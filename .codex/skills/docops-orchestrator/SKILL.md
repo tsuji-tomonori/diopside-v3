@@ -14,7 +14,8 @@ metadata:
 3. 要求変更なら RDR、設計変更なら ADR を同一変更で更新する。
 4. `up/related` を辿って上位・下位文書を更新または影響確認記録を作成する。
 5. `reports/impact_check_YYYY-MM-DD.md` を更新する。
-6. `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行して `reports/doc_check.md` を更新する。
+6. `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行して本文用語をWikiリンク化する。
+7. `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行して `reports/doc_check.md` を更新する。
 
 ## 出力
 - 変更済み docs

@@ -28,4 +28,5 @@ metadata:
 ## 品質チェック
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
+- 変更後に `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

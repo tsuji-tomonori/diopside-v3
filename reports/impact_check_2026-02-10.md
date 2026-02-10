@@ -95,6 +95,16 @@
 - 除外: frontmatter、既存Wikiリンク、インラインコード、Mermaid/コードブロック。
 - 検証: `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` 実行済み（issues/broken_links=0）。
 
+## 追記（用語自動リンク化のスクリプト運用追加）
+- 対象: `.codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py`, `.codex/skills/**/SKILL.md`, `RQ-DG-001`, `BD-CM-001`
+- 実施:
+  - 用語集 `RQ-GL-*` を参照して本文語彙を `[[RQ-GL-xxx|用語]]` へ自動変換するスクリプトを追加。
+  - `doc-*` / `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` の手順に、`auto_link_glossary.py` 実行を追加。
+  - 文書運用ガイド（`RQ-DG-001`）と構成管理（`BD-CM-001`）に標準実行順（自動リンク化→整合チェック）を反映。
+- 検証:
+  - `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py "docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md" "docs/2.基本設計(BD)/52.構成管理/BD-CM-001.md"`
+  - `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`
+
 ## 追記（用語定義の具体化）
 - 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-012`
 - 実施: 汎用文（「diopside文脈で利用する用語」）を、収集対象判定・配信契約・運用手順が読める具体定義へ更新。
