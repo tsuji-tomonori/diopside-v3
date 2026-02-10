@@ -122,3 +122,13 @@
   - 要求整合: `RQ-SC-001` の収集対象定義と `RQ-GL-003/004` の判定条件が整合。
   - 設計整合: `DD-API-001` の配信契約と `RQ-GL-007/008/009/010` の定義が整合。
   - 運用整合: `AT-PLAN-001` の運用判定導線と `RQ-GL-011/012` の定義が整合。
+
+## 追記（用語英名term_enの追加）
+- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-013`, `RQ-DG-001`, `BD-CM-001`, `.codex/skills/**`
+- 実施: 用語文書に `term_en`（ASCII `snake_case`）を追加し、`## 定義` に英名を併記。
+- 決定記録: `RQ-RDR-013` を新規作成し、機械可読な英名運用の採用理由を記録。
+- スキル更新: `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` / `doc-rq-gl` に英名運用ルールを反映。
+- 影響確認:
+  - 要求整合: `RQ-DG-001` の受入基準へ `term_en` 必須化を反映。
+  - 設計整合: `BD-CM-001` の構成管理方針へ英名運用を反映。
+  - 自動化整合: `auto_link_glossary.py` が `title` と `term_en` の両方をリンク対象として処理可能。

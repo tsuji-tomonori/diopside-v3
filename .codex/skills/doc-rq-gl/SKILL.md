@@ -10,7 +10,7 @@ metadata:
 
 ## 何を書くべきか
 - 文書IDに対応する1トピックの内容。
-- Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
+- Frontmatter必須キー（id/title/term_en/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
 - `## 変更履歴` への当日追記。
 
@@ -22,8 +22,13 @@ metadata:
 ## Frontmatter運用
 - `phase` は ID prefix と一致させる。
 - `owner` は `RQ-SH-*` を使う。
+- `term_en` は ASCII の `snake_case` で定義し、同義の英名を重複登録しない。
 - 意味変更時は `version` をPATCH更新する。
 - `updated` は作業日へ更新する。
+
+## 定義運用
+- `## 定義` の用語説明には英名を併記する（例: `英名: \`term_en\``）。
+- プログラム実装では原則 `term_en` を識別子の基準語彙として参照する。
 
 ## 品質チェック
 - `filename == id` を維持する。

@@ -3,7 +3,7 @@
 
 Rules:
 - Source glossary from docs/1.要求(RQ)/21.用語(GL)/RQ-GL-*.md
-- Replace term occurrences in body text with [[RQ-GL-xxx|term]]
+- Replace title and term_en occurrences in body text with [[RQ-GL-xxx|term]]
 - Exclude frontmatter, existing wiki links, inline code, and code blocks
 """
 
@@ -18,6 +18,13 @@ from pathlib import Path
 GLOSSARY_RELATIVE = Path("1.要求(RQ)") / "21.用語(GL)"
 
 
+def _register_term(mapping: dict[str, str], term: str, doc_id: str) -> None:
+    existing = mapping.get(term)
+    if existing and existing != doc_id:
+        raise RuntimeError(f"duplicate glossary term mapping: {term} -> {existing}, {doc_id}")
+    mapping[term] = doc_id
+
+
 def load_glossary_terms(docs_root: Path) -> dict[str, str]:
     glossary_dir = docs_root / GLOSSARY_RELATIVE
     if not glossary_dir.exists():
@@ -28,11 +35,16 @@ def load_glossary_terms(docs_root: Path) -> dict[str, str]:
         text = path.read_text(encoding="utf-8")
         id_match = re.search(r"^id:\s*(.+)$", text, re.M)
         title_match = re.search(r"^title:\s*(.+)$", text, re.M)
+        term_en_match = re.search(r"^term_en:\s*(.+)$", text, re.M)
         if not id_match or not title_match:
             continue
         doc_id = id_match.group(1).strip().strip("'")
         title = title_match.group(1).strip().strip("'")
-        mapping[title] = doc_id
+        _register_term(mapping, title, doc_id)
+        if term_en_match:
+            term_en = term_en_match.group(1).strip().strip("'")
+            if term_en:
+                _register_term(mapping, term_en, doc_id)
 
     if not mapping:
         raise RuntimeError("no glossary terms found from RQ-GL files")

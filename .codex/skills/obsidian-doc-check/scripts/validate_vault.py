@@ -43,6 +43,7 @@ REQUIRED_KEYS = [
 
 
 LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
+SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 
 
 def extract_links(value: Any) -> List[str]:
@@ -164,6 +165,18 @@ def main() -> int:
         for k in REQUIRED_KEYS:
             if k not in d.frontmatter:
                 issues.append(f"- {d.path}: missing key '{k}'")
+
+        # glossary-specific key
+        if d.id.startswith("RQ-GL-"):
+            term_en = d.frontmatter.get("term_en")
+            if term_en is None or str(term_en).strip() == "":
+                issues.append(f"- {d.path}: missing key 'term_en' for glossary doc")
+            else:
+                term_en_str = str(term_en).strip()
+                if not SNAKE_CASE_RE.match(term_en_str):
+                    issues.append(
+                        f"- {d.path}: 'term_en' must be ASCII snake_case: {term_en_str}"
+                    )
 
         # date format
         for k in ["created", "updated"]:

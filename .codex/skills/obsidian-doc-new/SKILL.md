@@ -13,8 +13,10 @@ metadata:
 - `filename == id`
 - `up/related` のリンク整合
 - 用語集（`RQ-GL-*`）にある語彙が本文でObsidianリンク化されている
+- 用語文書（`RQ-GL-*`）は `term_en` を持ち、値がASCII `snake_case` である
 - `## 変更履歴` の追記
 
 ## 実行
 - 新規作成・本文更新後に `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、本文用語を自動リンク化する。
+- 用語文書更新時は、`## 定義` に英名（`英名: \`term_en\``）を併記する。
 - 続けて `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、`reports/doc_check.md` を更新する。
