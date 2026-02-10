@@ -1,0 +1,7 @@
+# Project-scoped Codex settings for this repository.
+# Loaded only when you trust the project in Codex.
+
+# Keep defaults safe; wrapper scripts use --full-auto when edits are intended.
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+web_search = "cached"
