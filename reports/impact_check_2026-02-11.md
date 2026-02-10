@@ -16,3 +16,9 @@
 
 ## 検証
 - `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、リンク/整合性に問題がないことを確認。
+
+## 追記（収集要件の表現具体化）
+- 対象: `RQ-FR-002`, `RQ-FR-003`
+- 実施: 「収集できる」を、判定条件（公式チャンネルID一致/出演判定条件）と対象状態（公開動画）を明示した要件文へ更新。
+- 反映: 両文書の `version` を `1.0.4` へ更新。
+- 判定: 収集可否の判断条件が本文で一意に読める記述となり、レビュー時の解釈差分を低減。
