@@ -3,7 +3,7 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -37,7 +37,7 @@ tags:
 - Index Builder: 一覧検索向けに `bootstrap` と `archive_index.pN` を生成。
 - Static Distributor: 生成成果物を配信領域へ配置し、公開UIへ提供。
 - Web App: [[RQ-GL-010|段階ロード]]、クライアント検索、絞り込み、詳細表示。
-- Ops Console/Runbook: 収集失敗検知、[[RQ-GL-011|再収集]]実行、[[RQ-GL-012|受入判定]]。
+- Admin Console/Runbook: 収集失敗検知、[[RQ-GL-011|再収集]]実行、[[RQ-GL-012|受入判定]]。
 
 ## 配置方針
 - 配信面は静的ファイル配信を基本とし、閲覧トラフィックと収集処理を分離する。
@@ -50,7 +50,7 @@ flowchart TD
   subgraph EXT[外部]
     YT[YouTube Data Source]
     USER[利用者ブラウザ]
-    OPS[運用者]
+    ADMIN[管理者]
   end
 
   subgraph ING[収集・加工]
@@ -76,7 +76,7 @@ flowchart TD
   WEB --> S1
   WEB --> S2
   WEB --> S3
-  OPS --> C1
+  ADMIN --> C1
 ```
 
 ## 品質属性への対応
@@ -88,3 +88,4 @@ flowchart TD
 ## 変更履歴
 - 2026-02-10: 新規作成
 - 2026-02-10: コンポーネント責務、配置方針、品質属性対応を追加
+- 2026-02-10: ステークホルダー2者（管理者/利用者）に合わせて主体表現を修正
