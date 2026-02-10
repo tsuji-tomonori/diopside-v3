@@ -44,6 +44,7 @@ REQUIRED_KEYS = [
 
 LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+DOC_ID_CODE_REF_RE = re.compile(r"（`[A-Z]{2}-[A-Z]{2,4}-[0-9]{3}`）")
 
 
 def extract_links(value: Any) -> List[str]:
@@ -187,6 +188,12 @@ def main() -> int:
         # history section
         if "## 変更履歴" not in d.body:
             issues.append(f"- {d.path}: missing '## 変更履歴' section")
+
+        # document ID references in body should be Obsidian links
+        if DOC_ID_CODE_REF_RE.search(d.body):
+            issues.append(
+                f"- {d.path}: document ID reference in code style found (use [[ID]] instead of （`ID`）)"
+            )
 
         # banned relation sections in body
         for banned in ["## 上位文書", "## 下位文書", "## 関連文書"]:

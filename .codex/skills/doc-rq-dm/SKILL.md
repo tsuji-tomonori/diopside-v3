@@ -12,6 +12,7 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
+- 本文中の文書ID参照（`RQ-DM-*` など）をObsidianリンク（`[[ID]]`）で記述する。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -28,5 +29,6 @@ metadata:
 ## 品質チェック
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
+- 本文中の文書ID参照をコード表記（`\`ID\``）のまま残さない。
 - 変更後に `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
