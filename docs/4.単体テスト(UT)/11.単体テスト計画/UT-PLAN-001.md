@@ -29,13 +29,13 @@ tags:
 - 実行は`npm test` / `npm run test:coverage`を基準とする。
 
 ## API単位ケース一覧
-- [[UT-CASE-001]]: DD-API-002（収集ジョブ起動API）
-- [[UT-CASE-002]]: DD-API-003（収集ジョブ状態API）
+- [[UT-CASE-001]]: DD-API-002（[[RQ-GL-002|収集ジョブ]]起動API）
+- [[UT-CASE-002]]: DD-API-003（[[RQ-GL-002|収集ジョブ]]状態API）
 - [[UT-CASE-003]]: DD-API-004（アーカイブ一覧配信契約）
-- [[UT-CASE-004]]: DD-API-005（タグ辞書配信契約）
+- [[UT-CASE-004]]: DD-API-005（[[RQ-GL-005|タグ辞書]]配信契約）
 - [[UT-CASE-005]]: DD-API-006（検索契約）
 - [[UT-CASE-006]]: DD-API-007（動画詳細API）
-- [[UT-CASE-007]]: DD-API-008（再収集API）
+- [[UT-CASE-007]]: DD-API-008（[[RQ-GL-011|再収集]]API）
 - [[UT-CASE-008]]: DD-API-009（運用診断API）
 
 ## 完了条件

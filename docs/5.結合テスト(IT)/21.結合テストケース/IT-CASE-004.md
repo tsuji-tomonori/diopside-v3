@@ -23,7 +23,7 @@ tags:
 - `GET /tag_master.json`（[[DD-API-005]]）
 
 ## テスト目的
-- タグ辞書生成、配信、Web反映の連携を検証する。
+- [[RQ-GL-005|タグ辞書]]生成、配信、Web反映の連携を検証する。
 
 ## 手順
 1. 最新run後の `tag_master.json` を取得する。

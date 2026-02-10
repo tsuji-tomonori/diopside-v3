@@ -23,14 +23,14 @@ tags:
 - `POST /ops/ingestion/runs/{runId}/retry`（[[DD-API-008]]）
 
 ## テスト目的
-- 再収集APIの再実行条件、上限管理、監査項目付与を単体で検証する。
+- [[RQ-GL-011|再収集]]APIの再実行条件、上限管理、監査項目付与を単体で検証する。
 
 ## 前提
 - 元run状態（failed/succeeded）を切り替え可能なテストダブルを用いる。
 
 ## 手順
-1. `failed` runを指定して再収集を実行する。
-2. `succeeded` runで再収集不可ケースを実行する。
+1. `failed` runを指定して[[RQ-GL-011|再収集]]を実行する。
+2. `succeeded` runで[[RQ-GL-011|再収集]]不可ケースを実行する。
 3. 同一runへの再実行を上限回数まで実行する。
 
 ## 期待結果

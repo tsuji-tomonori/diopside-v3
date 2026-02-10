@@ -39,7 +39,7 @@ tags:
 - 未存在runは `404 RUN_NOT_FOUND`。
 - 失敗runは `errorSummary` と `traceId` を返す。
 
-## 受入判定との対応
+## [[RQ-GL-012|受入判定]]との対応
 - 運用監視シナリオの状態追跡根拠を保証する。
 
 ## 変更履歴

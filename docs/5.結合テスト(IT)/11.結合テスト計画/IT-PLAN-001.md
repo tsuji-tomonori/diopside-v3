@@ -25,17 +25,17 @@ tags:
 
 ## 観点
 - API契約の入出力と、実データ連携結果が一致する。
-- データ連携順序（bootstrap→tag_master→archive）を検証する。
-- 障害時の再収集と診断導線を検証する。
+- データ連携順序（[[RQ-GL-007|bootstrap]]→[[RQ-GL-008|tag_master]]→archive）を検証する。
+- 障害時の[[RQ-GL-011|再収集]]と診断導線を検証する。
 
 ## API単位ケース一覧
-- [[IT-CASE-001]]: DD-API-002（収集ジョブ起動API）
-- [[IT-CASE-002]]: DD-API-003（収集ジョブ状態API）
+- [[IT-CASE-001]]: DD-API-002（[[RQ-GL-002|収集ジョブ]]起動API）
+- [[IT-CASE-002]]: DD-API-003（[[RQ-GL-002|収集ジョブ]]状態API）
 - [[IT-CASE-003]]: DD-API-004（アーカイブ一覧配信契約）
-- [[IT-CASE-004]]: DD-API-005（タグ辞書配信契約）
+- [[IT-CASE-004]]: DD-API-005（[[RQ-GL-005|タグ辞書]]配信契約）
 - [[IT-CASE-005]]: DD-API-006（検索契約）
 - [[IT-CASE-006]]: DD-API-007（動画詳細API）
-- [[IT-CASE-007]]: DD-API-008（再収集API）
+- [[IT-CASE-007]]: DD-API-008（[[RQ-GL-011|再収集]]API）
 - [[IT-CASE-008]]: DD-API-009（運用診断API）
 
 ## 完了条件

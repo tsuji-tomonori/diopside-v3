@@ -24,15 +24,15 @@ tags:
 ## 詳細仕様
 - 本システムのAPI境界は「配信用データ契約」と「運用用制御API」で構成する。
 - MVPの利用者向け機能は静的JSON契約を主APIとして扱い、Webはこの契約に依存して動作する。
-- 運用用制御APIは収集実行・再収集・状態確認を対象にし、一般利用者UIとは分離する。
+- 運用用制御APIは収集実行・[[RQ-GL-011|再収集]]・状態確認を対象にし、一般利用者UIとは分離する。
 
 ## 契約分類
 - Public Read Contract（配信契約）
   - `bootstrap.json`: 初回描画に必要な最新動画セットと次リソース参照。
-  - `tag_master.json`: 全タグ辞書とタグ種別定義。
+  - `tag_master.json`: 全[[RQ-GL-005|タグ辞書]]とタグ種別定義。
   - `archive_index.p{page}.json`: 全件閲覧用のページング索引。
 - Ops Control Contract（運用契約）
-  - 収集ジョブ開始、実行状態確認、失敗ジョブ再実行、直近結果照会。
+  - [[RQ-GL-002|収集ジョブ]]開始、実行状態確認、失敗ジョブ再実行、直近結果照会。
   - 実行履歴は運用監査対象として保持する。
 
 ## Public Read Contract 詳細
@@ -48,7 +48,7 @@ tags:
 
 ## Ops Control Contract 詳細
 - `POST /ops/ingestion/runs`
-  - 用途: 収集ジョブ開始。
+  - 用途: [[RQ-GL-002|収集ジョブ]]開始。
   - 応答: `runId`, `acceptedAt`, `mode`（scheduled/manual）。
 - `GET /ops/ingestion/runs/{runId}`
   - 用途: 実行状態確認。

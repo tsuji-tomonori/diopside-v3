@@ -19,7 +19,7 @@ tags:
 
 
 ## 定義
-- tag_master: diopside文脈で利用する用語。
+- [[RQ-GL-008|tag_master]]: [[RQ-GL-001|diopside]]文脈で利用する用語。
 
 ## 利用ルール
 - 文書・実装・テストで同じ意味で使用する。
