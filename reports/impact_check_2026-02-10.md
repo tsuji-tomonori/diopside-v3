@@ -94,3 +94,12 @@
 - 実施: 用語集 `RQ-GL-001`〜`RQ-GL-012` の語彙出現箇所を Obsidian 形式のリンク（`[[RQ-GL-xxx|用語]]`）へ統一。
 - 除外: frontmatter、既存Wikiリンク、インラインコード、Mermaid/コードブロック。
 - 検証: `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` 実行済み（issues/broken_links=0）。
+
+## 追記（用語定義の具体化）
+- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-012`
+- 実施: 汎用文（「diopside文脈で利用する用語」）を、収集対象判定・配信契約・運用手順が読める具体定義へ更新。
+- 決定記録: `RQ-RDR-012` を新規作成し、用語意味変更の理由と影響を記録。
+- 影響確認:
+  - 要求整合: `RQ-SC-001` の収集対象定義と `RQ-GL-003/004` の判定条件が整合。
+  - 設計整合: `DD-API-001` の配信契約と `RQ-GL-007/008/009/010` の定義が整合。
+  - 運用整合: `AT-PLAN-001` の運用判定導線と `RQ-GL-011/012` の定義が整合。
