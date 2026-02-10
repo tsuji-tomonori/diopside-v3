@@ -105,6 +105,15 @@
   - `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py "docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md" "docs/2.基本設計(BD)/52.構成管理/BD-CM-001.md"`
   - `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`
 
+## 追記（ドメインモデル具体化）
+- 対象: `RQ-DM-001`〜`RQ-DM-007`, `RQ-RDR-013`
+- 実施:
+  - 7件のドメインモデルを雛形記述から具体化し、主キー/外部キー/論理識別子、主要属性、関連、整合条件を明文化。
+  - `RQ-RDR-013` を新規追加し、意味変更の決定根拠と影響範囲を要求決定記録として残した。
+- 影響確認:
+  - 要求→設計: `RQ-DM-*` の run追跡要件と `DD-API-002/003/008` の run契約が整合。
+  - 要求→データ設計: `RQ-DM-*` の識別子方針と `BD-DATA-001` / `BD-ERD-001` の方向性に矛盾なし。
+
 ## 追記（用語定義の具体化）
 - 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-012`
 - 実施: 汎用文（「diopside文脈で利用する用語」）を、収集対象判定・配信契約・運用手順が読める具体定義へ更新。
