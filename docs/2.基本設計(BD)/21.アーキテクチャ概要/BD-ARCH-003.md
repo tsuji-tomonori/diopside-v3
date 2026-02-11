@@ -3,41 +3,59 @@ id: BD-ARCH-003
 title: クラウド配置構成
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
 related:
 - '[[BD-ARCH-001]]'
-- '[[BD-ADR-001]]'
+- '[[BD-ADR-014]]'
+- '[[BD-ADR-021]]'
+- '[[BD-DEP-004]]'
+- '[[BD-ENV-002]]'
 tags:
 - diopside
 - BD
 - ARCH
 ---
 
-
 ## 設計方針
-- クラウド配置構成として[[RQ-GL-001|diopside]]の基本設計を定義する。
-- 収集対象（公式+出演）を前提に設計する。
+- 単一CloudFront配下で経路分離し、公開面と運用面の境界を固定する。
+- DB正本は非公開ネットワークに配置し、公開経路に露出させない。
 
 ## 設計要点
-- 公開データの収集・正規化・索引生成を分離する。
-- Web配信は静的JSON + フロント検索を採用する。
-- 運用監視と[[RQ-GL-011|再収集]]導線を設計に含める。
+- `/web/*`: 利用者向けWebと静的データ配信。
+- `/docs/*`: 文書とテスト結果ホスト。
+- `/openapi/*`: 仕様公開（認証必須）。
+- `/api/v1/*`: 管理画面向け運用API（認証必須）。
+- DB正本、収集実行、配信生成は内部実行基盤で運用する。
+
+## 配置ルール
+- 公開オリジンはS3のみとし、DBは直接オリジンに含めない。
+- 運用APIはCloudFront経由で公開するが、認証境界とrewrite禁止を維持する。
+- 配信生成は内部ジョブで実行し、生成完了後に公開パスを切替える。
 
 ## 図
 ```mermaid
-flowchart LR
-  A[YouTube API] --> B[Collector]
-  B --> C[tag_master.json]
-  B --> D[archive_index.pN.json]
-  D --> E[Web App]
+flowchart TD
+  USER[利用者] --> CF[CloudFront]
+  ADMIN[管理者] --> CF
+
+  CF -->|/web/*| S3WEB[S3 Web/Data]
+  CF -->|/docs/*| S3DOC[S3 Docs/Test]
+  CF -->|/openapi/*| S3OAS[S3 OpenAPI]
+  CF -->|/api/v1/*| API[Ops API]
+
+  API --> APP[App Runtime]
+  APP --> DB[(DB 正本)]
+  APP --> JOB[Publish Job]
+  JOB --> S3WEB
 ```
 
 ## 変更履歴
-- 2026-02-10: 新規作成
+- 2026-02-11: DB非公開配置と経路分離のクラウド構成を具体化 [[BD-ADR-021]]
+- 2026-02-10: 新規作成 [[BD-ADR-001]]

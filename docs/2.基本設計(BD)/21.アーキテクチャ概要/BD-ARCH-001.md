@@ -3,7 +3,7 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -16,8 +16,14 @@ related:
 - '[[BD-ADR-021]]'
 - '[[RQ-RDR-028]]'
 - '[[RQ-RDR-034]]'
+- '[[BD-ARCH-002]]'
+- '[[BD-ARCH-003]]'
+- '[[BD-ARCH-004]]'
+- '[[BD-ERD-001]]'
 - '[[BD-API-002]]'
+- '[[BD-API-003]]'
 - '[[BD-DATA-001]]'
+- '[[BD-UI-003]]'
 tags:
 - diopside
 - BD
@@ -45,6 +51,7 @@ tags:
 - Index Builder: 一覧検索向けに `bootstrap` と `archive_index.pN` を生成。
 - Static Distributor: 生成成果物（`bootstrap` / `tag_master` / `archive_index.pN`）を配信領域へ配置する。
 - Backend API: 管理画面からの更新要求を受け、DB更新と配信再生成を制御する。
+- Publish Orchestrator: [[RQ-GL-018|配信反映実行]] 単位で成果物生成、公開切替、失敗時ロールバックを制御する。
 - Web App: [[RQ-GL-010|段階ロード]]、クライアント検索、絞り込み、詳細表示。
 - Admin Console/Runbook: 収集失敗検知、[[RQ-GL-011|再収集]]実行、タグ更新、配信反映判定、[[RQ-GL-012|受入判定]]。
 
@@ -116,8 +123,9 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-11: 派生文書（ARCH-002/003/004, ERD, API-003, UI-003）とのトレースを追加 [[BD-ADR-021]]
 - 2026-02-11: DB正本化と3層責務境界、将来検索API拡張境界を追加 [[BD-ADR-021]]
-- 2026-02-11: 取得モード分離（Source Resolver/Incremental Updater）を追加し、PoC参照の収集責務を設計へ反映
-- 2026-02-10: 新規作成
-- 2026-02-10: コンポーネント責務、配置方針、品質属性対応を追加
-- 2026-02-10: ステークホルダー2者（管理者/利用者）に合わせて主体表現を修正
+- 2026-02-11: 取得モード分離（Source Resolver/Incremental Updater）を追加し、PoC参照の収集責務を設計へ反映 [[BD-ADR-001]]
+- 2026-02-10: 新規作成 [[BD-ADR-001]]
+- 2026-02-10: コンポーネント責務、配置方針、品質属性対応を追加 [[BD-ADR-001]]
+- 2026-02-10: ステークホルダー2者（管理者/利用者）に合わせて主体表現を修正 [[BD-ADR-001]]
