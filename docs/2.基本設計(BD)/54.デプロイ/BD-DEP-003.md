@@ -90,7 +90,7 @@ flowchart TD
   - 目的: `task docs:deploy` による再現可能な公開フローを先に安定化
 - Phase 2（拡張）
   - 対象: 単一CloudFrontで `/web/*`, `/docs/*`, `/openapi/*`, `/api/v1/*` を分岐
-  - 設計正本: `[[BD-DEP-004]]` / `[[DD-DEP-002]]`
+  - 設計正本: [[BD-DEP-004]] / [[DD-DEP-002]]
 
 ## 配信実装（infra）
 - `QuartzSiteStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。

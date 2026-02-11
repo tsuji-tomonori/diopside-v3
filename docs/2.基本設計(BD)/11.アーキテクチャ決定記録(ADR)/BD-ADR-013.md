@@ -37,10 +37,10 @@ tags:
 - S3非公開 + OAC構成により、配信セキュリティを維持しながら運用負荷を抑えられる。
 
 ## 影響
-- デプロイ設計: `[[BD-DEP-003]]` に公開フロー全体、実行チェーン、失敗時確認観点を追加する。
-- 詳細設計: `[[DD-DEP-001]]` に `siteAssetPath` 解決、Function rewrite、invalidationの詳細を反映する。
-- 受入運用: `[[AT-REL-001]]` / `[[AT-RUN-001]]` に手順と障害切り分けを反映する。
-- 段階導入: docs公開（Phase 1）を先行し、単一CloudFront分岐（Phase 2）は `[[BD-ADR-014]]` / `[[BD-DEP-004]]` で拡張する。
+- デプロイ設計: [[BD-DEP-003]] に公開フロー全体、実行チェーン、失敗時確認観点を追加する。
+- 詳細設計: [[DD-DEP-001]] に `siteAssetPath` 解決、Function rewrite、invalidationの詳細を反映する。
+- 受入運用: [[AT-REL-001]] / [[AT-RUN-001]] に手順と障害切り分けを反映する。
+- 段階導入: docs公開（Phase 1）を先行し、単一CloudFront分岐（Phase 2）は [[BD-ADR-014]] / [[BD-DEP-004]] で拡張する。
 
 ## 却下した選択肢
 - Quartz成果物を手動アップロードする運用: 再現性と監査性が低く、差分反映漏れのリスクが高いため不採用。

@@ -28,7 +28,7 @@ tags:
 - 単一CloudFront上で `/web` `/docs` `/openapi` `/api/v1` が競合なく分岐し、認証境界が成立することを確認する。
 
 ## 前提条件
-- CloudFront behaviorが `[[DD-DEP-002]]` の順序で適用されている。
+- CloudFront behaviorが [[DD-DEP-002]] の順序で適用されている。
 - OpenAPI仕様は `/openapi/v1/openapi.json` に配置済み。
 
 ## 手順

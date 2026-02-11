@@ -36,7 +36,7 @@ tags:
 - 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク（`[[ID]]`）で記載されている。
 - 用語文書（`RQ-GL-*`）は frontmatter に `term_en` を持ち、値は ASCII `snake_case` とする。
 - 用語文書の `## 定義` は表形式（`用語ID/用語名/英名/定義/判定条件/適用範囲`）で記載する。
-- タクソノミ系用語（例: `[[RQ-GL-013|タグ種別]]`）は、`タグ種別/説明/付与ルール` の表を持つ。
+- タクソノミ系用語（例: [[RQ-GL-013|タグ種別]]）は、`タグ種別/説明/付与ルール` の表を持つ。
 - frontmatter、既存Wikiリンク、インラインコード、コードブロックは自動リンク化の対象外である。
 - 文書運用変更時は、該当 `doc-*` スキルの `SKILL.md`/`TEMPLATE.md` が同一変更で更新されている。
 - 共通規約変更時は、`skill-maintainer`/`docops-orchestrator`/`obsidian-doc-*` の同時更新と、`reports/impact_check_YYYY-MM-DD.md` への記録が存在する。

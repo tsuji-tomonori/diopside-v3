@@ -33,7 +33,7 @@ tags:
 
 ## 適用条件
 - 本詳細は単一CloudFront分岐を導入するPhase 2で適用する。
-- Phase 1のdocs単独公開（`[[DD-DEP-001]]`）で運用手順が安定していることを前提とする。
+- Phase 1のdocs単独公開（[[DD-DEP-001]]）で運用手順が安定していることを前提とする。
 
 ## behavior別設定
 | Path | Origin | Cache | Function | 備考 |

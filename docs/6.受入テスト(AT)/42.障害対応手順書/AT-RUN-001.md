@@ -38,7 +38,7 @@ tags:
 1. 障害分類に応じて該当確認項目をチェックする。
 2. Quartz build失敗時は修正後に `task quartz:build` を再実行する。
 3. CDK deploy失敗時は認証情報とcontextを修正後に `task infra:deploy` を再実行する。
-4. cdk-nag失敗時は原則コード修正で解消し、除外が必要な場合は `[[DD-DEP-001]]` へ除外理由を追記して再実行する。
+4. cdk-nag失敗時は原則コード修正で解消し、除外が必要な場合は [[DD-DEP-001]] へ除外理由を追記して再実行する。
 5. 反映遅延時はinvalidation完了を待機し、必要時に `task docs:deploy` を再実行する。
 6. 経路競合時はbehavior順序を修正し、`'/web'`, `'/docs'`, `'/openapi'`, `'/api/v1'` の到達試験を再実行する。
 7. 認証障害時は認証設定を修正し、未認証拒否と認証後アクセスを再確認する。

@@ -28,10 +28,10 @@ tags:
 - 業務API経路を `/api/v1/*` に統一し、OpenAPI配布経路との版対応を固定する。
 
 ## 経路仕様
-- `[[DD-API-002]]`: `POST /api/v1/ops/ingestion/runs`
-- `[[DD-API-003]]`: `GET /api/v1/ops/ingestion/runs/{runId}`
-- `[[DD-API-008]]`: `POST /api/v1/ops/ingestion/runs/{runId}/retry`
-- `[[DD-API-009]]`: 
+- [[DD-API-002]]: `POST /api/v1/ops/ingestion/runs`
+- [[DD-API-003]]: `GET /api/v1/ops/ingestion/runs/{runId}`
+- [[DD-API-008]]: `POST /api/v1/ops/ingestion/runs/{runId}/retry`
+- [[DD-API-009]]:
   - `GET /api/v1/ops/ingestion/latest`
   - `GET /api/v1/ops/diagnostics/health`
 

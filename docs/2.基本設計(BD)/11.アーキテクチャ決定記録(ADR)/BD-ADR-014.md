@@ -37,9 +37,9 @@ tags:
 - 認証境界をCloudFront経路で固定することで、保護対象の抜け漏れを防げる。
 
 ## 影響
-- デプロイ設計: `[[BD-DEP-004]]` にpath予約、cache policy、invalidation範囲を反映する。
-- API設計: `[[BD-API-004]]` にOpenAPI公開経路と版対応を反映する。
-- 詳細設計: `[[DD-DEP-002]]` でbehavior詳細、`[[DD-API-010]]` で `/api/v1/*` 命名を具体化する。
+- デプロイ設計: [[BD-DEP-004]] にpath予約、cache policy、invalidation範囲を反映する。
+- API設計: [[BD-API-004]] にOpenAPI公開経路と版対応を反映する。
+- 詳細設計: [[DD-DEP-002]] でbehavior詳細、[[DD-API-010]] で `/api/v1/*` 命名を具体化する。
 
 ## 却下した選択肢
 - 画面を `/` 直下に配置する案: docs/openapiとの経路競合が起きやすく運用上の誤設定リスクが高いため不採用。
