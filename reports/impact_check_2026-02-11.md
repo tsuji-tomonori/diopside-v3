@@ -214,3 +214,29 @@
   - 運用整合: 新規FR追加時に実装工程寄り分類へ戻るリスクを低減。
   - トレーサビリティ整合: 配置判断が曖昧な場合のRDR記録ルールを明確化。
   - 検証結果: `validate_vault.py` 実行で `broken_links: 0`、`nonlinked_doc_ids: 68`（UT/IT/AT文書の既存ID未リンク）を確認。
+
+## 追記（FR起点での用語・ドメイン不足補完）
+- 対象: `RQ-GL-017`, `RQ-DM-009`, `RQ-FR-021`, `RQ-FR-023`, `RQ-DM-001`, `RQ-RDR-021`
+- 実施:
+  - WCL要求（`[[RQ-FR-021]]` / `[[RQ-FR-023]]`）で中核語彙となる `[[RQ-GL-017|ワードクラウド]]` を新規追加。
+  - WCL成果物の生成・状態・参照を表す `[[RQ-DM-009]]` を新規追加。
+  - `[[RQ-FR-021]]` / `[[RQ-FR-023]]` の要求本文と依存・関連へ `[[RQ-GL-017]]` / `[[RQ-DM-009]]` を反映。
+  - `[[RQ-DM-001]]` に `[[RQ-DM-009]]` との関連を追加し、詳細表示導線のモデル整合を補強。
+  - 要求決定記録 `[[RQ-RDR-021]]` に、用語/ドメイン補完の影響範囲を追記。
+- 影響確認:
+  - 要求整合: FRで使用する語彙（ワードクラウド）の定義がGLで一意に参照可能となった。
+  - ドメイン整合: HLWの `[[RQ-DM-008]]` に対し、WCL側も `[[RQ-DM-009]]` で対になるモデルを保持。
+  - トレーサビリティ整合: `FR -> GL/DM -> RDR` の参照経路を補完し、レビュー時の解釈差分を低減。
+
+## 追記（本文IDリンクのfail運用導入と残件解消）
+- 対象: `.opencode/skills/obsidian-doc-check/scripts/validate_vault.py`, `.pre-commit-config.yaml`, `.github/workflows/docs-link-check.yml`, `RQ-DG-001`, `UT-PLAN-001`, `IT-PLAN-001`, `AT-GO-001`, `AT-RPT-001`
+- 実施:
+  - `validate_vault.py` を拡張し、本文中の未リンク文書IDを `nonlinked_doc_ids` として検出し fail とする運用を追加。
+  - `--targets` を追加し、差分文書のみを厳格検査できるようにした。
+  - pre-commit と CI に同一検査ゲート（用語リンク + 本文IDリンク）を追加。
+  - `RQ-DG-001` の改修フローと受入基準に、リンク検査ゲートと fail 条件を反映。
+  - 残件だったUT/IT/AT文書の本文ID参照を `[[ID]]` へ統一（`UT-PLAN-001`, `IT-PLAN-001`, `AT-GO-001`, `AT-RPT-001`）。
+- 影響確認:
+  - 運用整合: ローカルコミットとPRの双方で同一ルールによりリンク不備をブロック可能。
+  - トレーサビリティ整合: テスト計画/判定/報告の表・本文から関連IDへ直接遷移可能。
+  - 検証結果: `validate_vault.py --docs-root docs --report reports/doc_check.md` 実行で `nonlinked_doc_ids: 0` を確認。
