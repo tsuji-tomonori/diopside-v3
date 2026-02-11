@@ -8,6 +8,10 @@
 - 要求・設計・テストの目的
 - TypeScript型安全の基本方針（`tsconfig` と lint の品質ゲート）
 - `unknown` 境界、`any` 使用制限、`switch` 網羅性の運用ルール
+- 防御的型付け（Brand/Opaque、判別可能union、センチネル値禁止、`boolean` blindness回避）
+- 空配列前提の防止（`NonEmptyArray` 相当または事前検証）
+- unsafe cast（`as any`）の局所化と記録ルール
+- リソース解放保証（`using` または `try/finally`）
 - CDK決定性（`synth` 副作用ゼロ、`cdk.context.json` 固定、props注入）
 - CDK依存整合（`aws-cdk-lib` / `constructs`）と `cdk-nag` の品質ゲート
 - 受入条件または確認手順
@@ -16,6 +20,7 @@
 ## 推奨章立て（BD-BUILD）
 - 設計方針
 - 設計要点（`strict`、`noUncheckedIndexedAccess`、`exactOptionalPropertyTypes`、`useUnknownInCatchVariables`）
+- 防御的型付け要点（Brand、境界decode、Option/Result、NonEmpty、resource cleanup）
 - lint/CI品質ゲート（`no-explicit-any`、`consistent-type-imports`）
 - 受入基準
 
