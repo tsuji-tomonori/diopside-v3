@@ -3,7 +3,7 @@ id: RQ-DEV-001
 title: DevOps要件
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -14,10 +14,12 @@ related:
 - '[[RQ-RDR-017]]'
 - '[[RQ-RDR-024]]'
 - '[[RQ-RDR-025]]'
+- '[[RQ-RDR-026]]'
 - '[[RQ-PC-009]]'
 - '[[BD-BUILD-001]]'
 - '[[BD-DEP-001]]'
 - '[[BD-DEP-003]]'
+- '[[BD-DEP-004]]'
 tags:
 - diopside
 - RQ
@@ -37,6 +39,7 @@ tags:
   - スキル更新を含む変更では、`reports/impact_check_YYYY-MM-DD.md` と `reports/doc_check.md` が同一変更で更新され、`broken_links: 0` を満たす。
   - ドキュメント公開は `task docs:deploy` を標準入口として実行され、Quartz成果物（`quartz/public`）と配信アセット（`siteAssetPath`）の不整合がない。
   - 公開反映時はCloudFront invalidationが実行され、配信確認手順（`[[AT-REL-001]]`）で更新差分を確認できる。
+  - 単一CloudFront運用では `'/web/*'`, `'/docs/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路分岐が維持され、`'/docs/*'` 以外へrewriteが適用されない。
   - 本番反映手順は 15分以内で完了し、失敗時は 10分以内に直前版へロールバックできる。
   - デプロイ手順書（`[[AT-REL-001]]`）と障害時手順（`[[AT-RUN-001]]`）が常に最新版と整合する。
   - 手動承認を伴うリリース判定記録（`[[AT-GO-001]]`）を毎回残す。
@@ -50,6 +53,7 @@ tags:
   - [[BD-BUILD-001]]
 
 ## 変更履歴
+- 2026-02-11: 単一CloudFrontパス分岐運用（`/web` `/docs` `/openapi` `/api/v1`）の品質ゲートを追加
 - 2026-02-11: Quartz + CDK 公開フロー品質ゲート（`task docs:deploy`、`siteAssetPath` 整合、invalidation確認）を追加
 - 2026-02-11: スキルメンテナンス方針をDevOps受入基準へ追加（同一変更同期、影響記録、doc_check判定）
 - 2026-02-10: 新規作成

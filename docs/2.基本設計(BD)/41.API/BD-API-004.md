@@ -1,0 +1,48 @@
+---
+id: BD-API-004
+title: OpenAPI配布とAPIバージョン境界
+doc_type: API設計
+phase: BD
+version: 1.0.0
+status: 下書き
+owner: RQ-SH-001
+created: 2026-02-11
+updated: '2026-02-11'
+up:
+- '[[RQ-FR-025]]'
+- '[[RQ-INT-001]]'
+related:
+- '[[BD-ADR-014]]'
+- '[[BD-DEP-004]]'
+- '[[DD-API-010]]'
+- '[[AT-SCN-006]]'
+tags:
+- diopside
+- BD
+- API
+---
+
+## 設計方針
+- APIの公開経路は `/api/v1/*` に統一し、OpenAPI仕様は `/openapi/v1/openapi.json` で配布する。
+- OpenAPI UIは `/openapi/` 配下に配置し、仕様参照先を `/openapi/v1/openapi.json` に固定する。
+- API版とOpenAPI版は同一バージョンで管理する。
+
+## 契約一覧
+| 種別 | パス | 用途 | 認証 |
+|---|---|---|---|
+| OpenAPI JSON | `/openapi/v1/openapi.json` | 機械可読仕様 | 必須 |
+| OpenAPI UI | `/openapi/` | 人向け仕様閲覧 | 必須 |
+| 業務API | `/api/v1/*` | 運用・業務処理 | 必須 |
+
+## バージョニング
+- v1は以下を対応付ける。
+  - `/openapi/v1/openapi.json`
+  - `/api/v1/*`
+- 破壊的変更時は v2 を新設し、v1は互換期間終了後に廃止する。
+
+## 認証境界
+- `/openapi/*` と `/api/*` は Cognito JWT を必須とする。
+- 未認証時は仕様閲覧・API実行のいずれも拒否する。
+
+## 変更履歴
+- 2026-02-11: 新規作成

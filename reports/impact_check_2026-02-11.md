@@ -253,6 +253,17 @@
   - トレーサビリティ整合: テスト計画/判定/報告の表・本文から関連IDへ直接遷移可能。
   - 検証結果: `validate_vault.py --docs-root docs --report reports/doc_check.md` 実行で `nonlinked_doc_ids: 0` を確認。
 
+## 追記（単一CloudFront配下のURL分岐設計追加）
+- 対象: `RQ-FR-025`, `RQ-RDR-026`, `BD-ADR-014`, `BD-DEP-004`, `BD-API-004`, `DD-DEP-002`, `DD-API-010`, `AT-SCN-006`, `RQ-SC-001`, `RQ-DEV-001`, `RQ-SEC-001`, `RQ-INT-001`, `AT-REL-001`, `AT-RUN-001`
+- 実施:
+  - 新規文書で、単一CloudFront Distribution上の経路分離（`/web/*`, `/docs/*`, `/openapi/*`, `/api/v1/*`）を要求・設計・受入まで定義。
+  - 版対応を `/openapi/v1/openapi.json` と `/api/v1/*` で固定し、認証境界を `/openapi/*` と `/api/v1/*` に設定。
+  - 既存文書は最小更新として、DoD範囲・非機能受入基準・配信/障害対応手順へ追記のみ実施。
+- 影響確認:
+  - 要求整合: `RQ-RDR-026 -> RQ-FR-025` で意思決定と要求本文が整合。
+  - 設計整合: `BD-ADR-014 -> BD-DEP-004/BD-API-004 -> DD-DEP-002/DD-API-010` の経路でトレース可能。
+  - 運用整合: `AT-SCN-006`、`AT-REL-001`、`AT-RUN-001` で経路競合・認証障害の検証と復旧を再現可能。
+
 ## 追記（ドキュメント公開フロー要求とQuartz+CDK設計の追加）
 - 対象: `RQ-FR-024`, `RQ-RDR-025`, `RQ-DEV-001`, `RQ-SC-001`, `BD-ADR-013`, `BD-DEP-003`, `DD-DEP-001`, `AT-PLAN-001`, `AT-REL-001`, `AT-RUN-001`
 - 実施:
