@@ -3,13 +3,13 @@ id: UT-CASE-008
 title: 運用診断API 単体テスト
 doc_type: 単体テストケース
 phase: UT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-10
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
-- '[[UT-PLAN-001]]'
+- '[[UT-PLAN-005]]'
 - '[[DD-API-009]]'
 related:
 - '[[IT-CASE-008]]'
@@ -39,4 +39,5 @@ tags:
 - `targetCounts` が `official/appearance/total` で一貫する。
 
 ## 変更履歴
+- 2026-02-11: バックエンド領域へ再配置し、上位計画を [[UT-PLAN-005]] に更新
 - 2026-02-10: 新規作成

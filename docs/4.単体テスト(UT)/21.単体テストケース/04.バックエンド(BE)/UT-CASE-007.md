@@ -3,13 +3,13 @@ id: UT-CASE-007
 title: 再収集API 単体テスト
 doc_type: 単体テストケース
 phase: UT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-10
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
-- '[[UT-PLAN-001]]'
+- '[[UT-PLAN-005]]'
 - '[[DD-API-008]]'
 related:
 - '[[IT-CASE-007]]'
@@ -39,4 +39,5 @@ tags:
 - 上限超過で明確な拒否コードを返す。
 
 ## 変更履歴
+- 2026-02-11: バックエンド領域へ再配置し、上位計画を [[UT-PLAN-005]] に更新
 - 2026-02-10: 新規作成

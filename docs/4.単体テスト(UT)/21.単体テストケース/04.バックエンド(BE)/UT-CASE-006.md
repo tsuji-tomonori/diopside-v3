@@ -3,13 +3,13 @@ id: UT-CASE-006
 title: 動画詳細API 単体テスト
 doc_type: 単体テストケース
 phase: UT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-10
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
-- '[[UT-PLAN-001]]'
+- '[[UT-PLAN-005]]'
 - '[[DD-API-007]]'
 related:
 - '[[IT-CASE-006]]'
@@ -40,4 +40,5 @@ tags:
 - 生成URLに対象 `videoId` が含まれる。
 
 ## 変更履歴
+- 2026-02-11: バックエンド領域へ再配置し、上位計画を [[UT-PLAN-005]] に更新
 - 2026-02-10: 新規作成

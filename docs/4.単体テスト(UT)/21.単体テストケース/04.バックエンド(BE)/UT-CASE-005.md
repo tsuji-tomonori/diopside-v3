@@ -3,13 +3,13 @@ id: UT-CASE-005
 title: 検索契約（クライアント実行）単体テスト
 doc_type: 単体テストケース
 phase: UT
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
-- '[[UT-PLAN-001]]'
+- '[[UT-PLAN-005]]'
 - '[[DD-API-006]]'
 related:
 - '[[IT-CASE-005]]'
@@ -43,5 +43,6 @@ tags:
 - `AT-SCN-002` の複合絞り込み再現性を担保する。
 
 ## 変更履歴
+- 2026-02-11: バックエンド領域へ再配置し、上位計画を [[UT-PLAN-005]] に更新
 - 2026-02-10: 新規作成
 - 2026-02-10: DD-API-006対応のAPI単位ケースへ細分化
