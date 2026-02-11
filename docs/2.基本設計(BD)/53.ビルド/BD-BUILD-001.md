@@ -1,9 +1,9 @@
 ---
 id: BD-BUILD-001
-title: ビルド方針
+title: ビルド方針（デプロイ単位分離）
 doc_type: ビルド設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,7 +17,10 @@ related:
 - '[[BD-ADR-001]]'
 - '[[BD-ADR-011]]'
 - '[[BD-ADR-016]]'
+- '[[BD-ADR-019]]'
 - '[[BD-DEP-003]]'
+- '[[BD-DEP-004]]'
+- '[[BD-API-004]]'
 - '[[DD-CODE-001]]'
 tags:
 - diopside
@@ -27,12 +30,21 @@ tags:
 
 
 ## 設計方針
-- TypeScriptの型安全を、個人開発でも運用可能な静的品質ゲートとして標準化する。
-- 型安全は実装規約ではなくビルド失敗条件として扱い、`tsconfig` と lint を同時に満たす構成を採用する。
-- 外部入力境界からUI/運用スクリプトまで、`any` の拡散を抑止して型の一貫性を維持する。
+- ビルド責務を「ドキュメント」「フロントエンド」「バックエンド」「インフラ」の4つのデプロイ単位で分離し、単位ごとに成果物と失敗条件を固定する。
+- 共通品質ゲート（`lint` / `test` / `build`）に加え、単位固有ゲートを必須化し、どの単位で失敗したかを即時判別できる構成を採用する。
+- TypeScriptの型安全は実装規約ではなくビルド失敗条件として扱い、`tsconfig` と lint を同時に満たす。
 - CDKの `synth` を決定的に保ち、同一コミットから同一テンプレートを再現できるビルド構成を採用する。
 
 ## 設計要点
+### デプロイ単位別ビルド方針
+| デプロイ単位 | 主成果物 | 主配信経路/配置先 | 単位固有ゲート | 失敗時の扱い |
+|---|---|---|---|---|
+| ドキュメント | `quartz/public` | `/docs/*`（CloudFront + S3） | `task docs:guard`、`npx quartz build -d ../docs`、`siteAssetPath` 整合確認 | docs配信のみ停止し、他単位の成果物を流用しない |
+| フロントエンド | `web/dist` | `/web/*` | `npm --prefix web run typecheck`、`npm --prefix web run test`、`npm --prefix web run build` | `/web/*` 更新を中断し、直前成果物を維持 |
+| バックエンド | API/OpenAPI配信アセット | `/api/v1/*`、`/openapi/v1/openapi.json` | API版とOpenAPI版の一致確認、`/api/v1/*` と `/openapi/*` へのrewrite非適用確認 | 版不整合時は `/api` と `/openapi` の公開を停止 |
+| インフラ | CDK template、CloudFront/S3設定 | 配信基盤全体 | `npm --prefix infra run build`、`npm --prefix infra run test`、`npm --prefix infra run synth`、`cdk-nag` | 基盤変更を中断し、配信経路設定を切り戻す |
+
+### 共通TypeScript品質ゲート
 - `tsconfig` 必須設定は `strict: true` を基準とし、`noUncheckedIndexedAccess: true`、`exactOptionalPropertyTypes: true`、`useUnknownInCatchVariables: true` を標準有効化する。
 - 配列/辞書アクセスは「存在しない可能性」を型へ反映し、`obj[key]` の結果を未検証で使用しない。
 - optional設計は `prop?: T`（未存在）と `prop: T | undefined`（存在+未定義）を使い分け、DTO/保存データの意味差を明示する。
@@ -43,6 +55,8 @@ tags:
 - `interface` は拡張前提のオブジェクト形状、`type` は union/型演算中心で利用し、使い分けを規約化する。
 - Genericsは「型同士の関係」を表す場合に限定し、単独出現の型パラメータは導入しない。
 - 型専用importは `import type` を強制し、`@typescript-eslint/no-explicit-any` と `@typescript-eslint/consistent-type-imports` を品質ゲートに含める。
+
+### インフラ決定性ゲート
 - CDK変更を含む場合は `cdk synth` を必須ゲートに追加し、生成テンプレートが副作用なく再現できることを確認する。
 - `fromLookup()` 等の結果を含む `cdk.context.json` は成果物の再現性のため差分管理し、コミット対象とする。
 - `aws-cdk-lib` と `constructs` はメジャーバージョン整合を維持し、依存更新時は `synth` とテストで互換性を検証する。
@@ -55,8 +69,13 @@ tags:
 - 型のみ参照のimportが `import type` へ統一されている。
 - CDK変更時は `lint` / `test` / `cdk synth` / `cdk-nag` が同一パイプラインで成功する。
 - `cdk.context.json` の更新がある場合は差分の根拠をPRへ記載し、未コミット状態を受入不可とする。
+- ドキュメント単位は `task docs:guard` と `quartz build` が成功し、`siteAssetPath` が `quartz/public` と一致する。
+- フロントエンド単位は `web` の `typecheck` / `test` / `build` が成功し、成果物が `/web/*` 配信前提を満たす。
+- バックエンド単位は `/api/v1/*` と `/openapi/v1/openapi.json` の版対応が一致し、`/api` と `/openapi` でrewrite/fallbackが無効である。
+- 単位別失敗時は対象単位のみ再実行可能であり、未検証単位の成果物を混在配備しない。
 
 ## 変更履歴
-- 2026-02-11: CDK決定性ゲート（`cdk synth`、`cdk.context.json`、props注入、依存整合）を追加
-- 2026-02-11: TypeScript型安全方針（tsconfig厳格化、`unknown` 境界、`satisfies`、lintゲート）を追加
-- 2026-02-10: 新規作成
+- 2026-02-11: デプロイ単位（docs/web/api/infra）別のビルド方針と単位固有ゲートを追加 [[BD-ADR-019]]
+- 2026-02-11: CDK決定性ゲート（`cdk synth`、`cdk.context.json`、props注入、依存整合）を追加 [[BD-ADR-016]]
+- 2026-02-11: TypeScript型安全方針（tsconfig厳格化、`unknown` 境界、`satisfies`、lintゲート）を追加 [[BD-ADR-011]]
+- 2026-02-10: 新規作成 [[BD-ADR-001]]

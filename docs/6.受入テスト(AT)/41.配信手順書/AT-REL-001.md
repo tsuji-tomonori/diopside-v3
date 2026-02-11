@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -40,14 +40,30 @@ tags:
 6. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
 7. Phase 2適用後は [[BD-DEP-004]] / [[DD-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
 
+## 領域別確認手順
+- docs（[[BD-DEP-003]], [[DD-DEP-001]]）
+  1. `'/docs/'` と `'/docs/<doc-path>'` が表示できることを確認する。
+  2. docs配信の更新差分が公開サイトで確認できることを確認する。
+- infra（[[BD-DEP-004]], [[DD-DEP-002]]）
+  1. CloudFront behavior順序が `'/api/*' -> '/openapi/*' -> '/docs/*' -> '/web/*' -> '/*'` であることを確認する。
+  2. rewriteが `'/docs/*'` のみに適用されることを確認する。
+- front（[[BD-DEP-005]], [[DD-DEP-003]]）
+  1. `'/web/'` と `'/web/<deep-path>'` が表示できることを確認する。
+  2. `'/web/*'` の更新時に `'/web/*'` 単位でinvalidationされていることを確認する。
+- backend（[[BD-DEP-006]], [[DD-DEP-004]], [[DD-API-010]]）
+  1. 未認証で `'/openapi/'` と `'/api/v1/ops/diagnostics/health'` へアクセスし、拒否されることを確認する。
+  2. 認証後に `'/openapi/v1/openapi.json'` と `'/api/v1/ops/diagnostics/health'` が取得できることを確認する。
+
 ## 判定基準
 - 公開手順が単一コマンドで完了し、配信サイトに更新内容が反映される。
 - `siteAssetPath` 解決先とS3配置先に不整合がない。
 - Phase 1では `'/'` と `'/docs/*'` の到達性が維持される。
 - Phase 2では `'/web/*'`, `'/docs/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路境界が維持される。
+- 領域別（docs/infra/front/backend）の確認結果を記録し、Fail時の切り分け先が一意である。
 - 異常時は [[AT-RUN-001]] の切り分け手順で復旧できる。
 
 ## 変更履歴
+- 2026-02-11: 領域別確認手順（docs/infra/front/backend）を追加し、切り分け観点を明確化
 - 2026-02-11: 公開トップ参照を [[RQ-HM-001]] から [[index]] へ変更
 - 2026-02-11: Phase 1（docs先行公開）基準へ手順を修正し、`/` と `/docs/` の到達確認を明記
 - 2026-02-11: 単一CloudFrontパス分岐（`/web` `/docs` `/openapi` `/api/v1`）の配信確認手順を追加
