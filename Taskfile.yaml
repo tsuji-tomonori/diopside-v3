@@ -1,0 +1,117 @@
+version: '3'
+
+tasks:
+  precommit:
+    desc: Install pre-commit hook
+    cmds:
+      - pre-commit install
+
+  precommit:run:
+    desc: Run pre-commit on changed files
+    cmds:
+      - pre-commit run
+
+  precommit:run:all:
+    desc: Run pre-commit on all files
+    cmds:
+      - pre-commit run --all-files
+
+  docs:autolink:
+    desc: Auto-link glossary for specified markdown files (FILES="docs/...md ...")
+    cmds:
+      - |
+        bash -lc 'if [ -z "{{.FILES}}" ]; then
+          echo "Usage: task docs:autolink FILES=\"docs/path/a.md docs/path/b.md\""
+          exit 1
+        fi
+        python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py {{.FILES}}'
+
+  docs:autolink:check:
+    desc: Check glossary links for specified markdown files (FILES="docs/...md ...")
+    cmds:
+      - |
+        bash -lc 'if [ -z "{{.FILES}}" ]; then
+          echo "Usage: task docs:autolink:check FILES=\"docs/path/a.md docs/path/b.md\""
+          exit 1
+        fi
+        python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py --docs-root docs --check {{.FILES}}'
+
+  docs:autolink:changed:
+    desc: Auto-link glossary for changed docs markdown files
+    cmds:
+      - |
+        python3 - <<'PY'
+        import shlex
+        import subprocess
+        import sys
+
+        changed = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True)
+        untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"], text=True)
+        files = []
+        for src in (changed.splitlines(), untracked.splitlines()):
+            for path in src:
+                path = path.strip()
+                if not path.startswith("docs/") or not path.endswith(".md"):
+                    continue
+                if path.endswith("/README.md") or path.endswith("/TEMPLATE.md"):
+                    continue
+                files.append(path)
+        files = sorted(set(files))
+        if not files:
+            print("No changed docs markdown files. Skipping auto-link.")
+            sys.exit(0)
+
+        cmd = ["python3", ".opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py", *files]
+        print("+", " ".join(shlex.quote(x) for x in cmd))
+        subprocess.run(cmd, check=True)
+        PY
+
+  docs:check:
+    desc: Validate all docs and update reports/doc_check.md
+    cmds:
+      - python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md
+
+  docs:check:changed:
+    desc: Validate changed docs and update reports/doc_check.md
+    cmds:
+      - |
+        python3 - <<'PY'
+        import shlex
+        import subprocess
+        import sys
+
+        changed = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True)
+        untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"], text=True)
+        files = []
+        for src in (changed.splitlines(), untracked.splitlines()):
+            for path in src:
+                path = path.strip()
+                if not path.startswith("docs/") or not path.endswith(".md"):
+                    continue
+                if path.endswith("/README.md") or path.endswith("/TEMPLATE.md"):
+                    continue
+                files.append(path)
+        files = sorted(set(files))
+        if not files:
+            print("No changed docs markdown files. Skipping validation.")
+            sys.exit(0)
+
+        cmd = [
+            "python3",
+            ".opencode/skills/obsidian-doc-check/scripts/validate_vault.py",
+            "--docs-root",
+            "docs",
+            "--report",
+            "reports/doc_check.md",
+            "--targets",
+            *files,
+        ]
+        print("+", " ".join(shlex.quote(x) for x in cmd))
+        subprocess.run(cmd, check=True)
+        PY
+
+  docs:guard:
+    desc: Run docs auto-link and validation for changed docs
+    cmds:
+      - task docs:autolink:changed
+      - task docs:check:changed

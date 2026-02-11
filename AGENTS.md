@@ -60,7 +60,8 @@ ObsidianドキュメントVaultです。
 1. 対象文書を更新
 2. `up/related` で影響範囲を確認し、必要文書を更新または確認記録化
 3. `reports/impact_check_YYYY-MM-DD.md` を更新
-4. `$obsidian-doc-check` を実行し `reports/doc_check.md` を更新
+4. `task docs:guard` を実行し、用語リンク補正と整合チェックを行う
+5. 必要に応じて `task docs:check` を実行し、全体整合を確認する
 
 ## 6. スキル運用
 - 文書種別ごとに対応 `doc-*` スキルを使用
@@ -78,3 +79,4 @@ ObsidianドキュメントVaultです。
   - Skills: `.opencode/skills/<name>/SKILL.md`
   - Commands: `.opencode/commands/*.md`
 - Agent Teams 相当の公式機能に依存せず、`@agent` 呼び出しと `/command` で役割分担する。
+- docs運用タスクは `Taskfile.yaml` を標準入口とし、初回は `task precommit` でフックを有効化する。

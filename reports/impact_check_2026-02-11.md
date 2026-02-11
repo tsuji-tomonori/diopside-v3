@@ -228,6 +228,18 @@
   - ドメイン整合: HLWの `[[RQ-DM-008]]` に対し、WCL側も `[[RQ-DM-009]]` で対になるモデルを保持。
   - トレーサビリティ整合: `FR -> GL/DM -> RDR` の参照経路を補完し、レビュー時の解釈差分を低減。
 
+## 追記（pre-commitとTaskfileのdocs運用整備）
+- 対象: `Taskfile.yaml`, `.pre-commit-config.yaml`, `AGENTS.md`, `README.md`
+- 実施:
+  - docs運用専用の `Taskfile.yaml` を追加し、`precommit` / `docs:guard` / `docs:check` などの標準入口を定義。
+  - `docs:autolink:changed` / `docs:check:changed` を追加し、差分docsだけを対象にリンク補正と整合検査を実行可能化。
+  - `.pre-commit-config.yaml` に汎用フック（`pre-commit-hooks`）を追加し、既存のdocs専用ローカルフックと併用。
+  - `AGENTS.md` の変更フローを `task docs:guard` / `task docs:check` 中心へ更新し、`README.md` に運用コマンドを追記。
+- 影響確認:
+  - 運用整合: docs更新時の手順が Task 入口に統一され、実行漏れリスクを低減。
+  - 品質整合: pre-commitで一般的なフォーマット/YAML整合を早期検知可能。
+  - 拡張整合: docs専用タスク構成のため、既存Web/他作業フローへの影響を最小化。
+
 ## 追記（本文IDリンクのfail運用導入と残件解消）
 - 対象: `.opencode/skills/obsidian-doc-check/scripts/validate_vault.py`, `.pre-commit-config.yaml`, `.github/workflows/docs-link-check.yml`, `RQ-DG-001`, `UT-PLAN-001`, `IT-PLAN-001`, `AT-GO-001`, `AT-RPT-001`
 - 実施:
@@ -240,3 +252,17 @@
   - 運用整合: ローカルコミットとPRの双方で同一ルールによりリンク不備をブロック可能。
   - トレーサビリティ整合: テスト計画/判定/報告の表・本文から関連IDへ直接遷移可能。
   - 検証結果: `validate_vault.py --docs-root docs --report reports/doc_check.md` 実行で `nonlinked_doc_ids: 0` を確認。
+
+## 追記（ドキュメント公開フロー要求とQuartz+CDK設計の追加）
+- 対象: `RQ-FR-024`, `RQ-RDR-025`, `RQ-DEV-001`, `RQ-SC-001`, `BD-ADR-013`, `BD-DEP-003`, `DD-DEP-001`, `AT-PLAN-001`, `AT-REL-001`, `AT-RUN-001`
+- 実施:
+  - 公開運用要求 `RQ-FR-024` を新規追加し、`task docs:deploy` を単一入口とする受入基準を定義。
+  - 要求決定記録 `RQ-RDR-025` を新規作成し、Quartz build + CDK deploy + invalidationの標準化を決定。
+  - 設計決定 `BD-ADR-013` と設計本文 `BD-DEP-003` を新規追加し、`siteAssetPath`、S3+OAC、pretty URL rewrite、失敗時観点を明文化。
+  - `DD-DEP-001` を意味変更し、公開フロー詳細（I/O、解決パス、障害ハンドリング）へ更新。
+  - 受入運用文書 `AT-REL-001` / `AT-RUN-001` と計画 `AT-PLAN-001` を公開手順前提へ更新。
+  - `RQ-DEV-001` と `RQ-SC-001` を更新し、DevOps品質ゲートとDoD範囲を `[[RQ-FR-024]]` まで拡張。
+- 影響確認:
+  - 要求整合: `[[RQ-PC-005]]`（AWS配信基盤）と `[[RQ-PC-009]]`（小差分リリース）の制約を、公開運用要求で具体化できた。
+  - 設計整合: `[[RQ-RDR-025]] -> [[BD-ADR-013]] -> [[BD-DEP-003]] -> [[DD-DEP-001]]` のトレース経路を構築。
+  - 受入整合: 公開手順と障害復旧の判定を `[[AT-REL-001]]` / `[[AT-RUN-001]]` で再現可能化。
