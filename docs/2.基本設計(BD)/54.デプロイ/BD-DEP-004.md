@@ -3,7 +3,7 @@ id: BD-DEP-004
 title: 単一CloudFrontパス分岐デプロイ設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.2
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -13,11 +13,7 @@ up:
 - '[[BD-ADR-014]]'
 related:
 - '[[BD-DEP-003]]'
-- '[[BD-DEP-005]]'
-- '[[BD-DEP-006]]'
 - '[[DD-DEP-002]]'
-- '[[DD-DEP-003]]'
-- '[[DD-DEP-004]]'
 - '[[AT-REL-001]]'
 - '[[AT-RUN-001]]'
 tags:
@@ -39,14 +35,6 @@ tags:
 - `/openapi/*`: OpenAPI UI/仕様配信
 - `/api/v1/*`: 業務API
 - `/`: `/web/` へ誘導
-
-## 領域別デプロイ文書
-| 領域 | 主経路 | 基本設計 | 詳細設計 | 運用確認 |
-|---|---|---|---|---|
-| docs | `/docs/*` | [[BD-DEP-003]] | [[DD-DEP-001]] | [[AT-REL-001]] |
-| infra | 全体分岐 | [[BD-DEP-004]] | [[DD-DEP-002]] | [[AT-REL-001]], [[AT-RUN-001]] |
-| front | `/web/*` | [[BD-DEP-005]] | [[DD-DEP-003]] | [[AT-REL-001]], [[AT-SCN-006]] |
-| backend | `/api/v1/*`, `/openapi/*` | [[BD-DEP-006]], [[BD-API-004]] | [[DD-DEP-004]], [[DD-API-010]] | [[AT-REL-001]], [[AT-SCN-006]] |
 
 ## Behavior設計
 | 優先 | Path Pattern | Origin | 認証 | rewrite/fallback |
@@ -76,6 +64,5 @@ tags:
 - 認証失敗: `/api/*` と `/openapi/*` の認証設定とヘッダ転送を確認する。
 
 ## 変更履歴
-- 2026-02-11: 領域別デプロイ文書（docs/infra/front/backend）を追加し、責務分担を明記 [[BD-ADR-014]]
-- 2026-02-11: Phase 2適用の位置づけと前提条件を追記 [[BD-ADR-014]]
-- 2026-02-11: 新規作成 [[BD-ADR-014]]
+- 2026-02-11: Phase 2適用の位置づけと前提条件を追記
+- 2026-02-11: 新規作成
