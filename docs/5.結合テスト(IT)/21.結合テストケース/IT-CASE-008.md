@@ -3,11 +3,11 @@ id: IT-CASE-008
 title: 運用診断API 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-10
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-API-009]]'
@@ -20,8 +20,8 @@ tags:
 ---
 
 ## 対象API
-- `GET /ops/ingestion/latest`
-- `GET /ops/diagnostics/health`（[[DD-API-009]]）
+- `GET /api/v1/ops/ingestion/latest`
+- `GET /api/v1/ops/diagnostics/health`（[[DD-API-009]]）
 
 ## テスト目的
 - 収集実行結果と診断状態表示の連携を検証する。
@@ -36,4 +36,5 @@ tags:
 - 状態が `ok/degraded/critical` で適切に遷移する。
 
 ## 変更履歴
+- 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成

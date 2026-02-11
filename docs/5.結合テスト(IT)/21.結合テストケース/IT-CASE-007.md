@@ -3,11 +3,11 @@ id: IT-CASE-007
 title: 再収集API 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-10
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-API-008]]'
@@ -20,7 +20,7 @@ tags:
 ---
 
 ## 対象API
-- `POST /ops/ingestion/runs/{runId}/retry`（[[DD-API-008]]）
+- `POST /api/v1/ops/ingestion/runs/{runId}/retry`（[[DD-API-008]]）
 
 ## テスト目的
 - 失敗runの[[RQ-GL-011|再収集]]実行と追跡API連携を検証する。
@@ -35,4 +35,5 @@ tags:
 - 上限超過時に拒否応答が返る。
 
 ## 変更履歴
+- 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成

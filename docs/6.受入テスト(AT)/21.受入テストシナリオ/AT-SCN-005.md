@@ -3,11 +3,11 @@ id: AT-SCN-005
 title: 障害時対応シナリオ
 doc_type: 受入テストシナリオ
 phase: AT
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[BD-TST-001]]'
 - '[[IT-PLAN-001]]'
@@ -34,9 +34,9 @@ tags:
 - 失敗run、または診断APIで`degraded/critical`となる状態を再現済み。
 
 ## 手順
-1. `GET /ops/diagnostics/health` で障害状態を確認する。
-2. 失敗runを特定し、`GET /ops/ingestion/runs/{runId}` で原因概要を確認する。
-3. 必要に応じて `POST /ops/ingestion/runs/{runId}/retry` を実行する。
+1. `GET /api/v1/ops/diagnostics/health` で障害状態を確認する。
+2. 失敗runを特定し、`GET /api/v1/ops/ingestion/runs/{runId}` で原因概要を確認する。
+3. 必要に応じて `POST /api/v1/ops/ingestion/runs/{runId}/retry` を実行する。
 4. 再実行runの完了を確認し、診断APIが正常へ戻るか確認する。
 5. 復旧結果を運用記録へ反映する。
 
@@ -58,6 +58,7 @@ tags:
 - 判定（Pass/Fail）
 
 ## 変更履歴
+- 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成
 - 2026-02-10: AT-PLAN-001の判定基準に合わせて障害対応手順を具体化
 - 2026-02-10: 対応DD-API番号を明示

@@ -3,11 +3,11 @@ id: AT-SCN-004
 title: 収集運用シナリオ
 doc_type: 受入テストシナリオ
 phase: AT
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[BD-TST-001]]'
 - '[[IT-PLAN-001]]'
@@ -31,13 +31,13 @@ tags:
 - `DD-API-009`（運用診断API）
 
 ## 前提条件
-- 管理者権限で `/ops` API を実行できる。
+- 管理者権限で `/api/v1/ops` API を実行できる。
 - 実行対象期間または対象区分が決定済み。
 
 ## 手順
-1. `POST /ops/ingestion/runs` を実行し `runId` を取得する。
-2. `GET /ops/ingestion/runs/{runId}` で進捗を監視する。
-3. 完了後に `GET /ops/ingestion/latest` で最新結果を確認する。
+1. `POST /api/v1/ops/ingestion/runs` を実行し `runId` を取得する。
+2. `GET /api/v1/ops/ingestion/runs/{runId}` で進捗を監視する。
+3. 完了後に `GET /api/v1/ops/ingestion/latest` で最新結果を確認する。
 4. 公式投稿/[[RQ-GL-004|出演動画]]の件数が期待範囲であることを確認する。
 
 ## 期待結果
@@ -58,6 +58,7 @@ tags:
 - 判定（Pass/Fail）
 
 ## 変更履歴
+- 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成
 - 2026-02-10: AT-PLAN-001の判定基準に合わせて収集運用手順を具体化
 - 2026-02-10: 対応DD-API番号を明示

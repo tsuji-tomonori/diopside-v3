@@ -3,7 +3,7 @@ id: RQ-RTM-002
 title: 要求トレーサビリティ（設計別）
 doc_type: 要求トレーサビリティマトリックス
 phase: RQ
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -97,16 +97,21 @@ tags:
 | [[BD-UI-003]] | 画面遷移 | [[RQ-FR-001]], [[RQ-FR-005]], [[RQ-FR-014]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-024]], [[RQ-FR-025]] | - | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-021]] | - |
 | [[BD-UI-004]] | アクセシビリティ方針 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]] | [[RQ-RDR-021]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]] | - |
 | [[DD-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | - | - | [[UT-PLAN-001]] |
-| [[DD-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
-| [[DD-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[IT-CASE-001]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-004]] | アーカイブ一覧API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-001]], [[IT-CASE-003]], [[IT-PLAN-001]], [[UT-CASE-003]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[RQ-FR-001]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-004]], [[IT-PLAN-001]], [[UT-CASE-004]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-006]] | 検索API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-005]], [[IT-PLAN-001]], [[UT-CASE-005]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-007]] | 動画詳細API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-003]], [[IT-CASE-006]], [[IT-PLAN-001]], [[UT-CASE-006]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-008]] | [[RQ-GL-011|再収集]]API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-005]], [[IT-CASE-007]], [[IT-PLAN-001]], [[UT-CASE-007]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-009]] | 運用診断API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-008]], [[IT-PLAN-001]], [[UT-CASE-008]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-FR-005]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-024]], [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
+| [[DD-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[RQ-FR-001]] | [[RQ-RDR-028]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[IT-CASE-001]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[RQ-FR-001]], [[RQ-FR-017]] | [[RQ-RDR-028]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-004]] | アーカイブ一覧API | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-015]] | [[RQ-RDR-002]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-001]], [[IT-CASE-003]], [[IT-PLAN-001]], [[UT-CASE-003]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[RQ-FR-005]], [[RQ-FR-009]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-004]], [[IT-PLAN-001]], [[UT-CASE-004]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-006]] | 検索API | [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-005]], [[IT-PLAN-001]], [[UT-CASE-005]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-007]] | 動画詳細API | [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-020]], [[RQ-FR-021]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-003]], [[IT-CASE-006]], [[IT-PLAN-001]], [[UT-CASE-006]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-008]] | [[RQ-GL-011|再収集]]API | [[RQ-FR-018]] | [[RQ-RDR-030]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-005]], [[IT-CASE-007]], [[IT-PLAN-001]], [[UT-CASE-007]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-009]] | 運用診断API | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-025]] | [[RQ-RDR-030]] | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-008]], [[IT-PLAN-001]], [[UT-CASE-008]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-010]] | API経路バージョニング詳細 | [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-026]] | [[BD-ADR-014]] | [[AT-SCN-006]] |
+| [[DD-API-011]] | 収集結果明細API | [[RQ-FR-017]] | [[RQ-RDR-030]] | [[BD-ADR-021]] | [[AT-SCN-004]], [[AT-SCN-005]], [[IT-PLAN-001]], [[UT-PLAN-001]] |
+| [[DD-API-012]] | 配信前後再確認API | [[RQ-FR-019]] | [[RQ-RDR-019]] | [[BD-ADR-021]] | [[AT-SCN-004]], [[AT-SCN-005]], [[IT-PLAN-001]], [[UT-PLAN-001]] |
+| [[DD-API-013]] | タグ管理API | [[RQ-FR-005]], [[RQ-FR-019]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[AT-SCN-002]], [[AT-SCN-004]], [[IT-PLAN-001]], [[UT-PLAN-001]] |
+| [[DD-API-014]] | ドキュメント公開実行API | [[RQ-FR-024]] | [[RQ-RDR-025]] | [[BD-ADR-013]], [[BD-ADR-021]] | [[AT-REL-001]], [[AT-RUN-001]], [[UT-PLAN-003]] |
+| [[DD-API-015]] | 配信反映ジョブ状態API | [[RQ-FR-005]], [[RQ-FR-024]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[AT-SCN-006]], [[AT-REL-001]], [[UT-PLAN-001]] |
 | [[DD-AV-001]] | 可用性詳細 | [[RQ-AV-001]], [[RQ-OBY-001]] | - | [[BD-ADR-020]] | [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-CODE-001]] | コーディング規約 | [[RQ-DEV-001]] | - | [[BD-ADR-011]] | [[UT-PLAN-001]] |
 | [[DD-COMP-001]] | コンポーネント分割 | [[RQ-FR-006]], [[RQ-FR-013]], [[RQ-FR-017]] | - | - | [[UT-PLAN-001]] |
@@ -140,5 +145,6 @@ tags:
 <!-- END AUTO-GENERATED: DESIGN_VIEW -->
 
 ## 変更履歴
+- 2026-02-11: DD-APIのFR対応を再マッピングし、[[DD-API-011]]〜[[DD-API-015]]を追加 [[RQ-RDR-034]]
 - 2026-02-11: `task docs:trace` による設計別静的ビューの自動生成ブロックを追加 [[RQ-RDR-033]]
 - 2026-02-11: 新規作成（設計別トレーサビリティビューを追加） [[RQ-RDR-033]]

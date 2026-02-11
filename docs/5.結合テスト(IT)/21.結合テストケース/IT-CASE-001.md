@@ -3,11 +3,11 @@ id: IT-CASE-001
 title: 収集ジョブ起動API 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-API-002]]'
@@ -21,7 +21,7 @@ tags:
 
 
 ## 対象API
-- `POST /ops/ingestion/runs`（[[DD-API-002]]）
+- `POST /api/v1/ops/ingestion/runs`（[[DD-API-002]]）
 
 ## テスト目的
 - 起動APIと実行キュー、実行履歴保存の連携を検証する。
@@ -42,5 +42,6 @@ tags:
 - `AT-SCN-004` の起動手順の事前検証になる。
 
 ## 変更履歴
+- 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成
 - 2026-02-10: DD-API-002対応のAPI単位ケースへ細分化

@@ -3,11 +3,11 @@ id: IT-CASE-002
 title: 収集ジョブ状態API 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-API-003]]'
@@ -21,7 +21,7 @@ tags:
 
 
 ## 対象API
-- `GET /ops/ingestion/runs/{runId}`（[[DD-API-003]]）
+- `GET /api/v1/ops/ingestion/runs/{runId}`（[[DD-API-003]]）
 
 ## テスト目的
 - run状態取得APIと実行エンジン状態反映の整合を検証する。
@@ -39,5 +39,6 @@ tags:
 - `AT-SCN-004` の進捗監視手順に接続する。
 
 ## 変更履歴
+- 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成
 - 2026-02-10: DD-API-003対応のAPI単位ケースへ細分化

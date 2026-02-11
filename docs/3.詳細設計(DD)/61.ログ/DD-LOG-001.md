@@ -3,7 +3,7 @@ id: DD-LOG-001
 title: ログ設計
 doc_type: ログ設計
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -11,10 +11,15 @@ updated: '2026-02-11'
 up:
 - '[[BD-MON-001]]'
 - '[[BD-MON-002]]'
+- '[[BD-ADR-022]]'
 related:
 - '[[RQ-OBY-001]]'
+- '[[RQ-RDR-035]]'
 - '[[RQ-AV-001]]'
 - '[[RQ-PS-001]]'
+- '[[RQ-SEC-001]]'
+- '[[RQ-PRC-001]]'
+- '[[RQ-COST-001]]'
 - '[[AT-OPS-001]]'
 - '[[AT-RPT-001]]'
 tags:
@@ -25,54 +30,100 @@ tags:
 
 
 ## 目的
-- [[RQ-OBY-001]] の必須記録項目を、収集・配信・検索・運用操作の全導線で欠落なく記録する。
-- 監視指標の算出元データを統一し、SLO判定と障害切り分けを同一証跡で実施可能にする。
+- [[RQ-OBY-001]] の可観測性要求を、AWS Lambda + CloudWatch Logs前提で再現可能な運用仕様へ落とし込む。
+- 収集・検索・配信・管理操作の運用調査、セキュリティ検知、監査証跡を同一スキーマで相関可能にする。
 
-## ログカテゴリ
-| カテゴリ | 発生源 | 主用途 | 必須相関キー |
+## 適用範囲
+- 出力対象は Backend API（Lambda）、運用Lambda、配信関連Lambdaとする。
+- ログはCloudWatch Logsに集約し、保持期間は30日固定とする。
+- 31日目以降の詳細ログは自動削除し、復元や再取得を前提にしない。
+
+## ログ分類
+| category | 用途 | 代表イベント | サンプリング |
 | --- | --- | --- | --- |
-| ingestion_run | [[RQ-GL-002|収集ジョブ]] | run成否、件数追跡、[[RQ-GL-011|再収集]]判断 | `run_id`, `trace_id` |
-| search_request | 検索API | p95算出、[[RQ-GL-014|検索条件]]分析 | `request_id`, `trace_id` |
-| delivery_edge | 配信経路 | 配信エラー率算出、最新更新監視 | `request_id`, `trace_id` |
-| admin_operation | 管理画面操作 | 運用監査、誤操作分析 | `operator_id`, `trace_id` |
-| alert_event | 監視通知 | 発報遅延判定、対応履歴 | `alert_id`, `trace_id` |
+| operational | 障害調査、性能分析、SLO算出 | `ingestion.run_completed`, `search.request_completed` | 許可（高頻度INFOのみ） |
+| security | 認証/認可/検証失敗の検知 | `authn.failed`, `authz.denied`, `input.validation_failed` | 不可 |
+| audit | 管理操作の証跡 | `admin.operation_succeeded`, `admin.operation_failed` | 不可 |
 
-## 共通ログスキーマ
+## 共通JSONスキーマ
 | フィールド | 型 | 必須 | 説明 |
 | --- | --- | --- | --- |
-| timestamp | RFC3339 string | Yes | 発生時刻（UTC） |
-| trace_id | string | Yes | 監視・ログ相関用ID |
-| source | enum | Yes | `ingestion/api/delivery/admin/monitor` |
-| event_type | string | Yes | イベント種別 |
-| severity | enum | Yes | `INFO/WARN/ERROR/CRITICAL` |
-| result | enum | Yes | `success/partial/failure` |
-| message | string | Yes | 人間可読メッセージ |
-| attributes | object | Yes | 種別固有の追加属性 |
+| `timestamp` | RFC3339 string | Yes | 発生時刻（UTC） |
+| `severity` | enum | Yes | `DEBUG/INFO/WARN/ERROR/CRITICAL` |
+| `service.name` | string | Yes | サービス識別子 |
+| `service.version` | string | Yes | デプロイ版 |
+| `deployment.environment` | enum | Yes | `production/development` |
+| `event.name` | string | Yes | 事前定義イベント名 |
+| `event.category` | enum | Yes | `operational/security/audit` |
+| `event.outcome` | enum | Yes | `success/failure/partial` |
+| `correlation_id` | string | Yes | 導線単位の相関ID |
+| `trace_id` | string | Yes | 分散追跡ID |
+| `request_id` | string | Yes | APIまたは処理要求ID |
+| `aws.lambda.request_id` | string | Yes | Lambda実行ID |
+| `message` | string | Yes | 人間可読メッセージ |
 
-## 種別ごとの必須属性
-| カテゴリ | 必須属性 |
+## 条件付き必須フィールド
+| 条件 | 追加必須フィールド |
 | --- | --- |
-| ingestion_run | `run_id`, `started_at`, `finished_at`, `target_count`, `success_count`, `failed_count` |
-| search_request | `status_code`, `latency_ms`, `query_type`, `result_count` |
-| delivery_edge | `status_code`, `edge_path`, `latency_ms`, `cache_status` |
-| admin_operation | `operator_id`, `operation_name`, `target_id`, `operation_result` |
-| alert_event | `alert_id`, `metric_id`, `threshold`, `detected_at`, `notified_at` |
+| 収集runイベント | `run_id`, `started_at`, `finished_at`, `target_count`, `success_count`, `failed_count` |
+| API応答イベント | `http.method`, `http.route`, `http.status_code`, `duration_ms` |
+| 検索イベント | `query_type`, `result_count` |
+| 管理操作イベント | `actor.id`, `actor.role`, `operation_name`, `target_id` |
+| エラーイベント | `error.code`, `error.type` |
 
-## ログ品質要件
-- 必須属性を満たすログ記録率は 99%以上を維持する。
-- 記録失敗時は `log_drop_count` メトリクスを増分し、1時間窓で欠測率を算出する。
-- 欠測率が 1% を超えた場合は `WARN`、5% を超えた場合は `CRITICAL` を発報する。
+## イベント語彙
+| event.name | category | severity既定 | 説明 |
+| --- | --- | --- | --- |
+| `ingestion.run_started` | operational | INFO | [[RQ-GL-002|収集ジョブ]]開始 |
+| `ingestion.run_completed` | operational | INFO | 収集完了（件数付き） |
+| `ingestion.run_failed` | operational | ERROR | 収集失敗 |
+| `search.request_completed` | operational | INFO | 検索API正常応答 |
+| `delivery.edge_error` | operational | ERROR | 配信経路エラー |
+| `authn.failed` | security | WARN | 認証失敗 |
+| `authz.denied` | security | WARN | 認可拒否 |
+| `input.validation_failed` | security | WARN | 入力検証失敗 |
+| `admin.operation_succeeded` | audit | INFO | 管理操作成功 |
+| `admin.operation_failed` | audit | ERROR | 管理操作失敗 |
+| `config.changed` | audit | INFO | 設定変更 |
+| `log.pipeline_drop_detected` | operational | CRITICAL | ログ欠測異常 |
 
-## 保持・検索方針
-- 0-30日: 即時検索層（運用調査とAT証跡確認に使用）。
-- 31-90日: 低コスト保管層（監査・傾向分析に使用）。
-- 90日超: 要約メトリクスのみ残し、詳細ログは削除する。
+## ログレベル運用
+- `DEBUG`: 開発環境のみ。production常時有効化は禁止。
+- `INFO`: 状態遷移、正常完了、監査対象の成功操作。
+- `WARN`: 継続可能な異常、認証失敗、入力不備。
+- `ERROR`: 処理失敗、外部依存失敗、管理操作失敗。
+- `CRITICAL`: 継続運用困難、欠測率5%超、重大通知遅延。
 
-## 出力と連携
-- 監視ダッシュボード向けに `SLI-ING-SUCCESS`, `SLI-API-LATENCY`, `SLI-LOG-COVERAGE` の集計値を出力する。
-- 受入運用向けに日次サマリ（閾値超過件数、欠測率、通知遅延）を [[AT-OPS-001]] の証跡として保存する。
-- リリース判定時は [[AT-RPT-001]] へ月次可用率・p95・通知遅延を転記する。
+## セキュリティ/プライバシー制約
+- ログにパスワード、アクセストークン、セッションID、秘密鍵、接続文字列、PIIを平文で記録しない。
+- 受信入力文字列はログ注入対策として改行と制御文字を無害化して記録する。
+- エラーメッセージは利用者入力をそのまま連結せず、`error.code` と要約メッセージを使用する。
+
+## 出力・収集方式
+- LambdaはJSON文字列を `stdout` へ出力し、CloudWatch Logsに自動収集する。
+- 構造化フィールドを維持できない自由文ログの単独出力は禁止する。
+- `correlation_id` はAPI入口で生成し、下流処理へ引き回す。
+
+## 品質ゲート
+- 必須フィールド充足率は99%以上。
+- 欠測率は1時間窓で算出し、1%超でWARN、5%超でCRITICALを発報。
+- セキュリティ/監査イベントの記録漏れは0件（サンプリング禁止）。
+
+## 保持・削除方針
+- CloudWatch Logs保持期間は30日。
+- 31日目以降はCloudWatch保持ポリシーで自動削除する。
+- 長期アーカイブは実施しない（コスト優先）。
+- 30日を超える詳細ログ調査要求は対象外とし、月次要約メトリクスで代替する。
+
+## AT連携
+- 日次サマリ（欠測率、通知遅延、主要失敗件数）を [[AT-OPS-001]] に記録する。
+- 受入報告では [[AT-RPT-001]] に可用率、性能p95、ログ品質指標を転記する。
+
+## I/Oまたは責務
+- 入力: APIリクエスト、[[RQ-GL-002|収集ジョブ]]実行結果、管理操作イベント、依存先応答、監視アラート。
+- 出力: CloudWatch構造化ログ、ログ品質メトリクス、運用日次サマリ。
 
 ## 変更履歴
+- 2026-02-11: AWS Lambda/CloudWatch前提の用途別ログ分類、構造化スキーマ、30日保持/自動削除、禁止記録項目を追加
 - 2026-02-11: ログカテゴリ、必須スキーマ、欠測率判定、保持方針、AT連携を具体化
 - 2026-02-10: 新規作成
