@@ -12,4 +12,4 @@
 - 依存/関連リンク（Obsidianリンク）
 
 ## 変更履歴
-- YYYY-MM-DD: 変更要約
+- YYYY-MM-DD: 変更要約（関連RDR: [[RQ-RDR-xxx]]）

@@ -27,6 +27,8 @@ metadata:
 - 本文中の文書ID参照をコード表記（`（`ID`）`）で残していない
 - 用語文書（`RQ-GL-*`）は `term_en` を持ち、値がASCII `snake_case` である
 - `## 変更履歴` の追記
+- RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれている
+- BD文書の `## 変更履歴` 各行に、関連ADRリンク（`[[BD-ADR-xxx]]`）が含まれている
 
 ## 実行
 - 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、本文用語を自動リンク化する。

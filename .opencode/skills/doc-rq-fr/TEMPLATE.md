@@ -15,4 +15,4 @@
 - 迷う場合は RDR に配置理由を追記する。
 
 ## 変更履歴
-- YYYY-MM-DD: 変更要約
+- YYYY-MM-DD: 変更要約（関連RDR: [[RQ-RDR-xxx]]）

@@ -32,6 +32,8 @@ metadata:
 13. 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク（`[[ID]]`）で記述されていることを確認する。
 14. `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば fail とし、修正が完了するまで次工程へ進まない。
 15. スキル更新を伴う変更では、`docs` と `.opencode/skills` が同一変更で更新されていることを確認する。
+16. RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれていることを確認する。
+17. BD文書の `## 変更履歴` 各行に、関連ADRリンク（`[[BD-ADR-xxx]]`）が含まれていることを確認する。
 
 ## 出力契約
 - 変更済み docs
