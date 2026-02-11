@@ -394,6 +394,18 @@
   - トレーサビリティ整合: RQ/BD/DD/AT と impact_check の相互参照でリンク切れを解消。
   - 運用整合: 本文IDリンクのfail運用（`RQ-DG-001`）と整合する記法へ是正。
 
+## 追記（変更履歴のRDR/ADRリンク必須化）
+- 対象: `AGENTS.md`, `RQ-DG-001`, `BD-CM-001`, `.opencode/skills/docops-orchestrator/SKILL.md`, `.opencode/skills/obsidian-doc-new/SKILL.md`, `.opencode/skills/obsidian-doc-change/SKILL.md`, `.opencode/skills/obsidian-doc-check/SKILL.md`, `.opencode/skills/skill-maintainer/SKILL.md`, `.opencode/skills/doc-rq-*/TEMPLATE.md`, `.opencode/skills/doc-bd-*/TEMPLATE.md`
+- 実施:
+  - 規約正本 `AGENTS.md` に、RQ文書の変更履歴行へ `[[RQ-RDR-xxx]]`、BD文書の変更履歴行へ `[[BD-ADR-xxx]]` の必須化を追加。
+  - `RQ-DG-001` と `BD-CM-001` を更新し、改修フロー/設計要点と受入基準に履歴リンク必須を反映。
+  - 共通スキル5件へ同ルールを同期し、チェック項目・実行フロー・保守手順で同一基準を維持。
+  - RQ/BDの全テンプレートで `## 変更履歴` 雛形をリンク必須形式へ統一。
+- 影響確認:
+  - 要求整合: `[[RQ-RDR-024]]` を起点に、RQ文書の変更理由が履歴行から直接追跡可能。
+  - 設計整合: `[[BD-ADR-012]]` を起点に、BD文書の設計判断が履歴行から直接追跡可能。
+  - 運用整合: 規約/運用文書/スキル/テンプレートが同一書式へ揃い、新規文書でもリンク記載漏れを抑止。
+
 ## 追記（「ページング済み索引」用語の定義とリンク統一）
 - 対象: `RQ-FR-006`, `RQ-GL-009`, `BD-API-001`, `DD-API-001`, `DD-API-004`
 - 実施:
@@ -414,3 +426,13 @@
 - 影響確認:
   - 要求整合: 一覧表示の目的（初回待機短縮）と手段（段階ロード）が同一文脈で判定可能。
   - 決定整合: `RQ-RDR-002 -> RQ-FR-015` の追跡経路で、採用理由と要求本文の一致を確認。
+
+## 追記（公開要求からコマンド名を分離し責務境界を明確化）
+- 対象: `RQ-FR-024`, `RQ-RDR-025`
+- 実施:
+  - `RQ-FR-024` の要求本文/受入基準/例外を更新し、実装詳細（`task docs:deploy`）を除外して「単一操作で公開できる」要求へ整理。
+  - `RQ-RDR-025` を更新し、標準入口の必須化は維持しつつ、操作方式やコマンド名の定義先を設計・運用文書と明記。
+  - 両文書の変更履歴をRDRリンク必須ルールに合わせて補正。
+- 影響確認:
+  - 要求整合: FRが「何を満たすか」に集中し、実装方式の変更耐性が向上。
+  - 決定整合: `RQ-RDR-025 -> RQ-FR-024` で、要求と実装責務の分離方針を追跡可能。
