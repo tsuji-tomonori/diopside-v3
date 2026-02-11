@@ -3,7 +3,7 @@ id: RQ-DG-001
 title: ドキュメント更新フロー
 doc_type: ドキュメント運用ガイド
 phase: RQ
-version: 1.0.19
+version: 1.0.21
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -13,7 +13,9 @@ up:
 related:
 - '[[BD-CM-001]]'
 - '[[RQ-RTM-001]]'
+- '[[RQ-RTM-002]]'
 - '[[RQ-RDR-024]]'
+- '[[RQ-RDR-033]]'
 tags:
 - diopside
 - RQ
@@ -28,9 +30,10 @@ tags:
 4. 共通運用規約変更時は、`skill-maintainer`、`docops-orchestrator`、`obsidian-doc-*` を同一変更で更新する。
 5. 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
 6. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>`）を実行する。
-7. docs変更を含むコミットでは `.pre-commit-config.yaml` のリンク検査ゲートを通過させる。
-8. PRでは `.github/workflows/docs-link-check.yml` のリンク検査ゲートを通過するまでマージしない。
-9. RQ文書の `## 変更履歴` 各行には、関連RDRリンク（`[[RQ-RDR-xxx]]`）を必ず記載する。
+7. RQ/BD/DD/UT/IT/ATを更新した場合は、`task docs:trace` を実行し、`RQ-RTM-001`（要求別）と `RQ-RTM-002`（設計別）の静的ビューを再生成・反映する。
+8. docs変更を含むコミットでは `.pre-commit-config.yaml` のリンク検査ゲートを通過させる。
+9. PRでは `.github/workflows/docs-link-check.yml` のリンク検査ゲートを通過するまでマージしない。
+10. RQ文書の `## 変更履歴` 各行には、関連RDRリンク（`[[RQ-RDR-xxx]]`）を必ず記載する。
 
 ## 受入基準
 - 用語集に定義された語彙（`RQ-GL-*`）が本文でObsidianリンク化されている。
@@ -42,10 +45,12 @@ tags:
 - 文書運用変更時は、該当 `doc-*` スキルの `SKILL.md`/`TEMPLATE.md` が同一変更で更新されている。
 - 共通規約変更時は、`skill-maintainer`/`docops-orchestrator`/`obsidian-doc-*` の同時更新と、`reports/impact_check_YYYY-MM-DD.md` への記録が存在する。
 - 文書更新とスキル更新の実行順は「自動リンク化 -> 整合チェック」を満たす。
+- `RQ-RTM-001` / `RQ-RTM-002` がDataview非依存の静的Markdownとして更新され、Quartz上で追跡ビューを表示できる。
 - `validate_vault.py` の `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` が1件でもある場合はFailとする。
 - RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれている。
 
 ## 変更履歴
+- 2026-02-11: Quartz前提の静的トレーサビリティ更新手順（`RQ-RTM-001/002`）を改修フローと受入基準へ追加 [[RQ-RDR-033]]
 - 2026-02-11: 本文中の主体表現「管理者/利用者」をステークホルダーリンクへ統一 [[RQ-RDR-010]]
 - 2026-02-11: RQ文書の変更履歴へ関連RDRリンクを必須化（関連RDR: [[RQ-RDR-024]]）
 - 2026-02-11: pre-commit/CIのリンク検査ゲートとFail基準（`nonlinked_doc_ids` 含む）を追加（関連RDR: [[RQ-RDR-024]]）

@@ -119,6 +119,11 @@ tasks:
         subprocess.run(cmd, check=True)
         PY
 
+  docs:trace:
+    desc: Generate static RTM views for Quartz
+    cmds:
+      - python3 .opencode/skills/obsidian-trace/scripts/generate_rtm_views.py --docs-root docs
+
   docs:guard:
     desc: Run docs auto-link and validation for changed docs
     cmds:

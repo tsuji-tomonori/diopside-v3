@@ -635,11 +635,13 @@
   - 運用整合: docs/infra/front/backendの変更時に、影響領域のみ再実行する方針を文書上で判定可能化。
 
 ## 追記（Quartz前提の静的トレーサビリティ運用へ移行）
-- 対象: `RQ-RDR-033`, `RQ-RTM-001`, `RQ-RTM-002`, `RQ-DG-001`, `.opencode/skills/doc-rq-rtm/SKILL.md`, `.opencode/skills/doc-rq-rtm/TEMPLATE.md`, `docs/index.md`
+- 対象: `RQ-RDR-033`, `RQ-RTM-001`, `RQ-RTM-002`, `RQ-DG-001`, `Taskfile.yaml`, `.opencode/skills/obsidian-trace/scripts/generate_rtm_views.py`, `.opencode/skills/doc-rq-rtm/SKILL.md`, `.opencode/skills/doc-rq-rtm/TEMPLATE.md`, `docs/index.md`
 - 実施:
   - `RQ-RDR-033` を新規作成し、Dataview依存を廃止して静的Markdownで追跡する方針を決定記録化。
   - `RQ-RTM-001` を要求別ビューとして改訂し、Dataview節を廃止して静的生成運用へ更新。
   - `RQ-RTM-002` を新規追加し、設計別ビューを分離して公開サイトで追跡できる構成へ拡張。
+  - `generate_rtm_views.py` を追加し、frontmatter/本文リンクから要求別・設計別の静的テーブルを自動生成可能化。
+  - `Taskfile.yaml` に `task docs:trace` を追加し、RTM再生成を標準手順化。
   - `RQ-DG-001` の改修フローと受入基準に、`RQ-RTM-001/002` 再生成反映を追加。
   - `doc-rq-rtm` スキルとテンプレートを、Quartz表示可能な静的追跡前提へ同期。
   - `docs/index.md` の入口に [[RQ-RTM-002]] を追加。

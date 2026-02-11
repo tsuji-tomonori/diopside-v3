@@ -13,6 +13,7 @@ related:
 - '[[RQ-PP-001]]'
 - '[[RQ-SC-001]]'
 - '[[RQ-RTM-001]]'
+- '[[RQ-RTM-002]]'
 - '[[RQ-DG-001]]'
 tags:
 - diopside
@@ -24,6 +25,7 @@ tags:
 - [[RQ-PP-001]]
 - [[RQ-SC-001]]
 - [[RQ-RTM-001]]
+- [[RQ-RTM-002]]
 - [[BD-ARCH-001]]
 - [[AT-GO-001]]
 
