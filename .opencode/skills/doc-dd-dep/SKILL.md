@@ -20,6 +20,7 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 配備手順（Task/Workflow順序）、アセット配置先、パス分岐・rewrite条件、失敗時の切り分け/再実行条件。
+- CDK詳細（論理ID変更検知、stateful分離、`cdk.context.json` 差分運用、fine-grained/snapshot/integテスト）。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -31,6 +32,7 @@ metadata:
 - 対象文書は `filename == id` を満たし、Frontmatter必須キーを欠落なく保持する。
 - デプロイ詳細設計の変更理由と影響範囲を `up/related` で追跡可能にし、関連するBD/DD/AT文書と整合した状態にする。
 - 変更後の整合チェック結果（用語リンク補正と検証）をリポジトリ手順に沿って確認できる状態にする。
+- CDKを扱う場合、運用手順として再現可能なテスト戦略と置換リスク回避手順が記載されている。
 
 ## Frontmatter運用
 - `phase` は ID prefix と一致させる。

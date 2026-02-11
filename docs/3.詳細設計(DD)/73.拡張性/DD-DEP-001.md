@@ -3,7 +3,7 @@ id: DD-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -11,8 +11,10 @@ updated: '2026-02-11'
 up:
 - '[[BD-DEP-003]]'
 - '[[BD-ADR-013]]'
+- '[[BD-ADR-016]]'
 related:
 - '[[RQ-FR-024]]'
+- '[[RQ-RDR-029]]'
 - '[[AT-REL-001]]'
 - '[[AT-RUN-001]]'
 tags:
@@ -28,6 +30,9 @@ tags:
 - CDK実行時は `--context siteAssetPath=<repo>/quartz/public` を必須指定し、明示値が未指定の場合は `../../quartz/public` を既定値として解決する。
 - 配信配置先は S3 `obsidian/` プレフィックス固定とし、CloudFront Distribution（OAC）経由で配信する。
 - URL書き換えはCloudFront Function（`pretty-url-rewrite.js`）で行い、`/` と `/docs/` は `index.html`、`/path/` は `index.html`、拡張子なしは `.html` 補完とする。
+- CDK合成は副作用ゼロを前提とし、Construct/Stack内部での `process.env` 直接参照を禁止する。
+- `fromLookup` 等で更新された `cdk.context.json` は差分レビュー対象とし、未コミット状態を許容しない。
+- statefulリソースを含む場合はStackを分離し、論理ID変更の有無をレビュー記録へ残す。
 
 ## Task定義（設計）
 - `docs:deploy`
@@ -50,6 +55,12 @@ tags:
   - `workflow_dispatch` を標準起動とし、必要に応じてmain反映時に起動する。
   - 実行順: `task docs:guard` -> `task docs:deploy`
   - AWS認証はOIDCロール引受で実施する。
+
+## テスト方針（CDK）
+- Fine-grained assertions: CloudFormationテンプレートの主要プロパティ（behavior順序、認証設定、OAC設定）を個別検証する。
+- Snapshot tests: テンプレート全体差分を検知するが、ライブラリアップグレード時の差分はfine-grainedで補強して判定する。
+- Integration tests: 1テスト=1 CDKアプリで配備可能性を検証し、`/docs/*` 到達とinvalidation後反映を確認する。
+- statefulリソース追加時は、論理ID不変を担保する回帰テストを追加する。
 
 ## cdk-nag除外の詳細
 - `AwsSolutionsChecks` をCDKアプリへ適用し、未除外の `AwsSolutions-*` 指摘が残る場合はテストを失敗させる。
@@ -91,6 +102,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-11: CDK決定性運用（副作用ゼロ、context差分管理、stateful分離）とCDKテスト方針を追加
 - 2026-02-11: 公開トップの解決先を `index.html` に統一し、`/docs/` の同値到達を明記
 - 2026-02-11: cdk-nag除外（IAM4/IAM5/L1/S1/CFR1/CFR2/CFR3/CFR4）の理由と運用ルールを追記
 - 2026-02-11: Task定義（`docs:deploy`/`quartz:build`/`infra:deploy`/`docs:verify`）とWorkflow設計を追記

@@ -6,6 +6,9 @@
 
 ## 必須観点
 - 要求・設計・テストの目的
+- 論理ID変更の検知手順とstateful置換リスク回避策
+- CDKテスト戦略（fine-grained / snapshot / integration）
+- `cdk.context.json` 差分管理と再現性確認手順
 - 受入条件または確認手順
 - 依存/関連リンク（Obsidianリンク）
 

@@ -21,6 +21,7 @@ metadata:
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
 - TypeScript型安全方針（`tsconfig` 基準、`any` 抑止、`unknown` 境界、lintゲート）。
+- CDKビルド方針（`cdk synth` 決定性、`cdk.context.json` 差分管理、`aws-cdk-lib`/`constructs` 整合、`cdk-nag` ゲート）。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -40,6 +41,8 @@ metadata:
 - TypeScript型安全を扱う場合、`strict`/`noUncheckedIndexedAccess`/`exactOptionalPropertyTypes`/`useUnknownInCatchVariables` の4設定を明記する。
 - `@typescript-eslint/no-explicit-any` と `@typescript-eslint/consistent-type-imports` を受入条件へ含める。
 - 外部入力境界を `unknown` で受け、絞り込み後に内部型へ変換する手順を記載する。
+- CDKを扱う場合、`synth` で外部副作用を発生させない原則、`cdk.context.json` のコミット運用、Construct/Stack内部での `process.env` 直参照禁止を記載する。
+- CDK変更時の最低品質ゲート（`lint` / `test` / `cdk synth` / `cdk-nag`）を受入条件へ含める。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
 
@@ -47,3 +50,4 @@ metadata:
 - 出力は `BD-BUILD-*` 1ファイルのみを対象とし、1トピック原則を守る。
 - Frontmatter必須キーを完備し、`phase: BD`・`owner: RQ-SH-*`・`updated` 当日を満たす。
 - 本文は「ビルド方針/品質ゲート/受入基準」を含み、TypeScript型安全を扱う場合は `tsconfig` 4設定・`any` 抑止・`unknown` 境界の整合が取れている。
+- CDKを扱う場合は、決定性・依存整合・context固定・セキュリティゲートの整合が取れている。

@@ -3,7 +3,7 @@ id: BD-DEP-003
 title: ドキュメント公開フロー（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -13,6 +13,7 @@ up:
 - '[[BD-ADR-013]]'
 related:
 - '[[BD-DEP-001]]'
+- '[[BD-ADR-016]]'
 - '[[AT-REL-001]]'
 - '[[DD-DEP-001]]'
 tags:
@@ -57,13 +58,19 @@ flowchart TD
 - `quartz:build` は `npx quartz build -d ../docs` により `quartz/public` を生成する。
 - `infra:deploy` は `npm run deploy -- --context siteAssetPath=<repo>/quartz/public` を実行し、配信元アセットを明示する。
 
+## CDK決定性方針
+- `cdk synth` は副作用ゼロを前提とし、デプロイ時以外にAWSリソース変更を発生させない。
+- synth時の外部ネットワーク依存を最小化し、`fromLookup` で取得した値は `cdk.context.json` に固定してコミットする。
+- 環境差分はStage/propsで表現し、Construct/Stack内部の `process.env` 直接参照を禁止する。
+- statefulリソースを含む変更では、論理ID変更有無をレビュー観点へ追加する。
+
 ## CI/CD設計
 - `docs-link-check`:
   - 対象: docs markdown変更
   - 役割: 用語リンク補正チェックと整合検証（`auto_link_glossary --check`、`validate_vault --targets`）
 - `docs-deploy`:
   - 起動: `workflow_dispatch`（手動）を標準、必要に応じてmain反映時
-  - 役割: `task docs:guard` -> `task docs:deploy` -> 公開URL検証
+  - 役割: `task docs:guard` -> `lint` / `test` / `cdk synth` / `cdk-nag` -> `task docs:deploy` -> 公開URL検証
   - 認証: OIDCでAWSロール引き受け（長期キー不使用）
 
 ## cdk-nag品質ゲート
@@ -102,6 +109,7 @@ flowchart TD
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-11: CDK決定性方針（副作用ゼロ、context固定、props注入、論理IDレビュー）を追加
 - 2026-02-11: 公開トップのリライト先を `RQ-HM-001.html` から `index.html` へ変更
 - 2026-02-11: cdk-nag品質ゲートと除外許可条件（Phase 1限定の根拠）を追記
 - 2026-02-11: CornellNoteWeb準拠ポイント、CI/CD分離設計、Phase 1/2の段階導入方針を追記

@@ -6,6 +6,8 @@
 
 ## 必須観点
 - 要求・設計・テストの目的
+- CDK決定性方針（`synth` 副作用ゼロ、`cdk.context.json` 固定）
+- 環境差分の表現方法（Stage/props）とstateful/stateless分離方針
 - 受入条件または確認手順
 - 依存/関連リンク（Obsidianリンク）
 
