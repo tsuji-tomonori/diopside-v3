@@ -1,0 +1,7 @@
+@use "sass:map";
+@use "./base.scss";
+@use "./variables.scss" as *;
+
+.page {
+  max-width: calc(#{map.get($breakpoints, desktop)} + 420px);
+}

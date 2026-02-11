@@ -3,6 +3,8 @@ version: '3'
 vars:
   ROOT_DIR: '{{.TASKFILE_DIR}}'
   QUARTZ_DIR: '{{.ROOT_DIR}}/quartz'
+  QUARTZ_CONFIG_SOURCE: '{{.ROOT_DIR}}/config/quartz/quartz.config.ts'
+  QUARTZ_CUSTOM_STYLE_SOURCE: '{{.ROOT_DIR}}/config/quartz/custom.scss'
   INFRA_DIR: '{{.ROOT_DIR}}/infra'
   SITE_ASSET_PATH: '{{.ROOT_DIR}}/quartz/public'
   STACK: 'QuartzSiteStack'
@@ -148,10 +150,19 @@ tasks:
     cmds:
       - npm ci
 
+  quartz:sync-config:
+    desc: Sync tracked Quartz config and style
+    deps:
+      - quartz:prepare
+    cmds:
+      - cp "{{.QUARTZ_CONFIG_SOURCE}}" "{{.QUARTZ_DIR}}/quartz.config.ts"
+      - cp "{{.QUARTZ_CUSTOM_STYLE_SOURCE}}" "{{.QUARTZ_DIR}}/quartz/styles/custom.scss"
+
   quartz:build:
     desc: Build Quartz public from docs
     deps:
       - quartz:install
+      - quartz:sync-config
     dir: '{{.QUARTZ_DIR}}'
     cmds:
       - npx quartz build -d ../docs

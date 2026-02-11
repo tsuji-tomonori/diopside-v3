@@ -15,7 +15,7 @@ web/test-results/
 # CDK
 infra/cdk.out/
 infra/dist/
-quartz/
+/quartz/
 
 # OS
 .DS_Store

@@ -72,6 +72,7 @@ task docs:deploy
 補足:
 
 - `quartz/` がない場合は `quartz:prepare` で自動 `git clone` されます（Git管理対象外）。
+- Quartz設定の正本は `config/quartz/` 配下で管理し、`task quartz:build` 実行時に `quartz/` へ同期されます。
 - AWS 認証情報（`CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）を設定してから実行してください。
 
 個別ファイルの用語リンクチェック:
