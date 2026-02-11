@@ -1,12 +1,25 @@
 ---
 name: doc-bd-cm
-description: doc-bd-cm に対応するdiopside文書を規約準拠で作成・更新する
+description: BD-CM（構成管理）文書を新規作成・改訂するときに、構成管理方針と文書運用手順をdiopside規約準拠で整備する
 metadata:
   short-description: BD-CM 文書の更新ガイド
 ---
 
 ## 目的
 - diopside（白雪 巴 公開YouTubeアーカイブ収集・蓄積・検索）の文書を、Obsidian運用規約に沿って更新する。
+
+## このスキルを使うとき
+- `BD-CM-*` の新規作成・改訂で、構成管理方針（変更分類ごとの更新対象、同一変更原則、検証順序）を定義・更新するとき。
+- `docs` と `.opencode/skills` の同時更新や、`reports/impact_check_YYYY-MM-DD.md` への影響記録を伴う変更を扱うとき。
+
+## このスキルを使わないとき
+- FR要件定義や画面設計など、構成管理方針以外の主題を更新するとき（対応する `doc-*` スキルを使う）。
+- 用語リンク補正やリンク整合チェックだけを実施するとき（`obsidian-doc-new` / `obsidian-doc-check` を使う）。
+
+## 出力契約
+- 対象 `BD-CM-*` 文書が、必須frontmatter・`filename == id`・`up/related` 整合を満たして更新されていること。
+- 構成管理方針として、変更分類に応じた更新対象、`docs`/`.opencode/skills` 同一変更原則、`auto_link_glossary.py -> validate_vault.py` の順序固定が本文で明示されていること。
+- 意味変更時は `version` PATCH更新、`updated` 当日更新、`## 変更履歴` の当日追記が反映されていること。
 
 ## 何を書くべきか
 - 文書IDに対応する1トピックの内容。

@@ -1,12 +1,20 @@
 ---
 name: docops-orchestrator
-description: diopside文書の変更を、影響分析・関連更新・整合チェックまで一気通貫で実行する
+description: diopside文書を変更するときに、影響分析・関連更新・整合チェックまで一気通貫で実行する
 metadata:
   short-description: 変更→影響確認→更新→検証
 ---
 
 ## 目的
 - 依頼を起点に docs 全体の整合を崩さず更新する。
+
+## このスキルを使うとき
+- `docs/**` と `.opencode/skills/**` にまたがる文書変更を、影響確認から検証まで一連で実施するとき。
+- FR配置・RDR/ADR同時更新・影響確認レポート更新を、同一変更で取りこぼしなく実施したいとき。
+
+## このスキルを使わないとき
+- 単一文書の軽微な誤字修正など、`up/related` 追跡やチェックレポート更新が不要なとき。
+- スキル本文の品質監査のみを行い、docs本体の更新や検証実行を伴わないとき。
 
 ## 実行フロー
 1. 対象文書IDを特定する。
@@ -25,7 +33,7 @@ metadata:
 14. `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば fail とし、修正が完了するまで次工程へ進まない。
 15. スキル更新を伴う変更では、`docs` と `.opencode/skills` が同一変更で更新されていることを確認する。
 
-## 出力
+## 出力契約
 - 変更済み docs
 - 影響確認レポート
 - doc_check レポート

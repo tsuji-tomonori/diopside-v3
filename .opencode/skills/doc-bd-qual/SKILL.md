@@ -1,6 +1,6 @@
 ---
 name: doc-bd-qual
-description: doc-bd-qual に対応するdiopside文書を規約準拠で作成・更新する
+description: BD-QUAL（品質特性）文書を新規作成・改訂するときに、品質特性ごとの設計方針と受入観点をdiopside規約準拠で整理する
 metadata:
   short-description: BD-QUAL 文書の更新ガイド
 ---
@@ -8,10 +8,19 @@ metadata:
 ## 目的
 - diopside（白雪 巴 公開YouTubeアーカイブ収集・蓄積・検索）の文書を、Obsidian運用規約に沿って更新する。
 
+## このスキルを使う条件
+- `BD-QUAL-*`（品質特性）文書を新規作成・更新する。
+- 可用性/性能/セキュリティ/可観測性/コストなど、非機能要求（`RQ-AV-*`/`RQ-PS-*`/`RQ-SEC-*`/`RQ-OBY-*`/`RQ-COST-*`）に対応する基本設計の方針を整理する。
+
+## このスキルを使わない条件
+- API仕様やUI仕様など、特定領域の機能設計が主目的の場合（`doc-bd-api` / `doc-bd-ui` などを使う）。
+- 実装手順・コード構造・運用手順が主目的の場合（対応する `doc-dd-*` / `doc-it-*` / `doc-at-*` を使う）。
+
 ## 何を書くべきか
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
+- 品質特性ごとの設計方針（例: 可用性/性能/可観測性）と、ATで検証可能な判定観点。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -28,5 +37,11 @@ metadata:
 ## 品質チェック
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
+- `up/related` から品質特性に対応する要求（`RQ-*`）と関連設計（`BD-ARCH-*` / `BD-ADR-*` など）を辿れることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
+
+## 出力契約
+- 出力は `BD-QUAL-*` 1ファイルのみを対象とし、1トピック原則を守る。
+- Frontmatter必須キーを完備し、`phase: BD`・`owner: RQ-SH-*`・`updated` 当日を満たす。
+- 本文は品質特性ごとの設計方針と受入観点を含み、`up/related` から対応する `RQ-*` と関連 `BD-*` へ追跡できる状態にする。

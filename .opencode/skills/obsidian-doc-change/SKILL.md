@@ -1,12 +1,20 @@
 ---
 name: obsidian-doc-change
-description: Obsidian文書運用をdiopside前提で支援する
+description: diopsideのObsidian文書を更新・改訂するときに、frontmatter/リンク整合と用語リンク補正を実施する
 metadata:
   short-description: Obsidian文書支援
 ---
 
 ## 目的
 - diopsideドキュメントをFrontmatter規約とリンク規約に沿って管理する。
+
+## このスキルを使う条件
+- `docs/**` の既存文書を更新・改訂し、Frontmatter整合と `up/related` の追跡性を同時に担保したいとき。
+- 用語集（`RQ-GL-*`）や文書ID参照（`RQ-DM-*`, `DD-API-*` など）を本文に追加・変更し、Obsidianリンク補正まで一気通貫で行うとき。
+
+## このスキルを使わない条件
+- 新規文書を作成するとき（`obsidian-doc-new` を使用）。
+- 文書整合の監査のみを行い、本文修正を伴わないとき（`obsidian-doc-check` を使用）。
 
 ## チェック項目
 - 必須frontmatterキーの存在
@@ -24,3 +32,7 @@ metadata:
 - 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、本文用語を自動リンク化する。
 - 用語文書更新時は、`## 定義` に英名（`英名: \`term_en\``）を併記する。
 - 続けて `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、`reports/doc_check.md` を更新する。
+
+## 出力契約
+- 対象文書は Frontmatter/リンク/FR配置規約に適合していること。
+- 用語リンク補正とVault検証の結果が `reports/doc_check.md` に反映され、差分として確認できること。

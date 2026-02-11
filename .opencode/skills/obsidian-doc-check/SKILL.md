@@ -1,12 +1,20 @@
 ---
 name: obsidian-doc-check
-description: Obsidian文書運用をdiopside前提で支援する
+description: diopsideのObsidian文書を追加・更新・レビューするときに、Frontmatter/リンク/FR配置規約の整合を検査する
 metadata:
   short-description: Obsidian文書支援
 ---
 
 ## 目的
 - diopsideドキュメントをFrontmatter規約とリンク規約に沿って管理する。
+
+## 使う条件
+- `docs/**` 配下の文書を追加・改訂し、規約適合を機械検証したいとき。
+- FR配置（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）や用語リンクの逸脱有無を確認したいとき。
+
+## 使わない条件
+- 文書の内容設計（要求追加方針、設計判断、文面レビュー）を行うだけで、規約検査を実行しないとき。
+- Obsidian Vault外の成果物（アプリ実装コード、非Markdown資産）の検査をしたいとき。
 
 ## チェック項目
 - 必須frontmatterキーの存在
@@ -27,3 +35,7 @@ metadata:
 - 差分ファイルのみ検査する場合は `--targets <対象Markdownパス...>` を併用する。
 - 検査は fail-fast 運用とし、`issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば失敗とする。
 - CI（`.github/workflows/docs-link-check.yml`）と pre-commit（`.pre-commit-config.yaml`）で同一検査を必須化する。
+
+## 出力契約
+- 検査結果は `reports/doc_check.md` に出力し、検査対象・失敗理由・修正要否を追跡可能にする。
+- 失敗時は fail-fast の結果をそのまま返し、`issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` の該当項目を修正対象として明示する。

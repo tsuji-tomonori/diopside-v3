@@ -1,6 +1,6 @@
 ---
 name: obsidian-doc-new
-description: Obsidian文書運用をdiopside前提で支援する
+description: diopsideのObsidian文書を新規作成・初回整備するときに、Frontmatter/リンク/用語運用を規約準拠で成立させる
 metadata:
   short-description: Obsidian文書支援
 ---
@@ -26,3 +26,16 @@ metadata:
 - 開発環境では `pre-commit` を導入し、docs変更時に上記チェックを必須ゲート化する。
 - 用語文書更新時は、`## 定義` に英名（`英名: \`term_en\``）を併記する。
 - 続けて `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、`reports/doc_check.md` を更新する。
+
+## 使う条件
+- 新規文書を追加し、必須Frontmatter/リンク/変更履歴を初回から規約どおりに整えるとき。
+- FR文書を新規追加し、機能単位カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）への配置妥当性を確認するとき。
+- 用語や文書ID参照を含む本文を作成し、Obsidianリンク化を一括で整備するとき。
+
+## 使わない条件
+- 既存文書の差分確認やリンク整合チェックのみが目的で、新規作成を伴わないとき（`obsidian-doc-check` を使う）。
+- 実装コードや設定ファイルのみを変更し、`docs/**` を更新しないとき。
+
+## 出力
+- 規約準拠で作成した対象文書（Frontmatter/本文/`## 変更履歴` を含む）。
+- 実行した用語自動リンク化と検査コマンド、および `reports/doc_check.md` 更新結果。

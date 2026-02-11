@@ -1,6 +1,6 @@
 ---
 name: doc-bd-api
-description: doc-bd-api に対応するdiopside文書を規約準拠で作成・更新する
+description: BD-API（API基本設計）文書を新規作成・改訂するときに、diopside規約準拠で作成・更新する
 metadata:
   short-description: BD-API 文書の更新ガイド
 ---
@@ -8,16 +8,29 @@ metadata:
 ## 目的
 - diopside（白雪 巴 公開YouTubeアーカイブ収集・蓄積・検索）の文書を、Obsidian運用規約に沿って更新する。
 
+## このスキルを使う条件
+- BDフェーズのAPI仕様（エンドポイント、入出力、認証/認可、エラー契約）を新規作成・改訂するとき。
+- 要求変更により、APIのI/F契約や後方互換条件の見直しが必要なとき。
+
+## このスキルを使わない条件
+- 要求定義（RQ-*）のみを更新する作業、または実装詳細中心の設計（DD-*）を更新する作業。
+- UI/運用手順など、API契約を主題としない文書の更新。
+
 ## 何を書くべきか
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
-- 要求または設計の意図、受入条件、関連リンク。
+- APIの利用目的、対象利用者、エンドポイント単位の要求/応答、エラー契約、互換性方針。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
 - 複数トピックの混在。
 - 本文での上位/下位セクション（関係はfrontmatterのみ）。
 - Mermaid以外の図表形式。
+
+## 出力契約
+- 対象文書は `filename == id` を満たし、Frontmatter必須キーを欠落なく保持する。
+- API仕様の変更理由と影響範囲を `up/related` で追跡可能にし、必要に応じて関連文書へ反映する。
+- 変更後の整合チェック結果（用語リンク補正と検証）をリポジトリ手順に沿って確認できる状態にする。
 
 ## Frontmatter運用
 - `phase` は ID prefix と一致させる。

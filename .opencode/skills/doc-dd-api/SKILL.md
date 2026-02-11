@@ -1,6 +1,6 @@
 ---
 name: doc-dd-api
-description: doc-dd-api に対応するdiopside文書を規約準拠で作成・更新する
+description: DD-API（API詳細設計）文書を新規作成・改訂するときに、diopside規約準拠で作成・更新する
 metadata:
   short-description: DD-API 文書の更新ガイド
 ---
@@ -8,16 +8,29 @@ metadata:
 ## 目的
 - diopside（白雪 巴 公開YouTubeアーカイブ収集・蓄積・検索）の文書を、Obsidian運用規約に沿って更新する。
 
+## このスキルを使う条件
+- DDフェーズのAPI詳細設計（エンドポイント内部処理、入力検証、例外マッピング、再実行/冪等性）を新規作成・改訂するとき。
+- BD-APIや要求変更を受けて、実装に近いI/F仕様や失敗時挙動の具体化が必要なとき。
+
+## このスキルを使わない条件
+- 要求定義（RQ-*）のみの更新、または基本設計（BD-API）レベルで契約方針だけを見直す作業。
+- DB構造やUI遷移など、API詳細設計を主題としない文書の更新。
+
 ## 何を書くべきか
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
-- 要求または設計の意図、受入条件、関連リンク。
+- API処理フロー、入力検証規則、外部依存の呼び出し順、エラー/例外の返却条件、冪等性・再試行方針。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
 - 複数トピックの混在。
 - 本文での上位/下位セクション（関係はfrontmatterのみ）。
 - Mermaid以外の図表形式。
+
+## 出力契約
+- 対象文書は `filename == id` を満たし、Frontmatter必須キーを欠落なく保持する。
+- API詳細設計の変更理由と影響範囲を `up/related` で追跡可能にし、関連するBD/DD文書と整合した状態にする。
+- 変更後の整合チェック結果（用語リンク補正と検証）をリポジトリ手順に沿って確認できる状態にする。
 
 ## Frontmatter運用
 - `phase` は ID prefix と一致させる。

@@ -1,6 +1,6 @@
 ---
 name: doc-bd-arch
-description: doc-bd-arch に対応するdiopside文書を規約準拠で作成・更新する
+description: BD-ARCH（アーキテクチャ概要）文書を新規作成・改訂するときに、システム境界・主要コンポーネント・配置方針をdiopside規約準拠で整理する
 metadata:
   short-description: BD-ARCH 文書の更新ガイド
 ---
@@ -8,16 +8,21 @@ metadata:
 ## 目的
 - diopside（白雪 巴 公開YouTubeアーカイブ収集・蓄積・検索）の文書を、Obsidian運用規約に沿って更新する。
 
-## 何を書くべきか
-- 文書IDに対応する1トピックの内容。
-- Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
-- 要求または設計の意図、受入条件、関連リンク。
-- `## 変更履歴` への当日追記。
+## このスキルを使う条件
+- `docs/2.基本設計(BD)/21.アーキテクチャ概要/BD-ARCH-*.md` を作成・更新するとき。
+- 収集・索引生成・配信・Web UI の責務境界や接続関係を、俯瞰レベルで整理するとき。
+- 要求（`RQ-*`）や設計判断（`BD-ADR-*`）を受け、全体構成の説明を更新するとき。
 
-## 何を書かないべきか
-- 複数トピックの混在。
-- 本文での上位/下位セクション（関係はfrontmatterのみ）。
-- Mermaid以外の図表形式。
+## このスキルを使わない条件
+- 意思決定の採否や代替案比較が主目的の場合（`doc-bd-adr` を使う）。
+- API仕様・UI仕様など特定領域の設計本文のみを更新する場合（`doc-bd-api` / `doc-bd-ui` などを使う）。
+- 詳細設計（DD）や実装・運用手順が主目的の場合（対応する `doc-dd-*` / `doc-it-*` / `doc-at-*` を使う）。
+
+## 出力契約
+- Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）を満たし、`filename == id` を維持する。
+- 本文には少なくとも `## 設計方針`、`## 設計要点`（または同等の境界/構成セクション）、`## 図`、`## 変更履歴` を含める。
+- `## 図` は Mermaid で記述し、主要コンポーネント間のデータ/責務の流れを読み取れる状態にする。
+- `up/related` で `RQ-*` / `BD-ADR-*` / 関連 `BD-*` へ辿れるようにし、複数トピック混在や本文での上位/下位セクション追加は行わない。
 
 ## Frontmatter運用
 - `phase` は ID prefix と一致させる。

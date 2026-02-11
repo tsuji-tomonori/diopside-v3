@@ -1,6 +1,6 @@
 ---
 name: doc-rq-fr
-description: doc-rq-fr に対応するdiopside文書を規約準拠で作成・更新する
+description: doc-rq-fr に対応するdiopsideの機能要求（FR）文書を規約準拠で作成・更新し、機能単位カテゴリ配置と関連文書整合を確認する。機能要求（FR）文書の追加・変更・レビュー時に使う
 metadata:
   short-description: RQ-FR 文書の更新ガイド
 ---
@@ -34,3 +34,15 @@ metadata:
 - FRの配置判断が曖昧な場合は、RDRへ配置理由を同一変更で記録する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
+
+## 使う条件
+- FR文書を新規作成・更新・レビューし、カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）配置を判断するとき。
+- FR追加/移動に伴い、関連RDRや他要求との整合を同一変更で確認するとき。
+
+## 使わない条件
+- FR以外（例: ADR/DD/UT/IT/AT）だけを更新し、FRカテゴリ配置判断が発生しないとき。
+- 実装都合の工程分類だけで要求を整理し、利用者機能カテゴリの判断を行わないとき。
+
+## 出力
+- 対象FR文書の更新内容と、機能単位カテゴリへ配置した理由。
+- 配置判断が曖昧な場合に追記したRDR記録と、実施した整合チェック結果。

@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: diopside文書運用向けに日本語コミットメッセージを作成する
+description: diopside文書変更をコミットする際に、日本語のConventional Commitsを作成する
 metadata:
   short-description: diopside向けコミット規約
 ---
@@ -26,6 +26,19 @@ metadata:
 - 変更の意図（why）を優先して記載する
 - 1コミット1意図を意識し、差分のまとまりを崩さない
 - セキュリティ情報や秘密情報は含めない
+
+## 使う条件
+- diopside文書（`docs/**` や `reports/**`）の変更をコミットする
+- scopeを文書ID/系統/運用区分で表現し、規約に沿って統一したい
+
+## 使わない条件
+- ソースコード主体の機能開発で、文書運用用scopeよりコード領域scopeを優先すべき
+- コミットを行わず、レビューコメントや作業メモのみを作成する
+
+## 出力契約
+- 出力は `type(scope): subject` 形式のコミットメッセージ案とする
+- `subject` と必要な本文は日本語で、変更理由（why）を1-2文で示す
+- 規約変更を伴う場合は `chore(docops)` を優先候補として明示する
 
 ## 例
 - `docs(RQ-SC-001): 収集対象の区分定義を公開アーカイブ前提で明確化`

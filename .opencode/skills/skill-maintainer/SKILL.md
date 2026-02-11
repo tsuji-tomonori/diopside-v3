@@ -1,12 +1,21 @@
 ---
 name: skill-maintainer
-description: docs運用の変更に合わせて `.opencode/skills` を同期更新する
+description: docs運用規約や文書種別の変更時に、`.opencode/skills` を関連文書・検証手順と同期更新する
 metadata:
   short-description: スキル保守ガイド
 ---
 
 ## 目的
 - 1スキル=1ドキュメント種別の対応を維持する。
+
+## 使う条件
+- docs配下の運用規約変更に合わせて、`.opencode/skills` と実行手順を同一変更で保守するとき。
+- 文書種別の追加・改名・統廃合に伴い、対応 `SKILL.md` / `TEMPLATE.md` の整合を取り直すとき。
+- バリデータやFR編成規約の変更を、関連スキル・エージェント・CI設定へ波及反映するとき。
+
+## 使わない条件
+- 単一文書の本文修正のみで、スキル定義や運用フローに変更が発生しないとき。
+- 実装コードのみの変更で、docs運用規約・文書種別・検証手順に影響しないとき。
 
 ## 手順
 1. 変更された文書種別を列挙する。
@@ -29,3 +38,8 @@ metadata:
 - スキル記述が diopside 前提で統一されている。
 - `RQ-DG` / `BD-CM` / `RDR` / `ADR` のトレースが辿れる。
 - FR編成規約が `AGENTS.md` / `doc-rq-fr` / `docops-orchestrator` / `obsidian-doc-*` / 関連エージェントで一致している。
+
+## 出力
+- 同期更新したスキル/文書/設定ファイルの一覧と、同一変更で反映した理由。
+- 実施した検証（`auto_link_glossary.py` / `validate_vault.py` / 必要時のCI設定同期）の結果。
+- `reports/impact_check_YYYY-MM-DD.md` に記録した影響範囲と追跡先（`RQ-DG` / `BD-CM` / `RDR` / `ADR`）。
