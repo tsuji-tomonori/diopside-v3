@@ -151,3 +151,15 @@
   - 要求整合: 「コメント密度を測定し、高密度区間を残す」という意図が要求本文で直接読める構成になった。
   - 用語/ドメイン整合: UI語彙（波形・区間）とデータ語彙（区間境界・密度指標）が文書横断で一致。
   - 設計/受入整合: 可視化契約、操作仕様、判定観点が一貫して追跡可能。
+
+## 追記（TypeScript型安全方針のBD反映）
+- 対象: `BD-BUILD-001`, `BD-ADR-011`, `.opencode/skills/doc-bd-build/SKILL.md`, `.opencode/skills/doc-bd-build/TEMPLATE.md`
+- 実施:
+  - `BD-BUILD-001` を更新し、TypeScript型安全の標準設定（`strict`、`noUncheckedIndexedAccess`、`exactOptionalPropertyTypes`、`useUnknownInCatchVariables`）と受入基準を追加。
+  - `BD-ADR-011` を新規作成し、型安全を `tsconfig` + lint の品質ゲートで標準化する決定を記録。
+  - `doc-bd-build` スキルに、型安全方針をBD-BUILD更新時の必須観点として追加。
+  - `doc-bd-build` テンプレートに、型安全章立て（tsconfig/lint/受入基準）を追加。
+- 影響確認:
+  - 要求整合: `[[RQ-DEV-001]]` の `lint/test/build` 必須化と、型安全ゲートの導入方針が整合。
+  - 設計整合: `[[BD-BUILD-001]]` から `[[DD-CODE-001]]` への規約展開が可能なトレースを確保。
+  - 運用整合: スキル更新により、今後のBD-BUILD更新でも同方針を継続適用できる。
