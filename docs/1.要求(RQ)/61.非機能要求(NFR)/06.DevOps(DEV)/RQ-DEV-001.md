@@ -60,10 +60,10 @@ tags:
   - [[BD-BUILD-001]]
 
 ## 変更履歴
-- 2026-02-11: `RQ-DEV-002` 参照を追加し、AIエージェント運用要件との束ねを明確化
-- 2026-02-11: CDK運用受入基準（synth決定性、context固定、props注入、stateful置換防止）を追加
-- 2026-02-11: 単一CloudFrontパス分岐運用（`/web` `/docs` `/openapi` `/api/v1`）の品質ゲートを追加
-- 2026-02-11: Quartz + CDK 公開フロー品質ゲート（`task docs:deploy`、`siteAssetPath` 整合、invalidation確認）を追加
-- 2026-02-11: スキルメンテナンス方針をDevOps受入基準へ追加（同一変更同期、影響記録、doc_check判定）
-- 2026-02-10: 新規作成
-- 2026-02-11: CI必須チェック/反映時間/ロールバック時間の受入閾値を追加し、テンプレート記述を具体化
+- 2026-02-11: `RQ-DEV-002` 参照を追加し、AIエージェント運用要件との束ねを明確化 [[RQ-RDR-029]]
+- 2026-02-11: CDK運用受入基準（synth決定性、context固定、props注入、stateful置換防止）を追加 [[RQ-RDR-025]]
+- 2026-02-11: 単一CloudFrontパス分岐運用（`/web` `/docs` `/openapi` `/api/v1`）の品質ゲートを追加 [[RQ-RDR-026]]
+- 2026-02-11: Quartz + CDK 公開フロー品質ゲート（`task docs:deploy`、`siteAssetPath` 整合、invalidation確認）を追加 [[RQ-RDR-025]]
+- 2026-02-11: スキルメンテナンス方針をDevOps受入基準へ追加（同一変更同期、影響記録、doc_check判定） [[RQ-RDR-024]]
+- 2026-02-10: 新規作成 [[RQ-RDR-017]]
+- 2026-02-11: CI必須チェック/反映時間/ロールバック時間の受入閾値を追加し、テンプレート記述を具体化 [[RQ-RDR-017]]
