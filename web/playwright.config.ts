@@ -22,8 +22,21 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'pc',
       use: { ...devices['Desktop Chrome'] },
+      testMatch: /.*happy-path\.spec\.ts/,
+    },
+    {
+      name: 'tablet',
+      use: {
+        ...devices['iPad (gen 7)'],
+        viewport: { width: 834, height: 1112 },
+      },
+      testMatch: /.*happy-path\.spec\.ts/,
+    },
+    {
+      name: 'mobile',
+      use: { ...devices['iPhone 14'] },
     },
   ],
 });
