@@ -3,7 +3,7 @@ id: BD-DEP-004
 title: 単一CloudFrontパス分岐デプロイ設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -13,6 +13,7 @@ up:
 - '[[BD-ADR-014]]'
 related:
 - '[[BD-DEP-003]]'
+- '[[BD-ADR-021]]'
 - '[[DD-DEP-002]]'
 - '[[AT-REL-001]]'
 - '[[AT-RUN-001]]'
@@ -55,6 +56,8 @@ tags:
 
 ## デプロイ方針
 - 静的成果物はプレフィックス分離で配置する（例: `web/`, `docs/`, `openapi/`）。
+- 利用者向け静的JSON（`bootstrap`, `tag_master`, `archive_index`）は `/web/*` 配下の配信領域で提供し、DB正本は公開しない。
+- ドキュメントとテスト結果は `/docs/*` 経路で公開し、業務API経路へ混在させない。
 - invalidationは経路別に実行する（`/web/*`, `/docs/*`, `/openapi/*`）。
 - `/*` 全体invalidationは緊急時のみ許可する。
 
@@ -62,7 +65,9 @@ tags:
 - 経路競合: behavior順序、path pattern、default behaviorを確認する。
 - rewrite誤適用: `/api/*` と `/openapi/*` にFunctionが紐づいていないことを確認する。
 - 認証失敗: `/api/*` と `/openapi/*` の認証設定とヘッダ転送を確認する。
+- データ混在: DB接続情報や非公開成果物が `/web/*` `/docs/*` へ公開されていないことを確認する。
 
 ## 変更履歴
+- 2026-02-11: DB正本前提の公開境界（`/web/*` 配信領域と docs/test結果分離）を追記 [[BD-ADR-021]]
 - 2026-02-11: Phase 2適用の位置づけと前提条件を追記
 - 2026-02-11: 新規作成
