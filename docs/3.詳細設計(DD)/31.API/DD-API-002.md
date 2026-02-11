@@ -3,7 +3,7 @@ id: DD-API-002
 title: 収集ジョブ起動API
 doc_type: API詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -53,12 +53,12 @@ tags:
 2. 入力構文を検証し、`mode/targetTypes/fromPublishedAt` の型不整合を拒否する。
 3. 同時実行制約を評価し、同種run実行中なら `409 RUN_ALREADY_ACTIVE` を返す。
 4. `Idempotency-Key` が既存要求と一致する場合は既存 `runId` を再返却する。
-5. runレコードを `queued` で作成し、実行要求イベントをキューへ発行する。
+5. runレコードを `queued` で作成し、同一Backend API内ジョブ実行モジュールへ登録する。
 6. 応答として `runId/acceptedAt/mode/targetTypes` を返却する。
 
 ## 状態遷移
 - 受付直後: `queued`
-- ワーカー取得後: `running`
+- Backend API内ジョブ開始後: `running`
 - 終了時: `succeeded|failed|partial|cancelled`
 
 ## エラーマッピング
@@ -79,6 +79,7 @@ tags:
 - 重複起動時に 409 応答となり、既存runの状態確認へ誘導できること。
 
 ## 変更履歴
+- 2026-02-11: 実行要求の登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: `/api/v1` 統一、処理ロジック/状態遷移/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成
 - 2026-02-10: [[RQ-GL-002|収集ジョブ]]起動APIの入出力、冪等性、監査仕様を追加

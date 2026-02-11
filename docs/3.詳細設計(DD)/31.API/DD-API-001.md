@@ -3,7 +3,7 @@ id: DD-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -32,6 +32,8 @@ tags:
 - MVPの利用者向け機能は静的JSON契約を主APIとして扱い、Webはこの契約に依存して動作する。
 - 運用用制御APIは `/api/v1/ops/*` を正本経路とし、一般利用者UIとは分離する。
 - 更新系データの正本はDBとし、配信契約は生成済み成果物を参照する。
+- 収集/再確認/公開反映のrun実行は単一のBackend API（Hono）内で完結し、別デプロイのworker/batchサービスは持たない。
+- `scheduled` 実行は外部スケジューラが同一運用APIを呼び出して開始し、処理は同一Backend API内ジョブ実行として扱う。
 - 将来の高度検索は `API検索エンドポイント` を追加予定とし、本書では予約境界のみ定義する。
 
 ## MVP対象API一覧
@@ -137,6 +139,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-11: run実行境界を単一Backend API（Hono）モノリスへ統一し、`scheduled` の起動方式を追記 [[BD-ADR-021]]
 - 2026-02-11: Problem Details 正本化と `trace_id` への統一、`BD-API-003/005` と `BD-ARCH-002/003/004` 参照を追加
 - 2026-02-11: MVP対象API一覧、共通処理ロジック規約、`/api/v1` 正本経路を追加 [[BD-ADR-021]]
 - 2026-02-11: DB正本前提と将来検索API予約境界を追記 [[BD-ADR-021]]

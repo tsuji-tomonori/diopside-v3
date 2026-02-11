@@ -3,7 +3,7 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -53,6 +53,7 @@ tags:
 - Index Builder: 一覧検索向けに `bootstrap` と `archive_index.pN` を生成。
 - Static Distributor: 生成成果物（`bootstrap` / `tag_master` / `archive_index.pN`）を配信領域へ配置する。
 - Backend API: 管理画面からの更新要求を受け、DB更新と配信再生成を制御する。
+- Batch Runner: 収集/再確認/公開反映をBackend API（Hono）内で実行し、run状態を管理する。
 - Publish Orchestrator: [[RQ-GL-018|配信反映実行]] 単位で成果物生成、公開切替、失敗時ロールバックを制御する。
 - Web App: [[RQ-GL-010|段階ロード]]、クライアント検索、絞り込み、詳細表示。
 - Admin Console/Runbook: 収集失敗検知、[[RQ-GL-011|再収集]]実行、タグ更新、配信反映判定、[[RQ-GL-012|受入判定]]。
@@ -73,7 +74,8 @@ tags:
 
 ## 配置方針
 - 配信面は静的ファイル配信を基本とし、閲覧トラフィックと収集処理を分離する。
-- 収集面は定期実行と手動再実行を両立し、実行履歴を運用確認可能にする。
+- 収集面は定期実行と手動再実行を両立し、起動入口を同一運用APIに統一したうえで実行履歴を運用確認可能にする。
+- 定期実行は外部スケジューラが運用APIを呼び出して開始し、実処理は単一Backend API（Hono）内で完結させる。
 - 監視面は「収集成功率」「最新更新時刻」「配信エラー率」を最小必須指標とする。
 
 ## 図
@@ -91,8 +93,9 @@ flowchart TD
     C2[Incremental Updater]
     C3[Normalizer]
     C4[Tag Resolver]
-    C5[Index Builder]
-    API[Backend API]
+  C5[Index Builder]
+  API[Backend API]
+  BR[Batch Runner in API]
   end
 
   subgraph DATA[データ層]
@@ -112,9 +115,10 @@ flowchart TD
   C0 --> C1 --> C2 --> C3 --> C4 --> C5
   C3 --> DB
   C4 --> DB
-  API --> DB
+  API --> BR
+  BR --> DB
   ADMUI --> API
-  API --> C5
+  BR --> C5
   C5 --> S1
   C5 --> S2
   C5 --> S3
@@ -133,6 +137,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-11: バッチ実処理を単一Backend API（Hono）内へ集約し、外部スケジューラはAPI起動のみ担う方式を追記 [[BD-ADR-021]]
 - 2026-02-11: Next.js App Router前提のWeb実行境界（RSC/Client境界、Dynamic API、Route Handler、Suspense）を追加 [[BD-ADR-024]]
 - 2026-02-11: 派生文書（ARCH-002/003/004, ERD, API-003, UI-003）とのトレースを追加 [[BD-ADR-021]]
 - 2026-02-11: DB正本化と3層責務境界、将来検索API拡張境界を追加 [[BD-ADR-021]]

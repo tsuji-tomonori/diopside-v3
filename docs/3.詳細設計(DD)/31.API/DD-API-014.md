@@ -3,7 +3,7 @@ id: DD-API-014
 title: ドキュメント公開実行API
 doc_type: API詳細
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -43,7 +43,7 @@ tags:
 1. 認証/権限を確認し、重複実行制約を評価する。
 2. `targetRef` 存在を検証し、参照不能なら400を返す。
 3. `docsPublishRunId` を採番して `queued` で作成する。
-4. 実行ワーカーへ公開ジョブを投入する。
+4. 同一Backend API内ジョブ実行モジュールへ公開ジョブを登録する。
 
 ### `GET /api/v1/admin/docs/publish/{docsPublishRunId}`
 1. runの存在を確認する。
@@ -64,4 +64,5 @@ tags:
 - ビルド失敗時にデプロイへ進まず、失敗理由を返せること。
 
 ## 変更履歴
+- 2026-02-11: 公開ジョブの実行登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: 新規作成 [[BD-ADR-021]]

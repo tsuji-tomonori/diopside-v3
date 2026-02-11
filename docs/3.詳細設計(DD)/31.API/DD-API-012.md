@@ -3,7 +3,7 @@ id: DD-API-012
 title: 配信前後再確認API
 doc_type: API詳細
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -43,7 +43,7 @@ tags:
 1. JWT検証後、入力動画ID集合と `mode` を検証する。
 2. 対象動画ごとに基準メタデータ（before）を解決する。
 3. `recheckRunId` を採番し `queued` で保存する。
-4. 再確認ジョブをキューへ投入し受理応答する。
+4. 再確認ジョブを同一Backend API内ジョブ実行モジュールへ登録し受理応答する。
 
 ### `GET /api/v1/ops/rechecks/{recheckRunId}`
 1. run存在確認後、再確認結果を集約する。
@@ -64,4 +64,5 @@ tags:
 - 差分なしでも `unchanged` として記録されること。
 
 ## 変更履歴
+- 2026-02-11: 再確認ジョブの実行登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: 新規作成 [[BD-ADR-021]]
