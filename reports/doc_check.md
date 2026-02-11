@@ -5,5 +5,76 @@
 - id_docs: 249
 - parse_errors: 0
 - issues: 0
+- nonlinked_doc_ids: 68
 - broken_links: 0
 - backlink_issues: 0
+
+## Non-linked document ID references (body)
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:4: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | - DD-API-002〜DD-API-009 の契約をAPI単位で検証し、実装変更時の回帰を局所化する。
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:4: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | - DD-API-002〜DD-API-009 の契約をAPI単位で検証し、実装変更時の回帰を局所化する。
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:12: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | - [[UT-CASE-001]]: DD-API-002（[[RQ-GL-002|収集ジョブ]]起動API）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:13: plain document ID 'DD-API-003' must be linked as [[DD-API-003]] | - [[UT-CASE-002]]: DD-API-003（[[RQ-GL-002|収集ジョブ]]状態API）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:14: plain document ID 'DD-API-004' must be linked as [[DD-API-004]] | - [[UT-CASE-003]]: DD-API-004（アーカイブ一覧配信契約）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:15: plain document ID 'DD-API-005' must be linked as [[DD-API-005]] | - [[UT-CASE-004]]: DD-API-005（[[RQ-GL-005|タグ辞書]]配信契約）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:16: plain document ID 'DD-API-006' must be linked as [[DD-API-006]] | - [[UT-CASE-005]]: DD-API-006（検索契約）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:17: plain document ID 'DD-API-007' must be linked as [[DD-API-007]] | - [[UT-CASE-006]]: DD-API-007（動画詳細API）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:18: plain document ID 'DD-API-008' must be linked as [[DD-API-008]] | - [[UT-CASE-007]]: DD-API-008（[[RQ-GL-011|再収集]]API）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:19: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | - [[UT-CASE-008]]: DD-API-009（運用診断API）
+- /home/t-tsuji/project/diopside-v3/docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md:27: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | - 2026-02-10: DD-API-002〜009に合わせてUTケースをAPI単位に再編
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:4: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | - DD-API-002〜DD-API-009 の契約が、実行基盤・配信データ・Web表示・運用導線で一貫して成立することを検証する。
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:4: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | - DD-API-002〜DD-API-009 の契約が、実行基盤・配信データ・Web表示・運用導線で一貫して成立することを検証する。
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:12: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | - [[IT-CASE-001]]: DD-API-002（[[RQ-GL-002|収集ジョブ]]起動API）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:13: plain document ID 'DD-API-003' must be linked as [[DD-API-003]] | - [[IT-CASE-002]]: DD-API-003（[[RQ-GL-002|収集ジョブ]]状態API）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:14: plain document ID 'DD-API-004' must be linked as [[DD-API-004]] | - [[IT-CASE-003]]: DD-API-004（アーカイブ一覧配信契約）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:15: plain document ID 'DD-API-005' must be linked as [[DD-API-005]] | - [[IT-CASE-004]]: DD-API-005（[[RQ-GL-005|タグ辞書]]配信契約）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:16: plain document ID 'DD-API-006' must be linked as [[DD-API-006]] | - [[IT-CASE-005]]: DD-API-006（検索契約）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:17: plain document ID 'DD-API-007' must be linked as [[DD-API-007]] | - [[IT-CASE-006]]: DD-API-007（動画詳細API）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:18: plain document ID 'DD-API-008' must be linked as [[DD-API-008]] | - [[IT-CASE-007]]: DD-API-008（[[RQ-GL-011|再収集]]API）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:19: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | - [[IT-CASE-008]]: DD-API-009（運用診断API）
+- /home/t-tsuji/project/diopside-v3/docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md:27: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | - 2026-02-10: DD-API-002〜009に合わせてITケースをAPI単位に再編
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:31: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | | DD-API-002 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:32: plain document ID 'DD-API-003' must be linked as [[DD-API-003]] | | DD-API-003 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:33: plain document ID 'DD-API-004' must be linked as [[DD-API-004]] | | DD-API-004 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:34: plain document ID 'DD-API-005' must be linked as [[DD-API-005]] | | DD-API-005 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:35: plain document ID 'DD-API-006' must be linked as [[DD-API-006]] | | DD-API-006 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:36: plain document ID 'DD-API-007' must be linked as [[DD-API-007]] | | DD-API-007 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:37: plain document ID 'DD-API-008' must be linked as [[DD-API-008]] | | DD-API-008 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:38: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | | DD-API-009 |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:44: plain document ID 'RQ-SH-001' must be linked as [[RQ-SH-001]] | | 判定者 | RQ-SH-001 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/52.リリース判定/AT-GO-001.md:47: plain document ID 'DD-API-008' must be linked as [[DD-API-008]] | | 例外承認事項 | DD-API-008 の文言改善を次リリース対応 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:9: plain document ID 'AT-SCN-001' must be linked as [[AT-SCN-001]] | | AT-SCN-001 | Pass | 2026-02-10 | RQ-SH-001 | 一覧表示・追加読込とも正常 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:9: plain document ID 'RQ-SH-001' must be linked as [[RQ-SH-001]] | | AT-SCN-001 | Pass | 2026-02-10 | RQ-SH-001 | 一覧表示・追加読込とも正常 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:10: plain document ID 'AT-SCN-002' must be linked as [[AT-SCN-002]] | | AT-SCN-002 | Pass | 2026-02-10 | RQ-SH-002 | 複合条件検索で期待件数一致 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:10: plain document ID 'RQ-SH-002' must be linked as [[RQ-SH-002]] | | AT-SCN-002 | Pass | 2026-02-10 | RQ-SH-002 | 複合条件検索で期待件数一致 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:11: plain document ID 'AT-SCN-003' must be linked as [[AT-SCN-003]] | | AT-SCN-003 | Pass | 2026-02-10 | RQ-SH-002 | モーダル表示とYouTube遷移正常 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:11: plain document ID 'RQ-SH-002' must be linked as [[RQ-SH-002]] | | AT-SCN-003 | Pass | 2026-02-10 | RQ-SH-002 | モーダル表示とYouTube遷移正常 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:12: plain document ID 'AT-SCN-004' must be linked as [[AT-SCN-004]] | | AT-SCN-004 | Pass | 2026-02-10 | RQ-SH-001 | 収集起動・状態追跡・結果確認正常 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:12: plain document ID 'RQ-SH-001' must be linked as [[RQ-SH-001]] | | AT-SCN-004 | Pass | 2026-02-10 | RQ-SH-001 | 収集起動・状態追跡・結果確認正常 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:13: plain document ID 'AT-SCN-005' must be linked as [[AT-SCN-005]] | | AT-SCN-005 | Fail | 2026-02-10 | RQ-SH-001 | [[RQ-GL-011|再収集]]上限超過時の運用文言が不明瞭 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:13: plain document ID 'RQ-SH-001' must be linked as [[RQ-SH-001]] | | AT-SCN-005 | Fail | 2026-02-10 | RQ-SH-001 | [[RQ-GL-011|再収集]]上限超過時の運用文言が不明瞭 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:28: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | | DD-API-002 | AT-SCN-004 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:28: plain document ID 'AT-SCN-004' must be linked as [[AT-SCN-004]] | | DD-API-002 | AT-SCN-004 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:29: plain document ID 'DD-API-003' must be linked as [[DD-API-003]] | | DD-API-003 | AT-SCN-004, AT-SCN-005 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:29: plain document ID 'AT-SCN-004' must be linked as [[AT-SCN-004]] | | DD-API-003 | AT-SCN-004, AT-SCN-005 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:29: plain document ID 'AT-SCN-005' must be linked as [[AT-SCN-005]] | | DD-API-003 | AT-SCN-004, AT-SCN-005 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:30: plain document ID 'DD-API-004' must be linked as [[DD-API-004]] | | DD-API-004 | AT-SCN-001 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:30: plain document ID 'AT-SCN-001' must be linked as [[AT-SCN-001]] | | DD-API-004 | AT-SCN-001 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:31: plain document ID 'DD-API-005' must be linked as [[DD-API-005]] | | DD-API-005 | AT-SCN-002 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:31: plain document ID 'AT-SCN-002' must be linked as [[AT-SCN-002]] | | DD-API-005 | AT-SCN-002 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:32: plain document ID 'DD-API-006' must be linked as [[DD-API-006]] | | DD-API-006 | AT-SCN-002 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:32: plain document ID 'AT-SCN-002' must be linked as [[AT-SCN-002]] | | DD-API-006 | AT-SCN-002 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:33: plain document ID 'DD-API-007' must be linked as [[DD-API-007]] | | DD-API-007 | AT-SCN-003 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:33: plain document ID 'AT-SCN-003' must be linked as [[AT-SCN-003]] | | DD-API-007 | AT-SCN-003 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:34: plain document ID 'DD-API-008' must be linked as [[DD-API-008]] | | DD-API-008 | AT-SCN-005 | Fail | INC-AT-2026-002 | エラーメッセージ改善を次リリースで修正 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:34: plain document ID 'AT-SCN-005' must be linked as [[AT-SCN-005]] | | DD-API-008 | AT-SCN-005 | Fail | INC-AT-2026-002 | エラーメッセージ改善を次リリースで修正 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:35: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | | DD-API-009 | AT-SCN-004, AT-SCN-005 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:35: plain document ID 'AT-SCN-004' must be linked as [[AT-SCN-004]] | | DD-API-009 | AT-SCN-004, AT-SCN-005 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:35: plain document ID 'AT-SCN-005' must be linked as [[AT-SCN-005]] | | DD-API-009 | AT-SCN-004, AT-SCN-005 | Pass | - | 継続監視 |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:40: plain document ID 'DD-API-002' must be linked as [[DD-API-002]] | | DD-API-002 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:41: plain document ID 'DD-API-003' must be linked as [[DD-API-003]] | | DD-API-003 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:42: plain document ID 'DD-API-004' must be linked as [[DD-API-004]] | | DD-API-004 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:43: plain document ID 'DD-API-005' must be linked as [[DD-API-005]] | | DD-API-005 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:44: plain document ID 'DD-API-006' must be linked as [[DD-API-006]] | | DD-API-006 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:45: plain document ID 'DD-API-007' must be linked as [[DD-API-007]] | | DD-API-007 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:46: plain document ID 'DD-API-008' must be linked as [[DD-API-008]] | | DD-API-008 |  |  |  |  |
+- /home/t-tsuji/project/diopside-v3/docs/6.受入テスト(AT)/61.受入テスト報告/AT-RPT-001.md:47: plain document ID 'DD-API-009' must be linked as [[DD-API-009]] | | DD-API-009 |  |  |  |  |

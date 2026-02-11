@@ -3,16 +3,17 @@ id: RQ-DG-001
 title: ドキュメント更新フロー
 doc_type: ドキュメント運用ガイド
 phase: RQ
-version: 1.0.16
+version: 1.0.17
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[RQ-SC-001]]'
 related:
 - '[[BD-CM-001]]'
 - '[[RQ-RTM-001]]'
+- '[[RQ-RDR-024]]'
 tags:
 - diopside
 - RQ
@@ -23,8 +24,10 @@ tags:
 ## 改修フロー
 1. RQ更新時はRDRを同一変更で更新する。
 2. BD/DD更新時はADR経路を確認する。
-3. 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
-4. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`）を実行する。
+3. 文書更新で規約・テンプレート・運用手順に変更がある場合は、同一変更で `.opencode/skills` の対応スキル（`SKILL.md`/`TEMPLATE.md`）を更新する。
+4. 共通運用規約変更時は、`skill-maintainer`、`docops-orchestrator`、`obsidian-doc-*` を同一変更で更新する。
+5. 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
+6. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`）を実行する。
 
 ## 受入基準
 - 用語集に定義された語彙（`RQ-GL-*`）が本文でObsidianリンク化されている。
@@ -33,8 +36,12 @@ tags:
 - 用語文書の `## 定義` は表形式（`用語ID/用語名/英名/定義/判定条件/適用範囲`）で記載する。
 - タクソノミ系用語（例: `[[RQ-GL-013|タグ種別]]`）は、`タグ種別/説明/付与ルール` の表を持つ。
 - frontmatter、既存Wikiリンク、インラインコード、コードブロックは自動リンク化の対象外である。
+- 文書運用変更時は、該当 `doc-*` スキルの `SKILL.md`/`TEMPLATE.md` が同一変更で更新されている。
+- 共通規約変更時は、`skill-maintainer`/`docops-orchestrator`/`obsidian-doc-*` の同時更新と、`reports/impact_check_YYYY-MM-DD.md` への記録が存在する。
+- 文書更新とスキル更新の実行順は「自動リンク化 -> 整合チェック」を満たす。
 
 ## 変更履歴
+- 2026-02-11: スキルメンテナンス方針（同一変更での同期更新、共通スキル同時更新、受入基準）を追加
 - 2026-02-10: タクソノミ系用語の表記基準（種別/説明/付与ルール）を受入基準へ追加
 - 2026-02-10: 本文中の文書ID参照をObsidianリンクで統一する受入基準を追加
 - 2026-02-10: 用語定義の表形式（標準）を受入基準へ追加

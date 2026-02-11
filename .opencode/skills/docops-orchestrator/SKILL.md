@@ -12,12 +12,15 @@ metadata:
 1. 対象文書IDを特定する。
 2. 対応 `doc-*` スキルを特定し更新する。
 3. 要求変更なら RDR、設計変更なら ADR を同一変更で更新する。
-4. `up/related` を辿って上位・下位文書を更新または影響確認記録を作成する。
-5. `reports/impact_check_YYYY-MM-DD.md` を更新する。
-6. `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行して本文用語をWikiリンク化する。
-7. `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行して `reports/doc_check.md` を更新する。
-8. 用語文書（`RQ-GL-*`）を変更した場合は、`term_en`（ASCII `snake_case`）と本文英名併記（`英名: \`term_en\``）を確認する。
-9. 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク（`[[ID]]`）で記述されていることを確認する。
+4. 規約変更時は `skill-maintainer` / `docops-orchestrator` / `obsidian-doc-*` を同一変更で更新する。
+5. `up/related` を辿って上位・下位文書を更新または影響確認記録を作成する。
+6. `reports/impact_check_YYYY-MM-DD.md` を更新する。
+7. `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行して本文用語をWikiリンク化する。
+8. `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>` を実行して `reports/doc_check.md` を更新する。
+9. 用語文書（`RQ-GL-*`）を変更した場合は、`term_en`（ASCII `snake_case`）と本文英名併記（`英名: \`term_en\``）を確認する。
+10. 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク（`[[ID]]`）で記述されていることを確認する。
+11. `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば fail とし、修正が完了するまで次工程へ進まない。
+12. スキル更新を伴う変更では、`docs` と `.opencode/skills` が同一変更で更新されていることを確認する。
 
 ## 出力
 - 変更済み docs
