@@ -1,0 +1,93 @@
+name: Docs Link Check
+
+on:
+  pull_request:
+    paths:
+      - "docs/**/*.md"
+      - ".opencode/skills/obsidian-doc-check/scripts/validate_vault.py"
+      - ".opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py"
+      - ".github/workflows/docs-link-check.yml"
+  push:
+    paths:
+      - "docs/**/*.md"
+      - ".opencode/skills/obsidian-doc-check/scripts/validate_vault.py"
+      - ".opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py"
+      - ".github/workflows/docs-link-check.yml"
+
+jobs:
+  docs-link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate glossary links and document ID links
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+          import sys
+
+          def run(cmd):
+              print("+", " ".join(cmd))
+              subprocess.run(cmd, check=True)
+
+          event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+          base_ref = os.environ.get("GITHUB_BASE_REF", "")
+          before = os.environ.get("GITHUB_EVENT_BEFORE", "")
+
+          if event_name == "pull_request" and base_ref:
+              run(["git", "fetch", "origin", base_ref, "--depth", "1"])
+              diff_range = f"origin/{base_ref}...HEAD"
+          elif before and before != "0000000000000000000000000000000000000000":
+              diff_range = f"{before}...HEAD"
+          else:
+              diff_range = "HEAD~1...HEAD"
+
+          out = subprocess.check_output(["git", "diff", "--name-only", diff_range], text=True)
+          changed = []
+          for line in out.splitlines():
+              path = line.strip()
+              if not path:
+                  continue
+              if not path.startswith("docs/") or not path.endswith(".md"):
+                  continue
+              if path.endswith("/README.md") or path.endswith("/TEMPLATE.md"):
+                  continue
+              changed.append(path)
+
+          if not changed:
+              print("No changed docs markdown files. Skipping checks.")
+              sys.exit(0)
+
+          run([
+              "python3",
+              ".opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py",
+              "--docs-root",
+              "docs",
+              "--check",
+              *changed,
+          ])
+
+          run([
+              "python3",
+              ".opencode/skills/obsidian-doc-check/scripts/validate_vault.py",
+              "--docs-root",
+              "docs",
+              "--report",
+              "reports/doc_check.md",
+              "--targets",
+              *changed,
+          ])
+          PY

@@ -45,6 +45,79 @@ REQUIRED_KEYS = [
 LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 DOC_ID_CODE_REF_RE = re.compile(r"（`[A-Z]{2}-[A-Z]{2,4}-[0-9]{3}`）")
+DOC_ID_RE = re.compile(r"\b(?:RQ|BD|DD|UT|IT|AT)-[A-Z]{2,8}-\d{3}\b")
+WIKI_LINK_RE = re.compile(r"\[\[[^\]]+\]\]")
+INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
+DOC_ID_ALLOWLIST_LINE_RE = [
+    re.compile(r"\b要求ID\s*:\s*", re.IGNORECASE),
+    re.compile(r"\b用語ID\s*[:|]\s*", re.IGNORECASE),
+]
+
+
+def _merge_spans(spans: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    if not spans:
+        return []
+    spans = sorted(spans)
+    merged: List[Tuple[int, int]] = [spans[0]]
+    for s, e in spans[1:]:
+        ms, me = merged[-1]
+        if s <= me:
+            merged[-1] = (ms, max(me, e))
+        else:
+            merged.append((s, e))
+    return merged
+
+
+def _in_spans(start: int, end: int, spans: List[Tuple[int, int]]) -> bool:
+    for s, e in spans:
+        if s <= start and end <= e:
+            return True
+    return False
+
+
+def _line_allows_unlinked_ids(line: str) -> bool:
+    for pat in DOC_ID_ALLOWLIST_LINE_RE:
+        if pat.search(line):
+            return True
+    return False
+
+
+def find_nonlinked_doc_ids(body: str, self_id: str) -> List[Tuple[int, str, str]]:
+    """Find non-linked document IDs in body text.
+
+    Returns list of (line_number, doc_id, line_text).
+    """
+    out: List[Tuple[int, str, str]] = []
+    in_fence = False
+    lines = body.splitlines()
+
+    for line_no, line in enumerate(lines, start=1):
+        stripped = line.strip()
+
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+
+        if _line_allows_unlinked_ids(line):
+            continue
+
+        protected_spans = _merge_spans(
+            [m.span() for m in WIKI_LINK_RE.finditer(line)]
+            + [m.span() for m in INLINE_CODE_RE.finditer(line)]
+        )
+
+        for m in DOC_ID_RE.finditer(line):
+            doc_id = m.group(0)
+            if doc_id == self_id:
+                continue
+            s, e = m.span()
+            if _in_spans(s, e, protected_spans):
+                continue
+            out.append((line_no, doc_id, line.rstrip()))
+
+    return out
 
 
 def extract_links(value: Any) -> List[str]:
@@ -112,10 +185,17 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--docs-root", default="docs", help="docs root directory (default: docs)")
     ap.add_argument("--report", default="", help="write markdown report to this path (optional)")
+    ap.add_argument(
+        "--targets",
+        nargs="*",
+        default=[],
+        help="validate only these markdown files (workspace-relative paths)",
+    )
     args = ap.parse_args()
 
     root = Path(".").resolve()
     docs_root = (root / args.docs_root).resolve()
+    target_paths = {(root / p).resolve() for p in args.targets}
 
     md_files = [
         p
@@ -145,6 +225,7 @@ def main() -> int:
     issues: List[str] = []
     broken_links: List[str] = []
     backlink_issues: List[str] = []
+    nonlinked_doc_ids: List[str] = []
 
     # Forbidden files are treated as issues.
     for p in forbidden_files:
@@ -152,10 +233,17 @@ def main() -> int:
 
     date_re = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
+    def in_scope(doc_path: Path) -> bool:
+        if not target_paths:
+            return True
+        return doc_path.resolve() in target_paths
+
     for d in docs:
         # Only validate docs that look like ID-based docs
         # (Exclude files without id in frontmatter)
         if not d.id:
+            continue
+        if not in_scope(d.path):
             continue
 
         # filename == id
@@ -193,6 +281,12 @@ def main() -> int:
         if DOC_ID_CODE_REF_RE.search(d.body):
             issues.append(
                 f"- {d.path}: document ID reference in code style found (use [[ID]] instead of （`ID`）)"
+            )
+
+        # document ID references should not remain plain text in body
+        for line_no, doc_id, line in find_nonlinked_doc_ids(d.body, d.id):
+            nonlinked_doc_ids.append(
+                f"- {d.path}:{line_no}: plain document ID '{doc_id}' must be linked as [[{doc_id}]] | {line}"
             )
 
         # banned relation sections in body
@@ -235,8 +329,11 @@ def main() -> int:
     lines.append(f"- id_docs: {len([d for d in docs if d.id])}")
     lines.append(f"- parse_errors: {len(parse_errors)}")
     lines.append(f"- issues: {len(issues)}")
+    lines.append(f"- nonlinked_doc_ids: {len(nonlinked_doc_ids)}")
     lines.append(f"- broken_links: {len(broken_links)}")
     lines.append(f"- backlink_issues: {len(backlink_issues)}")
+    if target_paths:
+        lines.append(f"- target_files: {len(target_paths)}")
     lines.append("")
 
     if parse_errors:
@@ -247,6 +344,11 @@ def main() -> int:
     if issues:
         lines.append("## Issues")
         lines.extend(issues)
+        lines.append("")
+
+    if nonlinked_doc_ids:
+        lines.append("## Non-linked document ID references (body)")
+        lines.extend(nonlinked_doc_ids)
         lines.append("")
 
     if broken_links:
@@ -267,6 +369,8 @@ def main() -> int:
         report_path.write_text(report_text, encoding="utf-8")
 
     print(report_text)
+    if parse_errors or issues or nonlinked_doc_ids or broken_links or backlink_issues:
+        return 1
     return 0
 
 

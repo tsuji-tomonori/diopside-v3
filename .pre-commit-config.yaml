@@ -1,0 +1,18 @@
+repos:
+  - repo: local
+    hooks:
+      - id: obsidian-auto-link-glossary
+        name: Auto-link glossary terms in docs
+        entry: python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py --docs-root docs
+        language: system
+        pass_filenames: true
+        files: ^docs/.*\.md$
+        exclude: (^docs/.*/README\.md$|^docs/.*/TEMPLATE\.md$)
+
+      - id: obsidian-validate-vault
+        name: Validate Obsidian docs link rules
+        entry: python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets
+        language: system
+        pass_filenames: true
+        files: ^docs/.*\.md$
+        exclude: (^docs/.*/README\.md$|^docs/.*/TEMPLATE\.md$)
