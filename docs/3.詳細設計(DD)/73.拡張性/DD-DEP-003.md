@@ -3,14 +3,14 @@ id: DD-DEP-003
 title: インフラデプロイ詳細（領域分割）
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-11'
 up:
   - '[[BD-DEP-005]]'
-  - '[[BD-ADR-026]]'
+  - '[[BD-ADR-014]]'
 related:
   - '[[BD-DEP-004]]'
   - '[[DD-DEP-002]]'
@@ -52,4 +52,5 @@ tags:
 - invalidation完了遅延を監視し、10分超過でWarningを発報する。
 
 ## 変更履歴
-- 2026-02-11: 新規作成（領域分割配備とロールバック条件を追加）
+- 2026-02-11: 新規作成（領域分割配備とロールバック条件を追加） [[BD-ADR-014]]
+- 2026-02-11: ADR参照を配信経路境界の決定へ整理 [[BD-ADR-014]]

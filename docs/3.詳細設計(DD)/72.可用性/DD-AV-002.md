@@ -3,14 +3,15 @@ id: DD-AV-002
 title: インフラ可用性詳細
 doc_type: 可用性設計
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-11'
 up:
   - '[[BD-MON-003]]'
-  - '[[BD-ADR-026]]'
+  - '[[BD-ADR-006]]'
+  - '[[BD-ADR-014]]'
 related:
   - '[[DD-DEP-003]]'
   - '[[DD-LOG-002]]'
@@ -49,4 +50,5 @@ tags:
 4. 可用性実績を `AT-OPS` と `AT-RPT` へ転記。
 
 ## 変更履歴
-- 2026-02-11: 新規作成（経路別可用性判定と復旧フロー）
+- 2026-02-11: 新規作成（経路別可用性判定と復旧フロー） [[BD-ADR-006]]
+- 2026-02-11: ADR参照を監視SLO/経路境界へ整理 [[BD-ADR-014]]
