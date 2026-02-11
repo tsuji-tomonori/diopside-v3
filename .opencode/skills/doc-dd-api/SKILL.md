@@ -20,6 +20,12 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - API処理フロー、入力検証規則、外部依存の呼び出し順、エラー/例外の返却条件、冪等性・再試行方針。
+- HonoのValidationTargets（`param/query/header/cookie/json/form`）単位の検証設計と適用順。
+- `@hono/zod-validator` 利用時の `safeParseAsync` 前提、hook/wrapper方針、`c.req.valid(...)` 利用規約。
+- `HTTPException(400, { cause })` と `app.onError` 集約の実装規約、`app.notFound` の扱い。
+- Zod v4 エラー整形（`z.flattenError()` / `z.treeifyError()`）と Problem Details拡張フィールドの対応。
+- ルート直後ハンドラの原則、分離時の `factory.createHandlers()` 採用条件。
+- RPC利用時の `AppType` export とメソッドチェーン定義条件。
 - Problem Details（`application/problem+json`）の実装マッピング（`type/title/status/detail/instance` + 拡張）
 - HTTPステータス実装規則（`201` + `Location`、`429` + `Retry-After`、`4xx/5xx` 切り分け）
 - 一覧APIのページング実装（cursor生成/検証、opaque維持、上限値）
@@ -49,5 +55,9 @@ metadata:
 - Problem Details必須メンバーと拡張項目の責務分離（文字列パース非依存）を確認する。
 - `GET` ボディ非利用、PUT/DELETE冪等性、`429` + `Retry-After`、ページサイズ上限が定義されていることを確認する。
 - `trace_id`/`request_id`/`instance` でログと応答を相互追跡できることを確認する。
+- `json/form` の `Content-Type` 条件、`header` 小文字キー規約、ValidationTargets別の適用順が定義されていることを確認する。
+- 検証済みデータの参照が `c.req.valid(...)` に統一され、ハンドラ内で未検証入力を使わないことを確認する。
+- バリデーション失敗が `HTTPException(400, { cause })` を経由して `app.onError` に集約されることを確認する。
+- Zod v4 のエラー整形関数（`z.flattenError()`/`z.treeifyError()`）を利用し、`format`/`flatten` 旧運用へ依存しないことを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

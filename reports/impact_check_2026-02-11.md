@@ -800,3 +800,17 @@
   - 設計整合: `BD-ADR-024 -> BD-ARCH-001/BD-BUILD-001/BD-SEC-001/BD-QUAL-001` の追跡経路を構築。
   - 要求整合: `RQ-DEV-001`, `RQ-PS-001`, `RQ-SEC-001`, `RQ-UX-001` と矛盾せず、受入観点（性能/安全/運用）をBDへ具体化。
   - 運用整合: 対応4スキル更新により、Next.js App Router前提の設計観点が docs 更新フローで継続適用可能。
+
+## 追記（Hono + Zod 実装規約のBD/skill反映）
+- 対象: `BD-ADR-025`, `BD-API-005`, `BD-API-002`, `BD-API-003`, `.opencode/skills/doc-bd-api/*`, `.opencode/skills/doc-dd-api/*`
+- 実施:
+  - `BD-ADR-025` を新規追加し、Hono + Zod の入力検証・例外処理・型共有方針を設計判断として固定。
+  - `BD-API-005` を更新し、ValidationTargets単位検証、`c.req.valid(...)`、`HTTPException` + `app.onError` 集約、Zod v4運用（`safeParseAsync`, `z.flattenError()`）を共通規約へ追加。
+  - `BD-API-002` を更新し、更新系APIの実装準拠先として `BD-API-005` / `BD-ADR-025` を追記。
+  - `BD-API-003` を更新し、ZodError起因の検証詳細を Problem Details拡張へ返す方針を追加。
+  - `doc-bd-api` の `SKILL.md` / `TEMPLATE.md` を更新し、Hono + Zod 観点（検証境界、エラー整形、RPC型共有）を必須化。
+  - `doc-dd-api` の `SKILL.md` / `TEMPLATE.md` を更新し、実装規約（`@hono/zod-validator`, `safeParseAsync`, `HTTPException`, `app.onError`）をチェック項目へ追加。
+- 影響確認:
+  - 設計整合: `BD-ADR-025 -> BD-API-005 -> BD-API-002/003` の追跡経路を構築。
+  - 要求整合: `RQ-SEC-001`（入力検証/情報露出抑制）、`RQ-INT-001`（契約整合）、`RQ-DEV-001`（実装標準化）と矛盾しない運用基準を確立。
+  - 運用整合: 対応2スキル更新により、今後のBD-API/DD-API更新時に同一のHono + Zod観点を継続適用可能。

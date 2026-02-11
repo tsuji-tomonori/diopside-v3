@@ -23,6 +23,10 @@ metadata:
 - HTTPセマンティクス（GET/POST/PUT/PATCH/DELETE の意味、冪等性、安全性）とステータスコード方針。
 - 一覧取得のページング方式（`limit` + `cursor` 推奨、cursorはopaque）と検索パラメータ統一方針。
 - エラー形式の標準（`application/problem+json`、`type/title/status/detail/instance`）と拡張項目方針。
+- Hono + Zod を採用するAPIの実装規約（ValidationTargets単位の検証、`c.req.valid(...)` 利用、`HTTPException` と `app.onError` 集約）。
+- バリデーションエラー整形方針（`z.flattenError()` / `z.treeifyError()`）と機械可読フィールドの定義。
+- Zod v4 前提の運用方針（`safeParseAsync`、未知キー strict/loose 方針、`z.input`/`z.output` の型境界）。
+- RPC型共有時の運用（`AppType` export、メソッドチェーン定義、`hc<AppType>` 利用）。
 - バージョニング/廃止（SemVer、`deprecated: true`、移行手順、Sunset）と契約運用（OpenAPI正本、CI破壊的変更検知）。
 - `## 変更履歴` への当日追記。
 
@@ -49,6 +53,10 @@ metadata:
 - `GET` にボディを持たせない設計になっていることを確認する。
 - PUT/DELETE の冪等性、POST作成時の `201` + `Location`、レート制限時の `429` + `Retry-After` が定義されていることを確認する。
 - Problem Details必須メンバー（`type/title/status/detail/instance`）を欠落なく定義していることを確認する。
+- `param/query/header/cookie/json/form` の必要箇所が定義され、`json/form` の `Content-Type` 条件と `header` 小文字運用が明記されていることを確認する。
+- 検証済み入力が `c.req.valid(...)` 経由に統一され、未検証入力の利用を許容していないことを確認する。
+- バリデーション失敗が `HTTPException(400, { cause })` と `app.onError` 集約で返却される方針を確認する。
+- RPC採用時に `AppType` export とメソッドチェーン定義が記載されていることを確認する。
 - OpenAPIを契約正本として、Lint/破壊的変更検知/契約テストの運用が記述されていることを確認する。
 - `## 変更履歴` 各行に `[[BD-ADR-xxx]]` が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。

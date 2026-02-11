@@ -3,7 +3,7 @@ id: BD-API-003
 title: エラーモデル
 doc_type: API設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -15,6 +15,7 @@ related:
 - '[[BD-ARCH-001]]'
 - '[[BD-ADR-021]]'
 - '[[BD-ADR-023]]'
+- '[[BD-ADR-025]]'
 - '[[BD-API-005]]'
 - '[[BD-API-001]]'
 - '[[BD-API-002]]'
@@ -49,12 +50,14 @@ tags:
 - 公開失敗時は直前公開版を維持し、`related_publish_run_id` を返す。
 - `429`: レート制限超過時は `Retry-After` を返し、再試行可能時刻を明示する。
 - `detail` 文字列の解析を必須にしない。機械判定情報は `code`/`errors[]` で返す。
+- Hono + Zod 実装では、検証失敗の `cause`（ZodError）を `app.onError` で整形し、`errors[]` と整合するフィールド単位詳細を返す。
 
 ## 参照系契約の応答方針
 - 静的配信はHTTPステータス（200/404/5xx）を優先し、UIはフォールバック表示へ遷移する。
 - 参照系エラーで管理系の内部情報（DB接続情報、内部パス、秘密値）を返さない。
 
 ## 変更履歴
+- 2026-02-11: Hono + Zod 連携時のバリデーションエラー整形方針を追記 [[BD-ADR-025]]
 - 2026-02-11: Problem Details（`application/problem+json`）基準へ更新し、429/Retry-After と拡張項目方針を追加 [[BD-ADR-023]]
 - 2026-02-11: 更新系/参照系を分離した共通エラーモデルを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成 [[BD-ADR-001]]

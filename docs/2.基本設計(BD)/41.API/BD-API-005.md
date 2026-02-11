@@ -3,7 +3,7 @@ id: BD-API-005
 title: HTTP API契約共通方針
 doc_type: API設計
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -15,6 +15,7 @@ up:
 - '[[RQ-DEV-001]]'
 related:
 - '[[BD-ADR-023]]'
+- '[[BD-ADR-025]]'
 - '[[BD-API-002]]'
 - '[[BD-API-003]]'
 - '[[BD-API-004]]'
@@ -74,5 +75,31 @@ tags:
 - CIでスキーマLint、破壊的変更検知、コントラクトテストを実行する。
 - 破壊的変更が検出された場合は、版追加または互換層追加が完了するまでリリースを停止する。
 
+## Hono + Zod 実装規約
+- 入力は不正を前提に、ルート境界で `param/query/header/cookie/json/form` を部位別に検証する。
+- `json`/`form` 検証は `Content-Type` の一致を必須とし、欠落時は入力不正として扱う。
+- `header` 検証時のキーは小文字で扱い、HTTPヘッダ名の大文字小文字差異を吸収する。
+- 検証済み入力は `c.req.valid(...)` から取得し、ハンドラ内部で未検証入力を参照しない。
+- ルート定義は型推論維持のため直後にハンドラを記述する。分離が必要な場合のみ `factory.createHandlers()` を利用する。
+- サブ機能分割は controller 増殖ではなく `app.route('/prefix', subApp)` を優先する。
+
+## Hono + Zod エラー統一規約
+- バリデーション失敗は `HTTPException(400, { cause: zodError })` で送出し、個別ルートで返却形式を分岐させない。
+- 404は `app.notFound`、未捕捉例外は `app.onError` でトップレベル集約する。
+- `app.onError` では `HTTPException` を優先処理し、Zod起因の失敗は `z.flattenError()` または `z.treeifyError()` で機械可読詳細を返す。
+- エラー応答は Problem Details を基本にし、検証項目詳細は拡張フィールドへ格納する。
+
+## Zod v4 運用規約
+- 失敗を制御フローで扱う箇所は `safeParse`/`safeParseAsync` を標準とする。
+- 非同期 `refine`/`transform` を含むスキーマは `safeParseAsync` を使用する。
+- `transform` 利用時は `z.input<T>` と `z.output<T>` の型境界を設計時に明記する。
+- 未知キー方針は API種別で固定し、更新系は strict 寄り、参照系は loose 寄りで運用する。
+- スキーマ合成は `.merge()` ではなく `.extend()` または shape 展開を優先する。
+
+## RPC 型共有規約
+- RPC連携を採用するAPIは `AppType` を export し、`hc<AppType>(...)` でクライアント型を共有する。
+- 型推論の安定化のため、RPC対象ルートはメソッドチェーンで定義する。
+
 ## 変更履歴
+- 2026-02-11: Hono + Zod 実装規約（入力検証、`HTTPException`/`onError` 集約、RPC型共有、Zod v4運用）を追加 [[BD-ADR-025]]
 - 2026-02-11: 新規作成（HTTPセマンティクス、Problem Details、互換性、運用規約を定義） [[BD-ADR-023]]
