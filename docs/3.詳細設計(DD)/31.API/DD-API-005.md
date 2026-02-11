@@ -3,7 +3,7 @@ id: DD-API-005
 title: タグ辞書API
 doc_type: API詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -36,6 +36,11 @@ tags:
 - 必須項目: `schemaVersion`, `tagMasterVersion`, `generatedAt`, `tagTypes`, `tags`。
 - `tagTypes` は表示順・単一選択可否・必須性を持つ。
 - `tags` は `[tagTypeId, tagName, aliases?, deprecated?, mergedInto?]` の可変長タプル。
+
+## JSON Schema
+- `tag_master.json` の正本スキーマ: `contracts/static-json/tag_master.schema.json`
+- `tags` の可変長タプルは JSON Schema の `prefixItems` と `oneOf` で 2〜5要素として検証する。
+- 互換性方針: 必須キーを固定しつつ、追加キーは将来拡張として許容する。
 
 ## UI利用ルール
 - フィルタカテゴリは `tagTypes.order` に従って表示する。
@@ -82,6 +87,7 @@ tags:
 - 廃止タグが一覧で識別可能であること。
 
 ## 変更履歴
+- 2026-02-11: `tag_master.json` 契約の JSON Schema 正本参照と可変長タプル検証方針を追加 [[BD-ADR-021]]
 - 2026-02-11: タグ新規作成APIと管理API処理ロジック/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-11: 管理API（タグ更新/公開反映）と公開切替ルールを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成

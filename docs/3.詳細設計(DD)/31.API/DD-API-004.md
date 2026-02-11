@@ -3,7 +3,7 @@ id: DD-API-004
 title: アーカイブ一覧API
 doc_type: API詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -28,14 +28,19 @@ tags:
 - `GET /archive_index.p{page}.json`
 
 ## `bootstrap.json` 契約
-- `schemaVersion`, `generatedAt`, `tagTypes`, `tagPreview`, `latest`, `next` を必須とする。
+- `schemaVersion`, `bootstrapVersion`, `generatedAt`, `tagMasterVersion`, `archiveVersion`, `tagTypes`, `tagPreview`, `latest`, `next` を必須とする。
 - `latest` は初期表示件数を満たす最小セットとする。
 - `next.archiveIndex.urlPattern` で[[RQ-GL-009|archive_index（ページング済み索引）]]のURIを通知する。
 
 ## `archive_index.p{page}.json` 契約
-- `page`, `pageSize`, `total`, `items` を必須とする。
+- `schemaVersion`, `archiveVersion`, `tagMasterVersion`, `generatedAt`, `page`, `pageSize`, `total`, `items` を必須とする。
 - `items` の要素は `[videoId, title, channelTagId, publishedAtEpochSec, durationSec, tagIds]`。
 - `total` は全件数、`pageSize` は固定サイズを示す。
+
+## JSON Schema
+- `bootstrap.json` の正本スキーマ: `contracts/static-json/bootstrap.schema.json`
+- `archive_index.p{page}.json` の正本スキーマ: `contracts/static-json/archive_index_page.schema.json`
+- 互換性方針: 必須キーを固定しつつ、追加キーは将来拡張として許容する。
 
 ## 処理ロジック
 1. Publish Orchestrator が対象[[RQ-GL-018|配信反映実行]]を `running` に遷移する。
@@ -59,6 +64,7 @@ tags:
 - 欠損ページ時は表示継続しつつ警告通知できること。
 
 ## 変更履歴
+- 2026-02-11: `bootstrap/archive_index` 契約の JSON Schema 正本参照と必須項目の実データ整合を追加 [[BD-ADR-021]]
 - 2026-02-11: 配信生成APIの処理ロジックと失敗時挙動を追加 [[BD-ADR-021]]
 - 2026-02-11: `archive_index` 契約の用語参照を [[RQ-GL-009]] へ統一
 - 2026-02-10: 新規作成

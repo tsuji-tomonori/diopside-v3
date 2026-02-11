@@ -3,7 +3,7 @@ id: BD-ADR-021
 title: DB正本化と3層責務境界で検索拡張性を確保する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -39,6 +39,8 @@ tags:
 - 外部LLM（ChatGPT）は管理者のタグ判断を補助する外部支援としてのみ扱い、反映経路は `管理画面 -> Backend API -> DB` に固定する。
 - LLM結果はJSON取込時に契約検証を必須とし、検証成功時のみDB正本へ反映する。
 - LLM支援で更新されたタグ反映後は `tag_master.json` と `archive_index.pN.json` を同一公開runで再生成する。
+- 利用者向けの静的配信JSON契約（`bootstrap.json` / `tag_master.json` / `archive_index.p{page}.json`）は JSON Schema（Draft 2020-12）を機械検証可能な正本として管理する。
+- 配信JSON契約は必須キーを互換境界として固定し、追加キーは将来拡張として許容する。
 
 ## 理由
 - DB正本化でデータ整合と更新履歴の一貫性を維持しつつ、配信用生成物を独立運用できる。
@@ -52,6 +54,7 @@ tags:
 - API設計: [[BD-API-001]] / [[BD-API-002]] で利用者向け配信契約と管理API契約を分離する。
 - デプロイ設計: [[BD-DEP-004]] で配信経路分離（web/docs/openapi/api）と運用証跡配信を整理する。
 - 詳細設計: [[DD-API-001]] / [[DD-API-005]] で境界追従を行う。
+- 契約スキーマ: `contracts/static-json/*.schema.json` を追加し、[[DD-API-001]] / [[DD-API-004]] / [[DD-API-005]] から参照する。
 - 管理画面運用を成立させるため、[[DD-API-011]]〜[[DD-API-015]] を追加し、結果明細/再確認/タグ管理/公開runを分離する。
 - 管理画面のLLM支援運用を成立させるため、[[BD-API-002]] / [[BD-UI-001]] / [[BD-DATA-001]] と [[DD-API-013]] / [[DD-UI-006]] で入出力・検証・監査を追加する。
 
@@ -60,6 +63,7 @@ tags:
 - S3静的JSONを正本として継続する案: 更新系監査と将来の検索拡張時の整合管理が難しいため不採用。
 
 ## 変更履歴
+- 2026-02-11: 静的配信JSON契約の JSON Schema 正本化と互換方針（必須キー固定+追加キー許容）を追加 [[BD-ADR-021]]
 - 2026-02-11: run実行方式を「単一Backend API（Hono）内実行 + 外部スケジューラ起動」に明確化 [[BD-ADR-021]]
 - 2026-02-11: LLM支援タグ運用の境界（外部提案/内部検証反映）と `tag_master/archive_index` 同時再生成を追加 [[BD-ADR-021]]
 - 2026-02-11: [[DD-API-011]]〜[[DD-API-015]]を追加し、管理系APIの責務分割を反映 [[BD-ADR-021]]

@@ -978,3 +978,15 @@
   - 設計整合: インフラ系BD/DDの根拠がテスト戦略ADRから分離され、責務境界と根拠が一致。
   - トレーサビリティ整合: `RQ-RTM-002` からインフラ設計の根拠ADRへ遷移した際の意味不一致を解消。
   - 運用整合: 監視・配備・認証統制の判定根拠が実運用文脈へ揃い、レビュー時の誤読リスクを低減。
+
+## 追記（静的配信JSON契約のJSON Schema正本化）
+- 対象: `contracts/static-json/bootstrap.schema.json`, `contracts/static-json/tag_master.schema.json`, `contracts/static-json/archive_index_page.schema.json`, `DD-API-001`, `DD-API-004`, `DD-API-005`, `BD-ADR-021`
+- 実施:
+  - 利用者向け静的配信契約（`bootstrap.json` / `tag_master.json` / `archive_index.p{page}.json`）を JSON Schema Draft 2020-12 で新規定義。
+  - `DD-API-001/004/005` を更新し、必須項目の実データ整合（`bootstrapVersion` / `tagMasterVersion` / `archiveVersion` / `generatedAt`）とスキーマ正本参照を追加。
+  - `tag_master.json` の `tags` 可変長タプルを `prefixItems + oneOf` で 2〜5 要素として明示。
+  - `BD-ADR-021` を更新し、静的配信JSON契約のスキーマ正本化と互換方針（必須キー固定・追加キー許容）を設計判断として記録。
+- 影響確認:
+  - 設計整合: `BD-ADR-021 -> DD-API-001/004/005 -> contracts/static-json/*.schema.json` の追跡経路を構築。
+  - 契約整合: 文書上のIF定義と配信実データの差分を解消し、機械検証可能な契約へ移行。
+  - 運用整合: 追加キーを許容する互換方針により、将来の非破壊拡張時の配信停止リスクを低減。

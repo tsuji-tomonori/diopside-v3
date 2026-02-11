@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:diopside:contract:static-json:archive-index-page:1",
+  "title": "diopside archive_index.p{page}.json",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "archiveVersion",
+    "tagMasterVersion",
+    "generatedAt",
+    "page",
+    "pageSize",
+    "total",
+    "items"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archiveVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tagMasterVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pageSize": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "minItems": 6,
+        "maxItems": 6,
+        "items": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

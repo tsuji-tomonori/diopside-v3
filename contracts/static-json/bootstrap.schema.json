@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:diopside:contract:static-json:bootstrap:1",
+  "title": "diopside bootstrap.json",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "bootstrapVersion",
+    "generatedAt",
+    "tagMasterVersion",
+    "archiveVersion",
+    "tagTypes",
+    "tagPreview",
+    "latest",
+    "next"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bootstrapVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tagMasterVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archiveVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tagTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "key",
+          "name",
+          "order",
+          "singleSelect",
+          "requiredPerVideo"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "singleSelect": {
+            "type": "boolean"
+          },
+          "requiredPerVideo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "tagPreview": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "string",
+            "minLength": 1
+          }
+        ],
+        "minItems": 3,
+        "maxItems": 3,
+        "items": false
+      }
+    },
+    "latest": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "minItems": 6,
+        "maxItems": 6,
+        "items": false
+      }
+    },
+    "next": {
+      "type": "object",
+      "required": [
+        "tagMaster",
+        "archiveIndex"
+      ],
+      "properties": {
+        "tagMaster": {
+          "type": "object",
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        },
+        "archiveIndex": {
+          "type": "object",
+          "required": [
+            "pageSize",
+            "urlPattern"
+          ],
+          "properties": {
+            "pageSize": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "urlPattern": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\{page\\}"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -3,7 +3,7 @@ id: DD-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -62,14 +62,22 @@ tags:
 
 ## Public Read Contract 詳細
 - `bootstrap.json`
-  - 必須項目: `schemaVersion`, `generatedAt`, `tagTypes`, `tagPreview`, `latest`, `next`。
+  - 必須項目: `schemaVersion`, `bootstrapVersion`, `generatedAt`, `tagMasterVersion`, `archiveVersion`, `tagTypes`, `tagPreview`, `latest`, `next`。
   - `next` で `tag_master` と `archive_index` の取得先を指示する。
 - `tag_master.json`
-  - 必須項目: `schemaVersion`, `tagMasterVersion`, `tagTypes`, `tags`。
+  - 必須項目: `schemaVersion`, `tagMasterVersion`, `generatedAt`, `tagTypes`, `tags`。
   - `tags` はタグID解決の正本として扱う。
 - `archive_index.p{page}.json`
-  - 必須項目: `page`, `pageSize`, `total`, `items`。
+  - 必須項目: `schemaVersion`, `archiveVersion`, `tagMasterVersion`, `generatedAt`, `page`, `pageSize`, `total`, `items`。
   - `items` は動画一覧表示とフィルタの入力データ。
+
+## JSON Schema 正本
+- 配信契約の機械検証可能な正本は JSON Schema（Draft 2020-12）とする。
+- スキーマ配置:
+  - `contracts/static-json/bootstrap.schema.json`
+  - `contracts/static-json/tag_master.schema.json`
+  - `contracts/static-json/archive_index_page.schema.json`
+- 互換性方針: 必須キーの維持を優先し、追加キーは互換拡張として許容する（unknown key を直ちに破壊的変更とみなさない）。
 
 ## Ops Control Contract 詳細
 - `POST /api/v1/ops/ingestion/runs`
@@ -139,6 +147,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-11: 配信契約の JSON Schema 正本（Draft 2020-12）参照と必須項目の実データ整合を追加 [[BD-ADR-021]]
 - 2026-02-11: run実行境界を単一Backend API（Hono）モノリスへ統一し、`scheduled` の起動方式を追記 [[BD-ADR-021]]
 - 2026-02-11: Problem Details 正本化と `trace_id` への統一、`BD-API-003/005` と `BD-ARCH-002/003/004` 参照を追加
 - 2026-02-11: MVP対象API一覧、共通処理ロジック規約、`/api/v1` 正本経路を追加 [[BD-ADR-021]]
