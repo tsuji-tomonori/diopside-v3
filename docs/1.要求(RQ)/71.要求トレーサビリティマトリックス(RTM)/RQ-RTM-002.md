@@ -66,20 +66,24 @@ tags:
 | [[BD-ADR-018]] | 公開UIをモバイルファーストで設計する | [[RQ-UX-001]], [[RQ-UX-005]] | [[RQ-RDR-032]] | [[BD-ADR-018]] | [[AT-SCN-002]] |
 | [[BD-ADR-019]] | ビルドをデプロイ単位で分離して品質ゲートを固定する | [[RQ-DEV-001]] | [[RQ-RDR-025]] | [[BD-ADR-019]] | - |
 | [[BD-ADR-020]] | 非機能詳細設計の判定軸を統一する | [[RQ-AV-001]], [[RQ-DATA-001]], [[RQ-OBY-001]], [[RQ-PS-001]], [[RQ-SEC-001]] | [[RQ-RDR-023]] | [[BD-ADR-020]] | - |
-| [[BD-ADR-021]] | DB正本化と3層責務境界で検索拡張性を確保する | [[RQ-DATA-001]], [[RQ-FR-005]], [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-003]], [[RQ-RDR-034]] | [[BD-ADR-021]] | [[AT-SCN-006]] |
+| [[BD-ADR-021]] | DB正本化と3層責務境界で検索拡張性を確保する | [[RQ-DATA-001]], [[RQ-FR-005]], [[RQ-FR-019]], [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-003]], [[RQ-RDR-034]] | [[BD-ADR-021]] | [[AT-SCN-006]] |
 | [[BD-ADR-022]] | Lambda構造化ログをCloudWatch 30日保持で運用する | [[RQ-COST-001]], [[RQ-OBY-001]] | [[RQ-RDR-035]] | [[BD-ADR-022]] | [[AT-OPS-001]] |
-| [[BD-API-001]] | API一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-INT-001]] | [[RQ-RDR-021]], [[RQ-RDR-034]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-021]] | - |
-| [[BD-API-002]] | 収集API設計 | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-017]], [[RQ-FR-019]], [[RQ-FR-025]] | [[RQ-RDR-028]], [[RQ-RDR-034]] | [[BD-ADR-021]] | - |
-| [[BD-API-003]] | エラーモデル | [[RQ-FR-001]] | - | [[BD-ADR-001]], [[BD-ADR-021]] | - |
-| [[BD-API-004]] | OpenAPI配布とAPIバージョン境界 | [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-026]] | [[BD-ADR-014]], [[BD-ADR-019]] | [[AT-SCN-006]] |
-| [[BD-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]] | [[BD-ADR-001]], [[BD-ADR-002]], [[BD-ADR-003]], [[BD-ADR-004]], [[BD-ADR-005]], [[BD-ADR-006]], [[BD-ADR-007]], [[BD-ADR-008]], [[BD-ADR-021]] | - |
+| [[BD-ADR-023]] | HTTP API契約をRFC準拠で統一する | [[RQ-INT-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | - | [[BD-ADR-023]] | - |
+| [[BD-ADR-024]] | Next.js App Router運用指針を基本設計へ標準化する | [[RQ-DEV-001]], [[RQ-PS-001]], [[RQ-SEC-001]], [[RQ-UX-001]] | - | [[BD-ADR-024]] | - |
+| [[BD-ADR-025]] | Hono + Zod の入力検証と例外処理を標準化する | [[RQ-DEV-001]], [[RQ-INT-001]], [[RQ-SEC-001]] | - | [[BD-ADR-025]] | - |
+| [[BD-API-001]] | API一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-INT-001]] | [[RQ-RDR-021]], [[RQ-RDR-034]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-021]], [[BD-ADR-023]] | - |
+| [[BD-API-002]] | 収集API設計 | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-017]], [[RQ-FR-019]], [[RQ-FR-025]] | [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]] | [[BD-ADR-021]], [[BD-ADR-023]], [[BD-ADR-025]] | - |
+| [[BD-API-003]] | エラーモデル | [[RQ-FR-001]] | - | [[BD-ADR-001]], [[BD-ADR-021]], [[BD-ADR-023]], [[BD-ADR-025]] | - |
+| [[BD-API-004]] | OpenAPI配布とAPIバージョン境界 | [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-026]] | [[BD-ADR-014]], [[BD-ADR-019]], [[BD-ADR-023]] | [[AT-SCN-006]] |
+| [[BD-API-005]] | HTTP API契約共通方針 | [[RQ-DEV-001]], [[RQ-INT-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | - | [[BD-ADR-023]], [[BD-ADR-025]] | - |
+| [[BD-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]] | [[BD-ADR-001]], [[BD-ADR-002]], [[BD-ADR-003]], [[BD-ADR-004]], [[BD-ADR-005]], [[BD-ADR-006]], [[BD-ADR-007]], [[BD-ADR-008]], [[BD-ADR-021]], [[BD-ADR-024]] | - |
 | [[BD-ARCH-002]] | 論理構成 | [[RQ-FR-001]] | [[RQ-RDR-034]] | [[BD-ADR-001]], [[BD-ADR-021]] | - |
 | [[BD-ARCH-003]] | クラウド配置構成 | [[RQ-FR-001]] | - | [[BD-ADR-001]], [[BD-ADR-014]], [[BD-ADR-021]] | - |
 | [[BD-ARCH-004]] | 主要データフロー | [[RQ-FR-001]] | - | [[BD-ADR-001]], [[BD-ADR-021]] | - |
 | [[BD-ARCH-005]] | AIエージェント運用アーキテクチャ | [[RQ-DEV-002]] | [[RQ-RDR-029]] | [[BD-ADR-016]] | - |
-| [[BD-BUILD-001]] | ビルド方針（デプロイ単位分離） | [[RQ-DEV-001]], [[RQ-FR-001]], [[RQ-UX-019]], [[RQ-UX-021]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | [[BD-ADR-001]], [[BD-ADR-011]], [[BD-ADR-016]], [[BD-ADR-019]], [[BD-ADR-022]] | - |
+| [[BD-BUILD-001]] | ビルド方針（デプロイ単位分離） | [[RQ-DEV-001]], [[RQ-FR-001]], [[RQ-UX-019]], [[RQ-UX-021]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | [[BD-ADR-001]], [[BD-ADR-011]], [[BD-ADR-016]], [[BD-ADR-019]], [[BD-ADR-022]], [[BD-ADR-024]] | - |
 | [[BD-CM-001]] | 構成管理方針 | [[RQ-FR-001]] | [[RQ-RDR-013]], [[RQ-RDR-024]] | [[BD-ADR-001]], [[BD-ADR-012]], [[BD-ADR-016]] | - |
-| [[BD-DATA-001]] | データアーキテクチャ | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-004]], [[RQ-FR-009]], [[RQ-PRC-001]] | [[RQ-RDR-014]], [[RQ-RDR-017]], [[RQ-RDR-028]], [[RQ-RDR-034]] | [[BD-ADR-001]], [[BD-ADR-021]] | - |
+| [[BD-DATA-001]] | データアーキテクチャ | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-004]], [[RQ-FR-009]], [[RQ-PRC-001]] | [[RQ-RDR-014]], [[RQ-RDR-017]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]] | [[BD-ADR-001]], [[BD-ADR-021]] | - |
 | [[BD-DEP-001]] | デプロイ方式 | [[RQ-COST-001]], [[RQ-DEV-001]], [[RQ-FR-001]] | - | [[BD-ADR-001]] | - |
 | [[BD-DEP-002]] | デプロイ運用ルール | [[RQ-FR-001]] | - | [[BD-ADR-001]] | - |
 | [[BD-DEP-003]] | ドキュメント公開フロー（Quartz + CDK） | [[RQ-DEV-001]], [[RQ-FR-024]] | [[RQ-RDR-025]] | [[BD-ADR-013]], [[BD-ADR-016]], [[BD-ADR-019]] | [[AT-REL-001]], [[AT-RUN-001]], [[UT-PLAN-003]] |
@@ -89,16 +93,16 @@ tags:
 | [[BD-ERD-001]] | ER図（概要） | [[RQ-DATA-001]], [[RQ-FR-001]] | [[RQ-RDR-014]] | [[BD-ADR-001]], [[BD-ADR-021]] | - |
 | [[BD-MON-001]] | 監視設計 | [[RQ-FR-001]], [[RQ-OBY-001]] | - | [[BD-ADR-001]], [[BD-ADR-022]] | [[AT-OPS-001]] |
 | [[BD-MON-002]] | SLO運用 | [[RQ-FR-001]] | - | [[BD-ADR-001]], [[BD-ADR-022]] | [[AT-OPS-001]] |
-| [[BD-QUAL-001]] | 品質特性 | [[RQ-AV-001]], [[RQ-FR-001]], [[RQ-OBY-001]], [[RQ-PS-001]] | [[RQ-RDR-017]] | [[BD-ADR-001]] | - |
+| [[BD-QUAL-001]] | 品質特性 | [[RQ-AV-001]], [[RQ-DEV-001]], [[RQ-OBY-001]], [[RQ-PS-001]], [[RQ-UX-001]], [[RQ-UX-023]] | [[RQ-RDR-017]] | [[BD-ADR-001]], [[BD-ADR-024]] | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
 | [[BD-RET-001]] | データ保持・削除方針 | [[RQ-FR-001]] | - | [[BD-ADR-001]] | - |
-| [[BD-SEC-001]] | セキュリティ設計 | [[RQ-FR-001]], [[RQ-PRC-001]], [[RQ-SEC-001]], [[RQ-UX-014]], [[RQ-UX-016]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | [[BD-ADR-001]] | - |
+| [[BD-SEC-001]] | セキュリティ設計 | [[RQ-DEV-001]], [[RQ-PRC-001]], [[RQ-SEC-001]], [[RQ-UX-014]], [[RQ-UX-016]], [[RQ-UX-022]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | [[BD-ADR-001]], [[BD-ADR-024]] | [[AT-OPS-001]] |
 | [[BD-TST-001]] | テスト戦略 | [[RQ-FR-001]] | - | [[BD-ADR-001]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]], [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
-| [[BD-UI-001]] | 画面一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-024]], [[RQ-FR-025]] | - | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-021]] | - |
-| [[BD-UI-002]] | 検索画面情報設計 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-UX-001]], [[RQ-UX-002]], [[RQ-UX-004]], [[RQ-UX-005]], [[RQ-UX-006]], [[RQ-UX-007]], [[RQ-UX-008]], [[RQ-UX-009]], [[RQ-UX-010]], [[RQ-UX-011]], [[RQ-UX-012]], [[RQ-UX-018]], [[RQ-UX-024]] | [[RQ-RDR-015]], [[RQ-RDR-018]], [[RQ-RDR-021]], [[RQ-RDR-032]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-017]], [[BD-ADR-018]] | [[UT-PLAN-004]] |
+| [[BD-UI-001]] | 画面一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-036]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-021]] | - |
+| [[BD-UI-002]] | 検索画面情報設計 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-UX-001]], [[RQ-UX-002]], [[RQ-UX-003]], [[RQ-UX-004]], [[RQ-UX-005]], [[RQ-UX-006]], [[RQ-UX-007]], [[RQ-UX-008]], [[RQ-UX-009]], [[RQ-UX-010]], [[RQ-UX-011]], [[RQ-UX-012]], [[RQ-UX-013]], [[RQ-UX-015]], [[RQ-UX-018]], [[RQ-UX-020]], [[RQ-UX-024]] | [[RQ-RDR-015]], [[RQ-RDR-018]], [[RQ-RDR-021]], [[RQ-RDR-032]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-017]], [[BD-ADR-018]] | [[UT-PLAN-004]] |
 | [[BD-UI-003]] | 画面遷移 | [[RQ-FR-001]], [[RQ-FR-005]], [[RQ-FR-014]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-024]], [[RQ-FR-025]] | - | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]], [[BD-ADR-021]] | - |
-| [[BD-UI-004]] | アクセシビリティ方針 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]] | [[RQ-RDR-021]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]] | - |
+| [[BD-UI-004]] | アクセシビリティ方針 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-UX-017]] | [[RQ-RDR-021]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]] | - |
 | [[DD-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | - | - | [[UT-PLAN-001]] |
-| [[DD-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001]] | [[RQ-RDR-034]] | [[BD-ADR-021]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
+| [[DD-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001]] | [[RQ-RDR-034]] | [[BD-ADR-021]], [[BD-ADR-023]], [[BD-ADR-025]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
 | [[DD-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[IT-CASE-001]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-004]] | アーカイブ一覧API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-001]], [[IT-CASE-003]], [[IT-PLAN-001]], [[UT-CASE-003]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
@@ -110,7 +114,7 @@ tags:
 | [[DD-API-010]] | API経路バージョニング詳細 | [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-026]] | [[BD-ADR-014]] | [[AT-SCN-006]] |
 | [[DD-API-011]] | 収集結果明細API | [[RQ-FR-017]] | - | [[BD-ADR-021]] | [[UT-PLAN-001]] |
 | [[DD-API-012]] | 配信前後再確認API | [[RQ-FR-019]] | - | [[BD-ADR-021]] | [[UT-PLAN-001]] |
-| [[DD-API-013]] | タグ管理API | [[RQ-FR-005]], [[RQ-FR-019]] | - | [[BD-ADR-021]] | [[UT-PLAN-001]] |
+| [[DD-API-013]] | タグ管理API | [[RQ-FR-005]], [[RQ-FR-019]] | [[RQ-RDR-036]] | [[BD-ADR-021]] | [[UT-PLAN-001]] |
 | [[DD-API-014]] | ドキュメント公開実行API | [[RQ-FR-024]] | - | [[BD-ADR-021]] | [[UT-PLAN-003]] |
 | [[DD-API-015]] | 配信反映ジョブ状態API | [[RQ-FR-005]], [[RQ-FR-024]] | - | [[BD-ADR-021]] | [[UT-PLAN-001]] |
 | [[DD-AV-001]] | 可用性詳細 | [[RQ-AV-001]], [[RQ-OBY-001]] | - | [[BD-ADR-020]] | [[AT-OPS-001]], [[AT-RPT-001]] |
@@ -136,7 +140,7 @@ tags:
 | [[DD-DDL-014]] | publish_artifactsテーブル | [[RQ-DATA-001]], [[RQ-INT-001]] | - | - | [[UT-PLAN-001]] |
 | [[DD-DEP-001]] | デプロイ詳細 | [[RQ-FR-024]] | [[RQ-RDR-025]], [[RQ-RDR-029]] | [[BD-ADR-013]], [[BD-ADR-016]] | [[AT-REL-001]], [[AT-RUN-001]], [[UT-CASE-010]], [[UT-PLAN-003]] |
 | [[DD-DEP-002]] | CloudFrontパス分岐詳細 | [[RQ-FR-025]] | [[RQ-RDR-026]] | [[BD-ADR-014]] | [[AT-REL-001]], [[AT-SCN-006]] |
-| [[DD-ERR-001]] | エラーコード設計 | [[RQ-OBY-001]], [[RQ-SEC-001]] | - | [[BD-ADR-020]] | [[AT-SCN-006]], [[UT-PLAN-001]] |
+| [[DD-ERR-001]] | エラーコード設計 | [[RQ-OBY-001]], [[RQ-SEC-001]] | - | [[BD-ADR-020]], [[BD-ADR-023]], [[BD-ADR-025]] | [[AT-SCN-006]], [[UT-PLAN-001]] |
 | [[DD-LOG-001]] | ログ設計 | [[RQ-AV-001]], [[RQ-COST-001]], [[RQ-OBY-001]], [[RQ-PRC-001]], [[RQ-PS-001]], [[RQ-SEC-001]] | [[RQ-RDR-035]] | [[BD-ADR-020]], [[BD-ADR-022]] | [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-MIG-001]] | DB移行方針 | [[RQ-DATA-001]], [[RQ-DEV-001]] | - | [[BD-ADR-020]] | [[AT-RUN-001]], [[IT-CASE-001]], [[UT-PLAN-001]] |
 | [[DD-PERF-001]] | 性能設計 | [[RQ-OBY-001]], [[RQ-PS-001]] | - | [[BD-ADR-020]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-RPT-001]] |
@@ -148,7 +152,7 @@ tags:
 | [[DD-UI-003]] | フィルタドロワー | [[RQ-FR-006]], [[RQ-FR-008]], [[RQ-UX-005]] | - | - | [[UT-PLAN-001]] |
 | [[DD-UI-004]] | 詳細モーダル | [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-020]], [[RQ-FR-021]] | - | - | [[UT-PLAN-001]] |
 | [[DD-UI-005]] | 検索バー | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-UX-003]] | - | - | [[UT-PLAN-001]] |
-| [[DD-UI-006]] | 運用ステータス画面 | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-024]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-006]] | 運用ステータス画面 | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-024]] | [[RQ-RDR-036]] | [[BD-ADR-021]] | [[UT-PLAN-001]] |
 <!-- END AUTO-GENERATED: DESIGN_VIEW -->
 
 ## 変更履歴

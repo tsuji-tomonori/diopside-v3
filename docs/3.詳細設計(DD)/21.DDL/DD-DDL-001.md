@@ -3,7 +3,7 @@ id: DD-DDL-001
 title: DDL一覧
 doc_type: DDL
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -11,6 +11,7 @@ updated: '2026-02-11'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
+- '[[BD-ERD-001]]'
 related:
 - '[[RQ-DATA-001]]'
 - '[[DD-MIG-001]]'
@@ -70,6 +71,7 @@ tags:
 - 出力: テーブル定義一覧、依存順序、DDL適用基準。
 
 ## 変更履歴
+- 2026-02-11: ER図起点でDDL追跡できるよう `BD-ERD-001` 参照を追加
 - 2026-02-11: 再確認run/配信反映run/動画単位結果をDDL対象へ追加し依存順序を更新
 - 2026-02-11: DDL一覧、依存順序、共通DDL方針を追加
 - 2026-02-10: 新規作成

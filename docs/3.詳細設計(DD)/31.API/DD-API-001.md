@@ -3,7 +3,7 @@ id: DD-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -11,9 +11,14 @@ updated: '2026-02-11'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-001]]'
+- '[[BD-ARCH-002]]'
+- '[[BD-ARCH-003]]'
+- '[[BD-ARCH-004]]'
 related:
 - '[[RQ-FR-001]]'
 - '[[BD-ADR-021]]'
+- '[[BD-API-003]]'
+- '[[BD-API-005]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -84,17 +89,18 @@ tags:
 - 状態遷移: run系は `queued -> running -> succeeded|failed|partial|cancelled` を共通に採用する。
 - 冪等制御: 更新系POSTは `Idempotency-Key` を受理し、重複実行時は既存runを返す。
 - 失敗時保全: 公開系処理失敗時は直前公開版を維持し、ロールバック可否を応答へ含める。
-- 監査記録: 管理操作は `operator`, `request_id`, `traceId`, `target_id` を監査ログへ記録する。
+- 監査記録: 管理操作は `operator`, `request_id`, `trace_id`, `target_id` を監査ログへ記録する。
 
 ## 将来予約境界（MVP非対象）
 - [[DD-API-006]] 検索API（サーバ検索）は予約のみ。MVPではクライアント検索を維持する。
 - [[DD-API-007]] 動画詳細API（サーバ詳細取得）は予約のみ。MVPでは静的配信から組み立てる。
 
 ## 共通エラーモデル
-- `code`: 一意エラーコード（例: `INGESTION_TIMEOUT`, `INVALID_CURSOR`）。
-- `message`: 利用者向け短文メッセージ。
-- `details`: デバッグ補足（運用画面のみ表示）。
-- `traceId`: 監視・ログ相関用ID。
+- HTTP APIエラーは Problem Details（`application/problem+json`）を標準とする。
+- 必須メンバー: `type`, `title`, `status`, `detail`, `instance`。
+- 拡張メンバー: `code`, `category`, `retryable`, `trace_id`, `occurred_at`, `errors[]`, `hint`。
+- `detail` の文字列パースを前提にせず、機械判定は `code` と `errors[]` で行う。
+- `trace_id` は `DD-LOG-001` のログ相関キーと同一値を使用する。
 
 ## バージョニング方針
 - 配信契約は `schemaVersion` で互換性管理する。
@@ -127,10 +133,11 @@ sequenceDiagram
 
 ## 受入条件
 - Webが `bootstrap -> tag_master -> archive_index` の順に取得し、段階表示できる。
-- 異常時に共通エラーモデルで通知し、`traceId` で追跡できる。
+- 異常時に Problem Details で通知し、`trace_id` で追跡できる。
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-11: Problem Details 正本化と `trace_id` への統一、`BD-API-003/005` と `BD-ARCH-002/003/004` 参照を追加
 - 2026-02-11: MVP対象API一覧、共通処理ロジック規約、`/api/v1` 正本経路を追加 [[BD-ADR-021]]
 - 2026-02-11: DB正本前提と将来検索API予約境界を追記 [[BD-ADR-021]]
 - 2026-02-11: `archive_index.p{page}.json` の用語表現を [[RQ-GL-009]] へ統一

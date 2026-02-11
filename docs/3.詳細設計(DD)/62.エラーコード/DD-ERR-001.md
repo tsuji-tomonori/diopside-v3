@@ -3,7 +3,7 @@ id: DD-ERR-001
 title: エラーコード設計
 doc_type: エラー設計
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -11,6 +11,8 @@ updated: '2026-02-11'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-004]]'
+- '[[BD-API-003]]'
+- '[[BD-API-005]]'
 related:
 - '[[RQ-SEC-001]]'
 - '[[RQ-OBY-001]]'
@@ -27,8 +29,14 @@ tags:
 
 
 ## 詳細仕様
-- API/運用処理/UI通知で同一コード体系を利用し、障害原因の切り分けを一意化する。
-- エラー応答は `code`, `message`, `details`, `traceId`, `occurredAt` を共通項目とする。
+- HTTP APIエラー応答は Problem Details（`application/problem+json`）を正本とし、API/運用処理/UI通知の判定情報を同一形式で扱う。
+- エラーコード体系は Problem Details の拡張メンバーとして運用し、文字列解析に依存しない機械判定を維持する。
+
+## Problem Details 基本契約
+- 必須メンバー: `type`, `title`, `status`, `detail`, `instance`。
+- 拡張メンバー: `code`, `category`, `retryable`, `trace_id`, `occurred_at`, `errors[]`, `hint`, `related_run_id`, `related_publish_run_id`。
+- `trace_id` は UUID 形式とし、`DD-LOG-001` の `trace_id` と相関可能にする。
+- `instance` は要求単位で一意となる識別子（例: `/api/v1/ops/ingestion/runs/{runId}#<request_id>`）を採用する。
 
 ## コード体系
 - 形式: `<domain>-<category>-<nnn>`（例: `OPS-AUTH-001`, `INGEST-VALIDATION-002`）。
@@ -43,18 +51,23 @@ tags:
 - `DEPENDENCY` / `TIMEOUT`: `502` / `504`（外部依存障害）。
 - `INTERNAL`: `500`（想定外例外）。
 
+## バリデーション詳細（`errors[]`）
+- フィールド単位の検証失敗は `errors[]` に格納し、`field`, `reason`, `rejected_value`（機密除外）を返す。
+- `detail` は人間向け要約に限定し、クライアント判定は `code` と `errors[]` を使用する。
+- Zod検証失敗は `app.onError` で集約し、`errors[]` へ正規化して返す。
+
 ## 利用者向けメッセージ方針
-- `message` は 80 文字以内の短文で、次操作（再試行、設定見直し、運用連絡）を含める。
-- `details` は管理画面のみ表示し、公開UIには内部構造や秘密情報を露出しない。
-- `traceId` はすべての失敗応答に付与し、ログ検索キーとして再利用する。
+- `title` と `detail` は 80 文字以内の短文を基本とし、次操作（再試行、設定見直し、運用連絡）を含める。
+- 公開UIへ内部構造や秘密情報を露出しない。詳細情報は `hint` と監査ログ側へ分離する。
+- `trace_id` はすべての失敗応答に付与し、ログ検索キーとして再利用する。
 
 ## 再試行ポリシー
 - `VALIDATION` / `AUTH` / `CONFLICT` は自動再試行しない。
 - `DEPENDENCY` / `TIMEOUT` は指数バックオフで最大 3 回再試行し、失敗時は運用アラートへ昇格する。
-- 同一 `traceId` で 3 回連続失敗した場合はインシデント候補として記録する。
+- 同一 `trace_id` で 3 回連続失敗した場合はインシデント候補として記録する。
 
 ## ログ連携
-- 失敗イベントは `code`, `httpStatus`, `traceId`, `resource`, `operator`, `retryCount` を必須記録する。
+- 失敗イベントは `code`, `http_status`, `trace_id`, `resource`, `operator`, `retry_count` を必須記録する。
 - エラーコード別件数を日次集計し、増加傾向（前週比 +20%以上）を監視する。
 - 重大コード（`*-INTERNAL-*`, `*-AUTH-*`）は即時通知対象とする。
 
@@ -63,5 +76,6 @@ tags:
 - 出力: 標準化エラー応答、ログイベント、通知イベント、インシデント判定材料。
 
 ## 変更履歴
+- 2026-02-11: Problem Details（`application/problem+json`）を正本化し、必須/拡張メンバーと `errors[]` 正規化方針を追加
 - 2026-02-11: エラーコード体系、HTTPマッピング、再試行ポリシー、ログ連携を具体化
 - 2026-02-10: 新規作成
