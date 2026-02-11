@@ -20,6 +20,10 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - API処理フロー、入力検証規則、外部依存の呼び出し順、エラー/例外の返却条件、冪等性・再試行方針。
+- Problem Details（`application/problem+json`）の実装マッピング（`type/title/status/detail/instance` + 拡張）
+- HTTPステータス実装規則（`201` + `Location`、`429` + `Retry-After`、`4xx/5xx` 切り分け）
+- 一覧APIのページング実装（cursor生成/検証、opaque維持、上限値）
+- 可観測性実装（`X-Request-Id`、`traceparent`、ログ相関）
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -30,6 +34,7 @@ metadata:
 ## 出力契約
 - 対象文書は `filename == id` を満たし、Frontmatter必須キーを欠落なく保持する。
 - API詳細設計の変更理由と影響範囲を `up/related` で追跡可能にし、関連するBD/DD文書と整合した状態にする。
+- 設計変更時は同一変更でADRを更新し、BD側の変更履歴で参照可能な状態にする。
 - 変更後の整合チェック結果（用語リンク補正と検証）をリポジトリ手順に沿って確認できる状態にする。
 
 ## Frontmatter運用
@@ -41,5 +46,8 @@ metadata:
 ## 品質チェック
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
+- Problem Details必須メンバーと拡張項目の責務分離（文字列パース非依存）を確認する。
+- `GET` ボディ非利用、PUT/DELETE冪等性、`429` + `Retry-After`、ページサイズ上限が定義されていることを確認する。
+- `trace_id`/`request_id`/`instance` でログと応答を相互追跡できることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

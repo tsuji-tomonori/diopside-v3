@@ -13,6 +13,10 @@ metadata:
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
 - 外部連携のデータ契約（JSON構造、ID形式、日時形式、版管理）に関する互換性条件。
+- HTTP API互換性条件（メソッド意味論、ステータスコード、ページング、エラー形式）
+- エラー契約標準（`application/problem+json`）と運用相関（`instance`/`trace_id`）
+- 廃止運用条件（`deprecated: true`、移行手順、サンセット、並行提供条件）
+- OpenAPI契約運用（契約正本、Lint、破壊的変更検知、契約テスト）
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -30,6 +34,8 @@ metadata:
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
 - 受入基準に、契約破壊時の扱い（並行提供・告知期間・切り戻し条件）が含まれていることを確認する。
+- 受入基準に、`GET` ボディ非利用、冪等性、429/Retry-After、Problem Detailsの統一条件が含まれていることを確認する。
+- 受入基準に、OpenAPI版とAPI版の対応関係、および廃止通知条件が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
 
