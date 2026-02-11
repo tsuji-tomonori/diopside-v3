@@ -90,6 +90,7 @@ export class QuartzSiteStack extends cdk.Stack {
       sources: [s3deploy.Source.asset(siteAssetPath)],
       destinationBucket: siteBucket,
       destinationKeyPrefix: keyPrefix,
+      memoryLimit: 1024,
       distribution,
       distributionPaths: ["/*"],
     });

@@ -38,10 +38,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
     },
   },
   "Resources": {
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBB049752D": {
       "DependsOn": [
-        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
-        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRoleDefaultPolicy0801355D",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRole739949D8",
       ],
       "Properties": {
         "Code": {
@@ -61,9 +61,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
             "Ref": "DeployQuartzPublicAwsCliLayerBEFBEAB8",
           },
         ],
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRole739949D8",
             "Arn",
           ],
         },
@@ -83,7 +84,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "QuartzSiteStackTest-Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+            "Value": "QuartzSiteStackTest-Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB",
           },
           {
             "Key": "Owner",
@@ -98,7 +99,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRole739949D8": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -141,7 +142,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "QuartzSiteStackTest-Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C-ServiceRole",
+            "Value": "QuartzSiteStackTest-Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB-ServiceRole",
           },
           {
             "Key": "Owner",
@@ -155,7 +156,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRoleDefaultPolicy0801355D": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -248,10 +249,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRoleDefaultPolicy0801355D",
         "Roles": [
           {
-            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRole739949D8",
           },
         ],
       },
@@ -269,7 +270,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
       },
       "Type": "AWS::Lambda::LayerVersion",
     },
-    "DeployQuartzPublicCustomResource8B913907": {
+    "DeployQuartzPublicCustomResource1024MiBF118CCE5": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "DestinationBucketKeyPrefix": "obsidian",
@@ -286,7 +287,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
         "Prune": true,
         "ServiceToken": {
           "Fn::GetAtt": [
-            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBB049752D",
             "Arn",
           ],
         },
@@ -506,7 +507,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
         },
         "Tags": [
           {
-            "Key": "aws-cdk:cr-owned:obsidian:0ed17ccc",
+            "Key": "aws-cdk:cr-owned:obsidian:05a284c9",
             "Value": "true",
           },
           {
