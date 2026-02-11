@@ -1,0 +1,559 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
+{
+  "Metadata": {
+    "cdk_nag": {
+      "rules_to_suppress": [
+        {
+          "id": "AwsSolutions-IAM4",
+          "reason": "CDK BucketDeployment custom resource role uses AWS managed policy by framework design.",
+        },
+        {
+          "id": "AwsSolutions-IAM5",
+          "reason": "CDK BucketDeployment requires scoped wildcard actions/resources for sync and invalidation.",
+        },
+        {
+          "id": "AwsSolutions-L1",
+          "reason": "CDK BucketDeployment uses framework-managed provider Lambda runtime outside direct stack control.",
+        },
+      ],
+    },
+  },
+  "Outputs": {
+    "CloudFrontDomainName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Distro87EBE6BA",
+          "DomainName",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+      "DependsOn": [
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "3423a042b818e31c1e34a19d6689ab2e5f9b70fcbe9e71df66f241b20a200bd9.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
+          },
+        },
+        "Handler": "index.handler",
+        "Layers": [
+          {
+            "Ref": "DeployQuartzPublicAwsCliLayerBEFBEAB8",
+          },
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.13",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "SiteBucket397A1860",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "SiteBucket397A1860",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "cloudfront:GetInvalidation",
+                "cloudfront:CreateInvalidation",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "Roles": [
+          {
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DeployQuartzPublicAwsCliLayerBEFBEAB8": {
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "0cfdecad2260a3a84ad0c2d08a77e03c9d25e26c7b52f26b1e1faf97aef92f18.zip",
+        },
+        "Description": "/opt/awscli/aws",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "DeployQuartzPublicCustomResource8B913907": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DestinationBucketKeyPrefix": "obsidian",
+        "DestinationBucketName": {
+          "Ref": "SiteBucket397A1860",
+        },
+        "DistributionId": {
+          "Ref": "Distro87EBE6BA",
+        },
+        "DistributionPaths": [
+          "/*",
+        ],
+        "OutputObjectKeys": true,
+        "Prune": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+            "Arn",
+          ],
+        },
+        "SourceBucketNames": [
+          {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        ],
+        "SourceObjectKeys": [
+          "b09bdf03e6d8c1a79924296b2bb2c2edcbc6c6518afa846ad8f5596935ae5cde.zip",
+        ],
+        "WaitForDistributionInvalidation": true,
+      },
+      "Type": "Custom::CDKBucketDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "Distro87EBE6BA": {
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-CFR1",
+              "reason": "Geo restriction is intentionally not configured for globally accessible public docs.",
+            },
+            {
+              "id": "AwsSolutions-CFR2",
+              "reason": "WAF is deferred for Phase 1 docs-only distribution; monitored at CloudFront and origin levels.",
+            },
+            {
+              "id": "AwsSolutions-CFR3",
+              "reason": "CloudFront access logs are deferred in Phase 1 to keep delivery pipeline lightweight.",
+            },
+            {
+              "id": "AwsSolutions-CFR4",
+              "reason": "Default CloudFront certificate is acceptable for initial docs-only rollout.",
+            },
+          ],
+        },
+      },
+      "Properties": {
+        "DistributionConfig": {
+          "DefaultCacheBehavior": {
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "Compress": true,
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "PrettyUrlRewriteFnB44A6F25",
+                    "FunctionARN",
+                  ],
+                },
+              },
+            ],
+            "TargetOriginId": "QuartzSiteStackTestDistroOrigin12D4A6C35",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "SiteBucket397A1860",
+                  "RegionalDomainName",
+                ],
+              },
+              "Id": "QuartzSiteStackTestDistroOrigin12D4A6C35",
+              "OriginAccessControlId": {
+                "Fn::GetAtt": [
+                  "DistroOrigin1S3OriginAccessControlA723D135",
+                  "Id",
+                ],
+              },
+              "OriginPath": "/obsidian",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": "",
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "DistroOrigin1S3OriginAccessControlA723D135": {
+      "Properties": {
+        "OriginAccessControlConfig": {
+          "Name": "QuartzSiteStackTestDistroOrigin1S3OriginAccessControlB873DB4F",
+          "OriginAccessControlOriginType": "s3",
+          "SigningBehavior": "always",
+          "SigningProtocol": "sigv4",
+        },
+      },
+      "Type": "AWS::CloudFront::OriginAccessControl",
+    },
+    "PrettyUrlRewriteFnB44A6F25": {
+      "Properties": {
+        "AutoPublish": true,
+        "FunctionCode": "function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+
+  if (uri === "/docs" || uri === "/docs/") {
+    request.uri = "/RQ-HM-001.html";
+    return request;
+  }
+
+  if (uri.startsWith("/docs/")) {
+    uri = uri.substring(5);
+  }
+
+  if (uri === "/") {
+    request.uri = "/RQ-HM-001.html";
+    return request;
+  }
+
+  if (uri.endsWith("/")) {
+    request.uri = uri + "index.html";
+    return request;
+  }
+
+  var lastSlash = uri.lastIndexOf("/");
+  var lastSegment = uri.substring(lastSlash + 1);
+
+  if (lastSegment.indexOf(".") === -1) {
+    request.uri = uri + ".html";
+    return request;
+  }
+
+  return request;
+}
+",
+        "FunctionConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AWS::Region",
+                },
+                "QuartzSiteStackTettyUrlRewriteFn18CEAC8D",
+              ],
+            ],
+          },
+          "Runtime": "cloudfront-js-2.0",
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::Region",
+              },
+              "QuartzSiteStackTettyUrlRewriteFn18CEAC8D",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFront::Function",
+    },
+    "SiteBucket397A1860": {
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-S1",
+              "reason": "Docs distribution uses CloudFront caching; S3 access logging is not enabled to minimize ops cost.",
+            },
+          ],
+        },
+      },
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": [
+          {
+            "Key": "aws-cdk:cr-owned:obsidian:0ed17ccc",
+            "Value": "true",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "SiteBucketPolicy3AC1D0F8": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "SiteBucket397A1860",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*",
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "SiteBucket397A1860",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "SiteBucket397A1860",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "s3:GetObject",
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceArn": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":cloudfront::",
+                        {
+                          "Ref": "AWS::AccountId",
+                        },
+                        ":distribution/",
+                        {
+                          "Ref": "Distro87EBE6BA",
+                        },
+                      ],
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudfront.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "SiteBucket397A1860",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

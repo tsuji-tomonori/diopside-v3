@@ -316,3 +316,23 @@
   - 要求整合: `FR/UC/RDR` で収集モードと責務境界が一意に読める構成を維持。
   - 設計整合: `RQ-RDR-028 -> BD-ARCH-001 -> BD-API-002/BD-DATA-001` のトレース経路を構築。
   - 制約整合: `RQ-PC-003` / `RQ-PRC-001` に合わせ、コメント/チャット/字幕の恒久保存を採用しない境界を維持。
+
+## 追記（cdk-nag除外理由の設計明文化）
+- 対象: `BD-DEP-003`, `DD-DEP-001`, `AT-RUN-001`
+- 実施:
+  - `BD-DEP-003` に cdk-nag 品質ゲートと、Phase 1で許可する除外ID（`IAM4/IAM5/L1/S1/CFR1/CFR2/CFR3/CFR4`）の適用方針を追加。
+  - `DD-DEP-001` に除外IDごとの対象・理由・再評価条件、および cdk-nag 失敗時の運用ルールを追加。
+  - `AT-RUN-001` に cdk-nag 失敗の障害分類と、`DD-DEP-001` への同時反映を含む復旧手順を追加。
+- 影響確認:
+  - 設計整合: cdk-nagの除外理由がコード（`infra/lib/quartz-site-stack.ts`）と文書（BD/DD/AT）で一致。
+  - 運用整合: 新規除外追加時に、実装だけでなく設計文書更新を必須化できる状態を確認。
+
+## 追記（Phase 1経路と実装経路の整合補正）
+- 対象: `infra/functions/pretty-url-rewrite.js`, `Taskfile.yaml`, `AT-REL-001`
+- 実施:
+  - CloudFront Functionに `/docs/*` 互換リライトを追加し、`/docs/` から公開トップへ到達できるよう修正。
+  - `docs:verify` を `/` と `/docs/` の双方確認へ更新。
+  - `AT-REL-001` をPhase 1（docs先行公開）基準へ修正し、Phase 2の経路確認を条件付き手順へ分離。
+- 影響確認:
+  - 経路整合: `BD-DEP-003` の Phase 1 方針（docs公開）と運用手順の参照経路が一致。
+  - 互換性: 既存の `/` アクセスを維持しつつ、`/docs/*` 導線でも同等到達を確認可能。

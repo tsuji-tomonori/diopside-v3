@@ -3,7 +3,7 @@ id: BD-DEP-003
 title: ドキュメント公開フロー（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -66,6 +66,17 @@ flowchart TD
   - 役割: `task docs:guard` -> `task docs:deploy` -> 公開URL検証
   - 認証: OIDCでAWSロール引き受け（長期キー不使用）
 
+## cdk-nag品質ゲート
+- `infra` のCDK合成時に `AwsSolutionsChecks` を適用し、未承認の警告/エラーを残したまま配備しない。
+- 除外（suppressions）は恒久設定ではなく、根拠・適用範囲・将来の解消条件を文書化したもののみ許可する。
+- 現行Phase 1（docs単独公開）で許可する除外は次のとおり。
+  - `AwsSolutions-IAM4` / `AwsSolutions-IAM5` / `AwsSolutions-L1`: `BucketDeployment` が生成するCDK管理カスタムリソース由来（スタック利用者側で直接制御不可）。
+  - `AwsSolutions-S1`: S3アクセスログはPhase 1では未導入（CloudFront配信を主体とし運用コストを抑制）。
+  - `AwsSolutions-CFR1`: 公開文書のグローバル配信要件によりGeo制限を未適用。
+  - `AwsSolutions-CFR2`: WAFはPhase 1で未導入（Phase 2の単一CloudFront運用で再評価）。
+  - `AwsSolutions-CFR3`: CloudFrontアクセスログはPhase 1で未導入（監視基盤拡張時に再評価）。
+  - `AwsSolutions-CFR4`: Phase 1ではCloudFront標準証明書を許容し、カスタムドメイン導入時に解消。
+
 ## 段階導入方針
 - Phase 1（先行）
   - 対象: `/docs/*` の公開のみ
@@ -91,5 +102,6 @@ flowchart TD
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-11: cdk-nag品質ゲートと除外許可条件（Phase 1限定の根拠）を追記
 - 2026-02-11: CornellNoteWeb準拠ポイント、CI/CD分離設計、Phase 1/2の段階導入方針を追記
 - 2026-02-11: 新規作成

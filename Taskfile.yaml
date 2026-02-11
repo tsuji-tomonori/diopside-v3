@@ -1,5 +1,14 @@
 version: '3'
 
+vars:
+  ROOT_DIR: '{{.TASKFILE_DIR}}'
+  QUARTZ_DIR: '{{.ROOT_DIR}}/quartz'
+  INFRA_DIR: '{{.ROOT_DIR}}/infra'
+  SITE_ASSET_PATH: '{{.ROOT_DIR}}/quartz/public'
+  STACK: 'QuartzSiteStack'
+  CDK_ARGS: ''
+  DOCS_SITE_URL: ''
+
 tasks:
   precommit:
     desc: Install pre-commit hook
@@ -115,3 +124,80 @@ tasks:
     cmds:
       - task docs:autolink:changed
       - task docs:check:changed
+
+  quartz:prepare:
+    desc: Clone Quartz if missing (not tracked)
+    cmds:
+      - |
+        bash -lc 'if [ ! -d "{{.QUARTZ_DIR}}" ]; then
+          git clone https://github.com/jackyzha0/quartz.git "{{.QUARTZ_DIR}}"
+        else
+          echo "Quartz already exists at {{.QUARTZ_DIR}}"
+        fi'
+
+  quartz:install:
+    desc: Install Quartz dependencies
+    deps:
+      - quartz:prepare
+    dir: '{{.QUARTZ_DIR}}'
+    cmds:
+      - npm ci
+
+  quartz:build:
+    desc: Build Quartz public from docs
+    deps:
+      - quartz:install
+    dir: '{{.QUARTZ_DIR}}'
+    cmds:
+      - npx quartz build -d ../docs
+
+  infra:install:
+    desc: Install CDK dependencies
+    dir: '{{.INFRA_DIR}}'
+    cmds:
+      - npm ci
+
+  infra:build:
+    desc: Build CDK TypeScript
+    deps:
+      - infra:install
+    dir: '{{.INFRA_DIR}}'
+    cmds:
+      - npm run build
+
+  infra:synth:
+    desc: Synthesize CDK template for docs delivery
+    deps:
+      - quartz:build
+      - infra:build
+    dir: '{{.INFRA_DIR}}'
+    cmds:
+      - npm run synth -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
+
+  infra:deploy:
+    desc: Deploy docs assets with CDK
+    deps:
+      - quartz:build
+      - infra:build
+    dir: '{{.INFRA_DIR}}'
+    cmds:
+      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
+
+  docs:verify:
+    desc: Verify deployed docs top page (optional DOCS_SITE_URL)
+    cmds:
+      - |
+        bash -lc 'if [ -z "{{.DOCS_SITE_URL}}" ]; then
+          echo "DOCS_SITE_URL is empty. Skip HTTP verification."
+          exit 0
+        fi
+        curl -fsSL "{{.DOCS_SITE_URL}}/" > /dev/null
+        curl -fsSL "{{.DOCS_SITE_URL}}/docs/" > /dev/null
+        echo "Verified: {{.DOCS_SITE_URL}}/"'
+
+  docs:deploy:
+    desc: Run docs guard + Quartz build + CDK deploy
+    cmds:
+      - task docs:guard
+      - task infra:deploy
+      - task docs:verify
