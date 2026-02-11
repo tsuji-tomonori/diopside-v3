@@ -26,7 +26,7 @@ tags:
 | 用語名 | [[RQ-GL-009|archive_index]] |
 | 英名 | `archive_index_pages` |
 | 定義 | 全件閲覧・絞り込みに利用するページ分割済み索引 `archive_index.p{page}.json` 群。 |
-| 判定条件/適用範囲 | `page/pageSize/total/items` を持つページ索引契約として、一覧表示と検索条件反映に適用する。 |
+| 判定条件/適用範囲 | `page/pageSize/total/items` を持つページ索引契約として、一覧表示と[[RQ-GL-014|検索条件]]反映に適用する。 |
 
 ## 利用ルール
 - 文書・実装・テストで同じ意味で使用する。
