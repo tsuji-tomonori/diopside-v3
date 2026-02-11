@@ -336,3 +336,14 @@
 - 影響確認:
   - 経路整合: `BD-DEP-003` の Phase 1 方針（docs公開）と運用手順の参照経路が一致。
   - 互換性: 既存の `/` アクセスを維持しつつ、`/docs/*` 導線でも同等到達を確認可能。
+
+## 追記（Quartzデフォルトホームへの移行）
+- 対象: `docs/index.md`, `docs/RQ-HM-001.md`, `infra/functions/pretty-url-rewrite.js`, `infra/test/fixtures/site/index.html`, `BD-DEP-003`, `DD-DEP-001`, `AT-REL-001`
+- 実施:
+  - ホーム文書を `RQ-HM-001` から `index` へ移行し、公開トップの正本を Quartz デフォルト (`index.md`) に統一。
+  - CloudFront Function の `"/"` と `"/docs/"` リライト先を `index.html` へ変更。
+  - infra のテストフィクスチャを `RQ-HM-001.html` から `index.html` へ置換。
+  - 設計文書と配信手順書の公開トップ参照を `index.html` / `[[index]]` 前提へ更新。
+- 影響確認:
+  - 経路整合: ルートアクセスと docs プレフィックスアクセスが同一トップへ解決される。
+  - 設計整合: BD/DD/AT の参照先が実装のルーティング仕様と一致する。

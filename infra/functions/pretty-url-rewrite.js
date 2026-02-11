@@ -3,7 +3,7 @@ function handler(event) {
   var uri = request.uri;
 
   if (uri === "/docs" || uri === "/docs/") {
-    request.uri = "/RQ-HM-001.html";
+    request.uri = "/index.html";
     return request;
   }
 
@@ -12,7 +12,7 @@ function handler(event) {
   }
 
   if (uri === "/") {
-    request.uri = "/RQ-HM-001.html";
+    request.uri = "/index.html";
     return request;
   }
 

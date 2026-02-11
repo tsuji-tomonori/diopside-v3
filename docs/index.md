@@ -1,13 +1,13 @@
 ---
-id: RQ-HM-001
+id: index
 title: ホーム
 doc_type: ホーム
 phase: RQ
-version: 1.0.1
+version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
-created: 2026-02-07
-updated: '2026-02-10'
+created: 2026-02-11
+updated: '2026-02-11'
 up: []
 related:
 - '[[RQ-PP-001]]'
@@ -20,7 +20,6 @@ tags:
 - HM
 ---
 
-
 ## 入口
 - [[RQ-PP-001]]
 - [[RQ-SC-001]]
@@ -29,4 +28,4 @@ tags:
 - [[AT-GO-001]]
 
 ## 変更履歴
-- 2026-02-10: 新規作成
+- 2026-02-11: Quartzデフォルトのホーム解決（index.md）へ移行

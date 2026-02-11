@@ -3,7 +3,7 @@ id: BD-DEP-003
 title: ドキュメント公開フロー（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -93,7 +93,7 @@ flowchart TD
 
 ## URL ルーティング
 - CloudFront Function（`pretty-url-rewrite.js`）で拡張子なしURLを `.html` へ補完する。
-- `/` へのアクセスは `RQ-HM-001.html` へリライトし、公開トップを固定する。
+- `/` と `/docs/` へのアクセスは `index.html` へリライトし、Quartzデフォルトの公開トップへ解決する。
 - `/path/` 形式は `index.html` を補完する。
 
 ## 失敗時の確認観点
@@ -102,6 +102,7 @@ flowchart TD
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-11: 公開トップのリライト先を `RQ-HM-001.html` から `index.html` へ変更
 - 2026-02-11: cdk-nag品質ゲートと除外許可条件（Phase 1限定の根拠）を追記
 - 2026-02-11: CornellNoteWeb準拠ポイント、CI/CD分離設計、Phase 1/2の段階導入方針を追記
 - 2026-02-11: 新規作成

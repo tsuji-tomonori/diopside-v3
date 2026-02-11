@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -36,7 +36,7 @@ tags:
 2. `task quartz:build` が `quartz/public` を生成することをログで確認する。
 3. `task infra:deploy` が `siteAssetPath=quartz/public` を参照してCDKデプロイすることを確認する。
 4. S3配置完了とCloudFront invalidation実行を確認する。
-5. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[RQ-HM-001]]）へ到達することを確認する。
+5. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
 6. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
 7. Phase 2適用後は `[[BD-DEP-004]]` / `[[DD-DEP-002]]` に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
 
@@ -48,6 +48,7 @@ tags:
 - 異常時は `[[AT-RUN-001]]` の切り分け手順で復旧できる。
 
 ## 変更履歴
+- 2026-02-11: 公開トップ参照を `[[RQ-HM-001]]` から `[[index]]` へ変更
 - 2026-02-11: Phase 1（docs先行公開）基準へ手順を修正し、`/` と `/docs/` の到達確認を明記
 - 2026-02-11: 単一CloudFrontパス分岐（`/web` `/docs` `/openapi` `/api/v1`）の配信確認手順を追加
 - 2026-02-11: Quartz + CDK 公開手順（`task docs:deploy`、配備確認、反映確認）を追加

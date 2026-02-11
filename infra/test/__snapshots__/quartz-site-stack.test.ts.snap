@@ -244,7 +244,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           },
         ],
         "SourceObjectKeys": [
-          "b09bdf03e6d8c1a79924296b2bb2c2edcbc6c6518afa846ad8f5596935ae5cde.zip",
+          "db73daf53944e9c9c99b421adb8151e19255453f996566c08daa72e963ad2fc4.zip",
         ],
         "WaitForDistributionInvalidation": true,
       },
@@ -341,7 +341,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
   var uri = request.uri;
 
   if (uri === "/docs" || uri === "/docs/") {
-    request.uri = "/RQ-HM-001.html";
+    request.uri = "/index.html";
     return request;
   }
 
@@ -350,7 +350,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
   }
 
   if (uri === "/") {
-    request.uri = "/RQ-HM-001.html";
+    request.uri = "/index.html";
     return request;
   }
 

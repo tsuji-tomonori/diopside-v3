@@ -3,7 +3,7 @@ id: DD-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -27,7 +27,7 @@ tags:
 - Quartz成果物は `npx quartz build -d ../docs` の出力 `quartz/public` を正本とする。
 - CDK実行時は `--context siteAssetPath=<repo>/quartz/public` を必須指定し、明示値が未指定の場合は `../../quartz/public` を既定値として解決する。
 - 配信配置先は S3 `obsidian/` プレフィックス固定とし、CloudFront Distribution（OAC）経由で配信する。
-- URL書き換えはCloudFront Function（`pretty-url-rewrite.js`）で行い、`/` は `RQ-HM-001.html`、`/path/` は `index.html`、拡張子なしは `.html` 補完とする。
+- URL書き換えはCloudFront Function（`pretty-url-rewrite.js`）で行い、`/` と `/docs/` は `index.html`、`/path/` は `index.html`、拡張子なしは `.html` 補完とする。
 
 ## Task定義（設計）
 - `docs:deploy`
@@ -91,6 +91,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-11: 公開トップの解決先を `index.html` に統一し、`/docs/` の同値到達を明記
 - 2026-02-11: cdk-nag除外（IAM4/IAM5/L1/S1/CFR1/CFR2/CFR3/CFR4）の理由と運用ルールを追記
 - 2026-02-11: Task定義（`docs:deploy`/`quartz:build`/`infra:deploy`/`docs:verify`）とWorkflow設計を追記
 - 2026-02-11: Quartz + CDK 公開フロー（`siteAssetPath`、rewrite、invalidation、障害切り分け）を具体化
