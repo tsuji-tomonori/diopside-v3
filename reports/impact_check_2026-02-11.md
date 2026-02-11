@@ -277,3 +277,14 @@
   - 要求整合: `[[RQ-PC-005]]`（AWS配信基盤）と `[[RQ-PC-009]]`（小差分リリース）の制約を、公開運用要求で具体化できた。
   - 設計整合: `[[RQ-RDR-025]] -> [[BD-ADR-013]] -> [[BD-DEP-003]] -> [[DD-DEP-001]]` のトレース経路を構築。
   - 受入整合: 公開手順と障害復旧の判定を `[[AT-REL-001]]` / `[[AT-RUN-001]]` で再現可能化。
+
+## 追記（CornellNoteWeb準拠の公開設計整理）
+- 対象: `RQ-RDR-025`, `BD-ADR-013`, `BD-DEP-003`, `DD-DEP-001`, `BD-DEP-004`, `DD-DEP-002`
+- 実施:
+  - `.workspace/CornellNoteWeb` の運用原則（Task入口統一/IaC配備/運用手順明文化）をdiopside公開設計へ明記。
+  - 公開方式をPhase 1（docs単独公開）/ Phase 2（単一CloudFront分岐拡張）で段階化。
+  - `BD-DEP-003` と `DD-DEP-001` に `docs-link-check` と `docs-deploy` の責務分離、および `docs:deploy` 実行チェーンを設計として追加。
+  - `BD-DEP-004` / `DD-DEP-002` にPhase 2適用条件（Phase 1安定化前提）を追加。
+- 影響確認:
+  - 運用整合: 先行公開で運用安定化してから経路分岐へ拡張するため、段階導入リスクを低減。
+  - 設計整合: RDR/ADR/BD/DDで同じ段階導入方針を参照できる状態へ統一。

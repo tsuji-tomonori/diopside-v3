@@ -3,7 +3,7 @@ id: BD-DEP-003
 title: ドキュメント公開フロー（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -27,6 +27,11 @@ tags:
 ## 前提
 - 将来運用では `quartz/` と `infra/` を同一リポジトリ配下に配置し、`task docs:deploy` を公開標準コマンドとして提供する。
 - 公開対象は Obsidian文書をQuartzでビルドした静的成果物（`quartz/public`）とする。
+
+## CornellNoteWeb準拠ポイント
+- 運用入口をTaskへ統一し、公開手順の人依存を排除する。
+- IaC（CDK）を唯一の配備経路とし、手動アップロード運用を採用しない。
+- 運用手順（公開/障害対応）を受入文書へ反映し、品質ゲートと一体で運用する。
 
 ## 公開フロー（全体）
 ```mermaid
@@ -52,6 +57,23 @@ flowchart TD
 - `quartz:build` は `npx quartz build -d ../docs` により `quartz/public` を生成する。
 - `infra:deploy` は `npm run deploy -- --context siteAssetPath=<repo>/quartz/public` を実行し、配信元アセットを明示する。
 
+## CI/CD設計
+- `docs-link-check`:
+  - 対象: docs markdown変更
+  - 役割: 用語リンク補正チェックと整合検証（`auto_link_glossary --check`、`validate_vault --targets`）
+- `docs-deploy`:
+  - 起動: `workflow_dispatch`（手動）を標準、必要に応じてmain反映時
+  - 役割: `task docs:guard` -> `task docs:deploy` -> 公開URL検証
+  - 認証: OIDCでAWSロール引き受け（長期キー不使用）
+
+## 段階導入方針
+- Phase 1（先行）
+  - 対象: `/docs/*` の公開のみ
+  - 目的: `task docs:deploy` による再現可能な公開フローを先に安定化
+- Phase 2（拡張）
+  - 対象: 単一CloudFrontで `/web/*`, `/docs/*`, `/openapi/*`, `/api/v1/*` を分岐
+  - 設計正本: `[[BD-DEP-004]]` / `[[DD-DEP-002]]`
+
 ## 配信実装（infra）
 - `QuartzSiteStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。
 - `BucketDeployment` で `siteAssetPath` を S3 の `obsidian/` プレフィックスへ配置する。
@@ -69,4 +91,5 @@ flowchart TD
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-11: CornellNoteWeb準拠ポイント、CI/CD分離設計、Phase 1/2の段階導入方針を追記
 - 2026-02-11: 新規作成

@@ -3,7 +3,7 @@ id: BD-DEP-004
 title: 単一CloudFrontパス分岐デプロイ設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -24,6 +24,10 @@ tags:
 
 ## 目的
 - 1つのCloudFront Distributionで、画面・ドキュメント・OpenAPI・APIを経路分離して配信する設計を定義する。
+
+## 導入位置づけ
+- 本設計は `[[BD-DEP-003]]` のPhase 2（拡張）で適用する。
+- Phase 1（`/docs/*` 単独公開）の運用安定化完了を前提条件とする。
 
 ## パス予約
 - `/web/*`: 画面配信（SPA）
@@ -60,4 +64,5 @@ tags:
 - 認証失敗: `/api/*` と `/openapi/*` の認証設定とヘッダ転送を確認する。
 
 ## 変更履歴
+- 2026-02-11: Phase 2適用の位置づけと前提条件を追記
 - 2026-02-11: 新規作成

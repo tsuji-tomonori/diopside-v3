@@ -3,7 +3,7 @@ id: DD-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -29,6 +29,28 @@ tags:
 - 配信配置先は S3 `obsidian/` プレフィックス固定とし、CloudFront Distribution（OAC）経由で配信する。
 - URL書き換えはCloudFront Function（`pretty-url-rewrite.js`）で行い、`/` は `RQ-HM-001.html`、`/path/` は `index.html`、拡張子なしは `.html` 補完とする。
 
+## Task定義（設計）
+- `docs:deploy`
+  - 役割: 公開一括実行（標準入口）
+  - 手順: `docs:guard` -> `quartz:build` -> `infra:build` -> `infra:deploy` -> `docs:verify`
+- `quartz:build`
+  - 役割: 文書ビルド
+  - 実行: `npx quartz build -d ../docs`
+- `infra:deploy`
+  - 役割: CDK配備とinvalidation
+  - 実行: `npm run deploy -- --context siteAssetPath=<repo>/quartz/public`
+- `docs:verify`
+  - 役割: 公開反映確認
+  - 確認: `/docs/` 到達、更新差分、主要リンク導線
+
+## Workflow定義（設計）
+- `docs-link-check.yml`
+  - docs変更時に `auto_link_glossary --check` と `validate_vault --targets` を実行する。
+- `docs-deploy.yml`
+  - `workflow_dispatch` を標準起動とし、必要に応じてmain反映時に起動する。
+  - 実行順: `task docs:guard` -> `task docs:deploy`
+  - AWS認証はOIDCロール引受で実施する。
+
 ## I/Oまたは責務
 - 入力:
   - `docs/` 配下Markdown
@@ -45,5 +67,6 @@ tags:
 - 反映遅延: invalidation完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-11: Task定義（`docs:deploy`/`quartz:build`/`infra:deploy`/`docs:verify`）とWorkflow設計を追記
 - 2026-02-11: Quartz + CDK 公開フロー（`siteAssetPath`、rewrite、invalidation、障害切り分け）を具体化
 - 2026-02-10: 新規作成

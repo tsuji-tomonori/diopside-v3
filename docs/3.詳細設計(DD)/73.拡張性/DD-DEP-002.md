@@ -3,7 +3,7 @@ id: DD-DEP-002
 title: CloudFrontパス分岐詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -31,6 +31,10 @@ tags:
 - `/*` は `/web/` へ301/302で誘導し、静的配信を行わない。
 - CloudFront Functionは `/docs/*` にのみ紐づける。
 
+## 適用条件
+- 本詳細は単一CloudFront分岐を導入するPhase 2で適用する。
+- Phase 1のdocs単独公開（`[[DD-DEP-001]]`）で運用手順が安定していることを前提とする。
+
 ## behavior別設定
 | Path | Origin | Cache | Function | 備考 |
 |---|---|---|---|---|
@@ -54,4 +58,5 @@ tags:
 - `/openapi/v1/openapi.json` の可用性
 
 ## 変更履歴
+- 2026-02-11: Phase 2適用条件（Phase 1安定化前提）を追記
 - 2026-02-11: 新規作成
