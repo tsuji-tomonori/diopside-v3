@@ -82,6 +82,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
             "Value": "CDK",
           },
           {
+            "Key": "Name",
+            "Value": "QuartzSiteStackTest-Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+          },
+          {
             "Key": "Owner",
             "Value": "platform-team",
           },
@@ -134,6 +138,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           {
             "Key": "ManagedBy",
             "Value": "CDK",
+          },
+          {
+            "Key": "Name",
+            "Value": "QuartzSiteStackTest-Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C-ServiceRole",
           },
           {
             "Key": "Owner",
@@ -377,6 +385,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
             "Value": "CDK",
           },
           {
+            "Key": "Name",
+            "Value": "QuartzSiteStackTest-Distro",
+          },
+          {
             "Key": "Owner",
             "Value": "platform-team",
           },
@@ -508,6 +520,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           {
             "Key": "ManagedBy",
             "Value": "CDK",
+          },
+          {
+            "Key": "Name",
+            "Value": "QuartzSiteStackTest-SiteBucket",
           },
           {
             "Key": "Owner",

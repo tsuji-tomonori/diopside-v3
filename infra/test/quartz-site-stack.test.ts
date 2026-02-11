@@ -73,6 +73,36 @@ function assertGovernanceTagsOnAllResources(
   }
 }
 
+function assertTagExistsOnAllResources(
+  template: Template,
+  resourceType: string,
+  tagKey: string,
+) {
+  const resources = template.findResources(resourceType) as Record<string, unknown>;
+  const entries = Object.entries(resources);
+
+  expect(entries.length).toBeGreaterThan(0);
+
+  for (const [logicalId, resource] of entries) {
+    const tags =
+      (
+        resource as {
+          Properties?: {
+            Tags?: Array<{ Key: string; Value: string }>;
+          };
+        }
+      ).Properties?.Tags ?? [];
+
+    const targetTag = tags.find((tag) => tag.Key === tagKey);
+    expect(targetTag).toBeDefined();
+    expect(targetTag?.Value).toMatch(/^[A-Za-z0-9:-]+$/);
+
+    if (!targetTag) {
+      throw new Error(`Missing ${tagKey} tag on resource ${logicalId}`);
+    }
+  }
+}
+
 describe("QuartzSiteStack", () => {
   test("passes cdk-nag with configured suppressions", () => {
     const { stack } = buildStack();
@@ -179,5 +209,15 @@ describe("QuartzSiteStack", () => {
   test("applies required governance tags to all CloudFront distributions", () => {
     const { template } = buildStack();
     assertGovernanceTagsOnAllResources(template, "AWS::CloudFront::Distribution");
+  });
+
+  test("applies Name tag to all S3 buckets", () => {
+    const { template } = buildStack();
+    assertTagExistsOnAllResources(template, "AWS::S3::Bucket", "Name");
+  });
+
+  test("applies Name tag to all CloudFront distributions", () => {
+    const { template } = buildStack();
+    assertTagExistsOnAllResources(template, "AWS::CloudFront::Distribution", "Name");
   });
 });

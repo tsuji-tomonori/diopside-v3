@@ -138,5 +138,18 @@ export class QuartzSiteStack extends cdk.Stack {
         reason: "CDK BucketDeployment uses framework-managed provider Lambda runtime outside direct stack control.",
       },
     ], true);
+
+    this.addNameTag(this);
+  }
+
+  private addNameTag(scope: Construct): void {
+    for (const child of scope.node.children) {
+      if (cdk.Resource.isResource(child)) {
+        const tagValue = child.node.path.replace(/\//g, "-").replace(/_/g, "-");
+        cdk.Tags.of(child).add("Name", tagValue);
+      }
+
+      this.addNameTag(child);
+    }
   }
 }
