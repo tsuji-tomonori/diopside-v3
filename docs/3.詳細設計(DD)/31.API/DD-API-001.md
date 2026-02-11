@@ -3,11 +3,11 @@ id: DD-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-001]]'
@@ -30,7 +30,7 @@ tags:
 - Public Read Contract（配信契約）
   - `bootstrap.json`: 初回描画に必要な最新動画セットと次リソース参照。
   - `tag_master.json`: 全[[RQ-GL-005|タグ辞書]]と[[RQ-GL-013|タグ種別]]定義。
-  - `archive_index.p{page}.json`: 全件閲覧用のページング索引。
+  - `archive_index.p{page}.json`: 全件閲覧用の[[RQ-GL-009|archive_index（ページング済み索引）]]。
 - Ops Control Contract（運用契約）
   - [[RQ-GL-002|収集ジョブ]]開始、実行状態確認、失敗ジョブ再実行、直近結果照会。
   - 実行履歴は運用監査対象として保持する。
@@ -100,5 +100,6 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-11: `archive_index.p{page}.json` の用語表現を [[RQ-GL-009]] へ統一
 - 2026-02-10: 新規作成
 - 2026-02-10: 配信契約/運用契約、エラーモデル、バージョニング方針を追加

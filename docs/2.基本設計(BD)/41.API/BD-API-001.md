@@ -3,7 +3,7 @@ id: BD-API-001
 title: API一覧
 doc_type: API設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -42,7 +42,7 @@ tags:
 |---|---|---|---|
 | 静的JSON | `bootstrap.json` | 初期表示データ | [[RQ-FR-015]] |
 | 静的JSON | `tag_master.json` | [[RQ-GL-005|タグ辞書]] | [[RQ-FR-005]] |
-| 静的JSON | `archive_index.p{page}.json` | [[RQ-GL-010|段階ロード]]一覧 | [[RQ-FR-007]], [[RQ-FR-015]] |
+| 静的JSON | `archive_index.p{page}.json` | [[RQ-GL-009|archive_index]]による[[RQ-GL-010|段階ロード]]一覧 | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-015]] |
 | 静的JSON | `highlights/{videoId}.json` | 動画詳細の[[RQ-GL-016|コメント密度波形]]と[[RQ-GL-015|盛り上がり区間]]表示 | [[RQ-FR-020]], [[RQ-FR-022]] |
 | 静的画像 | `wordcloud/{videoId}.png` | 動画詳細の話題傾向表示 | [[RQ-FR-021]] |
 
@@ -68,6 +68,7 @@ tags:
 - **フォールバック方針**: 画像不正・破損時は表示を中断し、モーダル機能（タグ、遷移、閉じる）を維持する。
 
 ## 変更履歴
+- 2026-02-11: `archive_index.p{page}.json` 契約の用語参照を [[RQ-GL-009]] に統一し、主な利用要求へ [[RQ-FR-006]] を追加
 - 2026-02-10: 新規作成
 - 2026-02-11: [[RQ-FR-021]] 対応として[[RQ-GL-017|ワードクラウド]]静的配信契約（`wordcloud/{videoId}.png`）を追加
 - 2026-02-11: [[RQ-FR-020]] 意味変更に合わせ、[[RQ-GL-016|コメント密度波形]]の静的配信契約（`highlights/{videoId}.json`）を追加

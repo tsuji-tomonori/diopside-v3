@@ -3,11 +3,11 @@ id: DD-API-004
 title: アーカイブ一覧API
 doc_type: API詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-001]]'
@@ -30,7 +30,7 @@ tags:
 ## `bootstrap.json` 契約
 - `schemaVersion`, `generatedAt`, `tagTypes`, `tagPreview`, `latest`, `next` を必須とする。
 - `latest` は初期表示件数を満たす最小セットとする。
-- `next.archiveIndex.urlPattern` でページ索引URIを通知する。
+- `next.archiveIndex.urlPattern` で[[RQ-GL-009|archive_index（ページング済み索引）]]のURIを通知する。
 
 ## `archive_index.p{page}.json` 契約
 - `page`, `pageSize`, `total`, `items` を必須とする。
@@ -46,5 +46,6 @@ tags:
 - 欠損ページ時は表示継続しつつ警告通知できること。
 
 ## 変更履歴
+- 2026-02-11: `archive_index` 契約の用語参照を [[RQ-GL-009]] へ統一
 - 2026-02-10: 新規作成
 - 2026-02-10: 一覧配信契約（[[RQ-GL-007|bootstrap]]/[[RQ-GL-009|archive_index]]）の詳細を追加
