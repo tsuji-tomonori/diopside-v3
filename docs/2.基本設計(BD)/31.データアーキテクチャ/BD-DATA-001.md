@@ -3,7 +3,7 @@ id: BD-DATA-001
 title: データアーキテクチャ
 doc_type: データアーキテクチャ
 phase: BD
-version: 1.1.1
+version: 1.1.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -35,7 +35,7 @@ tags:
 | 層 | 目的 | 主な保持項目 |
 |---|---|---|
 | DB正本層 | 更新系の唯一正本 | `run_id`, `video_id`, `source_type`, `update_type`, `tag_id`, `is_active`, `updated_at` |
-| 配信生成層 | 正本から配信形式へ変換 | `bootstrap`, `tag_master`, `archive_index.pN`, 補助表示成果物 |
+| 配信生成層 | 正本から配信形式へ変換 | `publish_run_id`, `artifact_type`, `artifact_path`, `checksum`, `generated_at` |
 | 配信公開層 | 利用者向け参照データ配布 | 公開JSON/静的画像/文書・テスト結果 |
 
 ## スキーマ境界
@@ -43,6 +43,7 @@ tags:
 - **任意属性**: `description`, `duration`, `tags`, `thumbnail_ref`。
 - **追跡属性**: `run_id`, `source_type`, `update_type`, `normalized_at`。
 - **品質属性**: `missing_fields`, `validation_status`, `supplement_required`。
+- **公開属性**: `publish_run_id`, `publish_status`, `published_at`, `rollback_from`。
 
 ## データライフサイクル
 1. DB正本層へ run条件、取得結果、タグ更新を反映する。
@@ -56,6 +57,7 @@ tags:
 - 任意属性欠損は補完対象として識別し、欠損理由を保持する。
 - DB正本更新に失敗した場合は配信再生成を実行しない。
 - 配信再生成が失敗した場合は直前公開版を維持する。
+- 公開切替後に `publish_run_id` 単位で成果物整合（件数/チェックサム）を検証する。
 
 ## 図
 ```mermaid
@@ -65,6 +67,7 @@ flowchart LR
 ```
 
 ## 変更履歴
+- 2026-02-11: [[RQ-GL-018|配信反映実行]]中心の配信生成属性と公開整合ゲートを追加 [[BD-ADR-021]]
 - 2026-02-11: DB正本層/配信生成層/配信公開層へ再整理し、再生成・公開切替ルールを追加 [[BD-ADR-021]]
-- 2026-02-11: データ層構成、追跡属性、品質ゲートを追加し収集モード分離へ対応
-- 2026-02-10: 新規作成
+- 2026-02-11: データ層構成、追跡属性、品質ゲートを追加し収集モード分離へ対応 [[BD-ADR-001]]
+- 2026-02-10: 新規作成 [[BD-ADR-001]]
