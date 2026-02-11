@@ -11,6 +11,41 @@ export class QuartzSiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    const allowedEnvironments = [
+      "Production",
+      "Staging",
+      "Development",
+      "Test",
+    ] as const;
+
+    const environmentTag =
+      (this.node.tryGetContext("tagEnvironment") as string | undefined) ??
+      "Development";
+
+    const governanceTags = {
+      CostCenter:
+        (this.node.tryGetContext("tagCostCenter") as string | undefined) ??
+        "CC0000",
+      Environment: environmentTag,
+      Owner:
+        (this.node.tryGetContext("tagOwner") as string | undefined) ??
+        "platform-team",
+      Project:
+        (this.node.tryGetContext("tagProject") as string | undefined) ??
+        "diopside",
+      ManagedBy: "CDK",
+    } as const;
+
+    if (!(allowedEnvironments as readonly string[]).includes(environmentTag)) {
+      throw new Error(
+        `Invalid tagEnvironment '${environmentTag}'. Allowed values: ${allowedEnvironments.join(", ")}`,
+      );
+    }
+
+    for (const [key, value] of Object.entries(governanceTags)) {
+      cdk.Tags.of(this).add(key, value);
+    }
+
     const keyPrefix = "obsidian";
     const originPath = `/${keyPrefix}`;
     const siteAssetPath =

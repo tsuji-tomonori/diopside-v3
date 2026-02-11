@@ -6,6 +6,21 @@ import { QuartzSiteStack } from "../lib/quartz-site-stack";
 
 const fixtureSitePath = path.join(__dirname, "fixtures/site");
 
+const REQUIRED_TAG_KEYS = [
+  "CostCenter",
+  "Environment",
+  "Owner",
+  "Project",
+  "ManagedBy",
+] as const;
+
+const ALLOWED_ENVIRONMENTS = [
+  "Production",
+  "Staging",
+  "Development",
+  "Test",
+] as const;
+
 function buildStack() {
   const app = new App({
     context: {
@@ -18,6 +33,44 @@ function buildStack() {
   const template = Template.fromStack(stack);
 
   return { stack, template };
+}
+
+function assertGovernanceTagsOnAllResources(
+  template: Template,
+  resourceType: string,
+) {
+  const resources = template.findResources(resourceType) as Record<string, unknown>;
+  const entries = Object.entries(resources);
+
+  expect(entries.length).toBeGreaterThan(0);
+
+  for (const [logicalId, resource] of entries) {
+    const tags =
+      (
+        resource as {
+          Properties?: {
+            Tags?: Array<{ Key: string; Value: string }>;
+          };
+        }
+      ).Properties?.Tags ?? [];
+
+    const tagMap = new Map(tags.map((tag) => [tag.Key, tag.Value]));
+
+    for (const key of REQUIRED_TAG_KEYS) {
+      expect(tagMap.has(key)).toBe(true);
+    }
+
+    expect(tagMap.get("ManagedBy")).toBe("CDK");
+    expect(ALLOWED_ENVIRONMENTS).toContain(tagMap.get("Environment"));
+
+    expect(tagMap.size).toBeGreaterThanOrEqual(REQUIRED_TAG_KEYS.length);
+    expect(tagMap.has("Environment")).toBe(true);
+    expect(tagMap.has("ManagedBy")).toBe(true);
+
+    if (!tagMap.has("Environment") || !tagMap.has("ManagedBy")) {
+      throw new Error(`Missing governance tags on resource ${logicalId}`);
+    }
+  }
 }
 
 describe("QuartzSiteStack", () => {
@@ -116,5 +169,15 @@ describe("QuartzSiteStack", () => {
   test("matches CloudFormation snapshot", () => {
     const { template } = buildStack();
     expect(template.toJSON()).toMatchSnapshot();
+  });
+
+  test("applies required governance tags to all S3 buckets", () => {
+    const { template } = buildStack();
+    assertGovernanceTagsOnAllResources(template, "AWS::S3::Bucket");
+  });
+
+  test("applies required governance tags to all CloudFront distributions", () => {
+    const { template } = buildStack();
+    assertGovernanceTagsOnAllResources(template, "AWS::CloudFront::Distribution");
   });
 });

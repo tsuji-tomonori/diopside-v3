@@ -68,6 +68,28 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           ],
         },
         "Runtime": "python3.13",
+        "Tags": [
+          {
+            "Key": "CostCenter",
+            "Value": "CC0000",
+          },
+          {
+            "Key": "Environment",
+            "Value": "Development",
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CDK",
+          },
+          {
+            "Key": "Owner",
+            "Value": "platform-team",
+          },
+          {
+            "Key": "Project",
+            "Value": "diopside",
+          },
+        ],
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -98,6 +120,28 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
             ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "CostCenter",
+            "Value": "CC0000",
+          },
+          {
+            "Key": "Environment",
+            "Value": "Development",
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CDK",
+          },
+          {
+            "Key": "Owner",
+            "Value": "platform-team",
+          },
+          {
+            "Key": "Project",
+            "Value": "diopside",
           },
         ],
       },
@@ -319,6 +363,28 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
             },
           ],
         },
+        "Tags": [
+          {
+            "Key": "CostCenter",
+            "Value": "CC0000",
+          },
+          {
+            "Key": "Environment",
+            "Value": "Development",
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CDK",
+          },
+          {
+            "Key": "Owner",
+            "Value": "platform-team",
+          },
+          {
+            "Key": "Project",
+            "Value": "diopside",
+          },
+        ],
       },
       "Type": "AWS::CloudFront::Distribution",
     },
@@ -430,6 +496,26 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           {
             "Key": "aws-cdk:cr-owned:obsidian:0ed17ccc",
             "Value": "true",
+          },
+          {
+            "Key": "CostCenter",
+            "Value": "CC0000",
+          },
+          {
+            "Key": "Environment",
+            "Value": "Development",
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CDK",
+          },
+          {
+            "Key": "Owner",
+            "Value": "platform-team",
+          },
+          {
+            "Key": "Project",
+            "Value": "diopside",
           },
         ],
       },
