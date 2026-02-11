@@ -12,6 +12,8 @@ metadata:
 - 必須frontmatterキーの存在
 - `filename == id`
 - `up/related` のリンク整合
+- FR（`docs/1.要求(RQ)/51.機能要求(FR)`）は機能単位カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）で配置されている
+- FR生成系要求は独立カテゴリ化されず、利用者機能カテゴリに配置されている
 - 用語集（`RQ-GL-*`）にある語彙が本文でObsidianリンク化されている
 - 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク化されている
 - 本文中の文書ID参照をコード表記（`（`ID`）`）で残していない
@@ -20,5 +22,7 @@ metadata:
 
 ## 実行
 - 新規作成・本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、本文用語を自動リンク化する。
+- 変更をコミットする前に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py --docs-root docs --check <対象Markdownパス...>` を実行し、未リンク用語が残っていないことを確認する。
+- 開発環境では `pre-commit` を導入し、docs変更時に上記チェックを必須ゲート化する。
 - 用語文書更新時は、`## 定義` に英名（`英名: \`term_en\``）を併記する。
 - 続けて `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、`reports/doc_check.md` を更新する。

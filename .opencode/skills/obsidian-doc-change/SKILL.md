@@ -12,6 +12,8 @@ metadata:
 - 必須frontmatterキーの存在
 - `filename == id`
 - `up/related` のリンク整合
+- FR（`docs/1.要求(RQ)/51.機能要求(FR)`）は機能単位カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）で配置されている
+- FR生成系要求は独立カテゴリ化されず、利用者機能カテゴリに配置されている
 - 用語集（`RQ-GL-*`）にある語彙が本文でObsidianリンク化されている
 - 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク化されている
 - 本文中の文書ID参照をコード表記（`（`ID`）`）で残していない

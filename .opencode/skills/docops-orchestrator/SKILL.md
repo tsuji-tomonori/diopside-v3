@@ -14,13 +14,16 @@ metadata:
 3. 要求変更なら RDR、設計変更なら ADR を同一変更で更新する。
 4. 規約変更時は `skill-maintainer` / `docops-orchestrator` / `obsidian-doc-*` を同一変更で更新する。
 5. `up/related` を辿って上位・下位文書を更新または影響確認記録を作成する。
-6. `reports/impact_check_YYYY-MM-DD.md` を更新する。
-7. `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行して本文用語をWikiリンク化する。
-8. `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>` を実行して `reports/doc_check.md` を更新する。
-9. 用語文書（`RQ-GL-*`）を変更した場合は、`term_en`（ASCII `snake_case`）と本文英名併記（`英名: \`term_en\``）を確認する。
-10. 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク（`[[ID]]`）で記述されていることを確認する。
-11. `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば fail とし、修正が完了するまで次工程へ進まない。
-12. スキル更新を伴う変更では、`docs` と `.opencode/skills` が同一変更で更新されていることを確認する。
+6. FR（`docs/1.要求(RQ)/51.機能要求(FR)`）を変更する場合は、機能単位カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）で配置する。
+7. FRの生成系要求は独立カテゴリ化せず、利用者機能カテゴリへ配置する。
+8. FR配置の判断が分かれる場合は RDR に配置理由を同一変更で記録する。
+9. `reports/impact_check_YYYY-MM-DD.md` を更新する。
+10. `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行して本文用語をWikiリンク化する。
+11. `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>` を実行して `reports/doc_check.md` を更新する。
+12. 用語文書（`RQ-GL-*`）を変更した場合は、`term_en`（ASCII `snake_case`）と本文英名併記（`英名: \`term_en\``）を確認する。
+13. 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク（`[[ID]]`）で記述されていることを確認する。
+14. `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば fail とし、修正が完了するまで次工程へ進まない。
+15. スキル更新を伴う変更では、`docs` と `.opencode/skills` が同一変更で更新されていることを確認する。
 
 ## 出力
 - 変更済み docs

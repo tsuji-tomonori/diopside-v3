@@ -200,3 +200,17 @@
   - 要求整合: 要求ID・本文・frontmatterを変更せず、文書の意味は不変。
   - トレーサビリティ整合: Obsidianリンクは `[[RQ-FR-xxx]]` のID解決のため、関連文書からの参照は維持。
   - 運用整合: 機能起点での閲覧性が向上し、コメント密度波形/ワードクラウドの表示要求と生成要求を同一機能カテゴリで追跡可能。
+
+## 追記（FR機能単位編成を運用規約・スキル・エージェントへ反映）
+- 対象: `AGENTS.md`, `.opencode/skills/doc-rq-fr/*`, `.opencode/skills/docops-orchestrator/SKILL.md`, `.opencode/skills/skill-maintainer/SKILL.md`, `.opencode/skills/obsidian-doc-*/SKILL.md`, `.opencode/agents/docops-orchestrator.md`
+- 実施:
+  - `AGENTS.md` に FR機能単位編成規約（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）を追加し、生成系要求の配置方針を明文化。
+  - `doc-rq-fr` に FR配置規則と曖昧時のRDR記録ルールを追加。
+  - `docops-orchestrator` / `skill-maintainer` に FR編成維持の実行手順を追加。
+  - `obsidian-doc-new` / `obsidian-doc-change` / `obsidian-doc-check` に FR配置の確認観点を追加。
+  - 運用用エージェントとして `.opencode/agents/docops-orchestrator.md` を新規追加。
+- 影響確認:
+  - 規約整合: FRの再編方針が AGENTS/skills/agents で同一ルールに統一された。
+  - 運用整合: 新規FR追加時に実装工程寄り分類へ戻るリスクを低減。
+  - トレーサビリティ整合: 配置判断が曖昧な場合のRDR記録ルールを明確化。
+  - 検証結果: `validate_vault.py` 実行で `broken_links: 0`、`nonlinked_doc_ids: 68`（UT/IT/AT文書の既存ID未リンク）を確認。
