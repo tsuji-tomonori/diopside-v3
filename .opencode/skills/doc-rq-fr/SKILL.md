@@ -12,7 +12,7 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
-- FRは機能単位カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）へ配置する。
+- FRは機能単位カテゴリ（ADM/SCH/TAG/LST/DET/HLW/WCL）へ配置する。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -31,12 +31,13 @@ metadata:
 - `up/related` のリンク先が存在することを確認する。
 - FR追加/移動時に、実装工程単位（収集実行/データ整備など）へ戻していないことを確認する。
 - 生成系要求（例: 派生データ生成）は、独立カテゴリ化せず利用者機能カテゴリへ配置する。
+- 管理者操作に関するFR（収集起動/監視/再収集/公開運用/配信経路確認）は `01.管理画面(ADM)` へ配置する。
 - FRの配置判断が曖昧な場合は、RDRへ配置理由を同一変更で記録する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
 
 ## 使う条件
-- FR文書を新規作成・更新・レビューし、カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）配置を判断するとき。
+- FR文書を新規作成・更新・レビューし、カテゴリ（ADM/SCH/TAG/LST/DET/HLW/WCL）配置を判断するとき。
 - FR追加/移動に伴い、関連RDRや他要求との整合を同一変更で確認するとき。
 
 ## 使わない条件

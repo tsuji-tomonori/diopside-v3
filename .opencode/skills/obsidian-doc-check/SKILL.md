@@ -10,7 +10,7 @@ metadata:
 
 ## 使う条件
 - `docs/**` 配下の文書を追加・改訂し、規約適合を機械検証したいとき。
-- FR配置（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）や用語リンクの逸脱有無を確認したいとき。
+- FR配置（ADM/SCH/TAG/LST/DET/HLW/WCL）や用語リンクの逸脱有無を確認したいとき。
 
 ## 使わない条件
 - 文書の内容設計（要求追加方針、設計判断、文面レビュー）を行うだけで、規約検査を実行しないとき。
@@ -20,7 +20,8 @@ metadata:
 - 必須frontmatterキーの存在
 - `filename == id`
 - `up/related` のリンク整合
-- FR（`docs/1.要求(RQ)/51.機能要求(FR)`）は機能単位カテゴリ（ING/SCH/TAG/LST/DET/HLW/WCL/OPS）で配置されている
+- FR（`docs/1.要求(RQ)/51.機能要求(FR)`）は機能単位カテゴリ（ADM/SCH/TAG/LST/DET/HLW/WCL）で配置されている
+- 管理者操作FR（収集起動/監視/再収集/公開運用/配信経路確認）は `01.管理画面(ADM)` に配置されている
 - FR生成系要求は独立カテゴリ化されず、利用者機能カテゴリに配置されている
 - 用語集（`RQ-GL-*`）にある語彙が本文でObsidianリンク化されている
 - 本文中の文書ID参照（`RQ-DM-*`, `DD-API-*` など）がObsidianリンク化されている

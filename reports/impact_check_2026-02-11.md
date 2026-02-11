@@ -446,3 +446,17 @@
 - 影響確認:
   - 要求整合: 主体表現からステークホルダー定義へ直接遷移でき、解釈の揺れを低減。
   - トレーサビリティ整合: UC/FR/NFR から SH への参照経路が一貫化。
+
+## 追記（管理者操作の管理画面カテゴリ統合）
+- 対象: `RQ-RDR-030`, `RQ-FR-001`, `RQ-FR-002`, `RQ-FR-003`, `RQ-FR-004`, `RQ-FR-019`, `RQ-FR-016`, `RQ-FR-017`, `RQ-FR-018`, `RQ-FR-024`, `RQ-FR-025`, `RQ-UC-001`, `RQ-UC-007`, `RQ-UC-008`, `RQ-UC-009`, `RQ-SC-001`, `AGENTS.md`, `.opencode/skills/doc-rq-fr/*`, `.opencode/skills/docops-orchestrator/SKILL.md`, `.opencode/skills/skill-maintainer/SKILL.md`, `.opencode/skills/obsidian-doc-*/SKILL.md`, `.opencode/agents/docops-orchestrator.md`
+- 実施:
+  - `RQ-RDR-030` を新規作成し、旧 `ING` と旧 `OPS` を管理画面カテゴリへ統合する決定を記録。
+  - FRカテゴリを `01.管理画面(ADM)` へ再編し、`RQ-FR-001/002/003/004/019/016/017/018/024/025` を移動。
+  - 上記FRの要求本文を「管理画面でできること」起点へ更新し、変更履歴へ `[[RQ-RDR-030]]` を追記。
+  - `RQ-UC-001/007/008/009` を管理画面起点の操作フローへ更新。
+  - `RQ-SC-001` のIn Scopeを管理画面操作（収集実行/監視/再収集/公開運用/配信経路確認）へ再整理。
+  - FR編成規約の正本を `ADM/SCH/TAG/LST/DET/HLW/WCL` に更新し、関連スキル/エージェントへ同一変更で反映。
+- 影響確認:
+  - 要求整合: 管理者操作がカテゴリ横断せず `01.管理画面(ADM)` で一意に追跡可能。
+  - 規約整合: `AGENTS.md` と `doc-rq-fr` / `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` のFRカテゴリ定義が一致。
+  - 運用整合: 収集起動から再収集、公開、経路確認までを管理画面運用として同一文脈でレビュー可能。
