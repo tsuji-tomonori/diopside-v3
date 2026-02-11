@@ -3,7 +3,7 @@ id: BD-API-005
 title: HTTP API契約共通方針
 doc_type: API設計
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -74,14 +74,30 @@ tags:
 - OpenAPIを契約正本とし、仕様更新なしの実装先行を禁止する。
 - CIでスキーマLint、破壊的変更検知、コントラクトテストを実行する。
 - 破壊的変更が検出された場合は、版追加または互換層追加が完了するまでリリースを停止する。
+- OpenAPI JSON は `/openapi/v1/openapi.json` で配布し、API版 `/api/v1/*` と同一版で管理する。
+- 人向け仕様UIは `/openapi/` に配布し、参照先を `/openapi/v1/openapi.json` へ固定する。
 
 ## Hono + Zod 実装規約
+- 本プロジェクトのAPI契約定義は `@hono/zod-openapi` に統一し、`OpenAPIHono` + `createRoute()` + `app.openapi()` を標準とする。
 - 入力は不正を前提に、ルート境界で `param/query/header/cookie/json/form` を部位別に検証する。
 - `json`/`form` 検証は `Content-Type` の一致を必須とし、欠落時は入力不正として扱う。
 - `header` 検証時のキーは小文字で扱い、HTTPヘッダ名の大文字小文字差異を吸収する。
 - 検証済み入力は `c.req.valid(...)` から取得し、ハンドラ内部で未検証入力を参照しない。
-- ルート定義は型推論維持のため直後にハンドラを記述する。分離が必要な場合のみ `factory.createHandlers()` を利用する。
+- ルート定義は型推論維持のため `createRoute()` 直後に `app.openapi(route, handler)` を記述する。分離が必要な場合のみ `factory.createHandlers()` を利用する。
 - サブ機能分割は controller 増殖ではなく `app.route('/prefix', subApp)` を優先する。
+
+## Schema-first 契約定義規約
+- スキーマの `z` は `@hono/zod-openapi` から import し、OpenAPIメタ（`example`/`description`/`param`）を同一定義へ付与する。
+- 再利用スキーマは `.openapi('SchemaName')` で命名し、components参照を安定化する。
+- Path parameter は `request.params` に集約し、OpenAPI path は `'/resources/{id}'` の `{}` 記法へ統一する。
+- ルート定義には `summary`/`operationId`/`tags` を必須化し、SDK生成とドキュメント分類の基準を固定する。
+- `responses` は利用ステータスごとに schema を定義し、成功系と失敗系（`default`/`4xx`/`5xx`）の形式差異を契約化する。
+
+## 構成分離規約（schemas/routes/handlers）
+- `schemas/` は Zod + OpenAPIメタのみを保持し、業務ロジックを含めない。
+- `routes/` は `createRoute()` の契約定義のみを保持し、実処理を含めない。
+- `handlers/` は業務ロジックに限定し、入力参照は `c.req.valid('param'|'query'|'json'|...)` のみを使用する。
+- 実装は「スキーマ定義 -> ルート契約 -> ハンドラ」の順で更新し、仕様未更新の実装先行を禁止する。
 
 ## Hono + Zod エラー統一規約
 - バリデーション失敗は `HTTPException(400, { cause: zodError })` で送出し、個別ルートで返却形式を分岐させない。
@@ -101,5 +117,6 @@ tags:
 - 型推論の安定化のため、RPC対象ルートはメソッドチェーンで定義する。
 
 ## 変更履歴
+- 2026-02-11: `@hono/zod-openapi` 統一方針（`OpenAPIHono`/`createRoute`、Schema-first、`operationId`/`tags`、OpenAPI公開経路）を追加 [[BD-ADR-025]]
 - 2026-02-11: Hono + Zod 実装規約（入力検証、`HTTPException`/`onError` 集約、RPC型共有、Zod v4運用）を追加 [[BD-ADR-025]]
 - 2026-02-11: 新規作成（HTTPセマンティクス、Problem Details、互換性、運用規約を定義） [[BD-ADR-023]]

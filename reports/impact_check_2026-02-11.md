@@ -814,3 +814,15 @@
   - 設計整合: `BD-ADR-025 -> BD-API-005 -> BD-API-002/003` の追跡経路を構築。
   - 要求整合: `RQ-SEC-001`（入力検証/情報露出抑制）、`RQ-INT-001`（契約整合）、`RQ-DEV-001`（実装標準化）と矛盾しない運用基準を確立。
   - 運用整合: 対応2スキル更新により、今後のBD-API/DD-API更新時に同一のHono + Zod観点を継続適用可能。
+
+## 追記（@hono/zod-openapi 統一方針のBD/skill反映）
+- 対象: `BD-ADR-025`, `BD-API-005`, `.opencode/skills/doc-bd-api/*`, `.opencode/skills/doc-dd-api/*`
+- 実施:
+  - `BD-ADR-025` を更新し、API契約定義方式を `@hono/zod-openapi`（`OpenAPIHono` + `createRoute()` + `app.openapi()`）へ統一する決定を追加。
+  - `BD-API-005` を更新し、Schema-first契約規約（`z` import元統一、`.openapi('SchemaName')`、`summary`/`operationId`/`tags`、`responses` 定義）を追加。
+  - `BD-API-005` の契約運用規約へ、`/openapi/v1/openapi.json` と `/openapi/` の配布経路固定、および `/api/v1/*` との版整合を追記。
+  - `doc-bd-api` の `SKILL.md` / `TEMPLATE.md` を更新し、設計観点に `@hono/zod-openapi` の必須チェックを追加。
+  - `doc-dd-api` の `SKILL.md` / `TEMPLATE.md` を更新し、詳細設計観点に `request.params/query/body` と `createRoute` 起点の定義規約を追加。
+- 影響確認:
+  - 設計整合: `BD-ADR-025 -> BD-API-005` の追跡を強化し、契約定義方式の揺れを解消。
+  - 運用整合: 対応2スキル更新により、今後のBD/DD API文書改訂で `@hono/zod-openapi` 観点を継続適用可能。

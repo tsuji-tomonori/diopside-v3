@@ -9,7 +9,9 @@
 - 受入条件または確認手順
 - 依存/関連リンク（Obsidianリンク）
 - ValidationTargets別の入力検証（`param/query/header/cookie/json/form`）と適用順
-- Hono + Zod 実装規約（`@hono/zod-validator`、`c.req.valid(...)`、`safeParseAsync`）
+- Hono + Zod 実装規約（`@hono/zod-openapi`、`OpenAPIHono`、`createRoute()`、`app.openapi()`）
+- スキーマ規約（`z` import元、`.openapi('SchemaName')`、`example`/`description`/`param`）
+- ルート規約（`summary`/`operationId`/`tags`、`request.params/query/body`、`responses` 成功/失敗）
 - Problem Details応答（`application/problem+json`、`type/title/status/detail/instance`、拡張項目）
 - 例外統一（`HTTPException`、`app.notFound`、`app.onError`、Zodエラー整形）
 - HTTPステータス詳細（`201` + `Location`、`429` + `Retry-After`、`4xx/5xx` 使い分け）

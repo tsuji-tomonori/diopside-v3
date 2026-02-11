@@ -21,7 +21,10 @@ metadata:
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - API処理フロー、入力検証規則、外部依存の呼び出し順、エラー/例外の返却条件、冪等性・再試行方針。
 - HonoのValidationTargets（`param/query/header/cookie/json/form`）単位の検証設計と適用順。
-- `@hono/zod-validator` 利用時の `safeParseAsync` 前提、hook/wrapper方針、`c.req.valid(...)` 利用規約。
+- `@hono/zod-openapi` 利用時の `OpenAPIHono`、`createRoute()`、`app.openapi()` の実装規約。
+- `request.params/query/body` の定義位置、`safeParseAsync` 前提、`c.req.valid(...)` 利用規約。
+- スキーマ記述規約（`z` import元統一、`.openapi('SchemaName')`、`example`/`description`/`param`）。
+- ルート記述規約（`summary`/`operationId`/`tags`、`responses` の成功/失敗スキーマ）。
 - `HTTPException(400, { cause })` と `app.onError` 集約の実装規約、`app.notFound` の扱い。
 - Zod v4 エラー整形（`z.flattenError()` / `z.treeifyError()`）と Problem Details拡張フィールドの対応。
 - ルート直後ハンドラの原則、分離時の `factory.createHandlers()` 採用条件。
@@ -57,6 +60,8 @@ metadata:
 - `trace_id`/`request_id`/`instance` でログと応答を相互追跡できることを確認する。
 - `json/form` の `Content-Type` 条件、`header` 小文字キー規約、ValidationTargets別の適用順が定義されていることを確認する。
 - 検証済みデータの参照が `c.req.valid(...)` に統一され、ハンドラ内で未検証入力を使わないことを確認する。
+- `@hono/zod-openapi` の `OpenAPIHono` / `createRoute()` / `app.openapi()` を用いた定義になっていることを確認する。
+- `summary`/`operationId`/`tags` と `responses`（成功/失敗）がルート単位で定義されていることを確認する。
 - バリデーション失敗が `HTTPException(400, { cause })` を経由して `app.onError` に集約されることを確認する。
 - Zod v4 のエラー整形関数（`z.flattenError()`/`z.treeifyError()`）を利用し、`format`/`flatten` 旧運用へ依存しないことを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。

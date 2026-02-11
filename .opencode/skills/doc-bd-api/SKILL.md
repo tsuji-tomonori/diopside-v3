@@ -23,7 +23,11 @@ metadata:
 - HTTPセマンティクス（GET/POST/PUT/PATCH/DELETE の意味、冪等性、安全性）とステータスコード方針。
 - 一覧取得のページング方式（`limit` + `cursor` 推奨、cursorはopaque）と検索パラメータ統一方針。
 - エラー形式の標準（`application/problem+json`、`type/title/status/detail/instance`）と拡張項目方針。
-- Hono + Zod を採用するAPIの実装規約（ValidationTargets単位の検証、`c.req.valid(...)` 利用、`HTTPException` と `app.onError` 集約）。
+- Hono + Zod を採用するAPIの実装規約（`@hono/zod-openapi` 統一、`OpenAPIHono`、`createRoute()`、`app.openapi()`）。
+- ValidationTargets単位の検証（`param/query/header/cookie/json/form`）、`c.req.valid(...)` 利用、`HTTPException` と `app.onError` 集約。
+- Schema-first 方針（`z` は `@hono/zod-openapi` から import、`.openapi('SchemaName')`、`example`/`description`/`param` メタ付与）。
+- ルート契約規約（`summary`/`operationId`/`tags` 必須、`request.params`、`responses` の成功/失敗スキーマ定義）。
+- OpenAPI公開規約（`/openapi/v1/openapi.json`、`/openapi/`）と `/api/v1/*` 版対応。
 - バリデーションエラー整形方針（`z.flattenError()` / `z.treeifyError()`）と機械可読フィールドの定義。
 - Zod v4 前提の運用方針（`safeParseAsync`、未知キー strict/loose 方針、`z.input`/`z.output` の型境界）。
 - RPC型共有時の運用（`AppType` export、メソッドチェーン定義、`hc<AppType>` 利用）。
@@ -55,9 +59,13 @@ metadata:
 - Problem Details必須メンバー（`type/title/status/detail/instance`）を欠落なく定義していることを確認する。
 - `param/query/header/cookie/json/form` の必要箇所が定義され、`json/form` の `Content-Type` 条件と `header` 小文字運用が明記されていることを確認する。
 - 検証済み入力が `c.req.valid(...)` 経由に統一され、未検証入力の利用を許容していないことを確認する。
+- `@hono/zod-openapi` の `OpenAPIHono` / `createRoute()` / `app.openapi()` で契約と実装を接続していることを確認する。
+- スキーマの `z` import元が `@hono/zod-openapi` であり、`.openapi()` メタが運用されていることを確認する。
+- ルートごとに `summary`/`operationId`/`tags` と `responses`（成功/失敗）が定義されていることを確認する。
 - バリデーション失敗が `HTTPException(400, { cause })` と `app.onError` 集約で返却される方針を確認する。
 - RPC採用時に `AppType` export とメソッドチェーン定義が記載されていることを確認する。
 - OpenAPIを契約正本として、Lint/破壊的変更検知/契約テストの運用が記述されていることを確認する。
+- OpenAPI JSON配布（`/openapi/v1/openapi.json`）と仕様UI配布（`/openapi/`）が記述されていることを確認する。
 - `## 変更履歴` 各行に `[[BD-ADR-xxx]]` が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
