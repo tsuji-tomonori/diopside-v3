@@ -3,7 +3,7 @@ id: DD-DBCON-001
 title: DB制約方針
 doc_type: DB制約
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -35,6 +35,14 @@ tags:
 | `video_tags.video_id` | `videos.video_id` | RESTRICT | CASCADE | 動画削除時の関連掃除 |
 | `video_tags.tag_id` | `tags.tag_id` | RESTRICT | RESTRICT | 履歴互換維持 |
 | `ingestion_events.run_id` | `ingestion_runs.run_id` | RESTRICT | CASCADE | run削除時のイベント掃除 |
+| `ingestion_items.run_id` | `ingestion_runs.run_id` | RESTRICT | CASCADE | run削除時の明細掃除 |
+| `ingestion_items.video_id` | `videos.video_id` | RESTRICT | RESTRICT | run証跡の整合維持 |
+| `recheck_runs.base_run_id` | `ingestion_runs.run_id` | RESTRICT | SET NULL | 元run削除時も再確認履歴を保持 |
+| `recheck_items.recheck_run_id` | `recheck_runs.recheck_run_id` | RESTRICT | CASCADE | run削除時の明細掃除 |
+| `recheck_items.video_id` | `videos.video_id` | RESTRICT | RESTRICT | 差分履歴の整合維持 |
+| `publish_runs.source_run_id` | `ingestion_runs.run_id` | RESTRICT | SET NULL | 元run削除時も公開履歴を保持 |
+| `publish_steps.publish_run_id` | `publish_runs.publish_run_id` | RESTRICT | CASCADE | run削除時のステップ掃除 |
+| `publish_artifacts.publish_run_id` | `publish_runs.publish_run_id` | RESTRICT | CASCADE | run削除時の成果物掃除 |
 
 ## NULL制約方針
 - 識別子・状態・時刻の基幹属性は `NOT NULL` を必須とする。
@@ -51,5 +59,6 @@ tags:
 - 出力: 制約セット、違反時応答ルール、ロールバック判定条件。
 
 ## 変更履歴
+- 2026-02-11: run明細/再確認/公開反映テーブルの外部キー方針を追加
 - 2026-02-11: 外部キー/NULL方針、制約違反時の扱いを追加
 - 2026-02-10: 新規作成

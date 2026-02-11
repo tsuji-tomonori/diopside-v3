@@ -3,7 +3,7 @@ id: BD-ERD-001
 title: ER図（概要）
 doc_type: ER図
 phase: BD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,6 +17,7 @@ related:
 - '[[BD-DATA-001]]'
 - '[[DD-DDL-001]]'
 - '[[DD-DDL-005]]'
+- '[[DD-DDL-012]]'
 tags:
 - diopside
 - BD
@@ -29,8 +30,9 @@ tags:
 
 ## 設計要点
 - `videos` を中心に `channels`、`video_tags`、`tags` を関連付ける。
-- `ingestion_runs` と `ingestion_events` で収集実行履歴を保持する。
-- `publish_runs` と `publish_artifacts` で公開反映履歴を保持する。
+- `ingestion_runs`、`ingestion_items`、`ingestion_events` で収集実行履歴を保持する。
+- `recheck_runs` と `recheck_items` で配信前後再確認履歴を保持する。
+- `publish_runs`、`publish_steps`、`publish_artifacts` で公開反映履歴を保持する。
 
 ## 図
 ```mermaid
@@ -41,9 +43,16 @@ erDiagram
   tag_types ||--o{ tags : classifies
 
   ingestion_runs ||--o{ ingestion_events : records
+  ingestion_runs ||--o{ ingestion_items : summarizes
   videos ||--o{ ingestion_events : targets
+  videos ||--o{ ingestion_items : targets
+
+  ingestion_runs ||--o{ recheck_runs : seeds
+  recheck_runs ||--o{ recheck_items : records
+  videos ||--o{ recheck_items : targets
 
   publish_runs ||--o{ publish_artifacts : outputs
+  publish_runs ||--o{ publish_steps : tracks
   ingestion_runs ||--o{ publish_runs : triggers
 
   channels {
@@ -96,12 +105,42 @@ erDiagram
     string reason
   }
 
+  ingestion_items {
+    string item_id PK
+    string run_id FK
+    string video_id FK
+    string status
+    string failure_reason_code
+  }
+
+  recheck_runs {
+    string recheck_run_id PK
+    string base_run_id FK
+    string mode
+    string status
+  }
+
+  recheck_items {
+    string recheck_item_id PK
+    string recheck_run_id FK
+    string video_id FK
+    string diff_status
+  }
+
   publish_runs {
     string publish_run_id PK
     string source_run_id FK
+    string publish_type
     string status
     datetime started_at
     datetime published_at
+  }
+
+  publish_steps {
+    string publish_step_id PK
+    string publish_run_id FK
+    string step_name
+    string status
   }
 
   publish_artifacts {
@@ -114,5 +153,6 @@ erDiagram
 ```
 
 ## 変更履歴
+- 2026-02-11: run明細/再確認/公開ステップをER図へ追加し、運用run追跡を具体化 [[BD-ADR-021]]
 - 2026-02-11: DB正本と公開反映履歴を含むER図へ再構成 [[BD-ADR-021]]
 - 2026-02-10: 新規作成 [[BD-ADR-001]]

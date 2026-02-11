@@ -742,3 +742,17 @@
   - 設計整合: `RQ-RDR-035 -> BD-ADR-022 -> DD-LOG-001` の追跡経路を追加し、AWS運用実態に一致したログ設計へ更新。
   - コスト整合: 長期アーカイブを採用せず30日保持に統一し、[[RQ-COST-001]] の上限制約と整合。
   - 運用制約: 30日超過後の詳細調査は不可となるため、AT日次/週次サマリの欠測を防ぐ運用が前提。
+
+## 追記（DB正本拡張に向けたDDL/制約の具体化）
+- 対象: `BD-DATA-001`, `BD-ERD-001`, `DD-DDL-001`, `DD-DDL-003`, `DD-DDL-007`, `DD-DDL-009`, `DD-DDL-010`, `DD-DDL-011`, `DD-DDL-012`, `DD-DDL-013`, `DD-DDL-014`, `DD-DBCON-001`, `DD-DBCON-002`, `DD-MIG-001`, `DD-API-011`
+- 実施:
+  - `videos` に品質属性（`validation_status`, `missing_fields`, `supplement_required`）を追加し、[[RQ-DATA-001]] の品質追跡要件をDDLへ反映。
+  - 収集runの動画単位結果を保持する `ingestion_items` を追加し、`DD-API-011` の明細取得正本を `ingestion_events` 集約から分離。
+  - 配信前後再確認向けに `recheck_runs` / `recheck_items` を追加し、[[RQ-FR-019]] の差分記録要件をrun/明細で追跡可能化。
+  - 公開反映run向けに `publish_runs` / `publish_steps` / `publish_artifacts` を追加し、生成/検証/切替/ロールバックを履歴管理可能化。
+  - run状態語彙を `queued/running/succeeded/failed/partial/cancelled` 系へ統一し、制約文書と移行文書に反映。
+  - `BD-ERD-001` / `BD-DATA-001` を更新し、DB正本・再確認・配信反映の責務境界をERDとデータライフサイクルで整合化。
+- 影響確認:
+  - 要求整合: `RQ-DATA-001`, `RQ-FR-017`, `RQ-FR-019`, `RQ-FR-025` の受入観点（追跡性/差分確認/公開反映）をDDL実体へ接続。
+  - 設計整合: `RQ-RDR-034 -> BD-ADR-021 -> BD-DATA-001/BD-ERD-001 -> DD-DDL/DBCON/MIG` の追跡経路を補強。
+  - 移行整合: `DD-MIG-001` に expand/backfill/switch/contract の適用順序を追記し、既存運用を止めない段階導入条件を明確化。

@@ -1,8 +1,8 @@
 # Doc Check Report
 
 - docs_root: `docs`
-- total_markdown: 295
-- id_docs: 295
+- total_markdown: 301
+- id_docs: 301
 - parse_errors: 0
 - issues: 0
 - nonlinked_doc_ids: 0
