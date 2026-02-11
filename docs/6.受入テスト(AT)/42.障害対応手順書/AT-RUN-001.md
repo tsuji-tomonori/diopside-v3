@@ -3,16 +3,18 @@ id: AT-RUN-001
 title: 障害対応手順書 001
 doc_type: 障害対応手順書
 phase: AT
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[BD-TST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
+- '[[AT-REL-001]]'
+- '[[BD-DEP-003]]'
 tags:
 - diopside
 - AT
@@ -21,11 +23,24 @@ tags:
 
 
 ## 受入目的
-- 障害対応手順書 001で利用者価値と運用品質を確認する。
+- Quartz + CDK 公開フローで障害が発生した際の切り分け手順と復旧手順を標準化する。
+
+## 障害分類と初動
+- Quartz build失敗: Markdown記法エラー、リンク不整合、ビルド設定不備を確認する。
+- CDK deploy失敗: AWS認証情報、権限、`siteAssetPath` 解決結果を確認する。
+- 反映遅延: CloudFront invalidation完了状態、対象パス、前回デプロイとの差分を確認する。
+
+## 復旧手順
+1. 障害分類に応じて該当確認項目をチェックする。
+2. Quartz build失敗時は修正後に `task quartz:build` を再実行する。
+3. CDK deploy失敗時は認証情報とcontextを修正後に `task infra:deploy` を再実行する。
+4. 反映遅延時はinvalidation完了を待機し、必要時に `task docs:deploy` を再実行する。
+5. 復旧完了後、公開URLで更新差分を確認して運用記録へ残す。
 
 ## 判定基準
-- 重要FR/NFRが受入手順で再現可能である。
-- 異常時の運用手順が機能する。
+- 3分類いずれの障害でも、原因特定から復旧確認までの手順が再現可能である。
+- 復旧後の公開サイトが期待バージョンへ更新され、運用記録に再実行結果が残る。
 
 ## 変更履歴
+- 2026-02-11: Quartz + CDK 公開障害の分類と復旧手順を追加
 - 2026-02-10: 新規作成
