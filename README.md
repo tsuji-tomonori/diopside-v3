@@ -1,30 +1,49 @@
-# video-archive-search
+# diopside
 
-ローカルで動作する「動画アーカイブ（summary.json + tagging_results.json）検索 UI」を **React + TypeScript + Vite** で実装し、
-**Jest による単体テスト** / **Playwright による E2E テスト** / **AWS CDK（CloudFront + S3）デプロイ** / **GitHub Actions デプロイ** まで含めたリポジトリです。
+diopside（白雪 巴/Shirayuki Tomoe の公開YouTubeアーカイブ収集・蓄積・検索Webアプリ）の
+ドキュメントと実装コードを同一リポジトリで管理します。
 
-参照元（プロトタイプ）: `index.html` / `tagging_results.json` fileciteturn0file2 fileciteturn0file1
+このリポジトリは、要求/設計/テスト/受入文書を `docs/` で一元管理し、
+アプリ実装を `web/` で管理します。`Taskfile.yaml` と CI で文書整合を検証します。
 
----
+## リポジトリ構成
 
-## ディレクトリ構成
+- `docs/`: Obsidian文書本体（RQ/BD/DD/UT/IT/AT）
+- `reports/`: 影響確認記録と文書チェックレポート
+- `.opencode/`: OpenCode用のスキル/エージェント/コマンド
+- `Taskfile.yaml`: docs運用タスク（autolink/check/guard/deploy）
+- `infra/`: ドキュメント公開用AWS CDK（CloudFront + S3）
+- `.github/workflows/docs-link-check.yml`: 変更docs向けCI検証
+- `web/`: フロントエンド実装（Vite + React + TypeScript）
 
-- `web/` : フロントエンド（Vite + React + TS）
-- `infra/` : AWS CDK (TypeScript) による S3 + CloudFront 構成
-- `docs/` : 要件、操作マニュアル、スクリーンショット、品質チェックリスト、レビュー
-- `.github/workflows/` : CI / Deploy
-- `claudecode/skills/` : 実装時に用いた TS/React のベストプラクティス指針
+## docs構成（フェーズ）
 
----
+- `docs/1.要求(RQ)`
+- `docs/2.基本設計(BD)`
+- `docs/3.詳細設計(DD)`
+- `docs/4.単体テスト(UT)`
+- `docs/5.結合テスト(IT)`
+- `docs/6.受入テスト(AT)`
 
-## 前提
+機能要求（FR）の管理方針と最新構成は次を参照してください。
 
-- Node.js 22+
-- npm 10+
+- `docs/1.要求(RQ)/51.機能要求(FR)`
+- `AGENTS.md`
 
----
+## 文書運用ルール（リンク）
 
-## ドキュメント運用（Task）
+- `AGENTS.md`
+- `docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md`
+
+## 変更フロー
+
+1. 対象文書を更新
+2. `up` / `related` を確認し、関連文書を更新または確認記録化
+3. `reports/impact_check_YYYY-MM-DD.md` を更新
+4. `task docs:guard` を実行（用語リンク補正 + 変更対象検証）
+5. 必要に応じて `task docs:check` を実行（全体検証）
+
+## Taskコマンド
 
 初回セットアップ:
 
@@ -32,7 +51,7 @@
 task precommit
 ```
 
-日常のdocs更新チェック:
+日常運用:
 
 ```bash
 task docs:guard
@@ -44,15 +63,33 @@ task docs:guard
 task docs:check
 ```
 
-個別ファイルのみ用語リンク確認:
+ドキュメント公開（Quartz build + CDK deploy）:
+
+```bash
+task docs:deploy
+```
+
+補足:
+
+- `quartz/` がない場合は `quartz:prepare` で自動 `git clone` されます（Git管理対象外）。
+- AWS 認証情報（`CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）を設定してから実行してください。
+
+個別ファイルの用語リンクチェック:
 
 ```bash
 task docs:autolink:check FILES="docs/path/to/doc.md"
 ```
 
----
+## CI
 
-## ローカル開発（Web）
+`Docs Link Check` ワークフローが、変更された `docs/**/*.md` を対象に次を実行します。
+
+- 用語リンクチェック（`auto_link_glossary.py --check`）
+- 文書ID/リンク整合チェック（`validate_vault.py --targets ...`）
+
+## web（実装）
+
+`web/` は Vite + React + TypeScript の実装コードです。
 
 ```bash
 cd web
@@ -60,108 +97,8 @@ npm ci
 npm run dev
 ```
 
-ブラウザで `http://localhost:5173` を開きます。
+主なコマンド:
 
----
-
-## 単体テスト（Jest）
-
-```bash
-cd web
-npm test
-npm run test:coverage
-npm run typecheck
-```
-
----
-
-## E2E（Playwright）
-
-初回のみブラウザをインストール:
-
-```bash
-cd web
-npx playwright install --with-deps
-```
-
-E2E 実行:
-
-```bash
-cd web
-npm run test:e2e
-```
-
-`docs/screenshots/` に正常系のスクリーンショットが出力されます。
-
----
-
-## AWS へデプロイ（CDK）
-
-> CloudFront + S3 に、`web/dist` をアップロードして配信します（SPA 対応で 404/403 を `/index.html` にフォールバック）。
-
-```bash
-cd web
-npm ci
-npm run build
-
-cd ../infra
-npm ci
-npm run deploy
-```
-
-スタック出力に CloudFront のドメインが表示されます。
-
-### @infra/ デプロイ手順
-
-`infra/` は CDK から `web/dist` を参照するため、先にフロントエンドをビルドします。
-
-```bash
-cd web
-npm ci
-npm run build
-
-cd ../infra
-npm ci
-npm run build
-npm run synth
-npm run deploy
-```
-
-スタック名は `cdk.json` の `VideoArchiveSearchStack` です。
-
-`cdk deploy` が `ts-node` で失敗する場合は、`infra/` で devDependencies が入っていることを確認してください。
-`NODE_ENV=production` などで devDependencies が省略される場合は、次のように明示してください。
-
-```bash
-cd infra
-npm ci --include=dev
-```
-
-削除する場合:
-
-```bash
-cd infra
-npm ci
-npm run destroy
-```
-
----
-
-## GitHub Actions でのデプロイ
-
-`deploy.yml` は **OIDC による AssumeRole** を前提にしています。
-以下の GitHub Secrets を設定してください。
-
-- `AWS_ROLE_TO_ASSUME` : GitHub Actions から Assume する IAM Role ARN
-- `AWS_REGION` : 例 `ap-northeast-1`
-
-`main` ブランチへの push（または手動実行）でデプロイが走ります。
-
----
-
-## ドキュメント
-
-- `docs/requirements.md` : SnowCards 形式の要件整理
-- `docs/manual.md` : 操作手順（スクリーンショット付き）
-- `docs/quality-checklist.md` : 品質基準チェックリスト
-- `docs/review.md` : チェックリストに基づくセルフレビュー
+- `npm run typecheck`
+- `npm test`
+- `npm run test:e2e`
