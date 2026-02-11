@@ -54,6 +54,8 @@ DOC_ID_ALLOWLIST_LINE_RE = [
     re.compile(r"\b要求ID\s*:\s*", re.IGNORECASE),
     re.compile(r"\b用語ID\s*[:|]\s*", re.IGNORECASE),
 ]
+RQ_RDR_LINK_RE = re.compile(r"\[\[RQ-RDR-\d{3}(?:[\]|#][^\]]*)?\]\]")
+BD_ADR_LINK_RE = re.compile(r"\[\[BD-ADR-\d{3}(?:[\]|#][^\]]*)?\]\]")
 
 
 def _merge_spans(spans: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
@@ -148,6 +150,31 @@ def find_backticked_concrete_wikilinks(body: str) -> List[Tuple[int, str, str]]:
     return out
 
 
+def extract_history_lines(body: str) -> List[Tuple[int, str]]:
+    """Extract bullet lines under '## 変更履歴'.
+
+    Returns list of (line_number, line_text).
+    """
+    lines = body.splitlines()
+    start = None
+    for idx, line in enumerate(lines, start=1):
+        if line.strip() == "## 変更履歴":
+            start = idx
+            break
+    if start is None:
+        return []
+
+    out: List[Tuple[int, str]] = []
+    for line_no in range(start + 1, len(lines) + 1):
+        line = lines[line_no - 1]
+        stripped = line.strip()
+        if stripped.startswith("## "):
+            break
+        if stripped.startswith("- "):
+            out.append((line_no, stripped))
+    return out
+
+
 def extract_links(value: Any) -> List[str]:
     """Extract Obsidian link targets (IDs) from a YAML value."""
     out: List[str] = []
@@ -218,6 +245,14 @@ def main() -> int:
         nargs="*",
         default=[],
         help="validate only these markdown files (workspace-relative paths)",
+    )
+    ap.add_argument(
+        "--require-history-links",
+        action="store_true",
+        help=(
+            "require RQ docs to include [[RQ-RDR-xxx]] and BD docs to include "
+            "[[BD-ADR-xxx]] in every history bullet"
+        ),
     )
     args = ap.parse_args()
 
@@ -304,6 +339,24 @@ def main() -> int:
         # history section
         if "## 変更履歴" not in d.body:
             issues.append(f"- {d.path}: missing '## 変更履歴' section")
+
+        if args.require_history_links:
+            phase = str(d.frontmatter.get("phase", "")).strip()
+            history_lines = extract_history_lines(d.body)
+            if phase in {"RQ", "BD"} and not history_lines:
+                issues.append(f"- {d.path}: history section has no bullet lines")
+            if phase == "RQ":
+                for line_no, line in history_lines:
+                    if not RQ_RDR_LINK_RE.search(line):
+                        issues.append(
+                            f"- {d.path}:{line_no}: RQ history bullet must include [[RQ-RDR-xxx]] | {line}"
+                        )
+            if phase == "BD":
+                for line_no, line in history_lines:
+                    if not BD_ADR_LINK_RE.search(line):
+                        issues.append(
+                            f"- {d.path}:{line_no}: BD history bullet must include [[BD-ADR-xxx]] | {line}"
+                        )
 
         # document ID references in body should be Obsidian links
         if DOC_ID_CODE_REF_RE.search(d.body):

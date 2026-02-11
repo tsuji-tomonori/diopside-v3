@@ -35,6 +35,7 @@ metadata:
 - 用語文書更新時は `term_en` と本文英名併記（`英名: \`term_en\``）を確認する。
 - `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、`reports/doc_check.md` を更新する。
 - 差分ファイルのみ検査する場合は `--targets <対象Markdownパス...>` を併用する。
+- RQ/BDの変更履歴リンク規約を差分文書で検査する場合は `--require-history-links --targets <対象Markdownパス...>` を使用する。
 - 検査は fail-fast 運用とし、`issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` のいずれかが 1 件でもあれば失敗とする。
 - CI（`.github/workflows/docs-link-check.yml`）と pre-commit（`.pre-commit-config.yaml`）で同一検査を必須化する。
 
