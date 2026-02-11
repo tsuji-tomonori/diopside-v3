@@ -15,7 +15,7 @@
 - 受入整合: `[[AT-PLAN-001]]` / `[[AT-RPT-001]]` / `[[AT-GO-001]]` で閾値判定結果を記録できる構成を維持。
 
 ## 検証
-- `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、リンク/整合性に問題がないことを確認。
+- `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し、リンク/整合性に問題がないことを確認。
 
 ## 追記（収集要件の表現具体化）
 - 対象: `RQ-FR-002`, `RQ-FR-003`

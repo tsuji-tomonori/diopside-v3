@@ -1,7 +1,7 @@
 # 影響確認レポート
 
 - 日付: 2026-02-10
-- 対象: docs 全198ファイル、.codex/skills、AGENTS.md
+- 対象: docs 全198ファイル、.opencode/skills、AGENTS.md
 - 判定: 旧案件（CornellNoteWeb）からdiopsideへ全面刷新。
 - 上位→下位: RQ更新に伴いBD/DD/UT/IT/ATを全件更新。
 - 下位→上位: 設計/テスト更新に伴いRQ整合を再確認済み。
@@ -93,17 +93,17 @@
 - 対象: `docs` 全体（本文）
 - 実施: 用語集 `RQ-GL-001`〜`RQ-GL-012` の語彙出現箇所を Obsidian 形式のリンク（`[[RQ-GL-xxx|用語]]`）へ統一。
 - 除外: frontmatter、既存Wikiリンク、インラインコード、Mermaid/コードブロック。
-- 検証: `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` 実行済み（issues/broken_links=0）。
+- 検証: `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` 実行済み（issues/broken_links=0）。
 
 ## 追記（用語自動リンク化のスクリプト運用追加）
-- 対象: `.codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py`, `.codex/skills/**/SKILL.md`, `RQ-DG-001`, `BD-CM-001`
+- 対象: `.opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py`, `.opencode/skills/**/SKILL.md`, `RQ-DG-001`, `BD-CM-001`
 - 実施:
   - 用語集 `RQ-GL-*` を参照して本文語彙を `[[RQ-GL-xxx|用語]]` へ自動変換するスクリプトを追加。
   - `doc-*` / `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` の手順に、`auto_link_glossary.py` 実行を追加。
   - 文書運用ガイド（`RQ-DG-001`）と構成管理（`BD-CM-001`）に標準実行順（自動リンク化→整合チェック）を反映。
 - 検証:
-  - `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py "docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md" "docs/2.基本設計(BD)/52.構成管理/BD-CM-001.md"`
-  - `python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`
+  - `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py "docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md" "docs/2.基本設計(BD)/52.構成管理/BD-CM-001.md"`
+  - `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`
 
 ## 追記（ドメインモデル具体化）
 - 対象: `RQ-DM-001`〜`RQ-DM-007`, `RQ-RDR-013`
@@ -133,7 +133,7 @@
 - 判定: `docs` 全体で `収集担当者` / `運用担当者` / `利用者または運用者` の残存参照は0件。
 
 ## 追記（用語英名term_enの追加）
-- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-013`, `RQ-DG-001`, `BD-CM-001`, `.codex/skills/**`
+- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-013`, `RQ-DG-001`, `BD-CM-001`, `.opencode/skills/**`
 - 実施: 用語文書に `term_en`（ASCII `snake_case`）を追加し、`## 定義` に英名を併記。
 - 決定記録: `RQ-RDR-013` を新規作成し、機械可読な英名運用の採用理由を記録。
 - スキル更新: `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` / `doc-rq-gl` に英名運用ルールを反映。
@@ -143,7 +143,7 @@
   - 自動化整合: `auto_link_glossary.py` が `title` と `term_en` の両方をリンク対象として処理可能。
 
 ## 追記（用語定義の表形式統一）
-- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-DG-001`, `.codex/skills/doc-rq-gl/*`
+- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-DG-001`, `.opencode/skills/doc-rq-gl/*`
 - 実施: 用語文書 `## 定義` を表形式（`用語ID/用語名/英名/定義/判定条件/適用範囲`）へ統一し、可読性を向上。
 - スキル更新: `doc-rq-gl` の `SKILL.md` と `TEMPLATE.md` に表形式標準を反映。
 - 影響確認:
@@ -171,7 +171,7 @@
   - 要求→DM: `RQ-DM-004/007` が語彙正本をGL参照する構成となり、責務分離を維持。
 
 ## 追記（ドメイン参照リンクの統一）
-- 対象: `RQ-DM-001`〜`RQ-DM-007`, `AT-SCN-001`, `AT-SCN-003`, `RQ-RDR-015`, `.codex/skills/doc-rq-dm/*`, `.codex/skills/doc-at-scn/*`, `obsidian-doc-*`, `docops-orchestrator`, `skill-maintainer`, `RQ-DG-001`
+- 対象: `RQ-DM-001`〜`RQ-DM-007`, `AT-SCN-001`, `AT-SCN-003`, `RQ-RDR-015`, `.opencode/skills/doc-rq-dm/*`, `.opencode/skills/doc-at-scn/*`, `obsidian-doc-*`, `docops-orchestrator`, `skill-maintainer`, `RQ-DG-001`
 - 実施: ドメインモデル本文の関連節にある文書ID参照（例: `` `RQ-DM-002` ``）を Obsidianリンク（`[[RQ-DM-002]]`）へ統一。
 - 決定記録: `RQ-RDR-015` を新規作成し、本文中の文書ID参照をObsidianリンクで統一する方針を記録。
 - スキル更新: DM専用スキルおよび共通スキルへ「本文中の文書ID参照はObsidianリンクで記載」の規約を追記。
@@ -180,7 +180,7 @@
   - 運用整合: `RQ-DG-001` の受入基準へ文書IDリンク統一ルールを追加。
 
 ## 追記（タグ種別定義の具体化）
-- 対象: `RQ-GL-013`, `RQ-RDR-015`, `RQ-DG-001`, `.codex/skills/doc-rq-gl/*`
+- 対象: `RQ-GL-013`, `RQ-RDR-015`, `RQ-DG-001`, `.opencode/skills/doc-rq-gl/*`
 - 実施:
   - `RQ-GL-013` に `タグ種別/説明/付与ルール` の表を追加し、種別語彙の運用判断を明文化。
   - 参考ルール（大分類/出演者名/ユニット名/ゲーム名/ゲームジャンル/シリーズ名/コンテンツ名/コンテンツジャンル/企画名/企画大分類/企画ジャンル/配信ジャンル/動画形式）を反映。
@@ -192,7 +192,7 @@
   - 運用整合: `RQ-DG-001` の受入基準へタクソノミ表記要件を追加。
 
 ## 追記（ユースケース記述の具体化）
-- 対象: `RQ-UC-001`〜`RQ-UC-008`, `RQ-RDR-016`, `.codex/skills/doc-rq-uc/*`
+- 対象: `RQ-UC-001`〜`RQ-UC-008`, `RQ-RDR-016`, `.opencode/skills/doc-rq-uc/*`
 - 実施:
   - UC文書の定型テンプレート文を廃止し、ユースケースごとの主体・処理・結果が追えるフローへ書き換え。
   - `代替/例外フロー` をUC固有の失敗条件へ分解（入力不備、取得失敗、競合、0件等）。

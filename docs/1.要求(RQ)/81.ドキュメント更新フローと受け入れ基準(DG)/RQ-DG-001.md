@@ -23,8 +23,8 @@ tags:
 ## 改修フロー
 1. RQ更新時はRDRを同一変更で更新する。
 2. BD/DD更新時はADR経路を確認する。
-3. 本文更新後に `python3 .codex/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
-4. 変更後に整合チェック（`python3 .codex/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`）を実行する。
+3. 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
+4. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`）を実行する。
 
 ## 受入基準
 - 用語集に定義された語彙（`RQ-GL-*`）が本文でObsidianリンク化されている。
