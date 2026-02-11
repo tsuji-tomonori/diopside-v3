@@ -46,6 +46,8 @@ LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 DOC_ID_CODE_REF_RE = re.compile(r"（`[A-Z]{2}-[A-Z]{2,4}-[0-9]{3}`）")
 DOC_ID_RE = re.compile(r"\b(?:RQ|BD|DD|UT|IT|AT)-[A-Z]{2,8}-\d{3}\b")
+BACKTICKED_WIKI_LINK_RE = re.compile(r"`\[\[([^\]]+)\]\]`")
+CONCRETE_DOC_ID_RE = re.compile(r"^(?:RQ|BD|DD|UT|IT|AT)-[A-Z]{2,8}-\d{3}$")
 WIKI_LINK_RE = re.compile(r"\[\[[^\]]+\]\]")
 INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
 DOC_ID_ALLOWLIST_LINE_RE = [
@@ -116,6 +118,32 @@ def find_nonlinked_doc_ids(body: str, self_id: str) -> List[Tuple[int, str, str]
             if _in_spans(s, e, protected_spans):
                 continue
             out.append((line_no, doc_id, line.rstrip()))
+
+    return out
+
+
+def find_backticked_concrete_wikilinks(body: str) -> List[Tuple[int, str, str]]:
+    """Find concrete Obsidian links wrapped in inline code.
+
+    Returns list of (line_number, doc_id, line_text).
+    """
+    out: List[Tuple[int, str, str]] = []
+    in_fence = False
+    lines = body.splitlines()
+
+    for line_no, line in enumerate(lines, start=1):
+        stripped = line.strip()
+
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+
+        for m in BACKTICKED_WIKI_LINK_RE.finditer(line):
+            target = normalize_link_id(m.group(1))
+            if CONCRETE_DOC_ID_RE.fullmatch(target):
+                out.append((line_no, target, line.rstrip()))
 
     return out
 
@@ -281,6 +309,11 @@ def main() -> int:
         if DOC_ID_CODE_REF_RE.search(d.body):
             issues.append(
                 f"- {d.path}: document ID reference in code style found (use [[ID]] instead of （`ID`）)"
+            )
+
+        for line_no, doc_id, line in find_backticked_concrete_wikilinks(d.body):
+            issues.append(
+                f"- {d.path}:{line_no}: concrete Obsidian link must not be code-styled (use [[{doc_id}]]) | {line}"
             )
 
         # document ID references should not remain plain text in body
