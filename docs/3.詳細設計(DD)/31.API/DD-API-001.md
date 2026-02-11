@@ -29,7 +29,7 @@ tags:
 ## 契約分類
 - Public Read Contract（配信契約）
   - `bootstrap.json`: 初回描画に必要な最新動画セットと次リソース参照。
-  - `tag_master.json`: 全[[RQ-GL-005|タグ辞書]]とタグ種別定義。
+  - `tag_master.json`: 全[[RQ-GL-005|タグ辞書]]と[[RQ-GL-013|タグ種別]]定義。
   - `archive_index.p{page}.json`: 全件閲覧用のページング索引。
 - Ops Control Contract（運用契約）
   - [[RQ-GL-002|収集ジョブ]]開始、実行状態確認、失敗ジョブ再実行、直近結果照会。
