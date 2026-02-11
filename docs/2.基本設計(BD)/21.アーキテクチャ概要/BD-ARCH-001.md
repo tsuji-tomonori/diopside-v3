@@ -3,7 +3,7 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -57,6 +57,26 @@ tags:
 - Publish Orchestrator: [[RQ-GL-018|配信反映実行]] 単位で成果物生成、公開切替、失敗時ロールバックを制御する。
 - Web App: [[RQ-GL-010|段階ロード]]、クライアント検索、絞り込み、詳細表示。
 - Admin Console/Runbook: 収集失敗検知、[[RQ-GL-011|再収集]]実行、タグ更新、配信反映判定、[[RQ-GL-012|受入判定]]。
+
+## バッチ一覧
+| バッチID | バッチ名 | 起動契約 | 主な責務 | 状態遷移 | 詳細設計 |
+|---|---|---|---|---|---|
+| BAT-001 | 収集runバッチ | `POST /api/v1/ops/ingestion/runs` | 収集対象解決、収集実行、run採番/集計 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-API-002]], [[DD-API-003]], [[DD-DDL-007]] |
+| BAT-002 | [[RQ-GL-011|再収集]]runバッチ | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | 失敗run再実行、親run連結、再実行回数制御 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-API-008]], [[DD-API-003]], [[DD-DDL-007]] |
+| BAT-003 | 配信前後再確認バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-API-012]], [[DD-DDL-010]] |
+| BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-API-015]], [[DD-DDL-012]] |
+| BAT-005 | docs公開バッチ | `POST /api/v1/admin/docs/publish` | docsビルド、配信反映、無効化処理 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-API-014]], [[DD-DDL-012]] |
+
+## バッチイベント一覧
+| イベントID | イベント名 | 発火条件 | 対象バッチ | 記録先 | 詳細設計 |
+|---|---|---|---|---|---|
+| BEV-001 | `queued` | API受理直後にrun作成 | BAT-001〜BAT-005 | `ingestion_runs` / `recheck_runs` / `publish_runs` の `status=queued` | [[DD-DDL-007]], [[DD-DDL-010]], [[DD-DDL-012]] |
+| BEV-002 | `running` | 同一Backend API内ジョブ実行モジュールで処理開始 | BAT-001〜BAT-005 | runテーブル `status=running`、`started_at` | [[DD-API-002]], [[DD-API-012]], [[DD-API-014]], [[DD-API-015]] |
+| BEV-003 | `succeeded` | 全ステップ成功で正常終了 | BAT-001〜BAT-005 | runテーブル終端状態、成功件数/公開時刻 | [[DD-API-003]], [[DD-API-012]], [[DD-API-015]], [[DD-DDL-012]] |
+| BEV-004 | `failed` | 非復旧エラーで終了 | BAT-001〜BAT-005 | `error_code`/`error_message`、監査ログ | [[DD-API-003]], [[DD-API-008]], [[DD-API-014]], [[DD-LOG-001]] |
+| BEV-005 | `partial` | 一部対象のみ成功して終了 | BAT-001〜BAT-003 | 件数差分（`success_count`/`failed_count`/`unchanged_count`） | [[DD-API-003]], [[DD-API-012]], [[DD-DDL-007]], [[DD-DDL-010]] |
+| BEV-006 | `rolled_back` | 公開切替失敗後に旧版へ切戻し完了 | BAT-004〜BAT-005 | `publish_runs.rollback_executed=true` | [[DD-API-014]], [[DD-API-015]], [[DD-DDL-012]] |
+| BEV-007 | `cancelled` | 運用判断または安全停止で中断 | BAT-001〜BAT-004 | runテーブル終端状態 `cancelled` | [[DD-API-003]], [[DD-API-008]], [[DD-API-012]], [[DD-DDL-007]] |
 
 ## 3層責務境界
 - プレゼンテーション層: `Web App` / `Admin Console` / `docs` を提供する。
@@ -137,6 +157,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-11: バッチ一覧/バッチイベント一覧を追加し、run状態と詳細設計参照を明確化 [[BD-ADR-021]]
 - 2026-02-11: バッチ実処理を単一Backend API（Hono）内へ集約し、外部スケジューラはAPI起動のみ担う方式を追記 [[BD-ADR-021]]
 - 2026-02-11: Next.js App Router前提のWeb実行境界（RSC/Client境界、Dynamic API、Route Handler、Suspense）を追加 [[BD-ADR-024]]
 - 2026-02-11: 派生文書（ARCH-002/003/004, ERD, API-003, UI-003）とのトレースを追加 [[BD-ADR-021]]
