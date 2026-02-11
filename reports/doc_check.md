@@ -8,4 +8,4 @@
 - nonlinked_doc_ids: 0
 - broken_links: 0
 - backlink_issues: 0
-- target_files: 2
+- target_files: 4

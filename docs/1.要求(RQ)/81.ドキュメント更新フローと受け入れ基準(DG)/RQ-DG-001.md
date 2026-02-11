@@ -3,7 +3,7 @@ id: RQ-DG-001
 title: ドキュメント更新フロー
 doc_type: ドキュメント運用ガイド
 phase: RQ
-version: 1.0.18
+version: 1.0.19
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -30,6 +30,7 @@ tags:
 6. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>`）を実行する。
 7. docs変更を含むコミットでは `.pre-commit-config.yaml` のリンク検査ゲートを通過させる。
 8. PRでは `.github/workflows/docs-link-check.yml` のリンク検査ゲートを通過するまでマージしない。
+9. RQ文書の `## 変更履歴` 各行には、関連RDRリンク（`[[RQ-RDR-xxx]]`）を必ず記載する。
 
 ## 受入基準
 - 用語集に定義された語彙（`RQ-GL-*`）が本文でObsidianリンク化されている。
@@ -42,13 +43,16 @@ tags:
 - 共通規約変更時は、`skill-maintainer`/`docops-orchestrator`/`obsidian-doc-*` の同時更新と、`reports/impact_check_YYYY-MM-DD.md` への記録が存在する。
 - 文書更新とスキル更新の実行順は「自動リンク化 -> 整合チェック」を満たす。
 - `validate_vault.py` の `issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` が1件でもある場合はFailとする。
+- RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれている。
 
 ## 変更履歴
-- 2026-02-11: pre-commit/CIのリンク検査ゲートとFail基準（`nonlinked_doc_ids` 含む）を追加
-- 2026-02-11: スキルメンテナンス方針（同一変更での同期更新、共通スキル同時更新、受入基準）を追加
-- 2026-02-10: タクソノミ系用語の表記基準（種別/説明/付与ルール）を受入基準へ追加
-- 2026-02-10: 本文中の文書ID参照をObsidianリンクで統一する受入基準を追加
-- 2026-02-10: 用語定義の表形式（標準）を受入基準へ追加
-- 2026-02-10: 用語の英名運用（`term_en` + 本文併記）を受入基準へ追加
-- 2026-02-10: 新規作成
-- 2026-02-10: 用語自動リンク化スクリプトの実行手順と受入基準を追加
+- 2026-02-11: 本文中の主体表現「管理者/利用者」をステークホルダーリンクへ統一 [[RQ-RDR-010]]
+- 2026-02-11: RQ文書の変更履歴へ関連RDRリンクを必須化（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-11: pre-commit/CIのリンク検査ゲートとFail基準（`nonlinked_doc_ids` 含む）を追加（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-11: スキルメンテナンス方針（同一変更での同期更新、共通スキル同時更新、受入基準）を追加（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-10: タクソノミ系用語の表記基準（種別/説明/付与ルール）を受入基準へ追加（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-10: 本文中の文書ID参照をObsidianリンクで統一する受入基準を追加（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-10: 用語定義の表形式（標準）を受入基準へ追加（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-10: 用語の英名運用（`term_en` + 本文併記）を受入基準へ追加（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-10: 新規作成（関連RDR: [[RQ-RDR-024]]）
+- 2026-02-10: 用語自動リンク化スクリプトの実行手順と受入基準を追加（関連RDR: [[RQ-RDR-024]]）
