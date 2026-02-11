@@ -3,17 +3,24 @@ id: BD-QUAL-001
 title: 品質特性
 doc_type: 品質特性
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[RQ-SC-001]]'
-- '[[RQ-FR-001]]'
+- '[[RQ-PS-001]]'
+- '[[RQ-UX-001]]'
+- '[[RQ-DEV-001]]'
 related:
 - '[[BD-ARCH-001]]'
 - '[[BD-ADR-001]]'
+- '[[BD-ADR-024]]'
+- '[[BD-BUILD-001]]'
+- '[[BD-SEC-001]]'
+- '[[BD-UI-002]]'
+- '[[AT-RPT-001]]'
 tags:
 - diopside
 - BD
@@ -22,13 +29,31 @@ tags:
 
 
 ## 設計方針
-- 品質特性として[[RQ-GL-001|diopside]]の基本設計を定義する。
-- 収集対象（公式+出演）を前提に設計する。
+- 品質特性は Next.js App Router 前提の実行境界（Server/Client、キャッシュ、再検証）と、利用者体感（表示速度・操作継続性）を一体で設計する。
+- 体感性能の最大要因である「ウォーターフォール削減」と「クライアントJS削減」を優先し、Server Components 標準運用を維持する。
+- 開発環境計測だけで合否を判断せず、`next build` / `next start` とフィールド指標（Web Vitals）を併用して判定する。
 
 ## 設計要点
-- 公開データの収集・正規化・索引生成を分離する。
-- Web配信は静的JSON + フロント検索を採用する。
-- 運用監視と[[RQ-GL-011|再収集]]導線を設計に含める。
+### 性能・体感品質
+- Server Components を既定とし、Client Components はインタラクションに必要な最小範囲へ限定する。
+- 逐次 await を避け、並列取得・preload・Suspense で待機時間を局所化する。
+- 主要導線のLCP/INP/CLSは `useReportWebVitals` で収集し、Lighthouseのシミュレーション結果だけに依存しない。
+
+### キャッシュ・更新整合品質
+- Data Cache / Request Memoization / Full Route Cache / Router Cache の役割を区分し、どこを保持しどこで再検証するかを文書で固定する。
+- `fetch` は `cache` / `next.revalidate` / `next.tags` を明示し、更新導線には `revalidatePath` または `revalidateTag` を接続する。
+- ISR運用では短すぎる `revalidate` を避け、即時性が必要な更新はオンデマンド再検証へ切り分ける。
+
+### UI品質と継続操作性
+- `loading.tsx` と Suspense により、データ待ちでもルート全体を停止させない。
+- `<Link>` の prefetch は既定有効を維持し、無効化は無駄な通信が明確な導線に限定する。
+- 画像は `next/image` を標準利用し、リモート画像では寸法指定でCLS劣化を防ぐ。
+
+### 開発・運用品質
+- 本番相当検証として `next build` + `next start` を必須化し、開発専用最適化に依存した品質判定を禁止する。
+- `@next/bundle-analyzer` でバンドル増加を定期監視し、回帰を早期検出する。
+- Turbopack 前提で開発体験を維持し、巨大barrel importや過剰再エクスポートを避ける。
 
 ## 変更履歴
-- 2026-02-10: 新規作成
+- 2026-02-11: Next.js App Router前提の品質特性（性能・キャッシュ・Web Vitals・本番検証）を追加 [[BD-ADR-024]]
+- 2026-02-10: 新規作成 [[BD-ADR-001]]

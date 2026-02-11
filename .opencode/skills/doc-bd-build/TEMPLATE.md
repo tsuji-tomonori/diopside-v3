@@ -14,6 +14,9 @@
 - リソース解放保証（`using` または `try/finally`）
 - CDK決定性（`synth` 副作用ゼロ、`cdk.context.json` 固定、props注入）
 - CDK依存整合（`aws-cdk-lib` / `constructs`）と `cdk-nag` の品質ゲート
+- Next.js本番ゲート（`next build` + `next start`）
+- Next.jsキャッシュ/再検証（`cache`/`revalidate`/`tags`、`revalidatePath`/`revalidateTag`）
+- Next.js最適化（`next/image`、`<Script>`、bundle analyzer、Web Vitals）
 - 受入条件または確認手順
 - 依存/関連リンク（Obsidianリンク）
 
@@ -22,6 +25,7 @@
 - 設計要点（`strict`、`noUncheckedIndexedAccess`、`exactOptionalPropertyTypes`、`useUnknownInCatchVariables`）
 - 防御的型付け要点（Brand、境界decode、Option/Result、NonEmpty、resource cleanup）
 - lint/CI品質ゲート（`no-explicit-any`、`consistent-type-imports`）
+- Next.js品質ゲート（build/start、Dynamic API利用位置、Suspense/loading、画像/Script）
 - 受入基準
 
 ## 変更履歴

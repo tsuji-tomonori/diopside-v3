@@ -3,7 +3,7 @@ id: BD-BUILD-001
 title: ビルド方針（デプロイ単位分離）
 doc_type: ビルド設計
 phase: BD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,6 +17,7 @@ related:
 - '[[BD-ADR-001]]'
 - '[[BD-ADR-011]]'
 - '[[BD-ADR-022]]'
+- '[[BD-ADR-024]]'
 - '[[BD-ADR-016]]'
 - '[[BD-ADR-019]]'
 - '[[BD-DEP-003]]'
@@ -70,6 +71,15 @@ tags:
 - `aws-cdk-lib` と `constructs` はメジャーバージョン整合を維持し、依存更新時は `synth` とテストで互換性を検証する。
 - Construct/Stack内部で `process.env` を直接参照せず、設定は型付きpropsで注入する。
 
+### Next.js本番品質ゲート
+- App Router構成では `next build` 成功後に `next start` で本番相当起動を確認し、開発時挙動との差分を[[RQ-GL-012|受入判定]]に含める。
+- ウォーターフォール検知のため、Server Components の逐次 await をレビュー対象にし、並列取得/preload/Suspense適用有無を確認する。
+- Dynamic API（`cookies()` / `headers()` / `searchParams`）利用箇所を記録し、Root Layout で全体動的化を起こしていないことを検証する。
+- `fetch` は `cache` / `next.revalidate` / `next.tags` を意図的に指定し、再検証は `revalidatePath` / `revalidateTag` のどちらを使うかを設計に明示する。
+- 画像とスクリプトは `next/image` と `<Script>` を標準利用し、リモート画像の `width/height` 指定漏れを受入不可とする。
+- `@next/bundle-analyzer` による依存肥大検知を定期実行し、主要導線の Core Web Vitals は `useReportWebVitals` で収集する。
+- 開発環境では Turbopack 前提を維持し、巨大barrel importや過剰な再エクスポートによる開発遅延を品質レビュー対象にする。
+
 ## 受入基準
 - CIで `tsc --noEmit` と lint が常時成功し、上記4つの `tsconfig` オプションが有効である。
 - 新規追加コードに `any` を導入する場合は、理由と除去計画をPR本文へ明記しない限り受入不可とする。
@@ -87,8 +97,14 @@ tags:
 - フロントエンド単位は `web` の `typecheck` / `test` / `build` が成功し、成果物が `/web/*` 配信前提を満たす。
 - バックエンド単位は `/api/v1/*` と `/openapi/v1/openapi.json` の版対応が一致し、`/api` と `/openapi` でrewrite/fallbackが無効である。
 - 単位別失敗時は対象単位のみ再実行可能であり、未検証単位の成果物を混在配備しない。
+- Next.js 対象単位では `next build` + `next start` が連続成功し、App Router 主要導線で Suspense/Loading による待機表示が成立する。
+- Dynamic API の利用が設計記載と一致し、意図しない全体Dynamic Rendering化がない。
+- `fetch` のキャッシュ/再検証方針（`cache`/`revalidate`/`tags`）が文書化され、更新導線に `revalidatePath` または `revalidateTag` が接続されている。
+- LCP寄与画像は `next/image` で配信され、リモート画像ではCLS防止のため寸法指定がある。
+- 主要導線のCWV（LCP/INP/CLS）を `useReportWebVitals` で記録し、Lighthouse結果のみで合否を決めない。
 
 ## 変更履歴
+- 2026-02-11: Next.js App Router向け品質ゲート（build/start、Dynamic API、fetch再検証、画像/Script、Web Vitals）を追加 [[BD-ADR-024]]
 - 2026-02-11: 防御的型付けゲート（Brand、境界decode、センチネル禁止、NonEmpty、資源解放）を追加 [[BD-ADR-022]]
 - 2026-02-11: デプロイ単位（docs/web/api/infra）別のビルド方針と単位固有ゲートを追加 [[BD-ADR-019]]
 - 2026-02-11: CDK決定性ゲート（`cdk synth`、`cdk.context.json`、props注入、依存整合）を追加 [[BD-ADR-016]]

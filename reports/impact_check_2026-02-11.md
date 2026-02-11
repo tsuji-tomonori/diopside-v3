@@ -786,3 +786,17 @@
   - 設計整合: `BD-ADR-023 -> BD-API-005 -> BD-API-002/003/004` の追跡経路を構築。
   - 要求整合: `RQ-INT-001`（互換性）、`RQ-SEC-001`（認可/情報露出抑制）、`RQ-OBY-001`（相関ID/トレース）と矛盾しない契約基準を確立。
   - 運用整合: skill更新により、今後のBD/DD/RQ-INT更新で同一API観点（Problem Details/互換性/CIゲート）を継続適用可能。
+
+## 追記（Next.js App RouterベストプラクティスのBD/skill反映）
+- 対象: `BD-ADR-024`, `BD-ARCH-001`, `BD-BUILD-001`, `BD-SEC-001`, `BD-QUAL-001`, `.opencode/skills/doc-bd-arch/*`, `.opencode/skills/doc-bd-build/*`, `.opencode/skills/doc-bd-sec/*`, `.opencode/skills/doc-bd-qual/*`
+- 実施:
+  - `BD-ADR-024` を新規追加し、App Router前提の設計標準（Server Components優先、Dynamic API利用境界、Route Handlers運用、キャッシュ再検証、セキュリティ統制）を決定記録化。
+  - `BD-ARCH-001` に Web実行境界（RSC/Client分離、Dynamic API波及、Server->Route Handlers回避、Suspense/streaming）を追加。
+  - `BD-BUILD-001` に Next.js本番品質ゲート（`next build` + `next start`、bundle analyzer、Web Vitals、`next/image`/`<Script>`、再検証設計）を追加。
+  - `BD-SEC-001` を更新し、Server Actions認可、秘密情報境界（`.env`/`NEXT_PUBLIC_`）、CSP、認証経路境界を具体化。
+  - `BD-QUAL-001` を更新し、体感性能・キャッシュ層・再検証・本番計測の品質特性を明文化。
+  - 対応4スキル（`doc-bd-arch/build/sec/qual`）の `SKILL.md` と `TEMPLATE.md` を同期更新し、今後の文書改訂で同観点が漏れないようにした。
+- 影響確認:
+  - 設計整合: `BD-ADR-024 -> BD-ARCH-001/BD-BUILD-001/BD-SEC-001/BD-QUAL-001` の追跡経路を構築。
+  - 要求整合: `RQ-DEV-001`, `RQ-PS-001`, `RQ-SEC-001`, `RQ-UX-001` と矛盾せず、受入観点（性能/安全/運用）をBDへ具体化。
+  - 運用整合: 対応4スキル更新により、Next.js App Router前提の設計観点が docs 更新フローで継続適用可能。

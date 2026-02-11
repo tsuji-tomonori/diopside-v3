@@ -18,6 +18,15 @@ metadata:
 - 障害対応手順・運用手順の整備が主目的の場合（`doc-at-run` / `doc-at-ops` を使う）。
 - 意思決定の採否や代替案比較そのものを記録する場合（`doc-bd-adr` を使う）。
 
+## 何を書くべきか
+- 文書IDに対応する1トピックの内容。
+- Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
+- セキュリティ対象範囲（公開データ収集/保存/配信/運用）と対象外境界。
+- Next.js App Router 前提のデータ境界（Server Components / Client Components / Server Actions）。
+- 認証/認可境界（`/openapi/*`, `/api/v1/*`）、入力検証、秘密情報管理（`.env` / `NEXT_PUBLIC_`）方針。
+- CSP、3rd party script、監査ログの運用方針。
+- `## 変更履歴` への当日追記（`[[BD-ADR-xxx]]` 付与）。
+
 ## 出力契約
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）を満たし、`filename == id` を維持する。
 - 本文には少なくとも `## 設計方針`、`## セキュリティ設計要点`（または同等の脅威/防御方針セクション）、`## 変更履歴` を含める。
@@ -33,5 +42,9 @@ metadata:
 ## 品質チェック
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
+- Next.js を扱う場合、Server Actions 実行時に認可確認を行う設計になっていることを確認する。
+- `NEXT_PUBLIC_` 変数に機密値を含めない方針とレビュー手順が記載されていることを確認する。
+- `'/openapi/*'` / `'/api/v1/*'` の認証境界、CSP、3rd party script 制御方針が明記されていることを確認する。
+- `## 変更履歴` 各行に `[[BD-ADR-xxx]]` が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

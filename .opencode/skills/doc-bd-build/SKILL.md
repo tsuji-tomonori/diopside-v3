@@ -23,6 +23,8 @@ metadata:
 - TypeScript型安全方針（`tsconfig` 基準、`any` 抑止、`unknown` 境界、lintゲート）。
 - 防御的型付け方針（Brand/Opaque、判別可能union、`NonEmptyArray`、センチネル値禁止、`boolean` blindness回避、unsafe cast局所化）。
 - CDKビルド方針（`cdk synth` 決定性、`cdk.context.json` 差分管理、`aws-cdk-lib`/`constructs` 整合、`cdk-nag` ゲート）。
+- Next.js本番品質ゲート（`next build` + `next start`、Web Vitals、bundle analyzer、`next/image` / `<Script>` 運用）。
+- Next.jsキャッシュ/再検証方針（`cache` / `revalidate` / `tags`、`revalidatePath` / `revalidateTag`）。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -49,6 +51,9 @@ metadata:
 - 明示解放が必要な資源に `using` または `try/finally` を要求する。
 - CDKを扱う場合、`synth` で外部副作用を発生させない原則、`cdk.context.json` のコミット運用、Construct/Stack内部での `process.env` 直参照禁止を記載する。
 - CDK変更時の最低品質ゲート（`lint` / `test` / `cdk synth` / `cdk-nag`）を受入条件へ含める。
+- Next.js を扱う場合、`next build` と `next start` を連続実行する本番相当ゲートを受入条件へ含める。
+- Dynamic API 利用箇所（`cookies`/`headers`/`searchParams`）と、意図しない全体Dynamic Rendering化の回避方針を確認する。
+- `next/image` の寸法指定、`<Script>` 利用、bundle analyzer 実行、`useReportWebVitals` 収集を品質チェックへ含める。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
 
@@ -58,3 +63,4 @@ metadata:
 - 本文は「ビルド方針/品質ゲート/受入基準」を含み、TypeScript型安全を扱う場合は `tsconfig` 4設定・`any` 抑止・`unknown` 境界の整合が取れている。
 - 防御的型付けを扱う場合、Brand/Opaque、判別可能union、センチネル禁止、`NonEmptyArray` 相当、unsafe cast局所化、資源解放保証の整合が取れている。
 - CDKを扱う場合は、決定性・依存整合・context固定・セキュリティゲートの整合が取れている。
+- Next.jsを扱う場合は、App Router境界、キャッシュ再検証、本番品質ゲート、画像/スクリプト最適化の整合が取れている。

@@ -3,7 +3,7 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -14,6 +14,7 @@ up:
 related:
 - '[[BD-ADR-001]]'
 - '[[BD-ADR-021]]'
+- '[[BD-ADR-024]]'
 - '[[RQ-RDR-028]]'
 - '[[RQ-RDR-034]]'
 - '[[BD-ARCH-002]]'
@@ -36,6 +37,7 @@ tags:
 - 収集・正規化・索引生成・検索表示を疎結合にし、将来の収集方式変更と検索方式拡張に耐える。
 - 利用者体験は「高速初期表示」と「高精度絞り込み」を優先し、[[RQ-GL-010|段階ロード]]を採用する。
 - 原本データはDBで一元管理し、利用者向け参照は配信用静的JSONを正規経路とする。
+- Web公開層は Next.js App Router を前提に、Server Components を既定として `"use client"` 境界を最小化する。
 
 ## システム境界
 - 本システムの責務は「公開動画メタデータの収集・加工・配信・検索」であり、動画本体配信はYouTube側責務とする。
@@ -60,6 +62,14 @@ tags:
 - アプリケーション層: `Backend API` が更新系処理と配信生成トリガを担う。
 - データ層: `DB` を正本とし、`S3配信用JSON` と `docs/テスト結果` を公開成果物として保持する。
 - 将来の高度検索はアプリケーション層へ `検索API` を追加して段階導入する（現行MVPは静的JSON参照を継続）。
+
+## Web実行境界（Next.js App Router）
+- Server Components を標準とし、状態保持・イベント処理・ブラウザAPI依存の部分だけを Client Components に切り出す。
+- `cookies()` / `headers()` / `searchParams` など Dynamic API は末端境界でのみ利用し、Root Layout での無差別利用を禁止する。
+- データ取得は Server Components で `fetch` / DB / 外部APIを直接呼び出し、Client からの更新系アクセスは Route Handlers 経由に限定する。
+- Server から Route Handlers への自己HTTP呼び出しは採用しない（不要な往復レイテンシを回避する）。
+- 逐次 await によるウォーターフォールを避けるため、並列取得と preload を優先し、`loading.tsx` と Suspense でストリーミング表示する。
+- `<Link>` の prefetch は既定有効を維持し、無効化は副作用が明確な場合に限定する。
 
 ## 配置方針
 - 配信面は静的ファイル配信を基本とし、閲覧トラフィックと収集処理を分離する。
@@ -123,6 +133,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-11: Next.js App Router前提のWeb実行境界（RSC/Client境界、Dynamic API、Route Handler、Suspense）を追加 [[BD-ADR-024]]
 - 2026-02-11: 派生文書（ARCH-002/003/004, ERD, API-003, UI-003）とのトレースを追加 [[BD-ADR-021]]
 - 2026-02-11: DB正本化と3層責務境界、将来検索API拡張境界を追加 [[BD-ADR-021]]
 - 2026-02-11: 取得モード分離（Source Resolver/Incremental Updater）を追加し、PoC参照の収集責務を設計へ反映 [[BD-ADR-001]]
