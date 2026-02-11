@@ -3,7 +3,7 @@ id: BD-API-001
 title: API一覧
 doc_type: API設計
 phase: BD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -49,14 +49,20 @@ tags:
 - **管理画面向け更新契約**: [[BD-API-002]] を正本とし、本書では参照のみ行う。
 - **将来拡張契約**: API検索エンドポイントは将来追加予定として予約し、現時点で契約詳細は固定しない。
 
-## 契約一覧
-| 種別 | パス/契約 | 用途 | 主な利用要求 |
-|---|---|---|---|
-| 静的JSON | `bootstrap.json` | 初期表示データ | [[RQ-FR-015]] |
-| 静的JSON | `tag_master.json` | [[RQ-GL-005|タグ辞書]] | [[RQ-FR-005]] |
-| 静的JSON | `archive_index.p{page}.json` | [[RQ-GL-009|archive_index]]による[[RQ-GL-010|段階ロード]]一覧 | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-015]] |
-| 静的JSON | `highlights/{videoId}.json` | 動画詳細の[[RQ-GL-016|コメント密度波形]]と[[RQ-GL-015|盛り上がり区間]]表示 | [[RQ-FR-020]], [[RQ-FR-022]] |
-| 静的画像 | `wordcloud/{videoId}.png` | 動画詳細の話題傾向表示 | [[RQ-FR-021]] |
+## API一覧
+| 区分 | パス/契約 | 用途 | 主な利用要求 | 詳細設計 |
+|---|---|---|---|---|
+| 配信契約 | `bootstrap.json` / `archive_index.p{page}.json` | 初期表示と[[RQ-GL-010|段階ロード]]一覧 | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-015]] | [[DD-API-004]] |
+| 配信契約 | `tag_master.json` / `highlights/{videoId}.json` / `wordcloud/{videoId}.png` | [[RQ-GL-005|タグ辞書]]と詳細補助表示（波形/[[RQ-GL-017|ワードクラウド]]） | [[RQ-FR-005]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]] | [[DD-API-005]] |
+| 運用API | `POST /api/v1/ops/ingestion/runs` | [[RQ-GL-002|収集ジョブ]]起動 | [[RQ-FR-001]], [[RQ-FR-003]] | [[DD-API-002]] |
+| 運用API | `GET /api/v1/ops/ingestion/runs/{runId}` | 収集run状態確認 | [[RQ-FR-017]] | [[DD-API-003]] |
+| 運用API | `GET /api/v1/ops/ingestion/runs/{runId}/items` | 収集結果明細確認 | [[RQ-FR-004]], [[RQ-FR-017]] | [[DD-API-011]] |
+| 運用API | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | [[RQ-GL-011|再収集]]実行 | [[RQ-FR-018]] | [[DD-API-008]] |
+| 運用API | `GET /api/v1/ops/ingestion/latest` / `GET /api/v1/ops/diagnostics/health` | 最新結果/運用診断確認 | [[RQ-FR-016]], [[RQ-FR-017]] | [[DD-API-009]] |
+| 運用API | `POST /api/v1/ops/rechecks` / `GET /api/v1/ops/rechecks/{recheckRunId}` | 配信前後再確認 | [[RQ-FR-019]] | [[DD-API-012]] |
+| 運用API | `POST /api/v1/admin/tags` / `PATCH /api/v1/admin/tags/{tagId}` / `PATCH /api/v1/admin/videos/{videoId}/tags` | タグ更新/手動タグ付け | [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-019]] | [[DD-API-013]] |
+| 運用API | `POST /api/v1/admin/publish/tag-master` / `GET /api/v1/admin/publish/{publishRunId}` | 配信反映run監視 | [[RQ-FR-024]], [[RQ-FR-025]] | [[DD-API-015]] |
+| 運用API | `POST /api/v1/admin/docs/publish` / `GET /api/v1/admin/docs/publish/{docsPublishRunId}` | docs公開run監視 | [[RQ-FR-024]] | [[DD-API-014]] |
 
 ## [[RQ-GL-016|コメント密度波形]]静的配信契約
 - **命名規約**: `highlights/{videoId}.json`（`videoId` はYouTube動画ID、拡張子は `json` 固定）。
@@ -80,6 +86,7 @@ tags:
 - **フォールバック方針**: 画像不正・破損時は表示を中断し、モーダル機能（タグ、遷移、閉じる）を維持する。
 
 ## 変更履歴
+- 2026-02-11: API一覧表へ詳細設計リンク列を追加し、運用API契約を個別API単位で整理 [[BD-ADR-021]]
 - 2026-02-11: 生成タイミングを「単一Backend API（Hono）内バッチ実行」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: 利用者向け参照契約にHTTP API共通方針の参照を追加 [[BD-ADR-023]]
 - 2026-02-11: DB正本前提の契約境界（参照系/更新系分離）を追記 [[BD-ADR-021]]
