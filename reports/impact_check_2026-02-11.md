@@ -337,6 +337,19 @@
   - 経路整合: `BD-DEP-003` の Phase 1 方針（docs公開）と運用手順の参照経路が一致。
   - 互換性: 既存の `/` アクセスを維持しつつ、`/docs/*` 導線でも同等到達を確認可能。
 
+## 追記（AWS CDKベストプラクティスの設計・スキル反映）
+- 対象: `RQ-RDR-029`, `BD-ADR-016`, `RQ-DEV-001`, `BD-BUILD-001`, `BD-DEP-003`, `DD-DEP-001`, `.opencode/skills/doc-rq-dev/*`, `.opencode/skills/doc-bd-build/*`, `.opencode/skills/doc-bd-dep/*`, `.opencode/skills/doc-dd-dep/*`
+- 実施:
+  - 要求決定記録 `RQ-RDR-029` を新規追加し、CDK設計標準（`synth` 決定性、Construct中心、stateful分離、props注入、`cdk.context.json` 固定）を採用決定として記録。
+  - 設計決定 `BD-ADR-016` を新規追加し、非採用案（Stack中心実装、`process.env` 直参照、物理名固定）を明示。
+  - `RQ-DEV-001` の受入基準へCDK品質ゲート（`cdk synth` 再現性、context管理、論理ID置換防止）を追加。
+  - `BD-BUILD-001` / `BD-DEP-003` / `DD-DEP-001` を更新し、決定性・CIゲート・CDKテスト方針（fine-grained/snapshot/integ）を反映。
+  - 対応 `doc-*` スキルと `TEMPLATE.md` を同一変更で更新し、以後の文書更新で同観点が漏れないように同期。
+- 影響確認:
+  - 要求整合: `[[RQ-PC-009]]` の小差分リリース制約に対し、CDK運用の判定可能条件が追加された。
+  - 設計整合: `[[RQ-RDR-029]] -> [[BD-ADR-016]] -> [[BD-BUILD-001]]/[[BD-DEP-003]] -> [[DD-DEP-001]]` の追跡経路を構築。
+  - スキル整合: `doc-rq-dev` / `doc-bd-build` / `doc-bd-dep` / `doc-dd-dep` が同一のCDK品質観点を保持。
+
 ## 追記（Quartzデフォルトホームへの移行）
 - 対象: `docs/index.md`, `docs/RQ-HM-001.md`, `infra/functions/pretty-url-rewrite.js`, `infra/test/fixtures/site/index.html`, `BD-DEP-003`, `DD-DEP-001`, `AT-REL-001`
 - 実施:
@@ -347,3 +360,25 @@
 - 影響確認:
   - 経路整合: ルートアクセスと docs プレフィックスアクセスが同一トップへ解決される。
   - 設計整合: BD/DD/AT の参照先が実装のルーティング仕様と一致する。
+
+## 追記（AIエージェント運用要求と設計の追加）
+- 対象: `RQ-DEV-002`, `RQ-RDR-029`, `BD-ARCH-005`, `BD-ADR-016`
+- 実施:
+  - AIエージェント運用を非機能要求として `RQ-DEV-002` に新規追加し、役割分離・最小権限・実行上限を受入基準化。
+  - 要求採用理由と影響範囲を `RQ-RDR-029` に記録。
+  - 運用アーキテクチャを `BD-ARCH-005` に新規追加し、Primary/Subagent分離と成果物トレースをMermaidで明示。
+  - 設計判断を `BD-ADR-016` に新規追加し、段階解放とホワイトリスト運用を採用決定として固定。
+- 影響確認:
+  - 要求整合: `RQ-PC-007` / `RQ-PC-009` のAI支援開発制約を、判定可能な運用要件へ具体化。
+  - 設計整合: `RQ-RDR-029 -> BD-ADR-016 -> BD-ARCH-005` の追跡経路を構築。
+  - 運用整合: 既存の文書運用規約（`BD-CM-001`, `RQ-DG-001`）と矛盾しない更新単位を維持。
+
+## 追記（エージェント実体定義への反映とDevOps要件束ね）
+- 対象: `.opencode/agents/review.md`, `.opencode/agents/security-auditor.md`, `.opencode/agents/orchestrator.md`, `RQ-DEV-001`
+- 実施:
+  - `review` / `security-auditor` を read-only 監査系サブエージェントとして追加し、`edit: deny` と最小bash許可を設定。
+  - `orchestrator` をPrimaryとして追加し、`permission.task` をホワイトリスト方式（`explore`/`review`/`security-auditor`）で定義。
+  - `RQ-DEV-001` に `[[RQ-DEV-002]]` 参照を追加し、AIエージェント運用要件をDevOps要件に統合。
+- 影響確認:
+  - 運用整合: 役割分離・最小権限・段階解放の方針が文書と実体定義の双方で一致。
+  - 要求整合: `RQ-DEV-001` から `RQ-DEV-002` を辿れるため、DevOps品質ゲート内でAI運用要件を判定可能。
