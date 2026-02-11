@@ -111,6 +111,11 @@ def is_rq(doc_id: str) -> bool:
     return doc_id.startswith("RQ-")
 
 
+def is_fr_nfr_requirement(doc: Doc) -> bool:
+    path = str(doc.path)
+    return "/51.機能要求(FR)/" in path or "/61.非機能要求(NFR)/" in path
+
+
 def is_rdr(doc_id: str) -> bool:
     return doc_id.startswith("RQ-RDR-")
 
@@ -172,9 +177,10 @@ def build_requirement_table(docs: dict[str, Doc]) -> str:
     lines: list[str] = []
     lines.append(f"- generated_at: {dt.date.today().isoformat()}")
     lines.append("")
-    lines.append("| 要求ID | タイトル | RDR | ADR | 設計(BD/DD) | 検証(UT/IT/AT) |")
+    lines.append("| 要求ID(FR/NFR) | タイトル | RDR | ADR | 設計(BD/DD) | 検証(UT/IT/AT) |")
     lines.append("| --- | --- | --- | --- | --- | --- |")
-    for doc_id in sorted([d for d in docs if is_rq(d)]):
+    target_ids = [doc.doc_id for doc in docs.values() if is_rq(doc.doc_id) and is_fr_nfr_requirement(doc)]
+    for doc_id in sorted(target_ids):
         d = docs[doc_id]
         rdr = linked_docs(doc_id, docs, is_rdr)
         adr = linked_docs(doc_id, docs, is_adr)
@@ -204,11 +210,11 @@ def build_design_table(docs: dict[str, Doc]) -> str:
     lines: list[str] = []
     lines.append(f"- generated_at: {dt.date.today().isoformat()}")
     lines.append("")
-    lines.append("| 設計ID | タイトル | 根拠要件(RQ) | RDR | ADR | 検証(UT/IT/AT) |")
+    lines.append("| 設計ID | タイトル | 根拠要件(FR/NFR) | RDR | ADR | 検証(UT/IT/AT) |")
     lines.append("| --- | --- | --- | --- | --- | --- |")
     for doc_id in sorted([d for d in docs if is_design(d)]):
         d = docs[doc_id]
-        rq = linked_docs(doc_id, docs, is_rq)
+        rq = linked_docs(doc_id, docs, lambda x: is_rq(x) and is_fr_nfr_requirement(docs[x]))
         rdr = linked_docs(doc_id, docs, is_rdr)
         adr = linked_docs(doc_id, docs, is_adr)
         tests = linked_docs(doc_id, docs, is_test)
