@@ -1,11 +1,11 @@
 # Doc Check Report
 
 - docs_root: `docs`
-- total_markdown: 287
-- id_docs: 287
+- total_markdown: 288
+- id_docs: 288
 - parse_errors: 0
 - issues: 0
 - nonlinked_doc_ids: 0
 - broken_links: 0
 - backlink_issues: 0
-- target_files: 2
+- target_files: 4
