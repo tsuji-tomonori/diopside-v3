@@ -756,3 +756,33 @@
   - 要求整合: `RQ-DATA-001`, `RQ-FR-017`, `RQ-FR-019`, `RQ-FR-025` の受入観点（追跡性/差分確認/公開反映）をDDL実体へ接続。
   - 設計整合: `RQ-RDR-034 -> BD-ADR-021 -> BD-DATA-001/BD-ERD-001 -> DD-DDL/DBCON/MIG` の追跡経路を補強。
   - 移行整合: `DD-MIG-001` に expand/backfill/switch/contract の適用順序を追記し、既存運用を止めない段階導入条件を明確化。
+
+## 追記（LLM支援タグ運用フローのRQ/BD/DD反映）
+- 対象: `RQ-RDR-036`, `RQ-FR-019`, `RQ-UC-009`, `BD-ADR-021`, `BD-API-002`, `BD-UI-001`, `BD-DATA-001`, `DD-API-013`, `DD-UI-006`
+- 実施:
+  - `RQ-RDR-036` を新規追加し、管理画面でのコピペ入力生成 -> 外部LLM提案 -> JSON取込検証 -> DB反映の運用境界を決定記録化。
+  - `RQ-FR-019` と `RQ-UC-009` を更新し、JSON検証成功時のみ反映する条件と、反映後に `tag_master.json` / `archive_index.pN.json` を更新する運用を追加。
+  - `BD-ADR-021` を更新し、外部提案と内部反映の責務分離、同一公開runでの2成果物再生成方針を追加。
+  - `BD-API-002` にタグ提案入力契約/タグ提案取込契約を追加し、`BD-UI-001` の UI-A04 操作をコピー/JSONアップロード/検証確認まで拡張。
+  - `BD-DATA-001` に取込検証層と import属性を追加し、検証失敗時の未反映ルールを品質ゲートへ反映。
+  - `DD-API-013` を拡張し、`/admin/tagging/prompts` と `/admin/tagging/imports`、JSON契約、エラーマッピングを追加。
+  - `DD-UI-006` に提案入力コピー・JSON取込・検証失敗時のUI挙動を追加。
+- 影響確認:
+  - 要求整合: `RQ-RDR-036 -> RQ-FR-019 -> RQ-UC-009` で、手動判断主体を維持しつつLLM支援フローを追跡可能化。
+  - 設計整合: `BD-ADR-021 -> BD-API-002/BD-UI-001/BD-DATA-001 -> DD-API-013/DD-UI-006` の追跡経路を構築。
+  - 運用整合: 反映後の公開更新対象を `tag_master` のみでなく `archive_index` まで含め、利用者画面との整合を維持。
+
+## 追記（HTTP APIベストプラクティスのBD/skill反映）
+- 対象: `BD-ADR-023`, `BD-API-005`, `BD-API-001`, `BD-API-002`, `BD-API-003`, `BD-API-004`, `.opencode/skills/doc-bd-api/*`, `.opencode/skills/doc-dd-api/*`, `.opencode/skills/doc-rq-int/*`
+- 実施:
+  - `BD-ADR-023` を新規追加し、HTTP API契約統一（HTTPセマンティクス、Problem Details、ページング、互換性、契約運用）の設計判断を記録。
+  - `BD-API-005` を新規追加し、URI命名、メソッド意味論、ステータス、カーソルページング、`application/problem+json`、SemVer/廃止、429/Retry-After、`traceparent`、OpenAPI契約正本運用を共通規約として定義。
+  - `BD-API-002` を更新し、管理系契約へ共通規約適用（GETボディ禁止、429運用、Problem Details、可観測性）を追記。
+  - `BD-API-003` を更新し、共通エラー契約を Problem Details基準へ再編。
+  - `BD-API-004` を更新し、SemVer、`deprecated: true`、Deprecation/Sunsetヘッダ、CI破壊的変更検知を追加。
+  - `BD-API-001` を更新し、利用者向け静的参照契約にもHTTP共通規約（ステータス/キャッシュ/エラーフォールバック）の参照を追加。
+  - `doc-bd-api`/`doc-dd-api`/`doc-rq-int` の SKILL/TEMPLATE を更新し、API契約レビューの必須観点へ同ルールを同期。
+- 影響確認:
+  - 設計整合: `BD-ADR-023 -> BD-API-005 -> BD-API-002/003/004` の追跡経路を構築。
+  - 要求整合: `RQ-INT-001`（互換性）、`RQ-SEC-001`（認可/情報露出抑制）、`RQ-OBY-001`（相関ID/トレース）と矛盾しない契約基準を確立。
+  - 運用整合: skill更新により、今後のBD/DD/RQ-INT更新で同一API観点（Problem Details/互換性/CIゲート）を継続適用可能。
