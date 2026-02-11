@@ -3,16 +3,19 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-11'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
 related:
 - '[[BD-ADR-001]]'
+- '[[RQ-RDR-028]]'
+- '[[BD-API-002]]'
+- '[[BD-DATA-001]]'
 tags:
 - diopside
 - BD
@@ -31,8 +34,10 @@ tags:
 - 表示対象は蓄積済み索引データのみとし、検索時に外部APIへ同期問い合わせしない。
 
 ## 論理コンポーネント
-- Collector: [[RQ-GL-002|収集ジョブ]]起動、対象動画列挙、差分取得。
-- Normalizer: 動画メタデータを内部スキーマへ変換し、重複と欠損を補正。
+- Source Resolver: 取得モード（公式取り込み/出演補完取り込み/差分更新）に応じて対象集合を解決する。
+- Collector: [[RQ-GL-002|収集ジョブ]]起動、対象動画列挙、メタデータ取得。
+- Incremental Updater: 既存データと照合し、更新種別（新規/既存/補完/再確認）を判定する。
+- Normalizer: 動画メタデータを内部スキーマへ変換し、重複と欠損を補正する。
 - Tag Resolver: [[RQ-GL-013|タグ種別]]辞書と動画タグを整合させ、`tag_master` を生成。
 - Index Builder: 一覧検索向けに `bootstrap` と `archive_index.pN` を生成。
 - Static Distributor: 生成成果物を配信領域へ配置し、公開UIへ提供。
@@ -54,10 +59,12 @@ flowchart TD
   end
 
   subgraph ING[収集・加工]
+    C0[Source Resolver]
     C1[Collector]
-    C2[Normalizer]
-    C3[Tag Resolver]
-    C4[Index Builder]
+    C2[Incremental Updater]
+    C3[Normalizer]
+    C4[Tag Resolver]
+    C5[Index Builder]
   end
 
   subgraph DIST[配信]
@@ -67,11 +74,11 @@ flowchart TD
     WEB[Web App]
   end
 
-  YT --> C1
-  C1 --> C2 --> C3 --> C4
-  C4 --> S1
-  C4 --> S2
-  C4 --> S3
+  YT --> C0
+  C0 --> C1 --> C2 --> C3 --> C4 --> C5
+  C5 --> S1
+  C5 --> S2
+  C5 --> S3
   USER --> WEB
   WEB --> S1
   WEB --> S2
@@ -86,6 +93,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-11: 取得モード分離（Source Resolver/Incremental Updater）を追加し、PoC参照の収集責務を設計へ反映
 - 2026-02-10: 新規作成
 - 2026-02-10: コンポーネント責務、配置方針、品質属性対応を追加
 - 2026-02-10: ステークホルダー2者（管理者/利用者）に合わせて主体表現を修正
