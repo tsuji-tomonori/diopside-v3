@@ -6,6 +6,8 @@ diopside（白雪 巴/Shirayuki Tomoe の公開YouTubeアーカイブ収集・�
 このリポジトリは、要求/設計/テスト/受入文書を `docs/` で一元管理し、
 アプリ実装を `web/` で管理します。`Taskfile.yaml` と CI で文書整合を検証します。
 
+[docs](https://d1da9dd6gfwbw6.cloudfront.net/)
+
 ## リポジトリ構成
 
 - `docs/`: Obsidian文書本体（RQ/BD/DD/UT/IT/AT）
