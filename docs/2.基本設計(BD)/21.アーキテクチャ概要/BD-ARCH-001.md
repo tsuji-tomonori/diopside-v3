@@ -3,11 +3,11 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.10
+version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -66,6 +66,8 @@ tags:
 | BAT-003 | 配信前後再確認バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-API-012]], [[DD-DDL-010]] |
 | BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-API-015]], [[DD-DDL-012]] |
 | BAT-005 | docs公開バッチ | `POST /api/v1/admin/docs/publish` | docsビルド、配信反映、無効化処理 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-API-014]], [[DD-DDL-012]] |
+| BAT-006 | 補助データ生成バッチ | 収集run完了トリガ（内部） | [[RQ-GL-016|コメント密度波形]]・[[RQ-GL-017|ワードクラウド]]生成 | `queued -> running -> succeeded\|failed\|partial` | [[DD-API-004]], [[RQ-FR-022]], [[RQ-FR-023]] |
+| BAT-007 | タグマスター即時更新バッチ | `POST /api/v1/admin/publish/tag-master`（publishScope=[[RQ-GL-008|tag_master]]） | [[RQ-GL-005|タグ辞書]]変更後の即時公開反映 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-API-013]], [[DD-API-015]] |
 
 ## バッチイベント一覧
 | イベントID | イベント名 | 発火条件 | 対象バッチ | 記録先 | 詳細設計 |
@@ -77,6 +79,17 @@ tags:
 | BEV-005 | `partial` | 一部対象のみ成功して終了 | BAT-001〜BAT-003 | 件数差分（`success_count`/`failed_count`/`unchanged_count`） | [[DD-API-003]], [[DD-API-012]], [[DD-DDL-007]], [[DD-DDL-010]] |
 | BEV-006 | `rolled_back` | 公開切替失敗後に旧版へ切戻し完了 | BAT-004〜BAT-005 | `publish_runs.rollback_executed=true` | [[DD-API-014]], [[DD-API-015]], [[DD-DDL-012]] |
 | BEV-007 | `cancelled` | 運用判断または安全停止で中断 | BAT-001〜BAT-004 | runテーブル終端状態 `cancelled` | [[DD-API-003]], [[DD-API-008]], [[DD-API-012]], [[DD-DDL-007]] |
+
+## バッチ実行制約
+| バッチID | 最大実行時間 | Retry回数 | Retry間隔 | 同時実行数 | 備考 |
+|---|---|---|---|---|---|
+| BAT-001 | 60分 | 3回 | 30秒（指数バックオフ） | 1 | 外部API制限考慮 |
+| BAT-002 | 30分 | 2回 | 1分 | 1 | 親runの制約を継承 |
+| BAT-003 | 30分 | 2回 | 30秒 | 1 | - |
+| BAT-004 | 15分 | 3回 | 30秒 | 1 | ロールバック時間含む |
+| BAT-005 | 30分 | 2回 | 1分 | 1 | ビルド時間含む |
+| BAT-006 | 60分 | 3回 | 30秒 | 3 | 動画単位で並列可 |
+| BAT-007 | 10分 | 3回 | 15秒 | 1 | - |
 
 ## 3層責務境界
 - プレゼンテーション層: `Web App` / `Admin Console` / `docs` を提供する。
@@ -157,6 +170,8 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-13: 変更履歴のADRリンク記載漏れを補正 [[BD-ADR-021]]
+- 2026-02-12: 補助データ生成バッチ（BAT-006）、タグマスター即時更新バッチ（BAT-007）、バッチ実行制約を追加 [[BD-ADR-021]]
 - 2026-02-11: バッチ一覧/バッチイベント一覧を追加し、run状態と詳細設計参照を明確化 [[BD-ADR-021]]
 - 2026-02-11: バッチ実処理を単一Backend API（Hono）内へ集約し、外部スケジューラはAPI起動のみ担う方式を追記 [[BD-ADR-021]]
 - 2026-02-11: Next.js App Router前提のWeb実行境界（RSC/Client境界、Dynamic API、Route Handler、Suspense）を追加 [[BD-ADR-024]]
