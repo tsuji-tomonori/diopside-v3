@@ -21,6 +21,11 @@
     - DD-INF: `DD-IAC-001`, `DD-IAC-002`, `DD-NET-001`, `DD-IAM-001`, `DD-OBS-001`, `DD-DR-001`, `DD-CICD-INF-001`
     - UT/IT/AT-INF: `UT-IAC-001`, `UT-POL-001`, `UT-SEC-001`, `IT-INF-ENV-001`, `IT-INF-SMK-001`, `IT-INF-NET-001`, `IT-INF-OBS-001`, `IT-INF-ROLL-001`, `AT-OPS-INF-001`, `AT-DR-001`, `AT-SLO-001`
     - 既存文書接続: `BD-ENV-001`, `BD-ENV-002`, `BD-CM-001`, `BD-TST-001`, `BD-DEP-001`, `RQ-RTM-001`
+  - 追加実施（2026-02-13: INF設計具体化）:
+    - 正本境界整理: `BD-INF-001`, `BD-INF-007`, `BD-DEP-005`
+    - DD具体化: `DD-NET-001`, `DD-IAM-001`, `DD-OBS-001`, `DD-DR-001`, `DD-IAC-002`, `DD-CICD-INF-001`
+    - UT/IT/AT具体化: `UT-IAC-001`, `UT-POL-001`, `UT-SEC-001`, `IT-INF-ENV-001`, `IT-INF-NET-001`, `IT-INF-OBS-001`, `IT-INF-ROLL-001`, `IT-INF-SMK-001`, `AT-OPS-INF-001`, `AT-DR-001`, `AT-SLO-001`
+    - 追跡更新: `RQ-RTM-001`, `RQ-RTM-002`
 
 ## 影響確認
 - 要求整合: 段階ロード中の操作制限、[[RQ-GL-015|盛り上がり区間]]判定条件、例外時挙動が要求本文で判定可能な粒度に具体化された。
@@ -32,7 +37,10 @@
 - 追跡整合（追加）: `RQ-RTM-001` と `IT-CASE-009/010/011` の直接リンクを補強し、`DD-API-011〜015` へのIT層トレースを明示した。
 - 追跡整合（INF追加）: インフラ文書群を `RQ-DEV-001`/`RQ-SEC-001`/`RQ-OBY-001` 系要求から辿れる構造へ接続した。
 - タスク消化（INF追加）: `reports/tasks_docs_fix_2026-02-13.md` のP0タスク（18〜23）を完了状態へ更新した。
+- 設計具体化（INF追補）: インフラ実装判断に必要な実装値（CIDR/TLS/IAM境界/SLO閾値/DR判定）をDDへ反映し、UT/IT/ATの判定基準を数値化した。
+- 追跡整合（INF追補）: DD-INF文書に要求リンク（`RQ-DEV-001`, `RQ-SEC-001`, `RQ-OBY-001`, `RQ-AV-001`）を追加し、RTM再生成で設計トレースを補強した。
 
 ## 検証
 - `task docs:guard` を実行し、文書整合チェックを実施。
 - `task docs:trace` を実行し、RTM静的ビューを再生成。
+- `task docs:check` を実行し、Vault全体で `broken_links: 0` を確認。

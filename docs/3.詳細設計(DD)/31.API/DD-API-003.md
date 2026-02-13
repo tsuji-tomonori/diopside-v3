@@ -3,11 +3,11 @@ id: DD-API-003
 title: 収集ジョブ状態API
 doc_type: API詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-002]]'
@@ -32,7 +32,7 @@ tags:
 ## レスポンス
 - `200 OK`
   - `runId`
-  - `status`: `queued | running | succeeded | failed | cancelled`
+  - `status`: `queued | running | succeeded | failed | partial | cancelled`
   - `targetTypes`
   - `processedCount`
   - `succeededCount`
@@ -43,7 +43,7 @@ tags:
   - 未知のrunId
 
 ## 状態遷移
-- `queued -> running -> succeeded|failed|cancelled`
+- `queued -> running -> succeeded|failed|partial|cancelled`
 - `failed` からは `DD-API-008` で[[RQ-GL-011|再収集]]runを作成する。
 
 ## 処理ロジック
@@ -69,6 +69,7 @@ tags:
 - 失敗時は`errorSummary`と`traceId`で障害調査へ遷移できること。
 
 ## 変更履歴
+- 2026-02-13: run状態語彙を `queued/running/succeeded/failed/partial/cancelled` に統一 [[BD-ADR-027]]
 - 2026-02-11: `/api/v1` 統一と処理ロジック/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成
 - 2026-02-10: [[RQ-GL-002|収集ジョブ]]状態APIの状態遷移と応答契約を追加

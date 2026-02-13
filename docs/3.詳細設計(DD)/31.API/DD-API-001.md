@@ -3,11 +3,11 @@ id: DD-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-001]]'
@@ -82,10 +82,10 @@ tags:
 ## Ops Control Contract 詳細
 - `POST /api/v1/ops/ingestion/runs`
   - 用途: [[RQ-GL-002|収集ジョブ]]開始。
-  - 応答: `runId`, `acceptedAt`, `mode`（scheduled/manual）。
+  - 応答: `runId`, `acceptedAt`, `triggerMode`（manual/scheduled）, `runKind`（official_ingestion/appearance_supplement/incremental_update）。
 - `GET /api/v1/ops/ingestion/runs/{runId}`
   - 用途: 実行状態確認。
-  - 応答: `status`（queued/running/succeeded/failed）, `processedCount`, `errorSummary`。
+  - 応答: `status`（queued/running/succeeded/failed/partial/cancelled）, `processedCount`, `errorSummary`。
 - `POST /api/v1/ops/ingestion/runs/{runId}/retry`
   - 用途: 失敗ジョブの再実行。
   - 応答: 新しい`runId`と関連元`runId`。
@@ -147,6 +147,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-13: 収集起動応答を `triggerMode/runKind` へ更新し、run状態語彙へ `partial/cancelled` を明記 [[BD-ADR-027]]
 - 2026-02-11: 配信契約の JSON Schema 正本（Draft 2020-12）参照と必須項目の実データ整合を追加 [[BD-ADR-021]]
 - 2026-02-11: run実行境界を単一Backend API（Hono）モノリスへ統一し、`scheduled` の起動方式を追記 [[BD-ADR-021]]
 - 2026-02-11: Problem Details 正本化と `trace_id` への統一、`BD-API-003/005` と `BD-ARCH-002/003/004` 参照を追加

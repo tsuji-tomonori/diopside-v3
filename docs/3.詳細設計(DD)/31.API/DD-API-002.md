@@ -3,7 +3,7 @@ id: DD-API-002
 title: 収集ジョブ起動API
 doc_type: API詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -33,7 +33,8 @@ tags:
 ## リクエスト
 - ヘッダー: `Content-Type: application/json`
 - Body:
-  - `mode`: `manual` | `scheduled`
+  - `triggerMode`: `manual` | `scheduled`
+  - `runKind`: `official_ingestion` | `appearance_supplement` | `incremental_update`
   - `targetTypes`: `official` / `appearance` の配列
   - `fromPublishedAt`（任意）: ISO8601
   - `dryRun`（任意）: true/false
@@ -42,7 +43,8 @@ tags:
 - `202 Accepted`
   - `runId`: 実行ID
   - `acceptedAt`: 受理時刻
-  - `mode`: 実行モード
+  - `triggerMode`: 起動文脈（手動/定期）
+  - `runKind`: 収集種別
   - `targetTypes`: 対象区分
 - `409 Conflict`
   - 同種ジョブが実行中で重複起動を拒否した場合
@@ -55,7 +57,8 @@ tags:
 
 ## 入力スキーマ（バッチ実行）
 - run起動入力（JSON）
-  - `mode`: `manual|scheduled`
+  - `triggerMode`: `manual|scheduled`
+  - `runKind`: `official_ingestion|appearance_supplement|incremental_update`
   - `targetTypes[]`: `official|appearance`
   - `fromPublishedAt?`: ISO8601
   - `dryRun?`: boolean
@@ -68,11 +71,11 @@ tags:
 
 ## 処理ロジック
 1. 認証済みJWTを検証し、`operator` を解決する。
-2. 入力構文を検証し、`mode/targetTypes/fromPublishedAt` の型不整合を拒否する。
+2. 入力構文を検証し、`triggerMode/runKind/targetTypes/fromPublishedAt` の型不整合を拒否する。
 3. 同時実行制約を評価し、同種run実行中なら `409 RUN_ALREADY_ACTIVE` を返す。
 4. `Idempotency-Key` が既存要求と一致する場合は既存 `runId` を再返却する。
 5. runレコードを `queued` で作成し、同一Backend API内ジョブ実行モジュールへ登録する。
-6. 応答として `runId/acceptedAt/mode/targetTypes` を返却する。
+6. 応答として `runId/acceptedAt/triggerMode/runKind/targetTypes` を返却する。
 
 ## 状態遷移
 - 受付直後: `queued`
@@ -80,7 +83,7 @@ tags:
 - 終了時: `succeeded|failed|partial|cancelled`
 
 ## エラーマッピング
-- `INVALID_TARGET`, `INVALID_TIMESTAMP`, `INVALID_MODE`: 400
+- `INVALID_TARGET`, `INVALID_TIMESTAMP`, `INVALID_TRIGGER_MODE`, `INVALID_RUN_KIND`: 400
 - `RUN_ALREADY_ACTIVE`: 409
 - `UNAUTHORIZED`: 401
 - `INTERNAL_ERROR`: 500
@@ -112,6 +115,7 @@ tags:
 - 重複起動時に 409 応答となり、既存runの状態確認へ誘導できること。
 
 ## 変更履歴
+- 2026-02-13: `triggerMode`（manual/scheduled）と `runKind`（official/appearance/incremental）へ実行種別を分離し、BD-API-002と語彙統一 [[BD-ADR-027]]
 - 2026-02-13: バッチ入力スキーマ、上流APIクォータ/レート制御、DynamoDB TTLによる冪等性保存を追加 [[BD-ADR-027]]
 - 2026-02-11: 実行要求の登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: `/api/v1` 統一、処理ロジック/状態遷移/エラーマッピングを追加 [[BD-ADR-021]]
