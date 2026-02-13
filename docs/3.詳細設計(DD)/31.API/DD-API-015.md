@@ -3,7 +3,7 @@ id: DD-API-015
 title: 配信反映ジョブ状態API
 doc_type: API詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -16,6 +16,7 @@ related:
 - '[[BD-UI-001]]'
 - '[[DD-API-005]]'
 - '[[DD-API-014]]'
+- '[[DD-UI-010]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -24,7 +25,7 @@ tags:
 ---
 
 ## 目的
-- タグ公開反映および公開runの状態を共通形式で照会し、UI-A06で進行監視できるようにする。
+- タグ公開反映および公開runの状態を共通形式で照会し、[[DD-UI-010|UI-A06]] で進行監視できるようにする。
 
 ## エンドポイント
 - `GET /api/v1/admin/publish/{publishRunId}`
@@ -55,9 +56,10 @@ tags:
 | `INTERNAL_ERROR` | 500 | サーバ内部例外により公開状態取得処理が失敗した。 |
 
 ## 受入観点
-- UI-A06で `queued/running/succeeded/failed/rolled_back` を判別できること。
+- [[DD-UI-010|UI-A06]] で `queued/running/succeeded/failed/rolled_back` を判別できること。
 - 失敗時にロールバック有無と再試行可否を確認できること。
 
 ## 変更履歴
+- 2026-02-14: 画面参照 `UI-A06` を [[DD-UI-010]] へリンク化
 - 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: 新規作成 [[BD-ADR-021]]

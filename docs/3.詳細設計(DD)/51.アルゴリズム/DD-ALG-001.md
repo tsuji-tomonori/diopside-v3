@@ -3,11 +3,11 @@ id: DD-ALG-001
 title: 検索アルゴリズム
 doc_type: アルゴリズム
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-UI-002]]'
@@ -16,6 +16,8 @@ related:
 - '[[RQ-FR-007]]'
 - '[[RQ-FR-008]]'
 - '[[DD-UI-003]]'
+- '[[DD-UI-012]]'
+- '[[DD-UI-013]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -27,6 +29,7 @@ tags:
 ## 詳細仕様
 - 検索は「前処理 -> フィルタ評価 -> 並び替え -> ページング」の4段階で実行する。
 - 一覧操作の応答速度を維持するため、前処理結果をメモリキャッシュして再利用する。
+- 条件入力は [[DD-UI-012|SearchConditionPanel]]、一覧反映は [[DD-UI-013|ArchiveList]] を起点に適用する。
 
 ## 処理手順
 1. 前処理: キーワード正規化（小文字化、全半角吸収、連続空白圧縮）。
@@ -59,5 +62,6 @@ flowchart TD
 ```
 
 ## 変更履歴
+- 2026-02-14: `SearchConditionPanel` / `ArchiveList` への責務リンクを追加
 - 2026-02-11: 検索処理手順、スコアリング、境界条件を具体化
 - 2026-02-10: 新規作成

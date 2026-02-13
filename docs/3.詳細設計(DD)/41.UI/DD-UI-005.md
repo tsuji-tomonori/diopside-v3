@@ -3,11 +3,11 @@ id: DD-UI-005
 title: 検索バー
 doc_type: UI詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-UI-002]]'
 - '[[DD-UI-001]]'
@@ -16,6 +16,8 @@ related:
 - '[[RQ-FR-007]]'
 - '[[RQ-UX-003]]'
 - '[[DD-ALG-001]]'
+- '[[DD-UI-003]]'
+- '[[DD-UI-012]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -27,6 +29,7 @@ tags:
 ## 詳細仕様
 - 検索バーはキーワード入力と即時サジェスト表示を担当し、確定時に検索実行イベントを発火する。
 - 日本語入力の変換中イベント（IME）では検索を実行しない。
+- [[DD-UI-003|UI-U02]] 内で利用する入力部品として、条件確定イベントは [[DD-UI-012|SearchConditionPanel]] に委譲する。
 
 ## 入力仕様
 | 項目 | 仕様 |
@@ -54,6 +57,7 @@ tags:
 - 出力: 検索確定イベント、候補表示状態、入力エラーメッセージ。
 
 ## 変更履歴
+- 2026-02-14: [[DD-UI-003|UI-U02]] および [[DD-UI-012|SearchConditionPanel]] との責務境界リンクを追加
 - 2026-02-13: 検索バーのa11y属性要件（combobox属性、`aria-invalid`/`aria-describedby`、status通知）を追加
 - 2026-02-11: 入力仕様、アクセシビリティ、失敗時挙動を具体化
 - 2026-02-10: 新規作成

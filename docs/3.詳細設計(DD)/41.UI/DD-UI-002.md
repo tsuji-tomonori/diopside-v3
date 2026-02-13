@@ -3,11 +3,11 @@ id: DD-UI-002
 title: 一覧画面
 doc_type: UI詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-001]]'
@@ -35,16 +35,17 @@ tags:
 - **PC（1280px基準）**: 一覧と補助情報の同時参照を許容する2カラム構成。操作順序はモバイルと同一に維持する。
 
 ## コンポーネント責務
-- `SearchConditionPanel`: キーワード、タグ、期間、再生時間、並び順の入力と変更通知を管理する。
-- `ArchiveList`: 検索結果カード群と「もっと見る」導線、追加読込状態を管理する。
-- `ArchiveDetailModal`: タイトル/メタ情報、YouTube遷移、URLコピー、閉じる操作を管理する。
-- `HighlightWavePanel`: `highlights/{videoId}.json` の取得、可視化、区間クリック遷移、再試行導線を管理する。
-- `WordCloudPanel`: `wordcloud/{videoId}.png` の取得、代替表示、再試行導線を管理する。
+- [[DD-UI-012|SearchConditionPanel]]: キーワード、タグ、期間、再生時間、並び順の入力と変更通知を管理する。
+- [[DD-UI-013|ArchiveList]]: 検索結果カード群と「もっと見る」導線、追加読込状態を管理する。
+- [[DD-UI-014|ArchiveDetailModal]]: タイトル/メタ情報、YouTube遷移、URLコピー、閉じる操作を管理する。
+- [[DD-UI-015|HighlightWavePanel]]: `highlights/{videoId}.json` の取得、可視化、区間クリック遷移、再試行導線を管理する。
+- [[DD-UI-016|WordCloudPanel]]: `wordcloud/{videoId}.png` の取得、代替表示、再試行導線を管理する。
+- 各責務の詳細は [[DD-UI-012]], [[DD-UI-013]], [[DD-UI-014]], [[DD-UI-015]], [[DD-UI-016]] を参照する。
 
 ## 状態遷移
 - 初期表示: `bootstrap` 読込成功で一覧描画、続けて `tag_master` と `archive_index` を非同期取得する。
-- 条件変更: `SearchConditionPanel` の変更イベントで一覧再評価し、件数表示とカード先頭を再計算する。
-- 詳細表示: カード選択で `ArchiveDetailModal` を開き、`HighlightWavePanel` と `WordCloudPanel` を並行取得する。
+- 条件変更: [[DD-UI-012|SearchConditionPanel]] の変更イベントで一覧再評価し、件数表示とカード先頭を再計算する。
+- 詳細表示: カード選択で [[DD-UI-014|ArchiveDetailModal]] を開き、[[DD-UI-015|HighlightWavePanel]] と [[DD-UI-016|WordCloudPanel]] を並行取得する。
 - 障害復帰: 補助情報取得失敗時は詳細モーダルを閉じず、再試行ボタンで再取得する。
 - 復帰保持: モーダルを閉じた際は一覧の[[RQ-GL-014|検索条件]]、スクロール位置、表示件数を維持する。
 
@@ -59,5 +60,6 @@ tags:
 - 出力: 一覧結果、詳細モーダル表示、YouTube遷移、エラー/再試行状態、操作継続性。
 
 ## 変更履歴
+- 2026-02-14: 画面コンポーネント責務を `DD-UI-012`〜`DD-UI-016` へ分割しリンクを追加
 - 2026-02-11: 公開UIのモバイルファースト方針に合わせ、端末別レイアウト/コンポーネント責務/状態遷移/操作制約を詳細化
 - 2026-02-10: 新規作成

@@ -55,7 +55,7 @@ tags:
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: DESIGN_VIEW -->
-- generated_at: 2026-02-13
+- generated_at: 2026-02-14
 
 | 設計ID | タイトル | 根拠要件(FR/NFR) | RDR | ADR | 検証(UT/IT/AT) |
 | --- | --- | --- | --- | --- | --- |
@@ -179,7 +179,7 @@ tags:
 | [[DD-LOG-001]] | ログ設計 | [[RQ-AV-001]], [[RQ-COST-001]], [[RQ-OBY-001]], [[RQ-PRC-001]], [[RQ-PS-001]], [[RQ-SEC-001]] | [[RQ-RDR-035]] | [[BD-ADR-020]], [[BD-ADR-022]], [[BD-ADR-027]] | [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-LOG-002]] | インフラ監視ログ詳細 | [[RQ-OBY-001]] | - | [[BD-ADR-022]] | [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-MIG-001]] | DB移行方針 | [[RQ-DATA-001]], [[RQ-DEV-001]] | - | [[BD-ADR-020]] | [[AT-RUN-001]], [[IT-CASE-001]], [[UT-PLAN-001]] |
-| [[DD-NET-001]] | ネットワーク詳細設計 | [[RQ-SEC-001]] | - | - | [[AT-OPS-INF-001]], [[IT-INF-NET-001]] |
+| [[DD-NET-001]] | ネットワーク詳細設計 | [[RQ-SEC-001]] | - | - | [[AT-OPS-INF-001]], [[IT-INF-NET-001]], [[IT-INF-SMK-001]] |
 | [[DD-OBS-001]] | インフラ監視詳細設計 | [[RQ-OBY-001]] | - | - | [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SLO-001]], [[IT-INF-OBS-001]] |
 | [[DD-PERF-001]] | 性能設計 | [[RQ-OBY-001]], [[RQ-PS-001]] | - | [[BD-ADR-020]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-REV-001]] | レビュー規約 | [[RQ-DEV-001]] | - | - | [[UT-PLAN-001]] |
@@ -191,14 +191,26 @@ tags:
 | [[DD-UI-003]] | フィルタドロワー | [[RQ-FR-006]], [[RQ-FR-008]], [[RQ-UX-005]] | - | - | [[UT-PLAN-001]] |
 | [[DD-UI-004]] | 詳細モーダル | [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-020]], [[RQ-FR-021]] | - | - | [[UT-PLAN-001]] |
 | [[DD-UI-005]] | 検索バー | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-UX-003]] | - | - | [[UT-PLAN-001]] |
-| [[DD-UI-006]] | 運用ステータス画面 | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-024]] | [[RQ-RDR-036]] | [[BD-ADR-021]] | [[AT-SCN-007]], [[UT-PLAN-001]] |
+| [[DD-UI-006]] | 運用ステータス画面 | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]] | [[RQ-RDR-036]] | [[BD-ADR-021]] | [[AT-SCN-007]], [[UT-PLAN-001]] |
+| [[DD-UI-007]] | 収集実行画面 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-008]] | [[RQ-GL-011|再収集]]設定画面 | [[RQ-FR-018]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-009]] | 配信前後確認・手動タグ付け画面 | [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-019]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-010]] | 配信反映ジョブ画面 | [[RQ-FR-005]], [[RQ-FR-024]], [[RQ-FR-025]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-011]] | 公開後運用・配信経路確認画面 | [[RQ-FR-024]], [[RQ-FR-025]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-012]] | SearchConditionPanel コンポーネント | [[RQ-FR-006]], [[RQ-FR-008]], [[RQ-UX-012]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-013]] | ArchiveList コンポーネント | [[RQ-FR-006]], [[RQ-FR-015]], [[RQ-UX-001]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-014]] | ArchiveDetailModal コンポーネント | [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-UX-006]], [[RQ-UX-007]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-015]] | HighlightWavePanel コンポーネント | [[RQ-FR-020]], [[RQ-UX-002]], [[RQ-UX-017]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-016]] | WordCloudPanel コンポーネント | [[RQ-FR-021]], [[RQ-UX-002]], [[RQ-UX-017]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-017]] | RunStatusScreen コンポーネント | [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-UX-017]] | - | - | [[UT-PLAN-001]] |
+| [[DD-UI-018]] | 管理画面共通操作コンポーネント | [[RQ-FR-016]], [[RQ-UX-017]] | - | - | [[UT-PLAN-001]] |
 <!-- END AUTO-GENERATED: DESIGN_VIEW -->
 
 ## テスト層トレース（自動生成）
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: TEST_LAYER_TRACE -->
-- generated_at: 2026-02-13
+- generated_at: 2026-02-14
 - judgment: 経路判定（max_depth=4、frontmatter+本文リンク）
 
 ### 要求 -> 受入テスト（AT）
@@ -363,19 +375,31 @@ tags:
 | [[DD-LOG-001]] | ログ設計 | [[UT-CASE-001]] | [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-SEC-001]] | PASS |
 | [[DD-LOG-002]] | インフラ監視ログ詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-PLAN-001]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
 | [[DD-MIG-001]] | DB移行方針 | [[UT-CASE-001]] | [[UT-PLAN-001]] | PASS |
-| [[DD-NET-001]] | ネットワーク詳細設計 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-SEC-001]] | PASS |
-| [[DD-OBS-001]] | インフラ監視詳細設計 | [[UT-CASE-001]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-PLAN-001]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
+| [[DD-NET-001]] | ネットワーク詳細設計 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
+| [[DD-OBS-001]] | インフラ監視詳細設計 | [[UT-CASE-001]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-PERF-001]] | 性能設計 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-REV-001]] | レビュー規約 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-SCALE-001]] | 拡張性詳細 | [[UT-CASE-001]], [[UT-CASE-003]] | [[UT-PLAN-001]] | PASS |
 | [[DD-SEC-001]] | セキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-SEC-002]] | インフラセキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-SEC-001]] | PASS |
-| [[DD-UI-001]] | UI詳細総論 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-001]] | UI詳細総論 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-UI-002]] | 一覧画面 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]], [[UT-PLAN-004]] | PASS |
 | [[DD-UI-003]] | フィルタドロワー | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
 | [[DD-UI-004]] | 詳細モーダル | [[UT-CASE-004]] | [[UT-PLAN-001]] | PASS |
 | [[DD-UI-005]] | 検索バー | [[UT-CASE-001]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
-| [[DD-UI-006]] | 運用ステータス画面 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-006]] | 運用ステータス画面 | [[UT-CASE-002]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-007]] | 収集実行画面 | [[UT-CASE-001]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-008]] | [[RQ-GL-011|再収集]]設定画面 | [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-009]] | 配信前後確認・手動タグ付け画面 | [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-010]] | 配信反映ジョブ画面 | [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-011]] | 公開後運用・配信経路確認画面 | [[UT-CASE-008]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-012]] | SearchConditionPanel コンポーネント | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-013]] | ArchiveList コンポーネント | [[UT-CASE-003]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-014]] | ArchiveDetailModal コンポーネント | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-015]] | HighlightWavePanel コンポーネント | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-016]] | WordCloudPanel コンポーネント | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-017]] | RunStatusScreen コンポーネント | [[UT-CASE-002]], [[UT-CASE-009]] | [[UT-PLAN-001]] | PASS |
+| [[DD-UI-018]] | 管理画面共通操作コンポーネント | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 <!-- END AUTO-GENERATED: TEST_LAYER_TRACE -->
 
 ## 変更履歴

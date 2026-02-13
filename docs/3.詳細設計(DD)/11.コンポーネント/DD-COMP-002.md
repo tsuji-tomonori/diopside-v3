@@ -3,11 +3,11 @@ id: DD-COMP-002
 title: 責務対応表
 doc_type: コンポーネント詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[DD-COMP-001]]'
@@ -17,6 +17,12 @@ related:
 - '[[RQ-FR-017]]'
 - '[[DD-UI-002]]'
 - '[[DD-UI-006]]'
+- '[[DD-UI-012]]'
+- '[[DD-UI-013]]'
+- '[[DD-UI-014]]'
+- '[[DD-UI-015]]'
+- '[[DD-UI-016]]'
+- '[[DD-UI-017]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -31,11 +37,11 @@ tags:
 ## 責務対応表
 | 要求/機能 | コンポーネント | 主責務 | 受入観点 |
 | --- | --- | --- | --- |
-| [[RQ-GL-014|検索条件]]入力 | `SearchConditionPanel` | 条件編集・確定イベント発火 | 条件変更時の再評価 |
-| 一覧表示 | `ArchiveList` | 一覧描画・[[RQ-GL-010|段階ロード]] | 追加読込、空結果表示 |
-| 詳細表示 | `ArchiveDetailModal` | 詳細表示・外部遷移 | モーダル復帰、遷移導線 |
-| 補助表示 | `HighlightWavePanel`/`WordCloudPanel` | 補助表示取得・再試行 | 失敗時の継続操作 |
-| 運用監視 | `RunStatusScreen` | 実行履歴・再実行 | 状態競合時の抑止 |
+| [[RQ-GL-014|検索条件]]入力 | [[DD-UI-012|SearchConditionPanel]] | 条件編集・確定イベント発火 | 条件変更時の再評価 |
+| 一覧表示 | [[DD-UI-013|ArchiveList]] | 一覧描画・[[RQ-GL-010|段階ロード]] | 追加読込、空結果表示 |
+| 詳細表示 | [[DD-UI-014|ArchiveDetailModal]] | 詳細表示・外部遷移 | モーダル復帰、遷移導線 |
+| 補助表示 | [[DD-UI-015|HighlightWavePanel]] / [[DD-UI-016|WordCloudPanel]] | 補助表示取得・再試行 | 失敗時の継続操作 |
+| 運用監視 | [[DD-UI-017|RunStatusScreen]] | 実行履歴・再実行 | 状態競合時の抑止 |
 
 ## 連携ルール
 - Feature外部へのイベント公開は `on*` 命名で統一する。
@@ -47,5 +53,6 @@ tags:
 - 出力: 要求と実装責務の対応表、連携イベント規則。
 
 ## 変更履歴
+- 2026-02-14: 画面コンポーネント名を `DD-UI-012`〜`DD-UI-017` へリンク化
 - 2026-02-11: 責務対応表と連携ルールを追加
 - 2026-02-10: 新規作成

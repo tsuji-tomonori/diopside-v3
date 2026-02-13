@@ -3,17 +3,23 @@ id: DD-ARCH-002
 title: Next.js App Router 実装ガイド
 doc_type: アーキテクチャ詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-ADR-024]]'
 - '[[BD-ARCH-001]]'
 related:
 - '[[DD-COMP-001]]'
 - '[[DD-UI-001]]'
+- '[[DD-UI-012]]'
+- '[[DD-UI-013]]'
+- '[[DD-UI-014]]'
+- '[[DD-UI-015]]'
+- '[[DD-UI-016]]'
+- '[[DD-UI-017]]'
 - '[[DD-CODE-001]]'
 - '[[RQ-DEV-001]]'
 - '[[RQ-PS-001]]'
@@ -249,10 +255,10 @@ const HighlightWavePanel = dynamic(
 | `app/page.tsx` | Server | データフェッチ、レイアウト |
 | `app/layout.tsx` | Server | 共通レイアウト |
 | `ArchiveCard` | Server | 静的表示のみ |
-| `SearchInput` | Client | 入力イベント |
-| `TagFilterPanel` | Client | チェックボックス操作 |
+| `SearchInput` | Client | 入力イベント（[[DD-UI-012|SearchConditionPanel]] 配下） |
+| `TagFilterPanel` | Client | チェックボックス操作（[[DD-UI-012|SearchConditionPanel]] 配下） |
 | `SortSelect` | Client | 選択イベント |
-| `HighlightWavePanel` | Client | Canvas描画、クリックイベント |
+| `HighlightWavePanel` | Client | Canvas描画、クリックイベント（[[DD-UI-015]]） |
 | `WordCloudImage` | Server | 画像表示のみ |
 | `Pagination` | Client | クリックイベント |
 | `Modal` | Client | 開閉状態管理 |
@@ -261,8 +267,15 @@ const HighlightWavePanel = dynamic(
 - [[BD-ADR-024]]: Next.js App Router 採用決定
 - [[DD-COMP-001]]: コンポーネント構成
 - [[DD-UI-001]]: UI詳細設計
+- [[DD-UI-012]]: SearchConditionPanel
+- [[DD-UI-013]]: ArchiveList
+- [[DD-UI-014]]: ArchiveDetailModal
+- [[DD-UI-015]]: HighlightWavePanel
+- [[DD-UI-016]]: WordCloudPanel
+- [[DD-UI-017]]: RunStatusScreen
 - [[DD-CODE-001]]: コーディング規約
 
 ## 変更履歴
+- 2026-02-14: 画面コンポーネントの参照リンク（`DD-UI-012`〜`DD-UI-017`）を追加
 - 2026-02-13: 設計別RTMの根拠追跡を補強するため、[[RQ-DEV-001]] / [[RQ-PS-001]] / [[RQ-SEC-001]] / [[RQ-UX-001]] を関連へ追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）
