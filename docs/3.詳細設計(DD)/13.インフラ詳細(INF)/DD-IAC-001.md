@@ -3,7 +3,7 @@ id: DD-IAC-001
 title: IaCモジュール設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -27,8 +27,10 @@ tags:
 
 ## ルール
 - 命名規則: `<domain>-<resource>-<env>`。
-- 変更は `plan` 出力をレビュー証跡として保存する。
+- IaC管理方式はCDKのみを採用し、Terraform定義を追加しない。
+- 変更は `cdk diff` 出力をレビュー証跡として保存する。
 
 ## 変更履歴
+- 2026-02-13: CDKオンリー方針と `cdk diff` 証跡ルールを追加
 - 2026-02-13: 設計別RTMの根拠追跡を補強するため、[[RQ-DEV-001]] を関連へ追加 [[BD-ADR-028]]
 - 2026-02-13: 新規作成

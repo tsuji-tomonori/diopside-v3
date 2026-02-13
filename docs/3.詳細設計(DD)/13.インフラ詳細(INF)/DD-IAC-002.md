@@ -3,7 +3,7 @@ id: DD-IAC-002
 title: IaC状態管理とドリフト検知
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -21,13 +21,13 @@ tags:
 ---
 
 ## 詳細仕様
-- state backendはロック有効で運用する。
+- CloudFormationスタック状態とCDK生成物（`cdk.out`）を状態管理の正本とする。
 - ドリフト検知は日次実行し、差分をチケット化する。
 
-## state backend設計
-- backend種別: S3 + DynamoDB lock（単一リージョン）。
-- state保存: SSE-KMS有効、バケットバージョニング有効、公開アクセス禁止。
-- lock timeout: 10分、強制解除は二重承認 + 実施記録を必須化。
+## 状態管理設計（CDK）
+- 生成管理: `cdk synth` で生成したテンプレートとcontext（`cdk.context.json`）を差分管理する。
+- 反映管理: `cdk deploy` は承認済み差分に対してのみ実行し、実行ログと変更セットを証跡化する。
+- 実行制御: 本番反映は承認済みパイプラインからのみ許可し、手動CLI直実行を禁止する。
 
 ## ドリフト検知SLA
 | レベル | 条件 | 対応SLA |
@@ -38,11 +38,12 @@ tags:
 
 ## 証跡
 - 日次検知結果は `reports/` 配下へ保存し、変更IDと紐付ける。
-- 未是正のドリフトがある場合、`apply` は禁止し `plan` のみ許可する。
+- 未是正のドリフトがある場合、`cdk deploy` は禁止し `cdk synth` / `cdk diff` のみ許可する。
 
 ## 運用条件
 - 手動変更検知時は即時是正またはIaC取り込みを実施する。
 
 ## 変更履歴
+- 2026-02-13: CDK状態管理（synth/diff/deploy証跡）へ更新し、`cdk deploy` 制御条件を追加
 - 2026-02-13: state backend構成、lock運用、ドリフト対応SLAを追加
 - 2026-02-13: 新規作成

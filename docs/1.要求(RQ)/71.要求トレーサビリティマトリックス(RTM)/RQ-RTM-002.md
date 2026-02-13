@@ -3,16 +3,17 @@ id: RQ-RTM-002
 title: 要求トレーサビリティ（設計別）
 doc_type: 要求トレーサビリティマトリックス
 phase: RQ
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-RTM-001]]'
 related:
 - '[[RQ-RDR-033]]'
 - '[[RQ-RDR-037]]'
+- '[[RQ-RDR-039]]'
 - '[[BD-ARCH-001]]'
 - '[[DD-API-001]]'
 - '[[DD-UI-002]]'
@@ -59,15 +60,15 @@ tags:
 | 設計ID | タイトル | 根拠要件(FR/NFR) | RDR | ADR | 検証(UT/IT/AT) |
 | --- | --- | --- | --- | --- | --- |
 | [[BD-ADR-001]] | 収集対象を公式+出演にする | - | [[RQ-RDR-001]], [[RQ-RDR-002]], [[RQ-RDR-003]], [[RQ-RDR-004]], [[RQ-RDR-005]], [[RQ-RDR-006]], [[RQ-RDR-007]], [[RQ-RDR-008]], [[RQ-RDR-009]] | - | - |
-| [[BD-ADR-002]] | 段階ロードJSONを採用する | - | [[RQ-RDR-001]] | - | - |
-| [[BD-ADR-003]] | タグ辞書分離を採用する | - | [[RQ-RDR-001]] | - | - |
+| [[BD-ADR-002]] | [[RQ-GL-010|段階ロード]]JSONを採用する | - | [[RQ-RDR-001]] | - | - |
+| [[BD-ADR-003]] | [[RQ-GL-005|タグ辞書]]分離を採用する | - | [[RQ-RDR-001]] | - | - |
 | [[BD-ADR-004]] | 静的配信+API起動バッチ（単一Backend API）構成を採用する | - | [[RQ-RDR-034]] | [[BD-ADR-004]], [[BD-ADR-021]] | - |
 | [[BD-ADR-005]] | 検索をフロントで実行する | - | [[RQ-RDR-001]] | - | - |
 | [[BD-ADR-006]] | 監視はSLO最小セットで開始する | - | [[RQ-RDR-001]] | - | - |
 | [[BD-ADR-007]] | リリースゲートをATで管理する | - | [[RQ-RDR-001]] | - | - |
-| [[BD-ADR-008]] | 運用再収集フローを標準化する | - | [[RQ-RDR-001]] | - | - |
-| [[BD-ADR-009]] | ワードクラウドは事前生成の静的画像配信を採用する | [[RQ-FR-021]], [[RQ-PRC-001]] | [[RQ-RDR-021]] | - | - |
-| [[BD-ADR-010]] | 詳細画面の見どころ導線はコメント密度波形を採用する | [[RQ-FR-020]], [[RQ-FR-022]] | [[RQ-RDR-020]] | - | - |
+| [[BD-ADR-008]] | 運用[[RQ-GL-011|再収集]]フローを標準化する | - | [[RQ-RDR-001]] | - | - |
+| [[BD-ADR-009]] | [[RQ-GL-017|ワードクラウド]]は事前生成の静的画像配信を採用する | [[RQ-FR-021]], [[RQ-PRC-001]] | [[RQ-RDR-021]] | - | - |
+| [[BD-ADR-010]] | 詳細画面の見どころ導線は[[RQ-GL-016|コメント密度波形]]を採用する | [[RQ-FR-020]], [[RQ-FR-022]] | [[RQ-RDR-020]] | - | - |
 | [[BD-ADR-011]] | TypeScript型安全をtsconfigとlintで標準化する | [[RQ-DEV-001]] | [[RQ-RDR-017]] | - | - |
 | [[BD-ADR-012]] | スキルメンテナンスを構成管理設計へ組み込む | [[RQ-DEV-001]] | [[RQ-RDR-024]] | - | - |
 | [[BD-ADR-013]] | ドキュメント公開はQuartz成果物をCDK経由で配信する | [[RQ-FR-024]] | [[RQ-RDR-025]] | [[BD-ADR-014]] | [[AT-REL-001]], [[AT-RUN-001]] |
@@ -129,13 +130,13 @@ tags:
 | [[BD-UI-004]] | アクセシビリティ方針 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-UX-017]] | [[RQ-RDR-021]] | [[BD-ADR-001]], [[BD-ADR-009]], [[BD-ADR-010]] | - |
 | [[DD-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | - | - | [[UT-PLAN-001]] |
 | [[DD-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001]] | [[RQ-RDR-034]] | [[BD-ADR-021]], [[BD-ADR-023]], [[BD-ADR-025]], [[BD-ADR-027]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
-| [[DD-API-002]] | 収集ジョブ起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]] | [[BD-ADR-021]], [[BD-ADR-027]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-003]] | 収集ジョブ状態API | [[RQ-FR-001]] | - | [[BD-ADR-021]], [[BD-ADR-027]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]] | [[BD-ADR-021]], [[BD-ADR-027]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[RQ-FR-001]] | - | [[BD-ADR-021]], [[BD-ADR-027]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-004]] | アーカイブ一覧API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-001]], [[IT-CASE-003]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-003]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-005]] | タグ辞書API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[AT-SCN-007]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-004]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[AT-SCN-007]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-004]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-006]] | 検索API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-005]], [[IT-PLAN-001]], [[UT-CASE-005]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-007]] | 動画詳細API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-003]], [[IT-CASE-006]], [[IT-PLAN-001]], [[UT-CASE-006]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-API-008]] | 再収集API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-005]], [[IT-CASE-007]], [[IT-CASE-012]], [[IT-PLAN-001]], [[UT-CASE-007]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-API-008]] | [[RQ-GL-011|再収集]]API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-005]], [[IT-CASE-007]], [[IT-CASE-012]], [[IT-PLAN-001]], [[UT-CASE-007]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-009]] | 運用診断API | [[RQ-FR-001]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-008]], [[IT-CASE-012]], [[IT-CASE-013]], [[IT-PLAN-001]], [[UT-CASE-008]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-API-010]] | API経路バージョニング詳細 | [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-026]] | [[BD-ADR-014]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-006]] |
 | [[DD-API-011]] | 収集結果明細API | [[RQ-FR-017]] | - | [[BD-ADR-021]] | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
@@ -208,11 +209,11 @@ tags:
 | [[RQ-DATA-001]] | データ要件 | [[AT-SCN-004]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001]] | DevOps要件 | [[AT-SCN-002]], [[AT-SCN-006]] | [[AT-GO-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-002]] | AIエージェント運用要件 | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-OPS-INF-001]] | PASS |
-| [[RQ-FR-001]] | 管理画面から公開動画収集ジョブを実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-001]] | 管理画面から公開動画[[RQ-GL-002|収集ジョブ]]を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-002]] | 管理画面で公式投稿の公開動画をチャンネルID一致で取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-003]] | 管理画面で出演条件一致の公開動画を判定して取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-004]] | 管理画面の収集結果として動画メタデータを正規化できる | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-005]] | タグ辞書を更新できる | [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-005]] | [[RQ-GL-005|タグ辞書]]を更新できる | [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-006]] | ページング済み索引を生成できる | [[AT-SCN-007]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-007]] | アーカイブ一覧を表示できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-008]] | キーワード検索できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
@@ -222,15 +223,15 @@ tags:
 | [[RQ-FR-012]] | 並び順を切り替えできる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-013]] | 動画詳細モーダルを表示できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-014]] | YouTube視聴ページへ遷移できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-015]] | 初回読み込みを高速化する段階ロードで漸進表示できる | [[AT-SCN-002]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-015]] | 初回読み込みを高速化する[[RQ-GL-010|段階ロード]]で漸進表示できる | [[AT-SCN-002]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-016]] | 管理画面で読み込み失敗を通知できる | [[AT-SCN-002]], [[AT-SCN-007]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-017]] | 管理画面で収集実行結果を確認できる | [[AT-SCN-005]], [[AT-SCN-007]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-018]] | 管理画面で手動再収集を実行できる | [[AT-SCN-005]], [[AT-SCN-007]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-018]] | 管理画面で手動[[RQ-GL-011|再収集]]を実行できる | [[AT-SCN-005]], [[AT-SCN-007]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-019]] | 管理画面で配信前後のメタデータ再取得と差分確認を運用できる | [[AT-SCN-007]] | [[AT-PLAN-001]] | PASS |
-| [[RQ-FR-020]] | 詳細画面でコメント密度波形を表示し盛り上がり区間へ遷移できる | [[AT-SCN-003]] | [[AT-PLAN-001]] | PASS |
-| [[RQ-FR-021]] | 動画詳細でワードクラウドを表示できる | [[AT-SCN-003]] | [[AT-PLAN-001]] | PASS |
-| [[RQ-FR-022]] | コメント密度波形表示用データを生成できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-023]] | ワードクラウド表示用画像を生成できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-020]] | 詳細画面で[[RQ-GL-016|コメント密度波形]]を表示し[[RQ-GL-015|盛り上がり区間]]へ遷移できる | [[AT-SCN-003]] | [[AT-PLAN-001]] | PASS |
+| [[RQ-FR-021]] | 動画詳細で[[RQ-GL-017|ワードクラウド]]を表示できる | [[AT-SCN-003]] | [[AT-PLAN-001]] | PASS |
+| [[RQ-FR-022]] | [[RQ-GL-016|コメント密度波形]]表示用データを生成できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-023]] | [[RQ-GL-017|ワードクラウド]]表示用画像を生成できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-024]] | 管理画面でドキュメント公開を一括実行できる | [[AT-SCN-007]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-REL-001]] | PASS |
 | [[RQ-FR-025]] | 管理画面運用の前提として単一CloudFrontで配信経路をパス分岐できる | [[AT-SCN-006]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-INT-001]] | 相互運用性要件 | [[AT-SCN-004]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
@@ -313,13 +314,13 @@ tags:
 | --- | --- | --- | --- | --- |
 | [[DD-ALG-001]] | 検索アルゴリズム | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
 | [[DD-API-001]] | API詳細総論 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
-| [[DD-API-002]] | 収集ジョブ起動API | [[UT-CASE-001]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
-| [[DD-API-003]] | 収集ジョブ状態API | [[UT-CASE-002]], [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
+| [[DD-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[UT-CASE-001]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
+| [[DD-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[UT-CASE-002]], [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-API-004]] | アーカイブ一覧API | [[UT-CASE-003]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
-| [[DD-API-005]] | タグ辞書API | [[UT-CASE-004]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
+| [[DD-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[UT-CASE-004]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-API-006]] | 検索API | [[UT-CASE-005]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-API-007]] | 動画詳細API | [[UT-CASE-006]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
-| [[DD-API-008]] | 再収集API | [[UT-CASE-007]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
+| [[DD-API-008]] | [[RQ-GL-011|再収集]]API | [[UT-CASE-007]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-API-009]] | 運用診断API | [[UT-CASE-008]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-API-010]] | API経路バージョニング詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-API-011]] | 収集結果明細API | [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
@@ -378,6 +379,7 @@ tags:
 <!-- END AUTO-GENERATED: TEST_LAYER_TRACE -->
 
 ## 変更履歴
+- 2026-02-13: CDKオンリー運用（`cdk synth/diff/deploy`）へ更新したINF系設計の追跡を反映 [[RQ-RDR-039]]
 - 2026-02-11: UT/IT/ATトレース表の経路判定（max_depth=4）自動生成ブロックを追加 [[RQ-RDR-037]]
 - 2026-02-11: DD-APIのFR対応を再マッピングし、[[DD-API-011]]〜[[DD-API-015]]を追加 [[RQ-RDR-034]]
 - 2026-02-11: `task docs:trace` による設計別静的ビューの自動生成ブロックを追加 [[RQ-RDR-033]]

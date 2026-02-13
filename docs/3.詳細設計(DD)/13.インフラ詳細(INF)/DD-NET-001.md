@@ -3,7 +3,7 @@ id: DD-NET-001
 title: ネットワーク詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -40,12 +40,13 @@ tags:
 - TLS: 受信面は TLS 1.2 以上を必須とし、`TLS1.0/1.1` を無効化する。
 
 ## 変更管理
-- ネットワーク変更は `plan` 差分で `route/security-group/nacl` の3点をレビュー必須とする。
+- ネットワーク変更は `cdk diff` 差分で `route/security-group/nacl` の3点をレビュー必須とする。
 - CIDR変更は破壊的変更として扱い、[[DD-CICD-INF-001]] の二重承認フローを適用する。
 
 ## 検証要件
 - 許可経路/拒否経路の到達性テストを自動実行する。
 
 ## 変更履歴
+- 2026-02-13: ネットワーク変更レビュー基準を `cdk diff` 差分へ統一
 - 2026-02-13: CIDR/サブネット/SG/NACL/egress/TLS最小要件を具体化
 - 2026-02-13: 新規作成

@@ -3,7 +3,7 @@ id: DD-COST-001
 title: コスト運用詳細
 doc_type: コスト運用詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -36,7 +36,7 @@ tags:
 | `Environment` | 必須 | 環境区分 | `Production` / `Staging` / `Development` / `Test` | 列挙固定 |
 | `Owner` | 必須 | 問い合わせ先 | チーム識別子（例: `platform-team`） | 個人名を避ける |
 | `Project` | 必須 | プロダクト集約 | `diopside` | プロダクト単位 |
-| `ManagedBy` | 必須 | 管理方式 | `Terraform` / `CDK` / `Manual` | 変更統制 |
+| `ManagedBy` | 必須 | 管理方式 | `CDK` / `Manual` | 変更統制 |
 
 ## 強制レイヤ
 - IaC:
@@ -120,6 +120,7 @@ flowchart TD
   - 月次コスト配賦レポートと是正記録（[[AT-OPS-001]]）
 
 ## 変更履歴
+- 2026-02-13: `ManagedBy` の許容値をCDKオンリー方針へ更新（`CDK`/`Manual`）
 - 2026-02-13: コスト超過検知アルゴリズム（検知閾値/予測算出/抑制施策優先順位/アラートレベル）を追加
 - 2026-02-13: [[DD-AV-001]]/[[BD-MON-001]]との相互参照を追加
 - 2026-02-11: 単一アカウント向けタグ統制（IaC/IAM/Config/Billing運用）を追加

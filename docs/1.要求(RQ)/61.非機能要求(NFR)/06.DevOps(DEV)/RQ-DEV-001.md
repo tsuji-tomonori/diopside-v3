@@ -3,11 +3,11 @@ id: RQ-DEV-001
 title: DevOps要件
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -16,6 +16,7 @@ related:
 - '[[RQ-RDR-025]]'
 - '[[RQ-RDR-026]]'
 - '[[RQ-RDR-029]]'
+- '[[RQ-RDR-039]]'
 - '[[RQ-DEV-002]]'
 - '[[RQ-PC-009]]'
 - '[[BD-BUILD-001]]'
@@ -40,6 +41,8 @@ tags:
   - AIエージェント運用を含む変更では、[[RQ-DEV-002]] の受入基準（役割分離・最小権限・実行上限）を満たす。
   - 文書運用規約を変更したリリース候補では、対象 `doc-*` スキルと `skill-maintainer` / `docops-orchestrator` の同期更新が同一変更で実施されている。
   - CDKを含む変更では `cdk synth` が副作用なく再現可能であり、`cdk.context.json` が差分管理されている。
+  - インフラIaCの管理方式はCDKのみを許可し、Terraformを含む別方式を採用しない。
+  - インフラ変更は `cdk synth -> cdk diff -> approve -> cdk deploy -> verify` の順で実行し、各フェーズの証跡を保持する。
   - CDKの構成は「Construct中心 + Stack配線」に従い、Construct/Stack内部で `process.env` を直接参照しない。
   - statefulリソースを含む変更では、論理IDの変更有無をレビューで確認し、意図しない置換が発生しない。
   - スキル更新を含む変更では、`reports/impact_check_YYYY-MM-DD.md` と `reports/doc_check.md` が同一変更で更新され、`broken_links: 0` を満たす。
@@ -60,6 +63,7 @@ tags:
   - [[BD-BUILD-001]]
 
 ## 変更履歴
+- 2026-02-13: CDKオンリー方針と標準反映フロー（`cdk synth/diff/deploy`）を受入基準へ追加 [[RQ-RDR-039]]
 - 2026-02-11: `RQ-DEV-002` 参照を追加し、AIエージェント運用要件との束ねを明確化 [[RQ-RDR-029]]
 - 2026-02-11: CDK運用受入基準（synth決定性、context固定、props注入、stateful置換防止）を追加 [[RQ-RDR-025]]
 - 2026-02-11: 単一CloudFrontパス分岐運用（`/web` `/docs` `/openapi` `/api/v1`）の品質ゲートを追加 [[RQ-RDR-026]]

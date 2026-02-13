@@ -3,7 +3,7 @@ id: BD-DEP-005
 title: インフラデプロイ設計（配信境界）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -44,6 +44,7 @@ tags:
 
 ## 実行方針
 - 標準入口は `task docs:deploy` を維持し、内部で領域別タスクへ分岐する。
+- インフラ反映は `cdk diff` で差分確認後に `cdk deploy` する順序を必須化する。
 - CloudFront behavior順序は `/api/*` -> `/openapi/*` -> `/docs/*` -> `/web/*` -> `/*` を固定する。
 - invalidationは経路別（`/docs/*` `/web/*` `/openapi/*`）で実施し、`/*` は緊急時のみ許可する。
 
@@ -69,10 +70,11 @@ tags:
 
 ## 品質ゲート
 - 配備前に `docs:guard` を通過し、リンク・参照不整合を解消する。
-- infra配備は `lint` / `test` / `cdk synth` / `cdk-nag` を通過条件とする。
+- infra配備は `lint` / `test` / `cdk synth` / `cdk diff` / `cdk-nag` を通過条件とする。
 - 配備後は `/docs/` `/web/` `/openapi/` `/api/v1/health` の到達を確認する。
 
 ## 変更履歴
+- 2026-02-13: CDK反映順序（`cdk diff` 先行、`cdk deploy` 後続）と品質ゲートを追加 [[BD-ADR-028]]
 - 2026-02-13: 管理対象AWSサービス基準（サービス単位の個数/構築理由/導入段階/除外ルール）へ表記を統一 [[BD-ADR-028]]
 - 2026-02-13: INF変更フローとの正本境界（承認統制は[[BD-INF-007]]正本）を明確化 [[BD-ADR-028]]
 - 2026-02-11: AWSリソース一覧（個数/構築理由/根拠文書）を追加 [[BD-ADR-014]]

@@ -3,7 +3,7 @@ id: DD-IAM-001
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -27,7 +27,7 @@ tags:
 ## ロール定義
 | ロール | 主体 | 主権限 | 制約 |
 |---|---|---|---|
-| `infra-deploy-role` | CI/CD | IaC `plan/apply`、CloudFront invalidation | 本番は手動承認後のみ `apply` 可 |
+| `infra-deploy-role` | CI/CD | IaC `cdk synth/diff/deploy`、CloudFront invalidation | 本番は手動承認後のみ `cdk deploy` 可 |
 | `infra-readonly-role` | 運用監視 | CloudWatch/Config/CloudTrail参照 | 書き込み権限禁止 |
 | `breakglass-admin-role` | 障害一次対応 | 期間限定の管理操作 | 60分で自動失効、二重承認必須 |
 
@@ -49,5 +49,6 @@ tags:
 - 主要操作は監査ログへ `actor`, `role`, `resource`, `result` を記録する。
 
 ## 変更履歴
+- 2026-02-13: `infra-deploy-role` の主権限をCDK標準操作（synth/diff/deploy）へ更新
 - 2026-02-13: ロール一覧・権限境界・Secrets/KMS運用・特権昇格条件を具体化
 - 2026-02-13: 新規作成
