@@ -3,11 +3,11 @@ id: DD-API-009
 title: 運用診断API
 doc_type: API詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-002]]'
@@ -57,15 +57,18 @@ tags:
 3. 最重度チェックを全体 `status` として返す。
 
 ## エラーマッピング
-- `DIAGNOSTICS_SOURCE_UNAVAILABLE`: 503
-- `UNAUTHORIZED`: 401
-- `INTERNAL_ERROR`: 500
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `UNAUTHORIZED` | 401 | JWTが未指定または無効で診断情報を参照できない。 |
+| `DIAGNOSTICS_SOURCE_UNAVAILABLE` | 503 | 診断元データ（run集計/配信監視値）の取得に失敗し判定不能。 |
+| `INTERNAL_ERROR` | 500 | サーバ内部例外により診断結果生成が中断した。 |
 
 ## 受入観点
 - 管理者が単一画面で「収集停止」と「配信劣化」を識別できること。
 - `AT-SCN-005` の障害対応シナリオで判定APIの結果を利用できること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: `/api/v1` 統一と診断API処理ロジック/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成
 - 2026-02-10: 運用診断APIの健全性指標と異常判定基準を追加

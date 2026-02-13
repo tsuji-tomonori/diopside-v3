@@ -3,11 +3,11 @@ id: DD-API-012
 title: 配信前後再確認API
 doc_type: API詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-API-002]]'
 - '[[RQ-FR-019]]'
@@ -54,15 +54,19 @@ tags:
 - `queued -> running -> succeeded|failed|partial`
 
 ## エラーマッピング
-- `INVALID_RECHECK_MODE`, `INVALID_TARGET_VIDEOS`: 400
-- `RECHECK_RUN_NOT_FOUND`: 404
-- `RECHECK_SOURCE_UNAVAILABLE`: 503
-- `UNAUTHORIZED`: 401
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `INVALID_RECHECK_MODE` | 400 | `mode` が許可値（`before_delivery`/`after_delivery`）に一致しない。 |
+| `INVALID_TARGET_VIDEOS` | 400 | `targetVideoIds[]` が空・重複過多・形式不正で受付条件を満たさない。 |
+| `UNAUTHORIZED` | 401 | JWTが未指定または無効で再確認runを操作できない。 |
+| `RECHECK_RUN_NOT_FOUND` | 404 | 指定 `recheckRunId` が存在せず結果を取得できない。 |
+| `RECHECK_SOURCE_UNAVAILABLE` | 503 | 比較元メタデータを取得できず差分判定を実行できない。 |
 
 ## 受入観点
 - 差分あり/差分なし/失敗が同一runで識別できること。
 - 差分なしでも `unchanged` として記録されること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: 再確認ジョブの実行登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: 新規作成 [[BD-ADR-021]]

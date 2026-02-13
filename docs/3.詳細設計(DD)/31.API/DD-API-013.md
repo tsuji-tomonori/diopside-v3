@@ -3,11 +3,11 @@ id: DD-API-013
 title: タグ管理API
 doc_type: API詳細
 phase: DD
-version: 1.1.0
+version: 1.1.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-API-002]]'
 - '[[RQ-FR-005]]'
@@ -96,12 +96,22 @@ tags:
 - `nextAction`: `publish_required | no_change`
 
 ## エラーマッピング
-- `TAG_NOT_FOUND`, `VIDEO_NOT_FOUND`: 404
-- `TAG_SLUG_CONFLICT`, `TAG_CONFLICT`: 409
-- `INVALID_TAG_INPUT`, `INVALID_TAG_OPERATION`: 400
-- `INVALID_IMPORT_SCHEMA`, `INVALID_IMPORT_PAYLOAD`, `INVALID_IMPORT_ITEM`: 400
-- `UNKNOWN_VIDEO_ID`, `UNKNOWN_TAG_ID`, `INACTIVE_TAG_ID`: 422
-- `UNAUTHORIZED`, `FORBIDDEN`: 401/403
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `INVALID_TAG_INPUT` | 400 | タグ作成/更新入力が必須項目・型・文字種制約を満たさない。 |
+| `INVALID_TAG_OPERATION` | 400 | `set/unset` 同時指定など、許可されないタグ操作を検知した。 |
+| `INVALID_IMPORT_SCHEMA` | 400 | `schemaVersion` が未対応で取込契約として受理できない。 |
+| `INVALID_IMPORT_PAYLOAD` | 400 | 取込リクエスト全体の構造が契約に一致しない。 |
+| `INVALID_IMPORT_ITEM` | 400 | `items[]` の個別要素が必須キー・型・重複制約を満たさない。 |
+| `UNAUTHORIZED` | 401 | JWTが未指定または無効で管理APIを実行できない。 |
+| `FORBIDDEN` | 403 | 認証は成立したが管理者権限が不足している。 |
+| `TAG_NOT_FOUND` | 404 | 指定 `tagId` が存在せず更新対象を解決できない。 |
+| `VIDEO_NOT_FOUND` | 404 | 指定 `videoId` が存在せず手動タグ付け対象を解決できない。 |
+| `TAG_SLUG_CONFLICT` | 409 | 正規化後slugが既存タグと衝突した。 |
+| `TAG_CONFLICT` | 409 | タグ更新時に同時更新競合や整合制約違反を検知した。 |
+| `UNKNOWN_VIDEO_ID` | 422 | 取込データ内の `videoId` が業務データとして未登録。 |
+| `UNKNOWN_TAG_ID` | 422 | 取込データ内の `tagId` が業務データとして未登録。 |
+| `INACTIVE_TAG_ID` | 422 | 取込対象 `tagId` が無効化済みで付与対象にできない。 |
 
 ## 受入観点
 - タグ作成/更新/無効化がDB正本へ反映されること。
@@ -111,5 +121,6 @@ tags:
 - 反映後に `nextAction=publish_required` を返し、`tag_master.json` と `archive_index.pN.json` 更新導線へ接続できること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: LLM支援タグ運用の提案入力API/JSON取込APIと契約検証を追加
 - 2026-02-11: 新規作成 [[BD-ADR-021]]

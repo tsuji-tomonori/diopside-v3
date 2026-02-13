@@ -3,11 +3,11 @@ id: DD-API-008
 title: 再収集API
 doc_type: API詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-002]]'
@@ -52,10 +52,13 @@ tags:
 6. 監査ログに `operator/reason/scope` を記録し応答する。
 
 ## エラーマッピング
-- `RUN_NOT_FOUND`: 404
-- `RUN_NOT_RETRYABLE`: 409
-- `RETRY_LIMIT_EXCEEDED`: 409
-- `INVALID_RETRY_SCOPE`, `INVALID_RETRY_RANGE`: 400
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `INVALID_RETRY_SCOPE` | 400 | `scope` が許可値（`full`/`failedOnly`/`range`）に一致しない。 |
+| `INVALID_RETRY_RANGE` | 400 | `scope=range` 時の期間指定が不正（欠落・逆転・形式不正）。 |
+| `RUN_NOT_FOUND` | 404 | 指定 `runId` が存在せず[[RQ-GL-011|再収集]]元を解決できない。 |
+| `RUN_NOT_RETRYABLE` | 409 | 元runが再実行不可状態（未完了/取消済み等）で受付できない。 |
+| `RETRY_LIMIT_EXCEEDED` | 409 | 同一 `runId` の再実行回数上限（3回）を超過した。 |
 
 ## 監査要件
 - 再実行は必ず実行者と理由を記録する。
@@ -66,6 +69,7 @@ tags:
 - 上限超過時に明確な拒否理由が返ること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: `/api/v1` 統一と[[RQ-GL-011|再収集]]処理ロジック/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成
 - 2026-02-10: [[RQ-GL-011|再収集]]ポリシー、監査要件、入出力契約を追加

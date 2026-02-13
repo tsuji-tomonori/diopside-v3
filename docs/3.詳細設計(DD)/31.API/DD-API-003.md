@@ -3,11 +3,11 @@ id: DD-API-003
 title: 収集ジョブ状態API
 doc_type: API詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-002]]'
@@ -55,10 +55,12 @@ tags:
 6. 応答時に `traceId` と `retryable` を付与する。
 
 ## エラーマッピング
-- `RUN_NOT_FOUND`: 404
-- `RUN_STATE_UNAVAILABLE`: 503
-- `UNAUTHORIZED`: 401
-- `INTERNAL_ERROR`: 500
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `UNAUTHORIZED` | 401 | JWTが未指定または無効でrun状態を照会できない。 |
+| `RUN_NOT_FOUND` | 404 | 指定 `runId` が存在せず、状態を返せない。 |
+| `RUN_STATE_UNAVAILABLE` | 503 | runストアまたは進捗集計基盤の一時障害で状態を算出できない。 |
+| `INTERNAL_ERROR` | 500 | サーバ内部例外により状態取得処理が中断した。 |
 
 ## エラーモデル
 - `RUN_NOT_FOUND`
@@ -69,6 +71,7 @@ tags:
 - 失敗時は`errorSummary`と`traceId`で障害調査へ遷移できること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-13: run状態語彙を `queued/running/succeeded/failed/partial/cancelled` に統一 [[BD-ADR-027]]
 - 2026-02-11: `/api/v1` 統一と処理ロジック/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成

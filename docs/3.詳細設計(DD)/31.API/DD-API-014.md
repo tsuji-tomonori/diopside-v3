@@ -3,11 +3,11 @@ id: DD-API-014
 title: ドキュメント公開実行API
 doc_type: API詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-API-002]]'
 - '[[RQ-FR-024]]'
@@ -70,16 +70,21 @@ tags:
 - `publish_steps.status`: `queued|running|succeeded|failed|skipped` を維持し、ロールバックstepにも同一適用する。
 
 ## エラーマッピング
-- `PUBLISH_ALREADY_ACTIVE`: 409
-- `INVALID_TARGET_REF`: 400
-- `DOCS_PUBLISH_RUN_NOT_FOUND`: 404
-- `DOCS_BUILD_FAILED`, `DOCS_DEPLOY_FAILED`, `INVALIDATION_FAILED`: 500
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `INVALID_TARGET_REF` | 400 | 指定 `targetRef` が存在しない、または解決不能なgit参照。 |
+| `DOCS_PUBLISH_RUN_NOT_FOUND` | 404 | 指定 `docsPublishRunId` が存在せず進捗照会できない。 |
+| `PUBLISH_ALREADY_ACTIVE` | 409 | 既存のドキュメント公開runが進行中で重複起動を拒否した。 |
+| `DOCS_BUILD_FAILED` | 500 | `docs_link_check` または `quartz_build` で失敗し成果物を確定できない。 |
+| `DOCS_DEPLOY_FAILED` | 500 | `cdk_deploy` で失敗し公開先切替を完了できない。 |
+| `INVALIDATION_FAILED` | 500 | `invalidation` 失敗により配信面への反映保証を満たせない。 |
 
 ## 受入観点
 - 単一操作でrunが作成され、ステップごとの進捗が確認できること。
 - ビルド失敗時にデプロイへ進まず、失敗理由を返せること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-13: docs公開部分失敗時のロールバック状態遷移と `publish_runs/publish_steps` 拡張状態を追加 [[BD-ADR-027]]
 - 2026-02-11: 公開ジョブの実行登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: 新規作成 [[BD-ADR-021]]

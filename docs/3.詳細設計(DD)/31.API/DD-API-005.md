@@ -3,11 +3,11 @@ id: DD-API-005
 title: タグ辞書API
 doc_type: API詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-001]]'
@@ -73,10 +73,14 @@ tags:
 4. 失敗時は直前公開版を維持して `failed` を返す。
 
 ## エラーマッピング
-- `TAG_NOT_FOUND`: 404
-- `TAG_SLUG_CONFLICT`, `TAG_ID_REUSED`: 409
-- `INVALID_TAG_PAYLOAD`: 400
-- `PUBLISH_GENERATION_FAILED`, `PUBLISH_SWITCH_FAILED`: 500
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `INVALID_TAG_PAYLOAD` | 400 | タグ作成/更新入力が必須項目・型・文字種制約を満たさない。 |
+| `TAG_NOT_FOUND` | 404 | 指定 `tagId` が存在せず更新対象を特定できない。 |
+| `TAG_SLUG_CONFLICT` | 409 | 正規化後slugが既存タグと重複し、一意性制約に抵触した。 |
+| `TAG_ID_REUSED` | 409 | 廃止済みまたは既存のタグ識別子再利用を検知し拒否した。 |
+| `PUBLISH_GENERATION_FAILED` | 500 | `tag_master.json` 生成または整合検証に失敗した。 |
+| `PUBLISH_SWITCH_FAILED` | 500 | 生成済み成果物の公開切替処理に失敗し、前版維持となった。 |
 
 ## エラーハンドリング
 - 取得失敗時は`bootstrap.tagPreview`をフォールバック辞書として使用する。
@@ -87,6 +91,7 @@ tags:
 - 廃止タグが一覧で識別可能であること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: `tag_master.json` 契約の JSON Schema 正本参照と可変長タプル検証方針を追加 [[BD-ADR-021]]
 - 2026-02-11: タグ新規作成APIと管理API処理ロジック/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-11: 管理API（タグ更新/公開反映）と公開切替ルールを追加 [[BD-ADR-021]]

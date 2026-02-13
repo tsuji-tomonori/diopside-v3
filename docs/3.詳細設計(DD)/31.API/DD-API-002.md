@@ -3,11 +3,11 @@ id: DD-API-002
 title: 収集ジョブ起動API
 doc_type: API詳細
 phase: DD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-002]]'
@@ -83,15 +83,20 @@ tags:
 - 終了時: `succeeded|failed|partial|cancelled`
 
 ## エラーマッピング
-- `INVALID_TARGET`, `INVALID_TIMESTAMP`, `INVALID_TRIGGER_MODE`, `INVALID_RUN_KIND`: 400
-- `RUN_ALREADY_ACTIVE`: 409
-- `UNAUTHORIZED`: 401
-- `INTERNAL_ERROR`: 500
-- `UPSTREAM_QUOTA_LIMIT`: 429
-- `UPSTREAM_RATE_LIMIT`: 429
-- `UPSTREAM_TIMEOUT`: 503
-- `UPSTREAM_INVALID_RESPONSE`: 502
-- `MISSING_IDEMPOTENCY_KEY`: 400
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `INVALID_TARGET` | 400 | `targetTypes` が空、または許可外値を含み、収集対象を解決できない。 |
+| `INVALID_TIMESTAMP` | 400 | `fromPublishedAt` がISO8601として解釈できない。 |
+| `INVALID_TRIGGER_MODE` | 400 | `triggerMode` が許可値（`manual`/`scheduled`）に一致しない。 |
+| `INVALID_RUN_KIND` | 400 | `runKind` が許可値（`official_ingestion`/`appearance_supplement`/`incremental_update`）に一致しない。 |
+| `MISSING_IDEMPOTENCY_KEY` | 400 | 更新系リクエストに必須の `Idempotency-Key` が未指定。 |
+| `UNAUTHORIZED` | 401 | JWTが未指定または無効で、実行要求を受理できない。 |
+| `RUN_ALREADY_ACTIVE` | 409 | 同種の収集runが進行中で、重複起動を拒否した。 |
+| `UPSTREAM_QUOTA_LIMIT` | 429 | 上流APIの日次クォータ枯渇により処理継続できない。 |
+| `UPSTREAM_RATE_LIMIT` | 429 | 上流APIの短期レート制限に到達し、一時的に受付を抑制した。 |
+| `UPSTREAM_INVALID_RESPONSE` | 502 | 上流API応答が契約不一致で、処理結果を確定できない。 |
+| `UPSTREAM_TIMEOUT` | 503 | 上流API応答待ちがタイムアウトし、一時的障害として扱う。 |
+| `INTERNAL_ERROR` | 500 | サーバ内部例外によりrun登録または応答生成に失敗した。 |
 
 ## 上流API障害時の判定表
 | 条件 | 応答/状態 | 再試行 | 備考 |
@@ -115,6 +120,7 @@ tags:
 - 重複起動時に 409 応答となり、既存runの状態確認へ誘導できること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-13: `triggerMode`（manual/scheduled）と `runKind`（official/appearance/incremental）へ実行種別を分離し、BD-API-002と語彙統一 [[BD-ADR-027]]
 - 2026-02-13: バッチ入力スキーマ、上流APIクォータ/レート制御、DynamoDB TTLによる冪等性保存を追加 [[BD-ADR-027]]
 - 2026-02-11: 実行要求の登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]

@@ -3,11 +3,11 @@ id: DD-API-015
 title: 配信反映ジョブ状態API
 doc_type: API詳細
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-API-002]]'
 - '[[RQ-FR-005]]'
@@ -47,14 +47,17 @@ tags:
 - `queued -> running -> succeeded|failed|rolled_back`
 
 ## エラーマッピング
-- `PUBLISH_RUN_NOT_FOUND`: 404
-- `PUBLISH_STATE_UNAVAILABLE`: 503
-- `UNAUTHORIZED`: 401
-- `INTERNAL_ERROR`: 500
+| エラーコード | HTTPステータス | 意味 |
+| --- | --- | --- |
+| `UNAUTHORIZED` | 401 | JWTが未指定または無効で公開run状態を参照できない。 |
+| `PUBLISH_RUN_NOT_FOUND` | 404 | 指定 `publishRunId` が存在せず進捗情報を返せない。 |
+| `PUBLISH_STATE_UNAVAILABLE` | 503 | 公開runストアまたはステップ集約基盤が一時利用不可で状態判定できない。 |
+| `INTERNAL_ERROR` | 500 | サーバ内部例外により公開状態取得処理が失敗した。 |
 
 ## 受入観点
 - UI-A06で `queued/running/succeeded/failed/rolled_back` を判別できること。
 - 失敗時にロールバック有無と再試行可否を確認できること。
 
 ## 変更履歴
+- 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: 新規作成 [[BD-ADR-021]]
