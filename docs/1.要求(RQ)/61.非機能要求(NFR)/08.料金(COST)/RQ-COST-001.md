@@ -3,11 +3,11 @@ id: RQ-COST-001
 title: コスト要件
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -35,7 +35,7 @@ tags:
   - AWS月額実績コストは 3,000円以下を維持する。
   - 月中時点で予測コストが 2,700円（上限の90%）を超えた場合、48時間以内に抑制施策を適用する。
   - 全対象リソースに `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` の必須タグが付与され、日次監査で付与率 100% を維持する。
-  - `Environment` は `Production` / `Staging` / `Development` / `Test` の列挙値のみを許可し、表記ゆれ（例: `production`）を許容しない。
+  - `Environment` は `Production` / `Development` の列挙値のみを許可し、表記ゆれ（例: `production`）を許容しない。
   - コスト配分に使用するタグキーは請求コンソールで有効化し、有効化遅延（最大48時間）を考慮した月次集計手順を維持する。
   - 抑制施策（収集頻度低減、キャッシュ期間延長、保持期間短縮）の適用記録を残す。
   - 月次コスト実績と予測差分を [[AT-OPS-001]] に記録する。
@@ -51,6 +51,7 @@ tags:
   - [[DD-COST-001]]
 
 ## 変更履歴
+- 2026-02-14: 環境運用を `dev/prod` へ統一した方針に合わせ、`Environment` 列挙値を2値へ更新 [[RQ-RDR-027]]
 - 2026-02-11: AWSタグ統制（必須タグ/列挙値/有効化遅延考慮）を受入基準へ追加 [[RQ-RDR-027]]
 - 2026-02-10: 新規作成 [[RQ-RDR-017]]
 - 2026-02-11: 月額上限/予兆閾値/抑制SLAの受入閾値を追加し、テンプレート記述を具体化 [[RQ-RDR-017]]
