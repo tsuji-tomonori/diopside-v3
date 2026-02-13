@@ -58,6 +58,11 @@
     - 自動補正スクリプト追加: `.opencode/skills/obsidian-doc-check/scripts/fix_mermaid_blocks.py`
     - 運用導線追加: `Taskfile.yaml` に `docs:mermaid:fix` / `docs:mermaid:fix:changed` を追加し、`docs:guard` 前段へ組込み
     - コミット前自動実行: `.pre-commit-config.yaml` に `obsidian-fix-mermaid` フックを追加
+  - 追加実施（2026-02-13: INF詳細の設定値・根拠整理）:
+    - BD責務整理: `BD-INF-003` を境界方針の正本へ再整理し、CIDR等の具体値正本を `DD-NET-001` へ集約
+    - VPC詳細化: `DD-NET-001` を章分割（VPC/Subnet, Route, SG/NACL, VPC Endpoint）し、環境別CIDR具体値（`10.20/10.21/10.22`）を確定
+    - IaC詳細化: `DD-IAC-001`, `DD-IAC-002` にリソース別設定責務とドリフト是正フロー（P1/P2/P3）を追加
+    - DR/監視詳細化: `DD-DR-001`, `DD-OBS-001` にリソース別設定値・目標値・通知条件の根拠を追加
   - 追加実施（2026-02-13: CDKオンリー要求同期）:
     - 要求更新: `RQ-DEV-001` にCDKオンリー方針（Terraform不採用）と標準反映フロー（`cdk synth/diff/deploy`）を追記
     - 要求決定更新: `RQ-RDR-039` にCDKオンリー決定を追記
@@ -85,6 +90,8 @@
 - 追跡整合（2026-02-13追補）: 要求文書へ直接検証リンクを追加し、RTM要求別ビューの検証欠落を縮小した。
 - 設計整合（2026-02-13追補）: インフラ変更フローをCDKオンリー（`cdk synth -> cdk diff -> approve -> cdk deploy -> verify`）へ統一し、運用・試験・コスト統制の語彙不整合を解消した。
 - 図表整合（2026-02-13追補）: Mermaidで経路ラベルを非引用で記述した場合のパース失敗を検知・自動補正する運用を追加し、`docs:guard` と pre-commit の双方で再発防止可能にした。
+- 設計整合（2026-02-13追補）: ネットワークをBD方針とDD実装値に責務分離し、VPC具体CIDR・ルート・通信制御・Endpointをリソース単位で根拠付き管理へ統一した。
+- 設計具体化（2026-02-13追補）: IaC/DR/監視設計を章分割し、設定値・運用判定・是正条件を文書上で即時参照できる粒度へ更新した。
 - 要求追跡整合（2026-02-13追補）: `RQ-DEV-001`/`RQ-RDR-039`/`RQ-RTM-001/002` を同一変更で更新し、CDKオンリー方針を要求層から追跡可能にした。
 
 ## 検証
@@ -94,4 +101,5 @@
 - `task docs:guard` 再実行で対象変更文書（`BD-API-002`, `BD-DEP-006`）の整合を確認（issues/broken links ともに 0）。
 - `task docs:guard` と `task docs:check` を再実行し、CDKオンリー再設計対象（14文書）で `broken_links: 0` を確認。
 - `task docs:guard` 再実行で、Mermaid補正導線（`docs:mermaid:fix:changed` -> `docs:autolink:changed` -> `docs:check:changed`）の動作を確認。
+- `task docs:guard` 実行で、INF詳細更新6文書（`BD-INF-003`, `DD-NET-001`, `DD-IAC-001`, `DD-IAC-002`, `DD-DR-001`, `DD-OBS-001`）の `issues: 0` / `broken_links: 0` を確認。
 - `task docs:guard` / `task docs:trace` / `task docs:check` を再実行し、CDKオンリー要求同期を含む対象変更（18文書）で `broken_links: 0` を確認。
