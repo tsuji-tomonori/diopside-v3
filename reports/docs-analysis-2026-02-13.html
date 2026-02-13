@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>docs 分析レポート 2026-02-13</title>
+  <style>
+    body { font-family: "Yu Gothic", "Meiryo", sans-serif; margin: 24px; color: #222; line-height: 1.6; }
+    h1, h2, h3 { margin: 0.8em 0 0.4em; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; }
+    th, td { border: 1px solid #d0d7de; padding: 8px 10px; vertical-align: top; }
+    th { background: #f6f8fa; text-align: left; }
+    .high { border-left: 4px solid #d1242f; padding-left: 10px; }
+    .med { border-left: 4px solid #9a6700; padding-left: 10px; }
+    code { background: #f6f8fa; padding: 1px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>docs 分析レポート（2026-02-13）</h1>
+
+  <h2>0. 対象と実施結果</h2>
+  <ul>
+    <li>対象: <code>docs/**/*.md</code>（計381ファイル）</li>
+    <li>構造チェック: <code>task docs:check</code> = <code>issues: 0 / broken_links: 0 / nonlinked_doc_ids: 0</code></li>
+    <li>RTM生成日: <code>RQ-RTM-001</code>, <code>RQ-RTM-002</code とも <code>generated_at: 2026-02-13</code></li>
+  </ul>
+
+  <h2>1. 結論サマリ（依頼観点）</h2>
+  <table>
+    <thead>
+      <tr><th>観点</th><th>判定</th><th>要点</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>要求に矛盾がないか</td><td>概ね良好（要改善あり）</td><td>重大矛盾は見当たらないが、要求→検証の直接リンク欠落が残る。</td></tr>
+      <tr><td>すべての要求に答える基本設計か</td><td>概ね満たす</td><td>RTM上、FR/NFRは設計文書に到達。</td></tr>
+      <tr><td>基本設計に矛盾がないか</td><td>概ね良好</td><td>重大な内部矛盾は未検出。</td></tr>
+      <tr><td>詳細設計は基本設計準拠か</td><td>概ね満たす</td><td>DDの多くはBD/ADR経由で追跡可能。</td></tr>
+      <tr><td>FE/BE/Batch/Infraが迷わず実装可能か</td><td>部分的に不足</td><td>テスト計画・判定文書がAPI拡張に未追随。</td></tr>
+      <tr><td>設計のあいまいさがないか</td><td>要改善</td><td>計画文書とRTM正本の対象範囲が不一致。</td></tr>
+      <tr><td>UT/IT/AT反映性</td><td>経路判定は満たすが文書整合に課題</td><td>RTMの経路判定はPASS、ただし計画/判定文書側が古い。</td></tr>
+      <tr><td>運用が適切に行えるか</td><td>基本は可、判定基準更新が必要</td><td>RunbookはあるがGo/No-Go対象が最新範囲を網羅していない。</td></tr>
+      <tr><td>非機能要求を守っているか</td><td>概ね担保</td><td>NFR設計・運用受入は整備。</td></tr>
+      <tr><td>非機能/コーディング/文書規約の抜け漏れ</td><td>重要な運用漏れあり</td><td>文書ステータスがほぼ全件「下書き」。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. 定量結果</h2>
+  <ul>
+    <li>要求 → AT: <code>59/59 PASS</code></li>
+    <li>基本設計 → IT: <code>41/41 PASS</code></li>
+    <li>詳細設計 → UT: <code>64/64 PASS</code></li>
+    <li><code>RQ-RTM-001</code> 検証列で <code>-</code> 残存要求: 11件（例: <code>RQ-FR-006</code>, <code>RQ-FR-007</code>, <code>RQ-FR-008</code>, <code>RQ-FR-017</code>, <code>RQ-DEV-002</code>）</li>
+    <li>文書ステータス: <code>下書き 358 / 廃止 1 / 承認 0</code></li>
+  </ul>
+
+  <h2>3. 主要Findings</h2>
+  <h3 class="high">High-1: UT/IT計画がAPI拡張に未追随</h3>
+  <ul>
+    <li><code>UT-PLAN-005</code> は <code>DD-API-002..009</code> と <code>UT-CASE-001..008</code> 前提（<code>UT-PLAN-005:40</code>, <code>UT-PLAN-005:52</code>）。</li>
+    <li><code>IT-PLAN-001</code> も <code>DD-API-002..009</code> / <code>IT-CASE-001..008</code> 前提（<code>IT-PLAN-001:24</code>, <code>IT-PLAN-001:42</code>）。</li>
+  </ul>
+
+  <h3 class="high">High-2: AT計画/判定が最新シナリオを網羅していない</h3>
+  <ul>
+    <li><code>AT-PLAN-001</code> に <code>AT-SCN-006/008/009</code> が未掲載（<code>AT-PLAN-001:38</code>）。</li>
+    <li><code>AT-GO-001</code> が <code>AT-SCN-001..005</code> と <code>DD-API-002..009</code> に限定（<code>AT-GO-001:40</code>, <code>AT-GO-001:41</code>）。</li>
+    <li><code>AT-RPT-001</code> テンプレートも同様に未網羅（<code>AT-RPT-001:17</code>, <code>AT-RPT-001:73</code>）。</li>
+  </ul>
+
+  <h3 class="med">Medium-1: RTM要求別ビューの直接検証リンク欠落</h3>
+  <ul>
+    <li><code>RQ-RTM-002</code> 経路判定は全PASS。</li>
+    <li>一方で <code>RQ-RTM-001</code> の検証列に <code>-</code> が残存し、<code>RQ-DG-001</code> の直接リンク必須運用と不一致。</li>
+  </ul>
+
+  <h3 class="med">Medium-2: 設計文書の一部が根拠要求に未接続</h3>
+  <p>例: <code>DD-ARCH-002</code>, <code>DD-AV-002</code>, <code>DD-IAC-001</code>, <code>DD-LOG-002</code>, <code>DD-SEC-002</code>。</p>
+
+  <h3 class="med">Medium-3: 承認ステータス運用が未実装</h3>
+  <p>文書規約はあるが、承認ゲートが実運用されていない。</p>
+
+  <h2>4. 改善提案（実行順）</h2>
+  <ol>
+    <li><code>UT-PLAN-005</code> / <code>IT-PLAN-001</code> を <code>DD-API-010..015</code> まで更新。</li>
+    <li><code>AT-PLAN-001</code> / <code>AT-GO-001</code> / <code>AT-RPT-001</code> を <code>AT-SCN-001..009</code>、<code>DD-API-002..015</code> 前提へ更新。</li>
+    <li><code>RQ-RTM-001</code> の検証列 <code>-</code> を解消し、<code>RQ-DG-001</code> と整合させる。</li>
+    <li>根拠要件未接続のDD文書に、正本要件リンク（RQ or BD）を追加。</li>
+    <li>Go/No-Go前提に「対象文書 <code>status: 承認</code>」を導入。</li>
+  </ol>
+</body>
+</html>

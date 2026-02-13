@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>docs分析レポート（2026-02-13）</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --ok: #0f766e;
+      --warn: #b45309;
+      --bad: #b91c1c;
+    }
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      background: linear-gradient(180deg, #fafaf9 0%, #f3f4f6 100%);
+      color: var(--text);
+    }
+    main {
+      max-width: 1160px;
+      margin: 24px auto;
+      padding: 0 16px 32px;
+    }
+    h1, h2, h3 { margin: 0 0 10px; }
+    .meta, .note { color: var(--muted); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 14px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: #f9fafb; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .warn { color: var(--warn); font-weight: 700; }
+    .bad { color: var(--bad); font-weight: 700; }
+    code { background: #f3f4f6; padding: 1px 4px; border-radius: 4px; }
+    ul { margin: 8px 0 0 18px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>docs分析レポート（2026-02-13）</h1>
+    <p class="meta">対象: <code>docs/**/*.md</code>（359件） / 実施日: 2026-02-13</p>
+
+    <section class="card">
+      <h2>0. 実施概要</h2>
+      <ul>
+        <li><code>task docs:check</code> 結果: <code>issues: 0 / broken_links: 0 / nonlinked_doc_ids: 0</code></li>
+        <li>フェーズ内訳: <code>RQ 152 / BD 69 / DD 64 / UT 30 / IT 24 / AT 20</code></li>
+        <li>ステータス内訳: <code>下書き 358 / 廃止 1 / 承認 0</code></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>1. 観点ごとの対象資料洗い出し</h2>
+      <table>
+        <thead>
+          <tr><th>観点</th><th>主対象資料</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>要求の矛盾</td><td><code>RQ-FR/NFR</code>, <code>RQ-RTM-001</code></td></tr>
+          <tr><td>要求に答えるBD</td><td><code>BD-ARCH-001</code>, <code>BD-API-001</code>, <code>RQ-RTM-002</code></td></tr>
+          <tr><td>BD整合</td><td><code>docs/2.基本設計(BD)/**/*.md</code>, <code>ADR群</code></td></tr>
+          <tr><td>DDのBD準拠</td><td><code>docs/3.詳細設計(DD)/**/*.md</code>, <code>RQ-RTM-002</code></td></tr>
+          <tr><td>実装可能性</td><td><code>DD-COMP-001</code>, <code>DD-API-*</code>, <code>DD-IAC-*</code>, <code>BD-ARCH-001</code></td></tr>
+          <tr><td>曖昧さ</td><td><code>RQ-DG-001</code>, <code>RQ-RTM-001</code></td></tr>
+          <tr><td>UT/IT/AT反映</td><td><code>BD-TST-001</code>, <code>UT/IT/AT-PLAN</code>, <code>AT-GO-001</code>, <code>AT-RPT-001</code></td></tr>
+          <tr><td>運用適切性</td><td><code>AT-OPS-001</code>, <code>AT-RUN-001</code>, <code>AT-DR-001</code>, <code>AT-SLO-001</code></td></tr>
+          <tr><td>非機能順守</td><td><code>RQ-AV/PS/SEC/OBY/COST/UX</code> + 対応BD/DD</td></tr>
+          <tr><td>規約抜け漏れ</td><td><code>DD-CODE-001</code>, <code>DD-REV-001</code>, <code>RQ-DG-001</code>, <code>RQ-DEV-002</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>2. 観点ごとの確認結果</h2>
+      <table>
+        <thead>
+          <tr><th>観点</th><th>判定</th><th>要点</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>要求の矛盾</td><td class="bad">要改善</td><td><code>AT-SCN-009</code> と <code>RQ-FR-009</code> の意味不一致</td></tr>
+          <tr><td>全要求に答えるBD</td><td class="ok">概ね満たす</td><td><code>RQ-RTM-002</code> で設計経路は成立</td></tr>
+          <tr><td>BD内整合</td><td class="ok">概ね良好</td><td>責務境界は明確</td></tr>
+          <tr><td>DDのBD準拠</td><td class="ok">概ね満たす</td><td>多くのDDがBDへ接続</td></tr>
+          <tr><td>実装可能性</td><td class="warn">要改善</td><td><code>DD-IAC-001</code> が抽象的で実装入力不足</td></tr>
+          <tr><td>設計曖昧さ</td><td class="warn">要改善</td><td><code>RQ-DG-001</code> 要求とRTM実データにギャップ</td></tr>
+          <tr><td>UT/IT/AT反映</td><td class="bad">要改善</td><td><code>UT-PLAN-005</code>/<code>IT-PLAN-001</code> が <code>DD-API-010..015</code> 未追随</td></tr>
+          <tr><td>運用適切性</td><td class="ok">概ね良好</td><td>運用手順は具体的</td></tr>
+          <tr><td>非機能順守</td><td class="ok">概ね良好</td><td>NFR閾値は文書化済み</td></tr>
+          <tr><td>規約抜け漏れ</td><td class="bad">要改善</td><td><code>status: 承認</code> が0件</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>3. 資料単位レビュー（良い点/悪い点）</h2>
+      <table>
+        <thead>
+          <tr><th>資料</th><th>良い点</th><th>悪い点・リスク</th><th>改善案</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>RQ-RTM-001</code></td><td>要求起点で全体を俯瞰</td><td>FR25件中10件で検証列が<code>-</code></td><td>主要テストIDを直接記載</td></tr>
+          <tr><td><code>RQ-RTM-002</code></td><td>設計起点とテスト層トレースがある</td><td>経路PASSで計画書乖離が見えにくい</td><td>計画書範囲一致チェックを追加</td></tr>
+          <tr><td><code>RQ-FR-009</code></td><td>受入基準が具体</td><td><code>AT-SCN-009</code> と要求意味が不一致</td><td>対応要求の再マッピング</td></tr>
+          <tr><td><code>RQ-DEV-002</code></td><td>AI運用統制は明確</td><td>検証リンク未設定（RTMで<code>-</code>）</td><td>AT/UTの検証ケース新設</td></tr>
+          <tr><td><code>BD-ARCH-001</code></td><td>Batch責務と制約が具体</td><td>Batch別テスト接続が弱い</td><td>BAT単位ITケースを増設</td></tr>
+          <tr><td><code>BD-API-001</code></td><td>API一覧の正本ルールが明確</td><td>MVP/将来境界が計画書に未反映</td><td>計画書で対象APIを明示分離</td></tr>
+          <tr><td><code>BD-TST-001</code></td><td>3層+INFの戦略が明快</td><td>下位計画の追随遅れ</td><td>UT/IT/AT計画を同期更新</td></tr>
+          <tr><td><code>DD-API-006</code></td><td>クライアント検索境界が明確</td><td>「API」表記で実装誤解余地</td><td>契約テストであることを計画書に明示</td></tr>
+          <tr><td><code>DD-IAC-001</code></td><td>IaC分離方針はある</td><td>実装粒度不足</td><td>モジュールI/O表と実行手順を追加</td></tr>
+          <tr><td><code>UT-PLAN-005</code></td><td>API単位UT運用を定義</td><td><code>DD-API-010..015</code> 未包含</td><td>ケース一覧更新</td></tr>
+          <tr><td><code>IT-PLAN-001</code></td><td>契約観点は妥当</td><td>ケース1〜8固定で新API未反映</td><td>IT-CASE-009..013を正式編入</td></tr>
+          <tr><td><code>AT-PLAN-001</code></td><td>判定基準は具体</td><td><code>AT-SCN-006/008/009</code> 未記載</td><td>受入対象と基準を更新</td></tr>
+          <tr><td><code>AT-GO-001</code></td><td>Go/No-Go入力が整理</td><td>必須シナリオ/API範囲が旧版</td><td>最新シナリオ/API群へ拡張</td></tr>
+          <tr><td><code>AT-RPT-001</code></td><td>API逆引き記録方式が良い</td><td><code>AT-SCN-008/009</code> 未統合</td><td>サマリ表とテンプレート更新</td></tr>
+          <tr><td><code>AT-SCN-009</code></td><td>タグ運用手順は具体</td><td>対応要求IDに意味ズレ</td><td>要求IDの整合修正</td></tr>
+          <tr><td><code>RQ-DG-001</code></td><td>文書運用ゲートが明確</td><td>実データとの未整合を検出できない</td><td>未充足をFailにする自動チェック追加</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>4. 最終サマリ</h2>
+      <p>構造整合は良好ですが、テスト計画とリリース判定文書の追随遅れが最重要課題です。要求→設計は成立しているため、次は「検証計画の最新化」と「要求ID意味整合」を優先すれば、実装と運用の迷いを大きく減らせます。</p>
+      <h3>優先アクション</h3>
+      <ol>
+        <li><code>AT-SCN-009</code> と <code>RQ-FR-009</code> の意味矛盾を解消</li>
+        <li><code>UT-PLAN-005</code> / <code>IT-PLAN-001</code> / <code>AT-PLAN-001</code> / <code>AT-GO-001</code> / <code>AT-RPT-001</code> を最新体系に更新</li>
+        <li><code>RQ-RTM-001</code> の検証列 <code>-</code> を解消</li>
+        <li><code>DD-IAC-001</code> を実装粒度へ補強</li>
+        <li>Go/No-Go前提に承認ゲート（<code>status: 承認</code>）を導入</li>
+      </ol>
+    </section>
+
+    <p class="note">作成ファイル: <code>reports/docs-review-2026-02-13.md</code> / <code>reports/docs-review-2026-02-13.html</code></p>
+  </main>
+</body>
+</html>
