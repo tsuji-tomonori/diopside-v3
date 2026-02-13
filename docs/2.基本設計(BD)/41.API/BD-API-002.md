@@ -3,7 +3,7 @@ id: BD-API-002
 title: 収集API設計
 doc_type: API設計
 phase: BD
-version: 1.1.6
+version: 1.1.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -56,18 +56,21 @@ tags:
 | 配信反映契約 | DB正本から配信JSON再生成を起動 | [[RQ-FR-019]], [[RQ-FR-025]] |
 
 ## 実行受付契約
-- **必須入力**: `mode`, `target_scope`。
-- **mode定義**:
+- **必須入力**: `trigger_mode`, `run_kind`, `target_scope`。
+- **trigger_mode定義**:
+  - `manual`: 管理画面からの手動起動。
+  - `scheduled`: 外部スケジューラからの定期起動。
+- **run_kind定義**:
   - `official_ingestion`: 公式投稿の公開動画取り込み。
   - `appearance_supplement`: 出演判定 + 補完入力を併用した取り込み。
   - `incremental_update`: 既存データとの差分更新。
 - **条件付き入力**:
   - `candidate_source_ref`: 出演補完入力の参照ID（モードが `appearance_supplement` のときのみ必須）。
   - `time_window`: 差分更新の対象期間（モードが `incremental_update` のとき任意）。
-- **受付応答**: `run_id`, `accepted_at`, `mode`, `requested_by` を返す。
+- **受付応答**: `run_id`, `accepted_at`, `trigger_mode`, `run_kind`, `requested_by` を返す。
 
 ## 実行状態契約
-- **状態遷移**: `queued -> running -> succeeded|failed|partial`。
+- **状態遷移**: `queued -> running -> succeeded|failed|partial|cancelled`。
 - **必須出力**:
   - 件数: `target_count`, `success_count`, `failure_count`。
   - 更新種別件数: `new_count`, `existing_count`, `backfill_count`, `recheck_count`。
@@ -136,6 +139,7 @@ tags:
 - 将来追加する高度検索APIの検索アルゴリズムとランキング詳細。
 
 ## 変更履歴
+- 2026-02-13: 実行起動文脈（`trigger_mode`）と収集種別（`run_kind`）を分離し、run状態語彙へ `cancelled` を追加 [[BD-ADR-027]]
 - 2026-02-13: LLM提案取込の手動フォールバックと上流APIクォータ制御ルールを追加 [[BD-ADR-027]]
 - 2026-02-11: 単一Backend API（Hono）モノリス前提（手動/定期とも同一API起動）を明記 [[BD-ADR-021]]
 - 2026-02-11: 入力検証/例外集約の実装準拠先（[[BD-API-005]] / [[BD-ADR-025]]）を追記 [[BD-ADR-025]]
