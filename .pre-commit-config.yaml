@@ -11,6 +11,14 @@ repos:
 
   - repo: local
     hooks:
+      - id: obsidian-fix-mermaid
+        name: Auto-fix Mermaid labels in docs
+        entry: python3 .opencode/skills/obsidian-doc-check/scripts/fix_mermaid_blocks.py --docs-root docs
+        language: system
+        pass_filenames: true
+        files: ^docs/.*\.md$
+        exclude: (^docs/.*/README\.md$|^docs/.*/TEMPLATE\.md$)
+
       - id: obsidian-auto-link-glossary
         name: Auto-link glossary terms in docs
         entry: python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py --docs-root docs

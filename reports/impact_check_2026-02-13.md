@@ -48,6 +48,11 @@
     - 要求直接検証リンク補強: `RQ-FR-006`, `RQ-FR-007`, `RQ-FR-008`, `RQ-FR-010`, `RQ-FR-011`, `RQ-FR-012`, `RQ-FR-013`, `RQ-FR-014`, `RQ-FR-016`, `RQ-FR-017`, `RQ-DEV-002`
     - 設計根拠要件補強: `DD-ARCH-002`, `DD-AV-002`, `DD-IAC-001`, `DD-LOG-002`, `DD-SEC-002`
     - 追跡再生成: `RQ-RTM-001`, `RQ-RTM-002`
+  - 追加実施（2026-02-13: Mermaidエラー修正と自動補正導入）:
+    - 図修正: `BD-ARCH-006` のMermaid経路ノードを `ID["/path/*"]` 形式へ補正
+    - 自動補正スクリプト追加: `.opencode/skills/obsidian-doc-check/scripts/fix_mermaid_blocks.py`
+    - 運用導線追加: `Taskfile.yaml` に `docs:mermaid:fix` / `docs:mermaid:fix:changed` を追加し、`docs:guard` 前段へ組込み
+    - コミット前自動実行: `.pre-commit-config.yaml` に `obsidian-fix-mermaid` フックを追加
 
 ## 影響確認
 - 要求整合: 段階ロード中の操作制限、[[RQ-GL-015|盛り上がり区間]]判定条件、例外時挙動が要求本文で判定可能な粒度に具体化された。
@@ -69,9 +74,11 @@
 - スキル整合（2026-02-13追補）: 設計書に実在する `BD-INF` / `DD-ARCH` / `DD-CICD-INF` / `DD-DR` / `DD-IAC` / `DD-IAM` / `DD-NET` / `DD-OBS` のスキル・生成マップ未定義を解消し、`.opencode` と `docs` のID体系を一致させた。
 - テスト・判定整合（2026-02-13追補）: UT/IT/AT計画・判定文書の対象範囲を `DD-API-015` / `AT-SCN-009` まで拡張し、Go/No-Go入力の範囲不一致を解消した。
 - 追跡整合（2026-02-13追補）: 要求文書へ直接検証リンクを追加し、RTM要求別ビューの検証欠落を縮小した。
+- 図表整合（2026-02-13追補）: Mermaidで経路ラベルを非引用で記述した場合のパース失敗を検知・自動補正する運用を追加し、`docs:guard` と pre-commit の双方で再発防止可能にした。
 
 ## 検証
 - `task docs:guard` を実行し、文書整合チェックを実施。
 - `task docs:trace` を実行し、RTM静的ビューを再生成。
 - `task docs:check` を実行し、Vault全体で `broken_links: 0` を確認。
 - `task docs:guard` 再実行で対象変更文書（`BD-API-002`, `BD-DEP-006`）の整合を確認（issues/broken links ともに 0）。
+- `task docs:guard` 再実行で、Mermaid補正導線（`docs:mermaid:fix:changed` -> `docs:autolink:changed` -> `docs:check:changed`）の動作を確認。

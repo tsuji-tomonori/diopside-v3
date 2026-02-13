@@ -77,6 +77,46 @@ tasks:
         subprocess.run(cmd, check=True)
         PY
 
+  docs:mermaid:fix:
+    desc: Auto-fix Mermaid labels for specified markdown files (FILES="docs/...md ...")
+    cmds:
+      - |
+        bash -lc 'if [ -z "{{.FILES}}" ]; then
+          echo "Usage: task docs:mermaid:fix FILES=\"docs/path/a.md docs/path/b.md\""
+          exit 1
+        fi
+        python3 .opencode/skills/obsidian-doc-check/scripts/fix_mermaid_blocks.py --docs-root docs {{.FILES}}'
+
+  docs:mermaid:fix:changed:
+    desc: Auto-fix Mermaid labels for changed docs markdown files
+    cmds:
+      - |
+        python3 - <<'PY'
+        import shlex
+        import subprocess
+        import sys
+
+        changed = subprocess.check_output(["git", "-c", "core.quotepath=false", "diff", "--name-only", "HEAD"], text=True)
+        untracked = subprocess.check_output(["git", "-c", "core.quotepath=false", "ls-files", "--others", "--exclude-standard"], text=True)
+        files = []
+        for src in (changed.splitlines(), untracked.splitlines()):
+            for path in src:
+                path = path.strip()
+                if not path.startswith("docs/") or not path.endswith(".md"):
+                    continue
+                if path.endswith("/README.md") or path.endswith("/TEMPLATE.md"):
+                    continue
+                files.append(path)
+        files = sorted(set(files))
+        if not files:
+            print("No changed docs markdown files. Skipping Mermaid auto-fix.")
+            sys.exit(0)
+
+        cmd = ["python3", ".opencode/skills/obsidian-doc-check/scripts/fix_mermaid_blocks.py", "--docs-root", "docs", *files]
+        print("+", " ".join(shlex.quote(x) for x in cmd))
+        subprocess.run(cmd, check=True)
+        PY
+
   docs:check:
     desc: Validate all docs and update reports/doc_check.md
     cmds:
@@ -129,6 +169,7 @@ tasks:
   docs:guard:
     desc: Run docs auto-link and validation for changed docs
     cmds:
+      - task docs:mermaid:fix:changed
       - task docs:autolink:changed
       - task docs:check:changed
 
