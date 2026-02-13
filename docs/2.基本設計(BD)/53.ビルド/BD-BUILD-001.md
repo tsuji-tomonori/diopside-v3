@@ -3,11 +3,11 @@ id: BD-BUILD-001
 title: ビルド方針（デプロイ単位分離）
 doc_type: ビルド設計
 phase: BD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -80,6 +80,14 @@ tags:
 - `@next/bundle-analyzer` による依存肥大検知を定期実行し、主要導線の Core Web Vitals は `useReportWebVitals` で収集する。
 - 開発環境では Turbopack 前提を維持し、巨大barrel importや過剰な再エクスポートによる開発遅延を品質レビュー対象にする。
 
+### アクセシビリティCIゲート（[[RQ-UX-021]]）
+- Pull Requestごとにアクセシビリティ自動検査を必須実行し、`npm --prefix web run test:a11y` を共通入口とする。
+- 重大度判定は `Critical/High` をリリースブロッカーとし、1件以上でCIジョブを失敗させる。
+- `Moderate/Low` は警告として記録するが、同一指摘が3回連続で残存した場合は改善計画未記載で受入不可とする。
+- 誤検知の一時除外は有効期限付き（最大30日）で管理し、例外ID・期限・改善チケットIDを検査ログへ記録する。
+- 検査結果はArtifactsまたは監査ログとして90日以上保持し、`AT-RPT-001` と `AT-GO-001` で参照可能にする。
+- 自動検査だけで代替せず、リリース前にキーボード操作とスクリーンリーダーの手動確認を補助ゲートとして運用する。
+
 ## 受入基準
 - CIで `tsc --noEmit` と lint が常時成功し、上記4つの `tsconfig` オプションが有効である。
 - 新規追加コードに `any` を導入する場合は、理由と除去計画をPR本文へ明記しない限り受入不可とする。
@@ -102,8 +110,12 @@ tags:
 - `fetch` のキャッシュ/再検証方針（`cache`/`revalidate`/`tags`）が文書化され、更新導線に `revalidatePath` または `revalidateTag` が接続されている。
 - LCP寄与画像は `next/image` で配信され、リモート画像ではCLS防止のため寸法指定がある。
 - 主要導線のCWV（LCP/INP/CLS）を `useReportWebVitals` で記録し、Lighthouse結果のみで合否を決めない。
+- PRごとに `npm --prefix web run test:a11y` が実行され、`Critical/High` が0件である。
+- a11y例外は有効期限付きで記録され、期限超過または改善チケット未紐付けの例外が存在しない。
+- a11y検査結果が90日以上保持され、`AT-RPT-001` と `AT-GO-001` から参照可能である。
 
 ## 変更履歴
+- 2026-02-13: [[RQ-UX-021]] 対応としてアクセシビリティCIゲート（重大度閾値、期限付き例外、90日保持、手動補助ゲート）を追加 [[BD-ADR-024]]
 - 2026-02-11: Next.js App Router向け品質ゲート（build/start、Dynamic API、fetch再検証、画像/Script、Web Vitals）を追加 [[BD-ADR-024]]
 - 2026-02-11: 防御的型付けゲート（Brand、境界decode、センチネル禁止、NonEmpty、資源解放）を追加 [[BD-ADR-022]]
 - 2026-02-11: デプロイ単位（docs/web/api/infra）別のビルド方針と単位固有ゲートを追加 [[BD-ADR-019]]

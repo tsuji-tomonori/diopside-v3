@@ -3,7 +3,7 @@ id: BD-INF-001
 title: インフラ全体像
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -36,6 +36,21 @@ tags:
 - 実行基盤: API/バッチ実行面、CI/CD実行面、監視収集面。
 - 運用基盤: アラート、Runbook、監査証跡、復旧導線。
 
+## AWSサービス一覧（管理対象）
+- 管理対象AWSサービスは 8 サービス（CloudFront, S3, Lambda, CloudWatch Logs, IAM, Config, Cognito, WAF）とする。
+- 本一覧は運用上意図して管理するサービスのみを対象とし、CDK内部生成リソース（`Custom::CDKBucketDeployment` 由来のLambda/Layerなど）は集計対象外とする。
+
+| AWSサービス | 論理個数（本番） | 構築理由 | 根拠文書 | 導入段階 |
+|---|---:|---|---|---|
+| Amazon CloudFront | 1 Distribution | 画面・ドキュメント・OpenAPI・APIを単一配信境界で経路分離し、公開導線を統一運用するため。 | [[BD-DEP-004]], [[BD-DEP-005]], [[BD-ARCH-006]] | Phase 1導入済 |
+| Amazon S3 | 1 Bucket | `web/` `docs/` `openapi/` の静的成果物をプレフィックス分離し、CloudFront配信のオリジンとして運用するため。 | [[BD-DEP-004]], [[BD-ENV-002]], [[BD-DEP-005]] | Phase 1導入済 |
+| AWS Lambda | 3ワークロード（API/運用/配信関連） | API処理、運用処理、配信関連処理を同一実行基盤で分離運用するため。 | [[BD-ARCH-006]], [[DD-LOG-001]], [[BD-DEP-005]] | Phase 2で拡張 |
+| Amazon CloudWatch Logs | 3ログ系統 | Lambda構造化ログを集約し、保持30日で運用監視・障害調査へ利用するため。 | [[BD-ADR-022]], [[DD-LOG-001]], [[DD-LOG-002]], [[BD-DEP-005]] | Phase 1導入済 |
+| AWS IAM | 3ロール（配備実行/運用参照/監査参照） | 最小権限でデプロイ、運用参照、監査参照の権限境界を固定するため。 | [[DD-SEC-002]], [[BD-INF-004]], [[BD-DEP-005]] | Phase 1導入済 |
+| AWS Config | 1ルール（`required-tags`） | 必須タグ欠落を日次監査し、コスト・セキュリティ是正運用へ接続するため。 | [[BD-ADR-015]], [[DD-COST-001]], [[BD-DEP-005]] | Phase 1導入済 |
+| Amazon Cognito | 1認証系統 | `/openapi/*` と `/api/v1/*` の認証境界を固定し、公開/保護経路の混在を防止するため。 | [[BD-ADR-014]], [[BD-API-004]], [[BD-DEP-005]] | Phase 2で拡張 |
+| AWS WAF | 0（Phase 1） | Phase 1では未導入とし、単一CloudFront運用の拡張時に再評価するため。 | [[BD-DEP-003]], [[BD-DEP-005]] | Phase 2で評価 |
+
 ## 正本境界
 - 本書（[[BD-INF-001]]）はインフラ設計全体の入口・責務分割の正本とし、個別手順の正本は持たない。
 - 変更手順/承認/切戻しの正本は [[BD-INF-007]]、配信経路に依存する配備手順の正本は [[BD-DEP-005]] とする。
@@ -46,5 +61,6 @@ tags:
 - 出力: INF系基本設計群（[[BD-INF-002]]〜[[BD-INF-007]]）と詳細設計群（[[DD-IAC-001]]/[[DD-NET-001]]/[[DD-IAM-001]]/[[DD-OBS-001]]/[[DD-DR-001]]/[[DD-CICD-INF-001]]）。
 
 ## 変更履歴
+- 2026-02-13: 管理対象AWSサービス一覧（個数/構築理由/導入段階/除外ルール）を追加 [[BD-ADR-028]]
 - 2026-02-13: 正本境界（INF親文書/変更フロー/配信配備/DD実装値）の責務を明確化 [[BD-ADR-028]]
 - 2026-02-13: 新規作成（インフラ文書体系の親文書を追加） [[BD-ADR-028]]
