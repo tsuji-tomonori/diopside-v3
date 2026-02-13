@@ -38,6 +38,16 @@
   - 追加実施（2026-02-13: API語彙統一・DB正本整合）:
     - API設計整合: `BD-API-002` の実行入力を `trigger_mode` + `run_kind` へ分離し、状態語彙へ `cancelled` を追加
     - デプロイ整合: `BD-DEP-006` をDB正本前提へ更新し、DBバックアップ（スナップショット/PITR）を追加
+  - 追加実施（2026-02-13: `.opencode` スキル同期）:
+    - 追加スキル: `doc-bd-inf`, `doc-dd-arch`, `doc-dd-cicd-inf`, `doc-dd-dr`, `doc-dd-iac`, `doc-dd-iam`, `doc-dd-net`, `doc-dd-obs`
+    - マップ更新: `.opencode/skills/obsidian-doc-new/assets/doc_path_map.yaml` に `BD-INF` / `DD-ARCH` / `DD-CICD-INF` / `DD-DR` / `DD-IAC` / `DD-IAM` / `DD-NET` / `DD-OBS` を追加
+    - オーケストレーター追従: `.opencode/skills/docops-orchestrator/SKILL.md`, `.opencode/agents/docops-orchestrator.md`
+  - 追加実施（2026-02-13: テスト計画/判定追随・RTM直接リンク補強）:
+    - テスト計画追随: `UT-PLAN-005`, `IT-PLAN-001`, `AT-PLAN-001`
+    - 判定/報告追随: `AT-GO-001`, `AT-RPT-001`
+    - 要求直接検証リンク補強: `RQ-FR-006`, `RQ-FR-007`, `RQ-FR-008`, `RQ-FR-010`, `RQ-FR-011`, `RQ-FR-012`, `RQ-FR-013`, `RQ-FR-014`, `RQ-FR-016`, `RQ-FR-017`, `RQ-DEV-002`
+    - 設計根拠要件補強: `DD-ARCH-002`, `DD-AV-002`, `DD-IAC-001`, `DD-LOG-002`, `DD-SEC-002`
+    - 追跡再生成: `RQ-RTM-001`, `RQ-RTM-002`
 
 ## 影響確認
 - 要求整合: 段階ロード中の操作制限、[[RQ-GL-015|盛り上がり区間]]判定条件、例外時挙動が要求本文で判定可能な粒度に具体化された。
@@ -56,6 +66,9 @@
 - 検証整合（a11y追補）: `AT-SCN-001/002` にキーボード・SR・320px/400%ズーム・言語指定・状態通知の受入観点を追加し、`RQ-UX-021` のCIゲート要件を `BD-BUILD-001` へ接続した。
 - 設計整合（2026-02-13追補）: 収集起動契約の語彙衝突（`mode` の多義）を `trigger_mode` と `run_kind` の分離で解消し、run状態語彙を `queued/running/succeeded/failed/partial/cancelled` へ統一した。
 - デプロイ整合（2026-02-13追補）: バックアップ設計を「ファイルベース前提」からDB正本前提へ改訂し、復旧導線へDB PITRを追加した。
+- スキル整合（2026-02-13追補）: 設計書に実在する `BD-INF` / `DD-ARCH` / `DD-CICD-INF` / `DD-DR` / `DD-IAC` / `DD-IAM` / `DD-NET` / `DD-OBS` のスキル・生成マップ未定義を解消し、`.opencode` と `docs` のID体系を一致させた。
+- テスト・判定整合（2026-02-13追補）: UT/IT/AT計画・判定文書の対象範囲を `DD-API-015` / `AT-SCN-009` まで拡張し、Go/No-Go入力の範囲不一致を解消した。
+- 追跡整合（2026-02-13追補）: 要求文書へ直接検証リンクを追加し、RTM要求別ビューの検証欠落を縮小した。
 
 ## 検証
 - `task docs:guard` を実行し、文書整合チェックを実施。

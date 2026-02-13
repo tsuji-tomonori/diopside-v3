@@ -19,6 +19,7 @@ metadata:
 ## 実行フロー
 1. 対象文書IDを特定する。
 2. 対応 `doc-*` スキルを特定し更新する。
+   - 設計系では `BD-INF` / `DD-ARCH` / `DD-CICD-INF` / `DD-DR` / `DD-IAC` / `DD-IAM` / `DD-NET` / `DD-OBS` も通常の `doc-*` 対象として扱う。
 3. 要求変更なら RDR、設計変更なら ADR を同一変更で更新する。
 4. 規約変更時は `skill-maintainer` / `docops-orchestrator` / `obsidian-doc-*` を同一変更で更新する。
 5. `up/related` を辿って上位・下位文書を更新または影響確認記録を作成する。
