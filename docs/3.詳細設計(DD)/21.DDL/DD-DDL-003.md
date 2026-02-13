@@ -3,11 +3,11 @@ id: DD-DDL-003
 title: videosテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -31,17 +31,17 @@ tags:
 | --- | --- | --- | --- | --- |
 | `video_id` | varchar(32) | No | PK | YouTube動画ID |
 | `channel_id` | varchar(64) | No | FK | `channels.channel_id` |
-| `title` | varchar(255) | No |  | 動画タイトル |
-| `published_at` | timestamptz | No |  | 公開日時 |
+| `title` | varchar(255) | No | NOT NULL | 動画タイトル |
+| `published_at` | timestamptz | No | NOT NULL | 公開日時 |
 | `duration_sec` | integer | Yes | CHECK | 再生時間（秒） |
-| `description` | text | Yes |  | 説明文 |
-| `thumbnail_url` | text | Yes |  | サムネイルURL |
+| `description` | text | Yes | NULL許容 | 説明文 |
+| `thumbnail_url` | text | Yes | NULL許容 | サムネイルURL |
 | `source_type` | varchar(16) | No | CHECK | `official` / `appearance` / `supplement` / `incremental` |
 | `update_type` | varchar(16) | No | CHECK | `new` / `existing` / `supplement` / `recheck` |
 | `validation_status` | varchar(16) | No | CHECK | `valid` / `invalid` / `needs_review` |
-| `missing_fields` | text[] | Yes |  | 欠損属性名一覧 |
+| `missing_fields` | text[] | Yes | NULL許容 | 欠損属性名一覧 |
 | `supplement_required` | boolean | No | DEFAULT false | 補完要否 |
-| `normalized_at` | timestamptz | No |  | 正規化時刻 |
+| `normalized_at` | timestamptz | No | NOT NULL | 正規化時刻 |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 | `updated_at` | timestamptz | No | DEFAULT now() | 更新時刻 |
 
@@ -62,6 +62,7 @@ tags:
 - 出力: 検索・一覧・詳細表示で参照する動画正本データ。
 
 ## 変更履歴
+- 2026-02-13: 制約未記載カラムへ NOT NULL/NULL許容 を明記
 - 2026-02-11: 品質属性（validation_status, missing_fields, supplement_required）と取得元区分を拡張
 - 2026-02-11: videosのカラム、インデックス、更新ルールを追加
 - 2026-02-10: 新規作成

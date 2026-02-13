@@ -3,11 +3,11 @@ id: BD-TST-001
 title: テスト戦略
 doc_type: テスト戦略
 phase: BD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -17,6 +17,8 @@ related:
 - '[[UT-PLAN-001]]'
 - '[[IT-PLAN-001]]'
 - '[[AT-PLAN-001]]'
+- '[[BD-INF-001]]'
+- '[[BD-ADR-028]]'
 tags:
 - diopside
 - BD
@@ -33,6 +35,11 @@ tags:
 - UT（[[UT-PLAN-001]]）: モジュール/API単位のロジック、入力検証、エラー応答、前提制約を最小単位で検証する。
 - IT（[[IT-PLAN-001]]）: API契約、データ連携順序、外部連携境界、障害時復旧導線の一貫性を検証する。
 - AT（[[AT-PLAN-001]]）: 利用者導線（検索到達性）と運用品質（収集継続性）を最終判定し、リリース可否を決定する。
+
+## インフラ試験レイヤ
+- UT-INF: IaC lint/policy/security scan（[[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]]）。
+- IT-INF: ephemeral構築、ネットワーク到達性、監視流入、ロールバック（[[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]]）。
+- AT-INF: 運用受入、DR演習、SLO受入（[[AT-OPS-INF-001]], [[AT-DR-001]], [[AT-SLO-001]]）。
 
 ## レベル間接続（エントリ/完了条件）
 - UT完了条件: 変更影響範囲のUTがPassし、失敗時の原因が局所化できること。
@@ -61,5 +68,6 @@ tags:
 - 変更影響は `reports/impact_check_YYYY-MM-DD.md` に記録し、判定根拠の追跡性を維持する。
 
 ## 変更履歴
+- 2026-02-13: インフラ試験レイヤ（UT-INF/IT-INF/AT-INF）を追加 [[BD-ADR-028]]
 - 2026-02-11: UT/IT/AT三層の責務境界、品質ゲート、要求保証マトリクスを追加 [[BD-ADR-026]]
 - 2026-02-10: 新規作成 [[BD-ADR-001]]

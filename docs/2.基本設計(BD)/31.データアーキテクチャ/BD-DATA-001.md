@@ -3,11 +3,11 @@ id: BD-DATA-001
 title: データアーキテクチャ
 doc_type: データアーキテクチャ
 phase: BD
-version: 1.1.4
+version: 1.1.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -18,6 +18,8 @@ related:
 - '[[RQ-RDR-028]]'
 - '[[RQ-RDR-036]]'
 - '[[RQ-RDR-034]]'
+- '[[RQ-RDR-038]]'
+- '[[BD-ADR-027]]'
 - '[[RQ-DATA-001]]'
 - '[[BD-API-002]]'
 tags:
@@ -57,6 +59,18 @@ tags:
 6. 利用者向け参照は配信公開層からのみ提供し、検索時のDB直接参照を行わない。
 7. LLM支援でタグ更新を反映した場合は `tag_master` と `archive_index` を同一 `publish_run_id` で再生成する。
 
+## [[RQ-GL-005|タグ辞書]]同期フロー
+1. 管理画面のタグ更新（手動更新/LLM取込）をDB正本へ反映する。
+2. 更新後、`propagation_state=pending_publish` を設定し、未反映状態を明示する。
+3. 配信反映runで `tag_master` と `archive_index` を同一 `publish_run_id` で再生成する。
+4. 公開切替後に `generated_at` と `checksum` を比較し、世代差分が0件であることを確認する。
+5. 検証不一致時は公開切替を中止し、前回確定版を維持する。
+
+## LLMタグ取込後の反映後処理
+- `applied_count > 0` の場合は自動で配信反映runを起動する。
+- `applied_count = 0` かつ `rejected_count > 0` の場合は再生成を行わず、エラー明細のみ記録する。
+- 反映後処理の失敗は `publish_runs` に `failed` として記録し、運用APIへ再試行可否を返す。
+
 ## 品質ゲート
 - `video_id` 重複は受け入れず、競合時は配信反映を停止する。
 - 取得元区分と更新種別の欠落レコードは配信対象から除外する。
@@ -76,6 +90,7 @@ flowchart LR
 ```
 
 ## 変更履歴
+- 2026-02-13: [[RQ-GL-005|タグ辞書]]のDB正本と配信JSONの同期フロー、LLM取込後の反映後処理を追加 [[BD-ADR-027]]
 - 2026-02-11: LLM出力JSONの取込検証層と `tag_master/archive_index` 同時再生成条件を追加 [[BD-ADR-021]]
 - 2026-02-11: 収集明細/再確認runを追加し、品質属性とrun状態語彙を具体化 [[BD-ADR-021]]
 - 2026-02-11: [[RQ-GL-018|配信反映実行]]中心の配信生成属性と公開整合ゲートを追加 [[BD-ADR-021]]

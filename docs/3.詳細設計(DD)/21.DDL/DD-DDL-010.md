@@ -3,11 +3,11 @@ id: DD-DDL-010
 title: recheck_runsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -34,14 +34,14 @@ tags:
 | `base_run_id` | uuid | Yes | FK | `ingestion_runs.run_id` |
 | `mode` | varchar(32) | No | CHECK | `before_delivery/after_delivery` |
 | `status` | varchar(16) | No | CHECK | `queued/running/succeeded/failed/partial/cancelled` |
-| `requested_by` | varchar(64) | Yes |  | 実行主体 |
+| `requested_by` | varchar(64) | Yes | NULL許容 | 実行主体 |
 | `total_count` | integer | No | DEFAULT 0 | 対象件数 |
 | `changed_count` | integer | No | DEFAULT 0 | 差分あり件数 |
 | `unchanged_count` | integer | No | DEFAULT 0 | 差分なし件数 |
 | `failed_count` | integer | No | DEFAULT 0 | 失敗件数 |
-| `started_at` | timestamptz | Yes |  | 開始時刻 |
-| `finished_at` | timestamptz | Yes |  | 終了時刻 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `started_at` | timestamptz | Yes | NULL許容 | 開始時刻 |
+| `finished_at` | timestamptz | Yes | NULL許容 | 終了時刻 |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
 ## インデックス
@@ -58,4 +58,5 @@ tags:
 - 出力: 再確認run状態、差分集計、失敗監査情報。
 
 ## 変更履歴
+- 2026-02-13: 実行主体/時刻/trace系カラムの制約を明記
 - 2026-02-11: 新規作成

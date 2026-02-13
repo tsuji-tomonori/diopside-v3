@@ -3,11 +3,11 @@ id: DD-DDL-011
 title: recheck_itemsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -34,10 +34,10 @@ tags:
 | `recheck_run_id` | uuid | No | FK | `recheck_runs.recheck_run_id` |
 | `video_id` | varchar(32) | No | FK | `videos.video_id` |
 | `diff_status` | varchar(16) | No | CHECK | `changed/unchanged/failed/excluded` |
-| `diff_fields` | text[] | Yes |  | 差分項目一覧 |
-| `reason` | text | Yes |  | 失敗/対象外理由 |
-| `compared_at` | timestamptz | Yes |  | 比較完了時刻 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `diff_fields` | text[] | Yes | NULL許容 | 差分項目一覧 |
+| `reason` | text | Yes | NULL許容 | 失敗/対象外理由 |
+| `compared_at` | timestamptz | Yes | NULL許容 | 比較完了時刻 |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
 ## インデックス
@@ -55,4 +55,5 @@ tags:
 - 出力: 動画単位差分結果、運用差分確認用データ。
 
 ## 変更履歴
+- 2026-02-13: 差分明細/理由/時刻/trace系カラムの制約を明記
 - 2026-02-11: 新規作成

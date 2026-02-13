@@ -3,11 +3,11 @@ id: DD-DDL-007
 title: ingestion_runsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -35,17 +35,17 @@ tags:
 | `run_kind` | varchar(32) | No | CHECK | `official_ingestion/appearance_supplement/incremental_update/retry/recheck` |
 | `mode` | varchar(16) | No | CHECK | `manual` / `scheduled` |
 | `status` | varchar(16) | No | CHECK | `queued/running/succeeded/failed/partial/cancelled` |
-| `target_types` | text[] | No |  | `official` / `appearance` |
+| `target_types` | text[] | No | NOT NULL | `official` / `appearance` |
 | `parent_run_id` | uuid | Yes | FK | 再実行元run |
-| `requested_by` | varchar(64) | Yes |  | 実行主体 |
-| `started_at` | timestamptz | Yes |  | 実行開始 |
-| `finished_at` | timestamptz | Yes |  | 実行終了 |
+| `requested_by` | varchar(64) | Yes | NULL許容 | 実行主体 |
+| `started_at` | timestamptz | Yes | NULL許容 | 実行開始 |
+| `finished_at` | timestamptz | Yes | NULL許容 | 実行終了 |
 | `target_count` | integer | No | DEFAULT 0 | 対象件数 |
 | `processed_count` | integer | No | DEFAULT 0 | 処理件数 |
 | `success_count` | integer | No | DEFAULT 0 | 成功件数 |
 | `failed_count` | integer | No | DEFAULT 0 | 失敗件数 |
 | `unprocessed_count` | integer | No | DEFAULT 0 | 未処理件数 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
 ## インデックス
@@ -63,6 +63,7 @@ tags:
 - 出力: run履歴、状態遷移監査情報、集計メトリクス。
 
 ## 変更履歴
+- 2026-02-13: 実行主体/時刻/trace系カラムの制約を明記
 - 2026-02-11: run種別、再実行連結、partial/cancelled対応と件数列を追加
 - 2026-02-11: ingestion_runsのカラム、状態遷移、インデックスを追加
 - 2026-02-10: 新規作成

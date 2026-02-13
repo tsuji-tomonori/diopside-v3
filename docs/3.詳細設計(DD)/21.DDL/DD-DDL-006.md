@@ -3,11 +3,11 @@ id: DD-DDL-006
 title: tag_typesテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -31,8 +31,8 @@ tags:
 | カラム | 型 | NULL | 制約 | 説明 |
 | --- | --- | --- | --- | --- |
 | `tag_type_id` | varchar(32) | No | PK | 種別識別子 |
-| `display_name` | varchar(128) | No |  | 画面表示名 |
-| `description` | text | Yes |  | 種別説明 |
+| `display_name` | varchar(128) | No | NOT NULL | 画面表示名 |
+| `description` | text | Yes | NULL許容 | 種別説明 |
 | `sort_order` | integer | No | DEFAULT 0 | 表示順 |
 | `is_active` | boolean | No | DEFAULT true | 有効フラグ |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
@@ -52,5 +52,6 @@ tags:
 - 出力: [[RQ-GL-013|タグ種別]]辞書、タグ表示順の基準情報。
 
 ## 変更履歴
+- 2026-02-13: `display_name`/`description` の制約を明記
 - 2026-02-11: tag_typesのカラム、制約、更新ルールを追加
 - 2026-02-10: 新規作成

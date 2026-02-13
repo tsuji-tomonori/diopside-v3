@@ -3,11 +3,11 @@ id: DD-DDL-012
 title: publish_runsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -36,17 +36,17 @@ tags:
 | `source_run_id` | uuid | Yes | FK | `ingestion_runs.run_id` |
 | `publish_type` | varchar(16) | No | CHECK | `tag_master/archive/all/docs` |
 | `trigger_type` | varchar(16) | No | CHECK | `manual/scheduled` |
-| `status` | varchar(16) | No | CHECK | `queued/running/succeeded/failed/rolled_back/cancelled` |
-| `triggered_by` | varchar(64) | Yes |  | 実行主体 |
-| `started_at` | timestamptz | Yes |  | 開始時刻 |
-| `finished_at` | timestamptz | Yes |  | 終了時刻 |
-| `published_at` | timestamptz | Yes |  | 公開時刻 |
+| `status` | varchar(16) | No | CHECK | `queued/running/rollback_pending/succeeded/failed/rolled_back/cancelled` |
+| `triggered_by` | varchar(64) | Yes | NULL許容 | 実行主体 |
+| `started_at` | timestamptz | Yes | NULL許容 | 開始時刻 |
+| `finished_at` | timestamptz | Yes | NULL許容 | 終了時刻 |
+| `published_at` | timestamptz | Yes | NULL許容 | 公開時刻 |
 | `rollback_executed` | boolean | No | DEFAULT false | ロールバック有無 |
-| `rollback_to_version` | varchar(64) | Yes |  | 切戻し先バージョン |
-| `error_code` | varchar(64) | Yes |  | 失敗コード |
-| `error_message` | text | Yes |  | 失敗理由 |
+| `rollback_to_version` | varchar(64) | Yes | NULL許容 | 切戻し先バージョン |
+| `error_code` | varchar(64) | Yes | NULL許容 | 失敗コード |
+| `error_message` | text | Yes | NULL許容 | 失敗理由 |
 | `retryable` | boolean | No | DEFAULT false | 再試行可否 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
 ## インデックス
@@ -64,4 +64,5 @@ tags:
 - 出力: 配信run履歴、公開状態、ロールバック判定情報。
 
 ## 変更履歴
+- 2026-02-13: [[RQ-GL-018|publish_run]]の主体/時刻/エラー系カラム制約を補完
 - 2026-02-11: 新規作成

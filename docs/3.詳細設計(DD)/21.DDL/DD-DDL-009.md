@@ -3,11 +3,11 @@ id: DD-DDL-009
 title: ingestion_itemsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -35,12 +35,12 @@ tags:
 | `run_id` | uuid | No | FK | `ingestion_runs.run_id` |
 | `video_id` | varchar(32) | No | FK | `videos.video_id` |
 | `status` | varchar(16) | No | CHECK | `succeeded/failed/unprocessed/excluded` |
-| `failure_reason_code` | varchar(64) | Yes |  | 失敗理由コード |
-| `failure_scope` | varchar(32) | Yes |  | `fetch/normalize/validate/publish` |
+| `failure_reason_code` | varchar(64) | Yes | NULL許容 | 失敗理由コード |
+| `failure_scope` | varchar(32) | Yes | NULL許容 | `fetch/normalize/validate/publish` |
 | `update_type` | varchar(16) | No | CHECK | `new/existing/supplement/recheck` |
 | `source_type` | varchar(16) | No | CHECK | `official/appearance/supplement/incremental` |
-| `processed_at` | timestamptz | Yes |  | 処理完了時刻 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `processed_at` | timestamptz | Yes | NULL許容 | 処理完了時刻 |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
 ## インデックス
@@ -58,4 +58,5 @@ tags:
 - 出力: run明細、[[RQ-GL-011|再収集]]対象抽出、運用追跡情報。
 
 ## 変更履歴
+- 2026-02-13: 失敗理由/処理時刻/trace系カラムの制約を明記
 - 2026-02-11: 新規作成

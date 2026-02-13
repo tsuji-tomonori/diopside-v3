@@ -3,11 +3,11 @@ id: DD-DDL-014
 title: publish_artifactsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -33,10 +33,10 @@ tags:
 | `artifact_id` | uuid | No | PK | 成果物ID |
 | `publish_run_id` | uuid | No | FK | `publish_runs.publish_run_id` |
 | `artifact_type` | varchar(32) | No | CHECK | `bootstrap/tag_master/archive_index/highlights/wordcloud/docs/openapi` |
-| `artifact_path` | text | No |  | 配信パス |
-| `checksum` | varchar(128) | No |  | ハッシュ値 |
-| `record_count` | integer | Yes |  | レコード件数 |
-| `generated_at` | timestamptz | No |  | 生成時刻 |
+| `artifact_path` | text | No | NOT NULL | 配信パス |
+| `checksum` | varchar(128) | No | NOT NULL | ハッシュ値 |
+| `record_count` | integer | Yes | NULL許容 | レコード件数 |
+| `generated_at` | timestamptz | No | NOT NULL | 生成時刻 |
 | `validation_status` | varchar(16) | No | CHECK | `passed/failed/skipped` |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
@@ -55,4 +55,5 @@ tags:
 - 出力: 配信成果物履歴、整合検証結果、公開監査情報。
 
 ## 変更履歴
+- 2026-02-13: 成果物パス/ハッシュ/件数/生成時刻の制約を明記
 - 2026-02-11: 新規作成

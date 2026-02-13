@@ -3,14 +3,15 @@ id: IT-CASE-009
 title: E2E基本フロー 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-12'
+updated: '2026-02-13'
 up:
 - '[[IT-PLAN-001]]'
 - '[[BD-ARCH-001]]'
+- '[[DD-API-011]]'
 related:
 - '[[AT-SCN-001]]'
 - '[[AT-SCN-004]]'
@@ -65,4 +66,5 @@ tags:
 - [[AT-SCN-004]] の収集運用シナリオの事前検証になる。
 
 ## 変更履歴
+- 2026-02-13: DD-API-011への直接トレース（upリンク）を追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）

@@ -3,11 +3,11 @@ id: DD-API-014
 title: ドキュメント公開実行API
 doc_type: API詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-API-002]]'
 - '[[RQ-FR-024]]'
@@ -15,6 +15,9 @@ related:
 - '[[BD-DEP-003]]'
 - '[[DD-DEP-001]]'
 - '[[UT-PLAN-003]]'
+- '[[DD-DDL-012]]'
+- '[[DD-DDL-013]]'
+- '[[BD-ADR-027]]'
 tags:
 - diopside
 - DD
@@ -53,6 +56,19 @@ tags:
 ## 状態遷移
 - `queued -> running -> succeeded|failed|rolled_back`
 
+## ロールバック手順
+1. `quartz_build` または `cdk_deploy` 失敗時は `switch` を実行しない。
+2. `switch` 後に `invalidation` が失敗した場合は `rollback_pending` を設定する。
+3. `rollback_prepare` で前回成功runの成果物参照を解決する。
+4. `rollback_switch` で前回成果物へ切替える。
+5. `rollback_verify` で `/docs` と `/openapi` の疎通を確認し、成功時に `rolled_back` へ遷移する。
+6. ロールバック失敗時は `failed` のまま固定し、運用手順へエスカレーションする。
+
+## publish_runs / publish_steps 追加状態
+- `publish_runs.status`: `rollback_pending` を追加する。
+- `publish_steps.step_name`: `rollback_prepare`, `rollback_switch`, `rollback_verify` を追加する。
+- `publish_steps.status`: `queued|running|succeeded|failed|skipped` を維持し、ロールバックstepにも同一適用する。
+
 ## エラーマッピング
 - `PUBLISH_ALREADY_ACTIVE`: 409
 - `INVALID_TARGET_REF`: 400
@@ -64,5 +80,6 @@ tags:
 - ビルド失敗時にデプロイへ進まず、失敗理由を返せること。
 
 ## 変更履歴
+- 2026-02-13: docs公開部分失敗時のロールバック状態遷移と `publish_runs/publish_steps` 拡張状態を追加 [[BD-ADR-027]]
 - 2026-02-11: 公開ジョブの実行登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: 新規作成 [[BD-ADR-021]]

@@ -3,14 +3,17 @@ id: IT-CASE-011
 title: 配信反映全体フロー 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-12'
+updated: '2026-02-13'
 up:
 - '[[IT-PLAN-001]]'
 - '[[BD-ARCH-001]]'
+- '[[DD-API-013]]'
+- '[[DD-API-014]]'
+- '[[DD-API-015]]'
 related:
 - '[[AT-SCN-007]]'
 - '[[DD-API-013]]'
@@ -60,4 +63,5 @@ tags:
 - [[AT-SCN-007]] の配信前後確認シナリオの事前検証になる。
 
 ## 変更履歴
+- 2026-02-13: [[DD-API-013]]/[[DD-API-014]]/[[DD-API-015]] への直接トレース（upリンク）を追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）

@@ -3,16 +3,19 @@ id: DD-API-002
 title: 収集ジョブ起動API
 doc_type: API詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-10'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-API-002]]'
 related:
 - '[[RQ-FR-001]]'
+- '[[RQ-FR-022]]'
+- '[[RQ-FR-023]]'
+- '[[BD-ADR-027]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -47,6 +50,21 @@ tags:
 ## バリデーション
 - `targetTypes` が空の場合は `400 INVALID_TARGET`。
 - `fromPublishedAt` が不正形式の場合は `400 INVALID_TIMESTAMP`。
+- `targetTypes` は `official|appearance` のみ許可し、未知値は `400 INVALID_TARGET`。
+- 収集入力に `Idempotency-Key` がない場合は `400 MISSING_IDEMPOTENCY_KEY`。
+
+## 入力スキーマ（バッチ実行）
+- run起動入力（JSON）
+  - `mode`: `manual|scheduled`
+  - `targetTypes[]`: `official|appearance`
+  - `fromPublishedAt?`: ISO8601
+  - `dryRun?`: boolean
+  - `traceId`: string
+- 補助データ生成入力（内部イベント）
+  - `videoId`: string
+  - `channelId`: string
+  - `records[]`: `meta_type`, `message_text`, `published_at`
+  - `pattern?`: 既定 `草|w|くさ|kusa`
 
 ## 処理ロジック
 1. 認証済みJWTを検証し、`operator` を解決する。
@@ -66,10 +84,25 @@ tags:
 - `RUN_ALREADY_ACTIVE`: 409
 - `UNAUTHORIZED`: 401
 - `INTERNAL_ERROR`: 500
+- `UPSTREAM_QUOTA_LIMIT`: 429
+- `UPSTREAM_RATE_LIMIT`: 429
+- `UPSTREAM_TIMEOUT`: 503
+- `UPSTREAM_INVALID_RESPONSE`: 502
+- `MISSING_IDEMPOTENCY_KEY`: 400
+
+## 上流API障害時の判定表
+| 条件 | 応答/状態 | 再試行 | 備考 |
+| --- | --- | --- | --- |
+| quota枯渇（daily） | `429 UPSTREAM_QUOTA_LIMIT` | 翌日再開のみ | 同日内自動再実行禁止 |
+| 一時rate limit | `429 UPSTREAM_RATE_LIMIT` | 可 | 指数バックオフ（1s, 2s, 4s, 最大30s） |
+| timeout/5xx | `503 UPSTREAM_TIMEOUT` | 可 | 最大3回 |
+| 不正レスポンス | `502 UPSTREAM_INVALID_RESPONSE` | 不可 | 手動調査へ切替 |
 
 ## 冪等性
 - `Idempotency-Key` が同一の場合は同一`runId`を返す。
 - 同一キーの有効期限は24時間とする。
+- 保存先は `idempotency_keys`（DynamoDB TTL）を正本とし、`expires_at` 到達後に自動削除する。
+- キーの重複判定は `operator + endpoint + payload_hash` の複合で実施する。
 
 ## 監査・ログ
 - 起動操作は監査ログへ記録する（`runId`, `operator`, `targetTypes`, `traceId`）。
@@ -79,6 +112,7 @@ tags:
 - 重複起動時に 409 応答となり、既存runの状態確認へ誘導できること。
 
 ## 変更履歴
+- 2026-02-13: バッチ入力スキーマ、上流APIクォータ/レート制御、DynamoDB TTLによる冪等性保存を追加 [[BD-ADR-027]]
 - 2026-02-11: 実行要求の登録先を「同一Backend API内ジョブ実行モジュール」へ明確化 [[BD-ADR-021]]
 - 2026-02-11: `/api/v1` 統一、処理ロジック/状態遷移/エラーマッピングを追加 [[BD-ADR-021]]
 - 2026-02-10: 新規作成

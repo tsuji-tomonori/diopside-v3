@@ -3,11 +3,11 @@ id: BD-API-002
 title: 収集API設計
 doc_type: API設計
 phase: BD
-version: 1.1.5
+version: 1.1.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -25,6 +25,8 @@ related:
 - '[[RQ-RDR-034]]'
 - '[[BD-DATA-001]]'
 - '[[DD-API-001]]'
+- '[[RQ-RDR-038]]'
+- '[[BD-ADR-027]]'
 tags:
 - diopside
 - BD
@@ -90,6 +92,11 @@ tags:
 - **検証**: 必須キー、型、重複、未知動画ID、未知タグID、無効タグIDを検証し、エラー明細を返す。
 - **反映条件**: 検証成功レコードのみ反映し、失敗レコードは未反映で保持する。
 
+## タグ提案取込のフォールバック
+- LLM API障害（タイムアウト/レート制限/不正応答）時は、提案取込を中断して手動タグ更新へ縮退する。
+- フォールバック時の応答は `degraded=true`, `fallback=manual_tagging` を返し、管理画面へ再実行導線を表示する。
+- フォールバック発生時でも既存タグ正本は変更しない。
+
 ## タグ更新契約
 - **用途**: 管理画面から[[RQ-GL-005|タグ辞書]]を更新する。
 - **入力例**: `tag_id`, `tag_name`, `tag_type_id`, `synonyms`, `is_active`。
@@ -109,6 +116,12 @@ tags:
 - `UPSTREAM_QUOTA_LIMIT`: 上流APIクォータ制限。
 - `NORMALIZATION_CONFLICT`: 正規化時の整合不一致。
 
+## 上流APIクォータ制御
+- 収集開始前に当日残クォータを確認し、閾値未満（既定 10%）なら `QUOTA_LOW` で起動を拒否する。
+- 実行中に `UPSTREAM_QUOTA_LIMIT` を受けた場合は無限リトライせず `partial` または `failed` で終了する。
+- `retryable=true` の場合のみ翌日再開候補として記録し、同日内の自動再実行は行わない。
+- クォータ関連エラーは `quota_snapshot`（使用量/残量/判定時刻）をrunへ保存する。
+
 ## 共通契約適用（要約）
 - **メソッド意味論**: 実行受付は `POST`、状態取得は `GET`、更新は `PUT/PATCH`、削除は `DELETE` を原則とし、`GET` にボディを載せない。
 - **一覧取得**: run一覧/結果一覧を返す場合は `limit` + `cursor` を必須とし、`cursor` は opaque 値で返す。
@@ -123,6 +136,7 @@ tags:
 - 将来追加する高度検索APIの検索アルゴリズムとランキング詳細。
 
 ## 変更履歴
+- 2026-02-13: LLM提案取込の手動フォールバックと上流APIクォータ制御ルールを追加 [[BD-ADR-027]]
 - 2026-02-11: 単一Backend API（Hono）モノリス前提（手動/定期とも同一API起動）を明記 [[BD-ADR-021]]
 - 2026-02-11: 入力検証/例外集約の実装準拠先（[[BD-API-005]] / [[BD-ADR-025]]）を追記 [[BD-ADR-025]]
 - 2026-02-11: HTTP API共通契約（メソッド意味論、Problem Details、ページング、429運用）の適用方針を追加 [[BD-ADR-023]]

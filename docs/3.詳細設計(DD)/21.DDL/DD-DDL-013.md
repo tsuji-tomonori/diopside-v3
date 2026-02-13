@@ -3,11 +3,11 @@ id: DD-DDL-013
 title: publish_stepsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -33,13 +33,13 @@ tags:
 | --- | --- | --- | --- | --- |
 | `publish_step_id` | uuid | No | PK | ステップID |
 | `publish_run_id` | uuid | No | FK | `publish_runs.publish_run_id` |
-| `step_name` | varchar(32) | No | CHECK | `generate/validate/switch/post_check/docs_link_check/quartz_build/cdk_deploy/invalidation` |
+| `step_name` | varchar(32) | No | CHECK | `generate/validate/switch/post_check/docs_link_check/quartz_build/cdk_deploy/invalidation/rollback_prepare/rollback_switch/rollback_verify` |
 | `status` | varchar(16) | No | CHECK | `queued/running/succeeded/failed/skipped` |
-| `started_at` | timestamptz | Yes |  | 開始時刻 |
-| `finished_at` | timestamptz | Yes |  | 終了時刻 |
-| `error_code` | varchar(64) | Yes |  | 失敗コード |
-| `error_message` | text | Yes |  | 失敗理由 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `started_at` | timestamptz | Yes | NULL許容 | 開始時刻 |
+| `finished_at` | timestamptz | Yes | NULL許容 | 終了時刻 |
+| `error_code` | varchar(64) | Yes | NULL許容 | 失敗コード |
+| `error_message` | text | Yes | NULL許容 | 失敗理由 |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 | `created_at` | timestamptz | No | DEFAULT now() | 作成時刻 |
 
 ## インデックス
@@ -57,4 +57,5 @@ tags:
 - 出力: ステップ進捗、失敗位置、再試行判断情報。
 
 ## 変更履歴
+- 2026-02-13: ロールバックstep語彙追加と未記載制約（NULL許容/NOT NULL）を補完
 - 2026-02-11: 新規作成

@@ -3,11 +3,11 @@ id: DD-DDL-004
 title: video_tagsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -35,7 +35,7 @@ tags:
 | `applied_by` | varchar(16) | No | CHECK | `system` / `operator` |
 | `confidence` | numeric(5,4) | Yes | CHECK | 自動付与時の信頼度（0-1） |
 | `applied_at` | timestamptz | No | DEFAULT now() | 付与時刻 |
-| `removed_at` | timestamptz | Yes |  | 解除時刻 |
+| `removed_at` | timestamptz | Yes | NULL許容 | 解除時刻 |
 
 ## インデックス
 - `idx_video_tags_tag_id` (`tag_id`)
@@ -52,5 +52,6 @@ tags:
 - 出力: 動画別タグ関連、検索フィルタの評価入力。
 
 ## 変更履歴
+- 2026-02-13: `removed_at` の制約（NULL許容）を明記
 - 2026-02-11: video_tagsのカラム、制約、運用ルールを追加
 - 2026-02-10: 新規作成

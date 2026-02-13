@@ -3,11 +3,11 @@ id: DD-DDL-008
 title: ingestion_eventsテーブル
 doc_type: DDL
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[BD-ARCH-001]]'
 - '[[BD-DATA-001]]'
@@ -33,13 +33,13 @@ tags:
 | --- | --- | --- | --- | --- |
 | `event_id` | uuid | No | PK | イベントID |
 | `run_id` | uuid | No | FK | `ingestion_runs.run_id` |
-| `event_type` | varchar(32) | No |  | `fetch/normalize/publish/retry` |
+| `event_type` | varchar(32) | No | NOT NULL | `fetch/normalize/publish/retry` |
 | `event_status` | varchar(16) | No | CHECK | `success/warn/failure` |
-| `target_id` | varchar(64) | Yes |  | 動画IDなど対象識別子 |
-| `error_code` | varchar(64) | Yes |  | 失敗時コード |
-| `message` | text | No |  | 説明 |
-| `occurred_at` | timestamptz | No |  | 発生時刻 |
-| `trace_id` | varchar(64) | No |  | 相関ID |
+| `target_id` | varchar(64) | Yes | NULL許容 | 動画IDなど対象識別子 |
+| `error_code` | varchar(64) | Yes | NULL許容 | 失敗時コード |
+| `message` | text | No | NOT NULL | 説明 |
+| `occurred_at` | timestamptz | No | NOT NULL | 発生時刻 |
+| `trace_id` | varchar(64) | No | NOT NULL | 相関ID |
 
 ## インデックス
 - `idx_ingestion_events_run_time` (`run_id`, `occurred_at`)
@@ -56,5 +56,6 @@ tags:
 - 出力: 実行イベント履歴、障害解析用証跡、監視連携データ。
 
 ## 変更履歴
+- 2026-02-13: イベント列の未記載制約（NOT NULL/NULL許容）を補完
 - 2026-02-11: ingestion_eventsのカラム、インデックス、記録ルールを追加
 - 2026-02-10: 新規作成

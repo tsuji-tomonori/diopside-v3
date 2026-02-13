@@ -3,7 +3,7 @@ id: BD-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.11
+version: 1.0.12
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,6 +17,8 @@ related:
 - '[[BD-ADR-024]]'
 - '[[RQ-RDR-028]]'
 - '[[RQ-RDR-034]]'
+- '[[RQ-RDR-038]]'
+- '[[BD-ADR-027]]'
 - '[[BD-ARCH-002]]'
 - '[[BD-ARCH-003]]'
 - '[[BD-ARCH-004]]'
@@ -97,6 +99,19 @@ tags:
 - データ層: `DB` を正本とし、`S3配信用JSON` と `docs/テスト結果` を公開成果物として保持する。
 - 将来の高度検索はアプリケーション層へ `検索API` を追加して段階導入する（現行MVPは静的JSON参照を継続）。
 
+## BAT-006 入出力契約
+- **起動イベント**: `S3 ObjectCreated` または収集run完了イベント。
+- **入力スキーマ（必須）**: `video_id`, `channel_id`, `meta_type`, `message_text`。
+- **波形生成入力条件**: `meta_type=textMessageEvent` の行のみ対象とし、検出パターン初期値は `草|w|くさ|kusa`。
+- **[[RQ-GL-017|ワードクラウド]]入力条件**: 形態素抽出対象は `message_text`。公開チャット由来以外は処理対象外。
+- **出力契約**: `highlights/{videoId}.json` と `wordcloud/{videoId}.png` を動画ID単位で再生成し、同一キー上書きで冪等性を担保する。
+- **障害時挙動**: 波形/[[RQ-GL-017|ワードクラウド]]の片系失敗は `partial` とし、失敗成果物のみ前回確定版を維持する。
+
+## 同時実行制御
+- BAT-001〜BAT-005 は同時実行数1を維持し、実行中は同種runを受け付けない。
+- BAT-006 は動画IDハッシュで最大3並列まで許容し、同一動画IDの重複実行は禁止する。
+- 同時実行判定は run作成時にロックを取得し、失敗時は `409 RUN_ALREADY_ACTIVE` を返す。
+
 ## Web実行境界（Next.js App Router）
 - Server Components を標準とし、状態保持・イベント処理・ブラウザAPI依存の部分だけを Client Components に切り出す。
 - `cookies()` / `headers()` / `searchParams` など Dynamic API は末端境界でのみ利用し、Root Layout での無差別利用を禁止する。
@@ -170,6 +185,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-13: BAT-006の入力スキーマ/出力契約/片系失敗時挙動と同時実行制御を追加 [[BD-ADR-027]]
 - 2026-02-13: 変更履歴のADRリンク記載漏れを補正 [[BD-ADR-021]]
 - 2026-02-12: 補助データ生成バッチ（BAT-006）、タグマスター即時更新バッチ（BAT-007）、バッチ実行制約を追加 [[BD-ADR-021]]
 - 2026-02-11: バッチ一覧/バッチイベント一覧を追加し、run状態と詳細設計参照を明確化 [[BD-ADR-021]]

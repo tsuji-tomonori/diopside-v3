@@ -3,11 +3,11 @@ id: BD-API-005
 title: HTTP API契約共通方針
 doc_type: API設計
 phase: BD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-INT-001]]'
 - '[[RQ-SEC-001]]'
@@ -22,6 +22,8 @@ related:
 - '[[DD-ERR-001]]'
 - '[[DD-API-001]]'
 - '[[DD-API-010]]'
+- '[[RQ-RDR-038]]'
+- '[[BD-ADR-027]]'
 tags:
 - diopside
 - BD
@@ -70,6 +72,18 @@ tags:
 - キャッシュ対象レスポンスは `Cache-Control` を明示し、意図しない共有キャッシュを防ぐ。
 - リクエスト相関は `X-Request-Id` と `traceparent` を利用し、Problem Details の `instance` とログ/トレースを相互参照可能にする。
 
+## CORS規約
+- 許可Originは `https://diopside.example.com` と管理画面運用Originの明示リスト方式とし、`*` は使用しない。
+- 許可メソッドは `GET,POST,PATCH,PUT,DELETE,OPTIONS`、許可ヘッダは `Content-Type,Authorization,X-Request-Id,Idempotency-Key,traceparent` とする。
+- `Access-Control-Allow-Credentials` は管理系APIのみ `true`、公開配信APIは `false` を既定とする。
+- Preflight応答は `Access-Control-Max-Age` を設定し、失敗時は `403` で拒否する。
+
+## レート制限規約
+- 管理系API: 1オペレータあたり `10 req/min`、バースト `20`。
+- 公開参照API: 1クライアントIPあたり `100 req/min`、バースト `200`。
+- 収集起動API（`/api/v1/ops/ingestion/runs`）は同時実行制約に加えて `3 req/min` を上限とする。
+- 超過時は `429 Too Many Requests` + `Retry-After` を返し、ログへ `rate_limit_key` を記録する。
+
 ## 契約運用規約（Contract-first）
 - OpenAPIを契約正本とし、仕様更新なしの実装先行を禁止する。
 - CIでスキーマLint、破壊的変更検知、コントラクトテストを実行する。
@@ -117,6 +131,7 @@ tags:
 - 型推論の安定化のため、RPC対象ルートはメソッドチェーンで定義する。
 
 ## 変更履歴
+- 2026-02-13: CORS許可ポリシー（Origin/Method/Header/Credentials）とAPIレート制限を追加 [[BD-ADR-027]]
 - 2026-02-11: `@hono/zod-openapi` 統一方針（`OpenAPIHono`/`createRoute`、Schema-first、`operationId`/`tags`、OpenAPI公開経路）を追加 [[BD-ADR-025]]
 - 2026-02-11: Hono + Zod 実装規約（入力検証、`HTTPException`/`onError` 集約、RPC型共有、Zod v4運用）を追加 [[BD-ADR-025]]
 - 2026-02-11: 新規作成（HTTPセマンティクス、Problem Details、互換性、運用規約を定義） [[BD-ADR-023]]
