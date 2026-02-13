@@ -3,17 +3,19 @@ id: RQ-UX-021
 title: クラウドCI/CDにおけるアクセシビリティ検査の自動化とゲート
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 related:
 - '[[RQ-RDR-018]]'
 - '[[RQ-DEV-001]]'
 - '[[BD-BUILD-001]]'
+- '[[AT-SCN-002]]'
+- '[[AT-REL-001]]'
 tags:
 - diopside
 - RQ
@@ -37,4 +39,5 @@ tags:
   - [[RQ-DEV-001]]
 
 ## 変更履歴
+- 2026-02-13: 要求別RTMの直接検証リンクとして [[AT-SCN-002]] / [[AT-REL-001]] を追加 [[RQ-RDR-038]]
 - 2026-02-11: 新規作成 [[RQ-RDR-018]]

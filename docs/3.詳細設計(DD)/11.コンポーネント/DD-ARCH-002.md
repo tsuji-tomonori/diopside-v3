@@ -3,11 +3,11 @@ id: DD-ARCH-002
 title: Next.js App Router 実装ガイド
 doc_type: アーキテクチャ詳細
 phase: DD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-12'
+updated: '2026-02-13'
 up:
 - '[[BD-ADR-024]]'
 - '[[BD-ARCH-001]]'
@@ -15,6 +15,10 @@ related:
 - '[[DD-COMP-001]]'
 - '[[DD-UI-001]]'
 - '[[DD-CODE-001]]'
+- '[[RQ-DEV-001]]'
+- '[[RQ-PS-001]]'
+- '[[RQ-SEC-001]]'
+- '[[RQ-UX-001]]'
 tags:
 - diopside
 - DD
@@ -260,4 +264,5 @@ const HighlightWavePanel = dynamic(
 - [[DD-CODE-001]]: コーディング規約
 
 ## 変更履歴
+- 2026-02-13: 設計別RTMの根拠追跡を補強するため、[[RQ-DEV-001]] / [[RQ-PS-001]] / [[RQ-SEC-001]] / [[RQ-UX-001]] を関連へ追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）

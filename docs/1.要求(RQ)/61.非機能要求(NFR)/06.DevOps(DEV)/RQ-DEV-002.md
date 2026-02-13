@@ -3,11 +3,11 @@ id: RQ-DEV-002
 title: AIエージェント運用要件
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -16,6 +16,7 @@ related:
 - '[[RQ-DEV-001]]'
 - '[[RQ-RDR-029]]'
 - '[[BD-ARCH-005]]'
+- '[[AT-OPS-INF-001]]'
 tags:
 - diopside
 - RQ
@@ -46,4 +47,5 @@ tags:
   - [[BD-ARCH-005]]
 
 ## 変更履歴
+- 2026-02-13: 要求別RTMの直接検証リンクとして [[AT-OPS-INF-001]] を追加 [[RQ-RDR-038]]
 - 2026-02-11: 新規作成 [[RQ-RDR-029]]

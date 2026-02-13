@@ -3,11 +3,11 @@ id: DD-LOG-002
 title: インフラ監視ログ詳細
 doc_type: ログ設計
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-13'
 up:
   - '[[BD-MON-003]]'
   - '[[BD-ADR-022]]'
@@ -16,6 +16,7 @@ related:
   - '[[DD-SEC-002]]'
   - '[[AT-OPS-001]]'
   - '[[AT-RPT-001]]'
+  - '[[RQ-OBY-001]]'
 tags:
   - diopside
   - DD
@@ -49,5 +50,6 @@ tags:
 - ログ品質未達時は可用性/性能の判定を保留し、再集計後に確定する。
 
 ## 変更履歴
+- 2026-02-13: 設計別RTMの根拠追跡を補強するため、[[RQ-OBY-001]] を関連へ追加 [[BD-ADR-022]]
 - 2026-02-11: 新規作成（インフラ監視ログイベントと品質基準） [[BD-ADR-022]]
 - 2026-02-11: ADR参照をCloudWatch保持と構造化ログ方針へ整理 [[BD-ADR-022]]
