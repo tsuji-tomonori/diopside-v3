@@ -4,7 +4,7 @@ title: 収集実行
 term_en: ingestion_run
 doc_type: 用語
 phase: RQ
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -12,6 +12,11 @@ updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related: []
+deprecated_terms:
+- 収集ジョブ
+- ingestion_job
+deprecated_terms_allow_in:
+- docs/1.要求(RQ)/41.要求決定記録(RDR)/RQ-RDR-040.md
 tags:
 - diopside
 - RQ
@@ -32,6 +37,7 @@ tags:
 - 文書・実装・テストで同じ意味で使用する。
 
 ## 変更履歴
+- 2026-02-14: 廃止語（`収集ジョブ`/`ingestion_job`）をfrontmatter管理へ移行し、GL正本から検証可能化 [[RQ-RDR-040]]
 - 2026-02-14: 用語を「[[RQ-GL-002|収集実行]]（[[RQ-GL-002|ingestion_run]]）」へ統一し、旧称「収集ジョブ」を互換表現として明記 [[RQ-RDR-040]]
 - 2026-02-11: 単一Backend API（Hono）内実行と手動/定期の運用API起動統一を明記 [[RQ-RDR-034]]
 - 2026-02-10: 定義を表形式（標準）へ統一

@@ -21,7 +21,7 @@ import argparse
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Set, Tuple
 
 import yaml
 
@@ -211,9 +211,105 @@ def normalize_link_id(doc_id: str) -> str:
     return doc_id.strip()
 
 
+def build_deprecated_term_rules(docs: List["Doc"], root: Path) -> Tuple[List[Dict[str, Any]], List[str]]:
+    """Build deprecated term rules from glossary docs (RQ-GL-*).
+
+    Expected glossary frontmatter keys:
+      - deprecated_terms: ["old_term", ...]  (optional)
+      - deprecated_terms_allow_in: ["docs/path/file.md", ...]  (optional)
+    """
+
+    rules: List[Dict[str, Any]] = []
+    issues: List[str] = []
+    term_to_owner: Dict[str, str] = {}
+
+    for d in docs:
+        if not d.id.startswith("RQ-GL-"):
+            continue
+
+        title = str(d.frontmatter.get("title", "")).strip()
+        term_en = str(d.frontmatter.get("term_en", "")).strip()
+
+        raw_terms = d.frontmatter.get("deprecated_terms", [])
+        if raw_terms is None:
+            raw_terms = []
+        if not isinstance(raw_terms, list):
+            issues.append(f"- {d.path}: 'deprecated_terms' must be a list")
+            continue
+
+        raw_allow_in = d.frontmatter.get("deprecated_terms_allow_in", [])
+        if raw_allow_in is None:
+            raw_allow_in = []
+        if not isinstance(raw_allow_in, list):
+            issues.append(f"- {d.path}: 'deprecated_terms_allow_in' must be a list")
+            raw_allow_in = []
+
+        allow_in: Set[str] = {d.path.resolve().relative_to(root).as_posix()}
+        for path_value in raw_allow_in:
+            rel = str(path_value).strip()
+            if not rel:
+                continue
+            try:
+                rel_path = (root / rel).resolve().relative_to(root)
+            except ValueError:
+                issues.append(
+                    f"- {d.path}: 'deprecated_terms_allow_in' path escapes workspace: {rel}"
+                )
+                continue
+            allow_in.add(rel_path.as_posix())
+
+        for value in raw_terms:
+            term = str(value).strip()
+            if not term:
+                issues.append(f"- {d.path}: 'deprecated_terms' must not contain empty values")
+                continue
+
+            if term == title or (term_en and term == term_en):
+                issues.append(
+                    f"- {d.path}: deprecated term '{term}' duplicates canonical glossary term"
+                )
+                continue
+
+            owner = term_to_owner.get(term)
+            if owner and owner != d.id:
+                issues.append(
+                    f"- {d.path}: deprecated term '{term}' is already defined in {owner}"
+                )
+                continue
+            term_to_owner[term] = d.id
+
+            preferred = term_en if (term_en and SNAKE_CASE_RE.fullmatch(term)) else title
+            rules.append({"term": term, "preferred": preferred, "allow_in": allow_in})
+
+    return rules, issues
+
+
+def find_deprecated_term_hits(text: str, term: str) -> List[Tuple[int, str]]:
+    """Find deprecated term hits in non-fenced lines.
+
+    Returns (line_number, line_text_without_trailing_ws).
+    """
+
+    out: List[Tuple[int, str]] = []
+    in_fence = False
+
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if term in line:
+            out.append((line_no, line.rstrip()))
+
+    return out
+
+
 @dataclass
 class Doc:
     path: Path
+    raw_text: str
     frontmatter: Dict[str, Any]
     body: str
 
@@ -282,18 +378,21 @@ def main() -> int:
 
     docs: List[Doc] = []
     parse_errors: List[str] = []
+    deprecated_term_issues: List[str] = []
 
     for p in sorted(md_files):
         text = p.read_text(encoding="utf-8")
         fm, body, errs = split_frontmatter(text)
         if errs:
             parse_errors.append(f"- {p}: " + "; ".join(errs))
-        docs.append(Doc(path=p, frontmatter=fm, body=body))
+        docs.append(Doc(path=p, raw_text=text, frontmatter=fm, body=body))
 
     id_to_doc: Dict[str, Doc] = {}
     for d in docs:
         if d.id:
             id_to_doc[d.id] = d
+
+    deprecated_term_rules, deprecated_rule_issues = build_deprecated_term_rules(docs, root)
 
     # Checks
     issues: List[str] = []
@@ -304,6 +403,8 @@ def main() -> int:
     # Forbidden files are treated as issues.
     for p in forbidden_files:
         issues.append(f"- {p}: forbidden file under docs/ (README.md / TEMPLATE.md are not allowed)")
+
+    issues.extend(deprecated_rule_issues)
 
     date_re = re.compile(r"^\d{4}-\d{2}-\d{2}$")
     allowed_bounded_contexts = set(ALLOWED_BOUNDED_CONTEXTS)
@@ -438,6 +539,27 @@ def main() -> int:
                 if t not in id_to_doc:
                     broken_links.append(f"- {d.id}: {rel_key} -> [[{t}]] (NOT FOUND)")
 
+    # Deprecated terms policy check
+    for d in docs:
+        if not in_scope(d.path):
+            continue
+        rel_path = d.path.resolve().relative_to(root).as_posix()
+        for policy in deprecated_term_rules:
+            if rel_path in policy["allow_in"]:
+                continue
+            term = str(policy["term"])
+            preferred = str(policy["preferred"])
+            hits = find_deprecated_term_hits(d.raw_text, term)
+            for line_no, line_text in hits:
+                if preferred:
+                    deprecated_term_issues.append(
+                        f"- {d.path}:{line_no}: deprecated term '{term}' found (use '{preferred}') | {line_text}"
+                    )
+                else:
+                    deprecated_term_issues.append(
+                        f"- {d.path}:{line_no}: deprecated term '{term}' found | {line_text}"
+                    )
+
     # Backlink check: every A.up -> P must be visible as reverse-up backlink at P.
     reverse_up: Dict[str, List[str]] = {doc_id: [] for doc_id in id_to_doc}
     for d in docs:
@@ -464,6 +586,7 @@ def main() -> int:
     lines.append(f"- id_docs: {len([d for d in docs if d.id])}")
     lines.append(f"- parse_errors: {len(parse_errors)}")
     lines.append(f"- issues: {len(issues)}")
+    lines.append(f"- deprecated_term_issues: {len(deprecated_term_issues)}")
     lines.append(f"- nonlinked_doc_ids: {len(nonlinked_doc_ids)}")
     lines.append(f"- broken_links: {len(broken_links)}")
     lines.append(f"- backlink_issues: {len(backlink_issues)}")
@@ -479,6 +602,11 @@ def main() -> int:
     if issues:
         lines.append("## Issues")
         lines.extend(issues)
+        lines.append("")
+
+    if deprecated_term_issues:
+        lines.append("## Deprecated terms")
+        lines.extend(deprecated_term_issues)
         lines.append("")
 
     if nonlinked_doc_ids:
@@ -504,7 +632,14 @@ def main() -> int:
         report_path.write_text(report_text, encoding="utf-8")
 
     print(report_text)
-    if parse_errors or issues or nonlinked_doc_ids or broken_links or backlink_issues:
+    if (
+        parse_errors
+        or issues
+        or deprecated_term_issues
+        or nonlinked_doc_ids
+        or broken_links
+        or backlink_issues
+    ):
         return 1
     return 0
 
