@@ -196,7 +196,7 @@
 
 ## 影響確認（追加10）
 - 更新フロー: `RQ-DG-001` を RQ/BD/DD/UT/IT/AT の工程別に再編し、同一変更ゲート（RDR/ADR/RTM/テスト追従）を明示。
-- 用語統制: `[[RQ-GL-008|tag_master]]（タグマネージャー）` を正本表記に固定し、`TagMaster`/`タグマスター` を廃止語へ移行。
+- 用語統制: `[[RQ-GL-008|tag_master]]（タグマスター）` を正本表記に固定。
 - DEP再編: `BD-INF-DEP-005` に配備モード（通常/初回/緊急）と配備責務6分類（BE/FE/Infra/DB/Doc/TestAsset）を追加。
 - 階層整理: `BD-INF-DEP-001` / `BD-INF-DEP-002` は `BD-INF-DEP-005` へ統合し、廃止（参照互換保持）。
 - IAM粒度: `DD-INF-SEC-003` に `環境(dev/prod) x 責務(deploy/ops/audit)` マトリクスを追加。
@@ -207,3 +207,21 @@
 - `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>` を実行する。
 - `task docs:guard` を実行して `issues` / `broken_links` / `backlink_issues` を確認する。
 - `task docs:trace` を実行して `RQ-RTM-001` / `RQ-RTM-002` を再生成する。
+
+## 実施内容（追加11）
+- 対象: `docs/0.ドメイン(DOM)` の廃止と、ドメイン境界正本のBD統合。
+- 基本設計追加: `BD-SYS-DOM-001`（5+1 BC、サブドメイン分類、境界契約マトリクス、BC責務サマリを統合）。
+- 基本設計更新: `BD-SYS-ARCH-001`, `BD-SYS-ADR-029`。
+- 要求更新: `RQ-RDR-040`（ドメイン境界正本の参照先を `BD-SYS-DOM-001` へ移管）。
+- 削除: `docs/0.ドメイン(DOM)` 配下8文書（`DOM-SUB-001`, `DOM-CTX-001`, `DOM-BC-001`〜`DOM-BC-006`）。
+
+## 影響確認（追加11）
+- 正本一意性: ドメイン境界定義を `[[BD-SYS-DOM-001]]` に一本化し、DOM層とBD層の重複正本を解消。
+- 参照整合: `[[DOM-*]]` 参照を廃止し、`BD-SYS-ARCH-001` / `BD-SYS-ADR-029` / `RQ-RDR-040` の追跡経路をBD正本へ統合。
+- 運用整合: ドメイン境界変更の判断点をADR (`[[BD-SYS-ADR-029]]`) に集約し、工程別運用フローへの接続を維持。
+
+## 検証（追加11）
+- `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行する。
+- `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>` を実行する。
+- `task docs:guard` を実行し、リンク/Frontmatter/追跡整合を確認する。
+- `task docs:trace` を実行し、RTM静的ビューを再生成する。

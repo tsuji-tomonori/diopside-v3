@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>diopside-v3 ドキュメントレビューレポート</title>
+<style>
+  :root {
+    --critical: #dc2626;
+    --critical-bg: #fef2f2;
+    --medium: #ea580c;
+    --medium-bg: #fff7ed;
+    --low: #2563eb;
+    --low-bg: #eff6ff;
+    --good: #16a34a;
+    --good-bg: #f0fdf4;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --bg: #ffffff;
+    --bg-alt: #f9fafb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  h1 { font-size: 1.75rem; border-bottom: 3px solid var(--text); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  h2 { font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem; padding-bottom: 0.3rem; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+  p, li { margin-bottom: 0.5rem; }
+  ul, ol { padding-left: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+  th { background: var(--bg-alt); font-weight: 600; white-space: nowrap; }
+  code { background: #f3f4f6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85em; }
+  a { color: var(--low); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .badge {
+    display: inline-block; padding: 0.15rem 0.6rem; border-radius: 3px;
+    font-size: 0.8rem; font-weight: 600; color: #fff;
+  }
+  .badge-critical { background: var(--critical); }
+  .badge-medium { background: var(--medium); }
+  .badge-low { background: var(--low); }
+  .badge-good { background: var(--good); }
+
+  .card {
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 1rem 1.25rem; margin: 1rem 0;
+  }
+  .card-critical { border-left: 4px solid var(--critical); background: var(--critical-bg); }
+  .card-medium { border-left: 4px solid var(--medium); background: var(--medium-bg); }
+  .card-low { border-left: 4px solid var(--low); background: var(--low-bg); }
+  .card-good { border-left: 4px solid var(--good); background: var(--good-bg); }
+
+  .card h4 { margin-bottom: 0.5rem; }
+  .card p { margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .card .ref { color: var(--text-light); font-size: 0.85rem; }
+
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin: 1rem 0;
+  }
+  .summary-item {
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 1rem; text-align: center;
+  }
+  .summary-item .num { font-size: 2rem; font-weight: 700; }
+  .summary-item .label { font-size: 0.85rem; color: var(--text-light); }
+
+  .grade { font-size: 3rem; font-weight: 700; color: var(--good); }
+
+  nav { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.5rem; margin: 1.5rem 0; }
+  nav ol { columns: 2; column-gap: 2rem; }
+  nav li { margin-bottom: 0.3rem; font-size: 0.95rem; }
+
+  .meta-table { margin-bottom: 1.5rem; }
+  .meta-table td:first-child { font-weight: 600; width: 160px; }
+
+  @media (max-width: 640px) {
+    body { padding: 1rem; }
+    nav ol { columns: 1; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 0.8rem; }
+    th, td { padding: 0.35rem 0.5rem; }
+  }
+
+  @media print {
+    body { max-width: none; padding: 0; font-size: 10pt; }
+    .card { break-inside: avoid; }
+    nav { break-after: page; }
+    h2 { break-after: avoid; }
+    table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>diopside-v3 ドキュメントレビューレポート</h1>
+
+<table class="meta-table">
+<tr><td>レビュー日</td><td>2026-02-15</td></tr>
+<tr><td>対象リポジトリ</td><td>diopside-v3</td></tr>
+<tr><td>対象ファイル数</td><td>385</td></tr>
+<tr><td>レビュー範囲</td><td>要求定義・基本設計・詳細設計・テスト計画</td></tr>
+</table>
+
+<nav>
+<strong>目次</strong>
+<ol>
+<li><a href="#sec1">エグゼクティブサマリー</a></li>
+<li><a href="#sec2">要求の矛盾分析</a></li>
+<li><a href="#sec3">要求カバレッジ分析</a></li>
+<li><a href="#sec4">基本設計の矛盾分析</a></li>
+<li><a href="#sec5">詳細設計の実装可能性分析</a></li>
+<li><a href="#sec6">インフラ重点分析</a></li>
+<li><a href="#sec7">設計の曖昧さ一覧</a></li>
+<li><a href="#sec8">テスト・運用文書の分析</a></li>
+<li><a href="#sec9">改善提案</a></li>
+</ol>
+</nav>
+
+<!-- ===== 1. Executive Summary ===== -->
+<h2 id="sec1">1. エグゼクティブサマリー</h2>
+
+<div style="text-align:center; margin:1rem 0;">
+  <span class="grade">A-</span>
+  <p style="color:var(--text-light);">総合評価</p>
+</div>
+
+<p>diopside-v3 のドキュメント群は、個人開発プロジェクトとしては極めて高い水準にある。要求定義から詳細設計・テスト計画まで全フェーズが体系的に整備されており、トレーサビリティマトリックス（RTM）による追跡も実現している。</p>
+
+<div class="summary-grid">
+  <div class="summary-item"><div class="num">385</div><div class="label">分析対象ファイル</div></div>
+  <div class="summary-item"><div class="num">7</div><div class="label">フェーズ区分</div></div>
+  <div class="summary-item"><div class="num" style="color:var(--critical)">5</div><div class="label">Must Fix</div></div>
+  <div class="summary-item"><div class="num" style="color:var(--medium)">8</div><div class="label">Should Fix</div></div>
+  <div class="summary-item"><div class="num" style="color:var(--low)">5</div><div class="label">Nice to Have</div></div>
+</div>
+
+<h3>強み</h3>
+<ul>
+  <li>ドメインモデル・用語集・境界づけられたコンテキストが明確に定義</li>
+  <li>インフラ設計（CIDR/SG/NACL/IaC パイプライン）が実装可能レベルで具体的</li>
+  <li>段階ロード（<code>bootstrap</code> → <code>tag_master</code> → <code>archive_index</code>）の一貫した設計</li>
+  <li>バックアップ・リカバリ設計に RTO/RPO 目標が明示</li>
+</ul>
+
+<h3>課題</h3>
+<ul>
+  <li>要求間の論理的矛盾が 4 件存在</li>
+  <li>テスト実行結果がすべてテンプレート状態</li>
+  <li>一部の非機能要求が運用体制制約と整合しない</li>
+</ul>
+
+<!-- ===== 2. Contradictions ===== -->
+<h2 id="sec2">2. 要求の矛盾分析</h2>
+
+<div class="card card-medium">
+  <h4>矛盾 #1: 継続収集 vs コスト上限・常時監視なし <span class="badge badge-medium">Medium</span></h4>
+  <p class="ref">RQ-PP-001 / RQ-PC-006</p>
+  <p>RQ-PP-001 はプロジェクト目的として「継続的に収集・蓄積」を定義しているが、RQ-PC-006 は AWS 月額コストを 3,000 円に上限設定し、収集頻度の削減を優先事項としている。</p>
+  <p><strong>影響:</strong> 「継続収集」の定義が曖昧なまま実装に進むと、コスト超過リスクまたは収集漏れのどちらかが発生する。</p>
+  <p><strong>推奨:</strong> RQ-PP-001 に「継続収集」の定量的定義（例: 日次バッチ、週次バッチ）を追記し、RQ-PC-006 との整合性を明示する。</p>
+</div>
+
+<div class="card card-low">
+  <h4>矛盾 #2: 出演条件判定 vs 手動確認 <span class="badge badge-low">Low</span></h4>
+  <p class="ref">RQ-FR-003 / RQ-SC-001</p>
+  <p>RQ-FR-003 は「出演条件一致の公開動画を判定して取り込める」と記述し自動判定を示唆する。一方 RQ-SC-001 では管理者による手動確認プロセスが前提。</p>
+  <p><strong>影響:</strong> 完全自動化と手動確認付きワークフローのどちらを実装すべきか判断できない。</p>
+  <p><strong>推奨:</strong> RQ-FR-003 に「管理者の確認を経て取り込む」フローを明記し、自動判定は候補提示にとどまることを明確化する。</p>
+</div>
+
+<div class="card card-medium">
+  <h4>矛盾 #3: 段階ロード無効化タイミング vs フィルタ即時動作 <span class="badge badge-medium">Medium</span></h4>
+  <p class="ref">RQ-UC-002 / RQ-FR-009</p>
+  <p>RQ-UC-002 は段階ロードを定義し全データロード完了までフル絞り込みが無効。RQ-FR-009 はタグ条件による絞り込みが <code>tag_master</code> を参照して動作すると記述しており、<code>archive_index</code> ロード完了前のフィルタ動作が未定義。</p>
+  <p><strong>影響:</strong> <code>tag_master</code> ロード完了後〜<code>archive_index</code> ロード完了前の間にタグフィルタ UI を有効化すべきかどうかが不明。</p>
+  <p><strong>推奨:</strong> RQ-UC-002 に段階ごとの UI 状態遷移を明記する。</p>
+</div>
+
+<div class="card card-medium">
+  <h4>矛盾 #4: 脆弱性即時対応 vs 運用体制制約 <span class="badge badge-medium">Medium</span></h4>
+  <p class="ref">RQ-SEC-001 / RQ-PC-004</p>
+  <p>RQ-SEC-001 はリリース時に Critical/High 脆弱性ゼロを受け入れ基準としているが、運用中の脆弱性対応時間は未定義。RQ-PC-004 は個人開発で 24 時間有人対応がないことを制約として明示。</p>
+  <p><strong>影響:</strong> 運用中に Critical 脆弱性が発見された場合の対応 SLA が不明確。</p>
+  <p><strong>推奨:</strong> RQ-SEC-001 に運用中の脆弱性対応基準を追記する（例: Critical 認知後 24h 以内に緩和策適用）。</p>
+</div>
+
+<!-- ===== 3. Coverage ===== -->
+<h2 id="sec3">3. 要求カバレッジ分析</h2>
+
+<h3>3.1 トレーサビリティ状況</h3>
+<table>
+<thead><tr><th>カテゴリ</th><th>要求数</th><th>BD 対応</th><th>カバレッジ</th></tr></thead>
+<tbody>
+<tr><td>機能要求（FR）</td><td>25+</td><td>対応あり</td><td><span class="badge badge-good">高</span></td></tr>
+<tr><td>非機能要求（NFR）</td><td>10 カテゴリ</td><td>対応あり</td><td><span class="badge badge-good">高</span></td></tr>
+<tr><td>ユースケース（UC）</td><td>9+</td><td>対応あり</td><td><span class="badge badge-good">高</span></td></tr>
+<tr><td>制約（PC）</td><td>6+</td><td>設計判断に反映</td><td><span class="badge badge-medium">中</span></td></tr>
+</tbody>
+</table>
+
+<h3>3.2 未定義用語</h3>
+<table>
+<thead><tr><th>用語</th><th>使用箇所</th><th>影響</th></tr></thead>
+<tbody>
+<tr><td>運用サイクル</td><td>テスト計画文書</td><td>テスト実行タイミングの解釈が曖昧</td></tr>
+<tr><td>公開チャット</td><td>要求文書</td><td>YouTube ライブチャットとの区別が不明確</td></tr>
+<tr><td>正規化</td><td>データ設計文書</td><td>DB 正規化か文字列正規化か不明</td></tr>
+</tbody>
+</table>
+
+<h3>3.3 LLM 統合の未反映</h3>
+<div class="card card-low">
+  <p class="ref">RQ-UC-009 / RQ-FR-005</p>
+  <p>RQ-UC-009 は管理者がタグ付けを行う際に「外部 LLM によるタグ提案」を利用するフローを定義。しかし RQ-FR-005（タグ辞書更新）には LLM 連携に関する記述がなく、機能要求レベルで LLM 統合が反映されていない。</p>
+  <p><strong>推奨:</strong> RQ-FR-005 に LLM タグ提案機能の要求を追加するか、LLM 連携は運用手順であり機能要求対象外であることを明記する。</p>
+</div>
+
+<h3>3.4 状態遷移図の欠如</h3>
+<ul>
+  <li><strong>段階ロードの状態遷移:</strong> <code>bootstrap</code> → <code>tag_master</code> → <code>archive_index</code> の各段階での UI 状態・フィルタ有効範囲が図示されていない</li>
+  <li><strong>タグライフサイクル:</strong> タグの作成 → 有効 → 無効化の遷移が DB 設計には暗示されているが状態遷移図がない</li>
+</ul>
+
+<!-- ===== 4. BD Consistency ===== -->
+<h2 id="sec4">4. 基本設計の矛盾分析</h2>
+
+<div class="card card-good">
+  <h4>BD 内部整合性: 良好（矛盾なし） <span class="badge badge-good">Good</span></h4>
+  <p>基本設計文書群内部で論理的矛盾は検出されなかった。</p>
+  <ul>
+    <li>アーキテクチャ概要と個別設計文書の用語・構成が一致</li>
+    <li>データ設計と API 設計のエンティティ定義が整合</li>
+    <li>インフラ設計と品質特性の SLA 目標が整合</li>
+  </ul>
+</div>
+
+<div class="card card-good">
+  <h4>BD-DD アライメント: 良好 <span class="badge badge-good">Good</span></h4>
+  <p>詳細設計は基本設計を正しく拡張・具体化している。</p>
+  <ul>
+    <li>BD-APP-API → DD-APP-API: API 仕様の詳細化</li>
+    <li>BD-INF-IAC → DD-INF-IAC: CI/CD パイプラインの具体化</li>
+    <li>BD-APP-DATA → DD-APP-DB: 物理設計への落とし込み</li>
+  </ul>
+</div>
+
+<!-- ===== 5. Implementation Readiness ===== -->
+<h2 id="sec5">5. 詳細設計の実装可能性分析</h2>
+
+<h3>5.1 実装 Ready</h3>
+<table>
+<thead><tr><th>領域</th><th>関連文書</th><th>評価</th></tr></thead>
+<tbody>
+<tr><td>ネットワーク / IaC</td><td>DD-INF-IAC-*, DD-INF-NET-*</td><td>CIDR/SG/NACL 具体定義済み</td></tr>
+<tr><td>API コントラクト</td><td>DD-APP-API-*</td><td>OpenAPI 相当の詳細定義あり</td></tr>
+<tr><td>DB 制約</td><td>DD-APP-DB-*</td><td>テーブル・インデックス・マイグレーション完備</td></tr>
+<tr><td>監視</td><td>DD-INF-MON-*</td><td>閾値定義済み（下記参照）</td></tr>
+<tr><td>CI/CD</td><td>DD-INF-IAC-001</td><td>全ステージ定義済み</td></tr>
+<tr><td>ログ</td><td>DD-APP-ログ/</td><td>構造化ログ設計完了</td></tr>
+</tbody>
+</table>
+
+<h3>5.2 要確認事項</h3>
+<table>
+<thead><tr><th>項目</th><th>内容</th><th>重要度</th></tr></thead>
+<tbody>
+<tr><td>DB リストア手順</td><td>BD-INF-DEP-006 で方針定義済みだが DD レベルの実装手順が不足</td><td><span class="badge badge-medium">Medium</span></td></tr>
+<tr><td><code>archive_index</code> ページネーション</td><td>ページ分割方式は定義済みだが件数・ソート順の詳細が不明確</td><td><span class="badge badge-low">Low</span></td></tr>
+<tr><td>Lambda 同時実行制限</td><td>同時実行数上限が未明示。3,000 円/月制約との整合性要確認</td><td><span class="badge badge-medium">Medium</span></td></tr>
+</tbody>
+</table>
+
+<!-- ===== 6. Infrastructure ===== -->
+<h2 id="sec6">6. インフラ重点分析</h2>
+
+<h3>6.1 Critical 欠落</h3>
+<div class="card card-critical">
+  <h4>RDS リストア手順の DD レベル詳細 <span class="badge badge-critical">Critical</span></h4>
+  <p class="ref">BD-INF-DEP-006（方針定義済み） / DD 該当文書なし</p>
+  <p>BD-INF-DEP-006 で PITR・日次スナップショットの方針は定義されている（S3 バージョニング 30 日、DB 日次スナップショット + PITR 30 日、RTO/RPO 目標あり）。不足しているのは DD レベルでの具体的なリストアコマンド・手順書。</p>
+</div>
+
+<h3>6.2 Medium 欠落</h3>
+<table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>WAF ルール</td><td>Phase 2 として計画されているが具体的なルールセットが未定義</td></tr>
+<tr><td>Lambda cold start SLA</td><td>コールドスタート時のレイテンシ目標未定義。p95 WARN 1200ms にコールドスタートが含まれるか不明</td></tr>
+<tr><td>シークレットローテーション頻度</td><td>Secrets Manager 利用は言及されているがローテーション間隔が未指定</td></tr>
+</tbody>
+</table>
+
+<h3>6.3 Minor 欠落</h3>
+<table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>S3 ライフサイクルポリシー</td><td>バージョニング 30 日定義済みだが Glacier 移行等のルール未定義</td></tr>
+<tr><td>TLS 証明書更新手順</td><td>ACM 自動更新が前提と推測されるが明示されていない</td></tr>
+<tr><td>クロスリージョン DR</td><td>DR/BCP 方針は存在するが詳細は Phase 2 以降</td></tr>
+</tbody>
+</table>
+
+<h3>6.4 良好な点</h3>
+<div class="card card-good">
+  <ul>
+    <li><strong>ネットワーク設計:</strong> CIDR/SG/NACL が実装可能レベルで具体的</li>
+    <li><strong>監視閾値:</strong> CloudFront 5xx（WARN 2% / CRIT 5%）、Lambda p95（WARN 1200ms / CRIT 1500ms）</li>
+    <li><strong>IaC パイプライン:</strong> lint/validate → policy → cdk synth → cdk diff → approve → cdk deploy → smoke</li>
+    <li><strong>破壊的変更:</strong> 設計レビュー + 運用の二重承認を要求</li>
+  </ul>
+</div>
+
+<!-- ===== 7. Ambiguities ===== -->
+<h2 id="sec7">7. 設計の曖昧さ一覧</h2>
+
+<table>
+<thead><tr><th>#</th><th>曖昧な点</th><th>関連領域</th><th>重要度</th><th>推奨対応</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>トランザクション分離レベル未指定</td><td>DD-APP-DB</td><td><span class="badge badge-medium">Medium</span></td><td>Read Committed を明示 or 要件に応じて指定</td></tr>
+<tr><td>2</td><td>キャッシュ無効化エラーリカバリ未定義</td><td>DD-INF / BD-INF</td><td><span class="badge badge-medium">Medium</span></td><td>CloudFront invalidation 失敗時のリトライ戦略を定義</td></tr>
+<tr><td>3</td><td>LLM タグ提案のサーキットブレーカー未定義</td><td>RQ-UC-009 / DD-APP</td><td><span class="badge badge-low">Low</span></td><td>外部 LLM API 障害時のフォールバックを明記</td></tr>
+<tr><td>4</td><td>同時タグ更新の楽観ロック未言及</td><td>DD-APP-DB</td><td><span class="badge badge-medium">Medium</span></td><td>API レベルでの ETag/version 楽観ロックを推奨</td></tr>
+<tr><td>5</td><td><code>archive_index</code> ページネーション詳細未定義</td><td>DD-APP-API</td><td><span class="badge badge-low">Low</span></td><td>件数上限・ソート基準・次ページ取得方式を明記</td></tr>
+<tr><td>6</td><td>コスト/パフォーマンストレードオフの定量化なし</td><td>BD-SYS-QUAL / RQ-PC-006</td><td><span class="badge badge-low">Low</span></td><td>3,000 円/月制約下でのコスト試算を追加</td></tr>
+</tbody>
+</table>
+
+<!-- ===== 8. Test & Operations ===== -->
+<h2 id="sec8">8. テスト・運用文書の分析</h2>
+
+<h3>8.1 テストケースの API 対応</h3>
+<table>
+<thead><tr><th>テストフェーズ</th><th>計画文書</th><th>ケース文書</th><th>API カバレッジ</th></tr></thead>
+<tbody>
+<tr><td>単体テスト（UT）</td><td>UT-PLAN-001〜005</td><td>DOC/INF/FE/BE</td><td><span class="badge badge-good">全 14 API</span></td></tr>
+<tr><td>結合テスト（IT）</td><td>IT-PLAN-001</td><td>13 ケース</td><td><span class="badge badge-good">全 14 API</span></td></tr>
+<tr><td>受入テスト（AT）</td><td>AT-PLAN-001</td><td>9 シナリオ</td><td><span class="badge badge-good">主要フロー</span></td></tr>
+</tbody>
+</table>
+
+<h3>8.2 Critical 欠落: テスト実行結果</h3>
+<div class="card card-critical">
+  <h4>テスト実行結果が一切なし <span class="badge badge-critical">Critical</span></h4>
+  <table>
+  <thead><tr><th>項目</th><th>状態</th></tr></thead>
+  <tbody>
+  <tr><td>UT レポート（<code>4.単体テスト(UT)/51.単体テストレポート/</code>）</td><td>テンプレート</td></tr>
+  <tr><td>IT 結果（<code>5.結合テスト(IT)/41.結合テスト結果/</code>）</td><td>テンプレート</td></tr>
+  <tr><td>AT 報告（<code>6.受入テスト(AT)/61.受入テスト報告/</code>）</td><td>テンプレート</td></tr>
+  </tbody>
+  </table>
+  <p>テスト計画・ケース定義は充実しているが、実行結果が一切記録されていない。リリース判定には全テストの実行結果が必要。</p>
+</div>
+
+<h3>8.3 スタブ状態のテスト計画</h3>
+<table>
+<thead><tr><th>文書</th><th>ドメイン</th><th>状態</th></tr></thead>
+<tbody>
+<tr><td>UT-PLAN-002</td><td>ドキュメント</td><td>最小限のケース定義のみ</td></tr>
+<tr><td>UT-PLAN-003</td><td>インフラ</td><td>最小限のケース定義のみ</td></tr>
+<tr><td>UT-PLAN-004</td><td>フロントエンド</td><td>最小限のケース定義のみ</td></tr>
+</tbody>
+</table>
+
+<h3>8.4 テストデータ</h3>
+<ul>
+  <li>AT-PLAN-001 は「最低 30 公式 + 30 ゲスト動画」のテストデータを要求</li>
+  <li>テストデータフィクスチャ（固定テストデータセット）の定義が未完了</li>
+</ul>
+
+<!-- ===== 9. Recommendations ===== -->
+<h2 id="sec9">9. 改善提案</h2>
+
+<h3>9.1 Must Fix（開発開始前に対応必須）— 5 件</h3>
+<table>
+<thead><tr><th>#</th><th>提案</th><th>関連指摘</th><th>対応方法</th></tr></thead>
+<tbody>
+<tr><td>MF-1</td><td>「継続収集」の定量的定義を追加</td><td>矛盾 #1</td><td>RQ-PP-001 に収集頻度を明記</td></tr>
+<tr><td>MF-2</td><td>段階ロード中の UI 状態遷移を定義</td><td>矛盾 #3</td><td>RQ-UC-002 に段階別 UI 状態表を追加</td></tr>
+<tr><td>MF-3</td><td>運用中の脆弱性対応 SLA を定義</td><td>矛盾 #4</td><td>RQ-SEC-001 に対応時間基準を追記</td></tr>
+<tr><td>MF-4</td><td>DB リストア手順を DD レベルで作成</td><td>インフラ Critical</td><td>DD-INF に復旧手順書を新規作成</td></tr>
+<tr><td>MF-5</td><td>テストデータフィクスチャを定義</td><td>テスト分析 8.4</td><td>UT/IT のテストデータ設計を完成</td></tr>
+</tbody>
+</table>
+
+<h3>9.2 Should Fix（本番リリース前に対応推奨）— 8 件</h3>
+<table>
+<thead><tr><th>#</th><th>提案</th><th>関連指摘</th><th>対応方法</th></tr></thead>
+<tbody>
+<tr><td>SF-1</td><td>出演条件判定フローの明確化</td><td>矛盾 #2</td><td>RQ-FR-003 に手動確認ステップを明記</td></tr>
+<tr><td>SF-2</td><td>未定義用語の用語集追加</td><td>カバレッジ 3.2</td><td>RQ-GL に 3 用語を追加</td></tr>
+<tr><td>SF-3</td><td>LLM 統合の要求レベル定義</td><td>カバレッジ 3.3</td><td>RQ-FR に LLM タグ提案要求を追加</td></tr>
+<tr><td>SF-4</td><td>トランザクション分離レベルの明示</td><td>曖昧さ #1</td><td>DD-APP-DB に分離レベルを記載</td></tr>
+<tr><td>SF-5</td><td>キャッシュ無効化リカバリ定義</td><td>曖昧さ #2</td><td>DD-INF にリトライ戦略を追加</td></tr>
+<tr><td>SF-6</td><td>楽観ロックの設計追加</td><td>曖昧さ #4</td><td>DD-APP-API に ETag 同時更新制御を追加</td></tr>
+<tr><td>SF-7</td><td>Lambda 同時実行制限の明示</td><td>実装可能性 5.2</td><td>DD-INF に同時実行上限とコスト試算を追加</td></tr>
+<tr><td>SF-8</td><td>UT-PLAN-002/003/004 の拡充</td><td>テスト分析 8.3</td><td>各ドメインのテスト計画を拡充</td></tr>
+</tbody>
+</table>
+
+<h3>9.3 Nice to Have（Phase 2 以降で対応）— 5 件</h3>
+<table>
+<thead><tr><th>#</th><th>提案</th><th>関連指摘</th><th>対応方法</th></tr></thead>
+<tbody>
+<tr><td>NH-1</td><td>状態遷移図の作成</td><td>カバレッジ 3.4</td><td>段階ロード・タグライフサイクルの状態遷移図を追加</td></tr>
+<tr><td>NH-2</td><td>コスト/パフォーマンストレードオフ定量化</td><td>曖昧さ #6</td><td>BD-SYS-QUAL にコスト試算セクションを追加</td></tr>
+<tr><td>NH-3</td><td>WAF ルールセットの定義</td><td>インフラ Medium</td><td>Phase 2 セキュリティ強化として具体化</td></tr>
+<tr><td>NH-4</td><td>クロスリージョン DR 設計</td><td>インフラ Minor</td><td>BD-INF-PLAT-002 を拡張</td></tr>
+<tr><td>NH-5</td><td><code>archive_index</code> ページネーション詳細</td><td>曖昧さ #5</td><td>DD-APP-API にページサイズ・ソート仕様を追加</td></tr>
+</tbody>
+</table>
+
+<hr style="margin-top:3rem">
+<p style="color:var(--text-light); font-size:0.85rem; text-align:center;">
+  本レポートは diopside-v3 リポジトリの docs/ 配下 385 ファイルを対象に静的分析を行った結果である。指摘事項は文書内容の論理的整合性に基づいており、実装コードのレビューは含まない。
+</p>
+
+</body>
+</html>

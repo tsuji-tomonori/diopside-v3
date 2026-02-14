@@ -55,7 +55,7 @@ tags:
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: DESIGN_VIEW -->
-- generated_at: 2026-02-14
+- generated_at: 2026-02-15
 
 | 設計ID | タイトル | 根拠要件(FR/NFR) | RDR | ADR | 検証(UT/IT/AT) |
 | --- | --- | --- | --- | --- | --- |
@@ -120,7 +120,7 @@ tags:
 | [[BD-SYS-ADR-026]] | テスト戦略をUT/IT/ATの三層品質ゲートで運用する | [[RQ-DEV-001]], [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-PLAN-001]], [[IT-PLAN-001]], [[UT-PLAN-001]] |
 | [[BD-SYS-ADR-027]] | バッチ実行制約と補助データ生成の運用境界を固定する | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | - | - | - |
 | [[BD-SYS-ADR-028]] | インフラ文書を本体開発フローへ統合する | - | [[RQ-RDR-039]] | - | - |
-| [[BD-SYS-ADR-029]] | DOM軸導入とPublished Language公式化で境界契約を管理する | - | [[RQ-RDR-040]] | - | - |
+| [[BD-SYS-ADR-029]] | ドメイン境界正本をBD-SYS-DOMへ統合しPublished Languageを維持する | - | [[RQ-RDR-040]] | - | - |
 | [[BD-SYS-ADR-030]] | データ保持・削除方針の責務をDB正本へ限定する | [[RQ-DATA-001]], [[RQ-OBY-001]], [[RQ-PRC-001]] | [[RQ-RDR-034]], [[RQ-RDR-035]] | - | - |
 | [[BD-SYS-ADR-031]] | 配備モードと責務マトリクスをINF正本へ統合する | - | [[RQ-RDR-043]] | - | - |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-038]], [[RQ-RDR-040]] | - | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] |
@@ -128,6 +128,7 @@ tags:
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[RQ-DEV-001]], [[RQ-FR-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | - | - | - |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[RQ-FR-001]] | - | - | - |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[RQ-DEV-002]] | [[RQ-RDR-029]] | - | - |
+| [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-040]] | - | - |
 | [[BD-SYS-QUAL-001]] | 品質特性 | [[RQ-AV-001]], [[RQ-DEV-001]], [[RQ-OBY-001]], [[RQ-PS-001]], [[RQ-UX-001]], [[RQ-UX-023]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
 | [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[RQ-DEV-001]], [[RQ-PRC-001]], [[RQ-SEC-001]], [[RQ-UX-014]], [[RQ-UX-016]], [[RQ-UX-022]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPS-001]] |
 | [[DD-APP-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | - | - | [[UT-PLAN-001]] |
@@ -212,7 +213,7 @@ tags:
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: TEST_LAYER_TRACE -->
-- generated_at: 2026-02-14
+- generated_at: 2026-02-15
 - judgment: 経路判定（max_depth=4、frontmatter+本文リンク）
 
 ### 要求 -> 受入テスト（AT）
@@ -342,7 +343,7 @@ tags:
 | [[BD-SYS-ADR-026]] | テスト戦略をUT/IT/ATの三層品質ゲートで運用する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-027]] | バッチ実行制約と補助データ生成の運用境界を固定する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-028]] | インフラ文書を本体開発フローへ統合する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-SYS-ADR-029]] | DOM軸導入とPublished Language公式化で境界契約を管理する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-SYS-ADR-029]] | ドメイン境界正本をBD-SYS-DOMへ統合しPublished Languageを維持する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-030]] | データ保持・削除方針の責務をDB正本へ限定する | [[IT-CASE-007]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-031]] | 配備モードと責務マトリクスをINF正本へ統合する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
@@ -350,6 +351,7 @@ tags:
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
+| [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[IT-CASE-001]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-QUAL-001]] | 品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-OBS-001]] | PASS |
 | [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 
