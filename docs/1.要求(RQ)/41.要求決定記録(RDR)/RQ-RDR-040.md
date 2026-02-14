@@ -3,7 +3,7 @@ id: RQ-RDR-040
 title: DDDドメイン軸導入と用語・集約整合を要求として確定する決定
 doc_type: 要求決定記録
 phase: RQ
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-14
@@ -39,7 +39,7 @@ tags:
 
 ## 決定事項
 - DDD全量対応の戦略基盤として `docs/0.ドメイン(DOM)/` を追加し、5+1境界づけられたコンテキスト（Ingestion / TagManagement / Publishing / Viewing / Administration / Analytics）を要求上の正本境界として採用する。
-- 境界間契約は Published Language を明示し、`contracts/static-json/*.schema.json` を Publishing から Viewing への公式契約として扱う。
+- 境界間契約は Published Language を明示し、静的配信契約スキーマ群を Publishing から Viewing への公式契約として扱う。
 - 用語 `RQ-GL-002` は「[[RQ-GL-002|収集実行]] ([[RQ-GL-002|ingestion_run]])」を正とし、`job/run/runs` の揺れを要求・モデル・関連設計で段階的に解消する。
 - ドメインモデルでは、最低4集約（動画、[[RQ-GL-002|収集実行]]、[[RQ-GL-005|タグ辞書]]、[[RQ-GL-006|アーカイブ索引]]）について集約境界と集約ルートを明記し、境界横断更新を禁止する。
 
@@ -54,4 +54,5 @@ tags:
 - `BD-SYS-ARCH-001` および `BD-SYS-ADR-029` から、境界定義と契約定義を設計判断へ接続する。
 
 ## 変更履歴
+- 2026-02-14: 決定記録から具体パス記述を除外し、要求レベルの契約表現へ統一 [[RQ-RDR-042]]
 - 2026-02-14: 新規作成

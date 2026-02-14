@@ -3,11 +3,11 @@ id: RQ-RDR-034
 title: DB正本管理を前提に3層構造で段階拡張する決定
 doc_type: 要求決定記録
 phase: RQ
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -28,7 +28,7 @@ tags:
 
 ## 決定事項
 - 原本データ（タグ、[[RQ-GL-014|検索条件]]に利用するメタデータ）はDBを正本として管理する。
-- 利用者向け検索は当面 `bootstrap.json` / `tag_master.json` / `archive_index.pN.json` の静的配信を継続する。
+- 利用者向け検索は当面 [[RQ-GL-007|bootstrap]] / [[RQ-GL-008|tag_master]] / [[RQ-GL-009|archive_index]] の静的配信を継続する。
 - 高度あいまい検索はMVP対象外とし、将来 `API検索エンドポイント` を追加できる拡張境界を確保する。
 - システム構造は「プレゼンテーション層（管理画面/利用者画面/文書）」「アプリケーション層（Backend API）」「データ層（DB/S3）」の3層で管理する。
 - バッチ処理（収集/再確認/公開反映）は単一のBackend API（Hono）内で実行し、別デプロイのworkerサービスを持たない。
@@ -46,5 +46,6 @@ tags:
 - 詳細設計は [[DD-APP-API-001]] / [[DD-APP-API-002]] / [[DD-APP-API-012]] / [[DD-APP-API-014]] で静的配信契約と管理API契約の境界、および単一API内実行方式を追従させる。
 
 ## 変更履歴
+- 2026-02-14: 決定記録から具体ファイル名を除外し、用語リンク中心の記述へ統一 [[RQ-RDR-042]]
 - 2026-02-11: バッチ実行方式を「単一Backend API（Hono）内実行 + 外部スケジューラ起動」に明確化 [[RQ-RDR-034]]
 - 2026-02-11: 新規作成 [[RQ-RDR-034]]

@@ -112,3 +112,23 @@
 - `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py` を対象9文書へ実行。
 - `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets ...` を対象10文書へ実行。
 - `task docs:guard` を実行し、整合チェックを確認。
+
+## 実施内容（追加7）
+- 対象: RQ層（SC/GL/UC/FR/NFR/RDR）の記述から具体ファイル名を除外し、用語・契約概念中心へ統一。
+- 要求決定記録追加: `RQ-RDR-042`（要求文書で具体ファイル名を正本表現にしない方針を決定）。
+- 要求更新:
+  - SC: `RQ-SC-001`
+  - GL: `RQ-GL-005`, `RQ-GL-006`, `RQ-GL-007`, `RQ-GL-008`, `RQ-GL-009`
+  - UC: `RQ-UC-002`, `RQ-UC-009`
+  - FR: `RQ-FR-005`, `RQ-FR-009`, `RQ-FR-019`, `RQ-FR-025`
+  - NFR: `RQ-PS-001`, `RQ-INT-001`, `RQ-DEV-001`
+  - RDR: `RQ-RDR-026`, `RQ-RDR-034`, `RQ-RDR-036`, `RQ-RDR-040`
+
+## 影響確認（追加7）
+- 要求整合: `bootstrap/tag_master/archive_index` は `[[RQ-GL-*]]` 用語リンクで表現し、具体ファイル名依存を除去。
+- 境界整合: OpenAPI・契約スキーマは要求側で公開経路/契約群レベルに留め、実体定義はBD/DD側へ責務分離。
+- 追跡整合: 変更対象の `## 変更履歴` に `[[RQ-RDR-042]]` を追加し、方針決定との同一変更追跡を確保。
+
+## 検証（追加7）
+- `rg -n "\\.json" docs/1.要求\(RQ\)` を実行し、RQ配下に具体JSONファイル名の記述が残存しないことを確認。
+- `task docs:guard` を実行し、整合チェックを確認。

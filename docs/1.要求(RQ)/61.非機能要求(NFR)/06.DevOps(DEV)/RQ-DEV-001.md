@@ -3,11 +3,11 @@ id: RQ-DEV-001
 title: DevOps要件
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -40,7 +40,7 @@ tags:
   - すべてのリリース候補に対して、最低限 `lint` / `test` / `build` の3系統チェックを実行し成功率 100% である。
   - AIエージェント運用を含む変更では、[[RQ-DEV-002]] の受入基準（役割分離・最小権限・実行上限）を満たす。
   - 文書運用規約を変更したリリース候補では、対象 `doc-*` スキルと `skill-maintainer` / `docops-orchestrator` の同期更新が同一変更で実施されている。
-  - CDKを含む変更では `cdk synth` が副作用なく再現可能であり、`cdk.context.json` が差分管理されている。
+  - CDKを含む変更では `cdk synth` が副作用なく再現可能であり、CDKコンテキスト定義が差分管理されている。
   - インフラIaCの管理方式はCDKのみを許可し、Terraformを含む別方式を採用しない。
   - インフラ変更は `cdk synth -> cdk diff -> approve -> cdk deploy -> verify` の順で実行し、各フェーズの証跡を保持する。
   - CDKの構成は「Construct中心 + Stack配線」に従い、Construct/Stack内部で `process.env` を直接参照しない。
@@ -63,6 +63,7 @@ tags:
   - [[BD-DEV-PIPE-001]]
 
 ## 変更履歴
+- 2026-02-14: 非機能要求記述から具体ファイル名を除外し、運用条件レベルの記述へ統一 [[RQ-RDR-042]]
 - 2026-02-13: CDKオンリー方針と標準反映フロー（`cdk synth/diff/deploy`）を受入基準へ追加 [[RQ-RDR-039]]
 - 2026-02-11: `RQ-DEV-002` 参照を追加し、AIエージェント運用要件との束ねを明確化 [[RQ-RDR-029]]
 - 2026-02-11: CDK運用受入基準（synth決定性、context固定、props注入、stateful置換防止）を追加 [[RQ-RDR-025]]
