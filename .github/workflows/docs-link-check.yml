@@ -28,6 +28,11 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "PyYAML>=6,<7"
+
       - name: Validate glossary links and document ID links
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
