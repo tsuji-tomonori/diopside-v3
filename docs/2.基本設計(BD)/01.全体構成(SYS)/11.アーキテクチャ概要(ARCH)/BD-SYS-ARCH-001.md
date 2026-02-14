@@ -157,7 +157,7 @@ flowchart TD
 - 2026-02-14: DOM軸接続（[[DOM-CTX-001]]）と Published Language（`contracts/static-json/*.schema.json`）の公式化を追加 [[BD-SYS-ADR-029]]
 - 2026-02-13: BAT-006の入力スキーマ/出力契約/片系失敗時挙動と同時実行制御を追加 [[BD-SYS-ADR-027]]
 - 2026-02-13: 変更履歴のADRリンク記載漏れを補正 [[BD-SYS-ADR-021]]
-- 2026-02-12: 補助データ生成バッチ（BAT-006）、タグマスター即時更新バッチ（BAT-007）、バッチ実行制約を追加 [[BD-SYS-ADR-021]]
+- 2026-02-12: 補助データ生成バッチ（BAT-006）、タグマネージャー即時更新バッチ（BAT-007）、バッチ実行制約を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: バッチ一覧/バッチイベント一覧を追加し、run状態と詳細設計参照を明確化 [[BD-SYS-ADR-021]]
 - 2026-02-11: バッチ実処理を単一Backend API（Hono）内へ集約し、外部スケジューラはAPI起動のみ担う方式を追記 [[BD-SYS-ADR-021]]
 - 2026-02-11: Next.js App Router前提のWeb実行境界（RSC/Client境界、Dynamic API、Route Handler、Suspense）を追加 [[BD-SYS-ADR-024]]

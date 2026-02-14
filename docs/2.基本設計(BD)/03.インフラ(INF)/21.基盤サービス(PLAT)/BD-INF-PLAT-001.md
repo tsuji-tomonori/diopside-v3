@@ -3,11 +3,11 @@ id: BD-INF-PLAT-001
 title: インフラ全体像
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-DEV-001]]'
 - '[[RQ-SEC-001]]'
@@ -21,6 +21,7 @@ related:
 - '[[BD-INF-IAC-001]]'
 - '[[BD-INF-DEP-005]]'
 - '[[BD-SYS-ADR-028]]'
+- '[[BD-SYS-ADR-031]]'
 tags:
 - diopside
 - BD
@@ -36,6 +37,11 @@ tags:
 - クラウド基盤: ネットワーク、IAM、Secrets、ストレージ、配信。
 - 実行基盤: API/バッチ実行面、CI/CD実行面、監視収集面。
 - 運用基盤: アラート、Runbook、監査証跡、復旧導線。
+
+## 監視・イベント責務
+- 監視責務は「収集run」「再確認run」「公開run」「docs公開run」の状態遷移と、公開経路の到達性を対象にする。
+- イベント責務は run状態イベント（queued/running/succeeded/failed/partial/rolled_back/cancelled）を監査可能な形で保持し、通知判定へ接続する。
+- 監視設定値の正本は `[[DD-INF-MON-001]]` / `[[DD-INF-MON-002]]`、イベント契約の正本は `[[BD-APP-API-002]]` とする。
 
 ## AWSサービス一覧（管理対象）
 - 管理対象AWSサービスは 8 サービス（CloudFront, S3, Lambda, CloudWatch Logs, IAM, Config, Cognito, WAF）とする。
@@ -63,6 +69,7 @@ tags:
 - 出力: INF系基本設計群（[[BD-INF-ENV-001]]〜[[BD-INF-IAC-001]]）と詳細設計群（[[DD-INF-IAC-002]]/[[DD-INF-NET-001]]/[[DD-INF-SEC-002]]/[[DD-INF-MON-001]]/[[DD-INF-SEC-001]]/[[DD-INF-IAC-001]]）。
 
 ## 変更履歴
+- 2026-02-14: INF全体像へ監視・イベント責務を追加し、正本参照を `DD-INF-MON-*` / `BD-APP-API-002` へ明示 [[BD-SYS-ADR-031]]
 - 2026-02-13: CDKオンリー運用とAs-Is/To-Be分離方針を追記 [[BD-SYS-ADR-028]]
 - 2026-02-13: 管理対象AWSサービス一覧（個数/構築理由/導入段階/除外ルール）を追加 [[BD-SYS-ADR-028]]
 - 2026-02-13: 正本境界（INF親文書/変更フロー/配信配備/DD実装値）の責務を明確化 [[BD-SYS-ADR-028]]

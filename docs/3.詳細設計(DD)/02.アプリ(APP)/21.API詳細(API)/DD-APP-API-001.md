@@ -3,7 +3,7 @@ id: DD-APP-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,8 +17,10 @@ up:
 related:
 - '[[RQ-FR-001]]'
 - '[[BD-SYS-ADR-021]]'
+- '[[BD-SYS-ADR-031]]'
 - '[[BD-APP-API-003]]'
 - '[[BD-APP-API-005]]'
+- '[[DD-APP-ERR-001]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside
@@ -107,6 +109,7 @@ tags:
 
 ## 共通エラーモデル
 - HTTP APIエラーは Problem Details（`application/problem+json`）を標準とする。
+- DD層のエラー契約正本は本書とし、互換参照は `[[DD-APP-ERR-001]]` を使用する。
 - 必須メンバー: `type`, `title`, `status`, `detail`, `instance`。
 - 拡張メンバー: `code`, `category`, `retryable`, `trace_id`, `occurred_at`, `errors[]`, `hint`。
 - `detail` の文字列パースを前提にせず、機械判定は `code` と `errors[]` で行う。
@@ -147,6 +150,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-14: DDエラー契約正本を本書へ統合し、`[[DD-APP-ERR-001]]` を参照互換文書へ変更 [[BD-SYS-ADR-031]]
 - 2026-02-13: 収集起動応答を `triggerMode/runKind` へ更新し、run状態語彙へ `partial/cancelled` を明記 [[BD-SYS-ADR-027]]
 - 2026-02-11: 配信契約の JSON Schema 正本（Draft 2020-12）参照と必須項目の実データ整合を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: run実行境界を単一Backend API（Hono）モノリスへ統一し、`scheduled` の起動方式を追記 [[BD-SYS-ADR-021]]

@@ -3,17 +3,18 @@ id: BD-INF-DEP-005
 title: インフラデプロイ設計（配信境界）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
   - '[[RQ-FR-025]]'
   - '[[RQ-DEV-001]]'
 related:
   - '[[BD-SYS-ADR-014]]'
   - '[[BD-SYS-ADR-028]]'
+  - '[[BD-SYS-ADR-031]]'
   - '[[BD-INF-DEP-004]]'
   - '[[BD-INF-PLAT-001]]'
   - '[[BD-INF-IAC-001]]'
@@ -27,7 +28,7 @@ tags:
 ---
 
 ## 目的
-- インフラ配備の責務を docs/front/backend/infra の4領域で分離し、障害時の再実行範囲を限定する。
+- インフラ配備の責務を `BE/FE/Infra/DB/Doc/TestAsset` の6領域で分離し、配備モードごとの再実行範囲を限定する。
 
 ## 正本境界
 - 本書は「配信境界に依存するデプロイ順序/確認ポイント」の正本とする。
@@ -37,16 +38,27 @@ tags:
 ## 配備責務マップ
 | 領域 | 主成果物 | 主経路 | 主失敗時の再実行 |
 |---|---|---|---|
-| docs | Quartz静的成果物 | `/docs/*` | `task quartz:build` -> `task infra:deploy` |
-| front | SPA静的成果物 | `/web/*` | front build -> `task infra:deploy` |
-| backend | API実行バイナリ | `/api/v1/*` | backend deploy |
-| infra | CloudFront/S3/配備設定 | 全経路 | `task infra:deploy` |
+| BE | API実行バイナリ、運用API | `/api/v1/*` | backend build/test -> deploy |
+| FE | SPA静的成果物 | `/web/*` | front build/test -> deploy |
+| Infra | CloudFront/S3/IAM/Config | 全経路 | `cdk diff` -> `cdk deploy` |
+| DB | スキーマ変更、マイグレーション | 非公開経路 | migrate -> verify -> rollback |
+| Doc | Quartz静的成果物、OpenAPI公開成果物 | `/docs/*`, `/openapi/*` | `task quartz:build` -> `task docs:deploy` |
+| TestAsset | UT/IT/ATの固定データ・検証成果物 | 非公開経路 | test asset republish |
+
+## 配備モード境界
+| モード | 適用条件 | 許可配備単位 | 不許可操作 | 最低確認 |
+|---|---|---|---|---|
+| 通常配備 | 定常の差分反映 | 差分のある単位のみ | 全経路invalidation（`/*`） | `/web/`, `/docs/`, `/openapi/`, `/api/v1/health` |
+| 初回配備 | 新規環境立上げ、全面初期化 | 6単位すべて | 省略配備 | 監視/認証/配信経路の全件疎通 |
+| 緊急配備 | 重大障害復旧、回避策即時反映 | 影響単位 + 必要最小限Infra | 非関連単位の同時変更 | 障害導線の復旧確認 + 監査記録 |
 
 ## 実行方針
 - 標準入口は `task docs:deploy` を維持し、内部で領域別タスクへ分岐する。
 - インフラ反映は `cdk diff` で差分確認後に `cdk deploy` する順序を必須化する。
 - CloudFront behavior順序は `/api/*` -> `/openapi/*` -> `/docs/*` -> `/web/*` -> `/*` を固定する。
 - invalidationは経路別（`/docs/*` `/web/*` `/openapi/*`）で実施し、`/*` は緊急時のみ許可する。
+- 通常配備は差分単位のみを許可し、Infra差分がない場合はInfra配備を実施しない。
+- 初回配備は6単位すべてを対象にし、途中省略を禁止する。
 
 ## AWSリソース一覧（管理対象）
 | AWSサービス | 論理個数（本番） | 構築理由 | 根拠文書 | 導入段階 |
@@ -74,6 +86,7 @@ tags:
 - 配備後は `/docs/` `/web/` `/openapi/` `/api/v1/health` の到達を確認する。
 
 ## 変更履歴
+- 2026-02-14: 配備モード（通常/初回/緊急）を定義し、配備責務を6分類（BE/FE/Infra/DB/Doc/TestAsset）へ拡張 [[BD-SYS-ADR-031]]
 - 2026-02-13: CDK反映順序（`cdk diff` 先行、`cdk deploy` 後続）と品質ゲートを追加 [[BD-SYS-ADR-028]]
 - 2026-02-13: 管理対象AWSサービス基準（サービス単位の個数/構築理由/導入段階/除外ルール）へ表記を統一 [[BD-SYS-ADR-028]]
 - 2026-02-13: INF変更フローとの正本境界（承認統制は[[BD-INF-IAC-001]]正本）を明確化 [[BD-SYS-ADR-028]]

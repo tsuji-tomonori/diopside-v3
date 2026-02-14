@@ -122,6 +122,7 @@ tags:
 | [[BD-SYS-ADR-028]] | インフラ文書を本体開発フローへ統合する | - | [[RQ-RDR-039]] | - | - |
 | [[BD-SYS-ADR-029]] | DOM軸導入とPublished Language公式化で境界契約を管理する | - | [[RQ-RDR-040]] | - | - |
 | [[BD-SYS-ADR-030]] | データ保持・削除方針の責務をDB正本へ限定する | [[RQ-DATA-001]], [[RQ-OBY-001]], [[RQ-PRC-001]] | [[RQ-RDR-034]], [[RQ-RDR-035]] | - | - |
+| [[BD-SYS-ADR-031]] | 配備モードと責務マトリクスをINF正本へ統合する | - | [[RQ-RDR-043]] | - | - |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-038]], [[RQ-RDR-040]] | - | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[RQ-FR-001]] | [[RQ-RDR-034]] | - | - |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[RQ-DEV-001]], [[RQ-FR-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | - | - | - |
@@ -297,11 +298,11 @@ tags:
 | [[BD-DEV-PIPE-001]] | ビルド方針（デプロイ単位分離） | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
 | [[BD-DEV-TEST-001]] | テスト戦略 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-CM-001]] | 構成管理方針 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
-| [[BD-INF-DEP-001]] | デプロイ方式 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
-| [[BD-INF-DEP-002]] | デプロイ運用ルール | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-INF-DEP-001]] | デプロイ方式 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
+| [[BD-INF-DEP-002]] | デプロイ運用ルール | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-DEP-003]] | ドキュメント公開フロー（Quartz + CDK） | [[IT-CASE-001]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-INF-DEP-004]] | 単一CloudFrontパス分岐デプロイ設計 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
-| [[BD-INF-DEP-005]] | インフラデプロイ設計（配信境界） | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
+| [[BD-INF-DEP-005]] | インフラデプロイ設計（配信境界） | [[IT-CASE-001]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
 | [[BD-INF-DEP-006]] | バックアップ・リカバリ設計 | [[IT-CASE-007]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-ENV-001]] | 環境分割方針 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-INF-ENV-001]] | PASS |
 | [[BD-INF-IAC-001]] | インフラ変更フロー | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
@@ -343,12 +344,13 @@ tags:
 | [[BD-SYS-ADR-028]] | インフラ文書を本体開発フローへ統合する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-029]] | DOM軸導入とPublished Language公式化で境界契約を管理する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-030]] | データ保持・削除方針の責務をDB正本へ限定する | [[IT-CASE-007]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-SYS-ADR-031]] | 配備モードと責務マトリクスをINF正本へ統合する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
-| [[BD-SYS-QUAL-001]] | 品質特性 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-SYS-QUAL-001]] | 品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-OBS-001]] | PASS |
 | [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 
 ### 詳細設計 -> 単体テスト（UT）
@@ -415,15 +417,15 @@ tags:
 | [[DD-INF-DEP-001]] | デプロイ詳細 | [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-003]] | PASS |
 | [[DD-INF-DEP-002]] | CloudFrontパス分岐詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-003]] | PASS |
 | [[DD-INF-DEP-003]] | インフラデプロイ詳細（領域分割） | [[UT-CASE-001]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-003]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
-| [[DD-INF-IAC-001]] | インフラCI/CD詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
+| [[DD-INF-IAC-001]] | インフラCI/CD詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-INF-IAC-002]] | IaCモジュール設計 | [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-INF-IAC-003]] | IaC状態管理とドリフト検知 | [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
-| [[DD-INF-MON-001]] | インフラ監視詳細設計 | [[UT-CASE-001]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
+| [[DD-INF-MON-001]] | インフラ監視詳細設計 | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-INF-MON-002]] | インフラ監視ログ詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-INF-NET-001]] | ネットワーク詳細設計 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
 | [[DD-INF-SEC-001]] | DR復旧手順詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-INF-SEC-002]] | IAM詳細設計 | [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-POL-001]], [[UT-SEC-001]] | PASS |
-| [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-SEC-001]] | PASS |
+| [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]], [[UT-SEC-001]] | PASS |
 | [[DD-SYS-AV-001]] | 可用性詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-SYS-AV-002]] | インフラ可用性詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-SYS-COST-001]] | コスト運用詳細 | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-SEC-001]] | PASS |

@@ -89,8 +89,8 @@
 
 ## 影響確認（追加5）
 - 用語整合: 運用/設計/試験で `[[RQ-GL-002|収集実行]]` を一貫使用し、`収集ジョブ` は互換説明（`RQ-GL-002` 本文）に限定。
-- 再収集整合: `RQ-GL-011` 定義を「再収集は `[[RQ-GL-002|収集実行]]` の再実行」として更新。
-- 契約整合: API/UI/RTM の名称を「収集実行起動API」「収集実行状態API」へ統一し、要求-設計-試験の追跡語彙を一致化。
+- [[RQ-GL-011|再収集]]整合: `RQ-GL-011` 定義を「[[RQ-GL-011|再収集]]は `[[RQ-GL-002|収集実行]]` の再実行」として更新。
+- 契約整合: API/UI/RTM の名称を「[[RQ-GL-002|収集実行]]起動API」「[[RQ-GL-002|収集実行]]状態API」へ統一し、要求-設計-試験の追跡語彙を一致化。
 
 ## 検証（追加5）
 - `rg -n "収集ジョブ|ingestion_job" docs` を実行し、旧称は `RQ-GL-002`（旧称明記）と `RQ-RDR-040`（不一致理由の記録）に限定されることを確認。
@@ -185,3 +185,25 @@
 - `task docs:guard` を実行してリンク/Frontmatter/追跡整合を確認。
 - `task docs:trace` を実行して `RQ-RTM-002` の設計別ビューを再生成。
 - 必要に応じて `task docs:check` を実行し、全体整合を再確認。
+
+## 実施内容（追加10）
+- 対象: `reports/docs-review-2026-02-14.html` の全量修正（残課題中心）。
+- 要求決定記録追加: `RQ-RDR-043`（用語統制と更新フロー工程分割を同時適用）。
+- 設計判断追加: `BD-SYS-ADR-031`（配備モード・責務6分類・IAM粒度マトリクス・DD正本統合）。
+- 要求更新: `RQ-DG-001`, `RQ-GL-008`。
+- 基本設計更新: `BD-INF-DEP-005`, `BD-INF-DEP-001`, `BD-INF-DEP-002`, `BD-INF-PLAT-001`, `BD-SYS-QUAL-001`, `BD-APP-API-002`, `BD-SYS-ARCH-001`。
+- 詳細設計更新: `DD-INF-SEC-003`, `DD-APP-API-001`, `DD-APP-ERR-001`, `DD-SYS-SEC-001`。
+
+## 影響確認（追加10）
+- 更新フロー: `RQ-DG-001` を RQ/BD/DD/UT/IT/AT の工程別に再編し、同一変更ゲート（RDR/ADR/RTM/テスト追従）を明示。
+- 用語統制: `[[RQ-GL-008|tag_master]]（タグマネージャー）` を正本表記に固定し、`TagMaster`/`タグマスター` を廃止語へ移行。
+- DEP再編: `BD-INF-DEP-005` に配備モード（通常/初回/緊急）と配備責務6分類（BE/FE/Infra/DB/Doc/TestAsset）を追加。
+- 階層整理: `BD-INF-DEP-001` / `BD-INF-DEP-002` は `BD-INF-DEP-005` へ統合し、廃止（参照互換保持）。
+- IAM粒度: `DD-INF-SEC-003` に `環境(dev/prod) x 責務(deploy/ops/audit)` マトリクスを追加。
+- DD正本整理: エラー契約正本を `DD-APP-API-001` に統合し `DD-APP-ERR-001` を廃止、セキュリティ正本を `DD-INF-SEC-003` に統合し `DD-SYS-SEC-001` を廃止。
+
+## 検証（追加10）
+- `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行する。
+- `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>` を実行する。
+- `task docs:guard` を実行して `issues` / `broken_links` / `backlink_issues` を確認する。
+- `task docs:trace` を実行して `RQ-RTM-001` / `RQ-RTM-002` を再生成する。

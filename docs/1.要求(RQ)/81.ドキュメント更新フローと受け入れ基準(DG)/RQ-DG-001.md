@@ -3,7 +3,7 @@ id: RQ-DG-001
 title: ドキュメント更新フロー
 doc_type: ドキュメント運用ガイド
 phase: RQ
-version: 1.0.25
+version: 1.0.26
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,6 +17,7 @@ related:
 - '[[RQ-RDR-024]]'
 - '[[RQ-RDR-033]]'
 - '[[RQ-RDR-038]]'
+- '[[RQ-RDR-043]]'
 tags:
 - diopside
 - RQ
@@ -24,20 +25,33 @@ tags:
 ---
 
 
-## 改修フロー
+## 改修フロー（工程別）
+### RQ
 1. RQ更新時はRDRを同一変更で更新する。
-2. BD/DD更新時はADR経路を確認する。
-3. 文書更新で規約・テンプレート・運用手順に変更がある場合は、同一変更で `.opencode/skills` の対応スキル（`SKILL.md`/`TEMPLATE.md`）を更新する。
-4. 共通運用規約変更時は、`skill-maintainer`、`docops-orchestrator`、`obsidian-doc-*` を同一変更で更新する。
-5. 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
-6. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>`）を実行する。
-7. 用語改定時は `RQ-GL-*` のfrontmatter（`deprecated_terms` / `deprecated_terms_allow_in`）を更新し、廃止語検査ルールをGL正本へ反映する。
-8. RQ/BD/DD/UT/IT/ATを更新した場合は、`task docs:trace` を実行し、`RQ-RTM-001`（要求別）と `RQ-RTM-002`（設計別）の静的ビューを再生成・反映する。
-9. docs変更を含むコミットでは `.pre-commit-config.yaml` のリンク検査ゲートを通過させる。
-10. PRでは `.github/workflows/docs-link-check.yml` のリンク検査ゲートを通過するまでマージしない。
-11. RQ文書の `## 変更履歴` 各行には、関連RDRリンク（`[[RQ-RDR-xxx]]`）を必ず記載する。
-12. FR/NFRを変更した場合は `RQ-RTM-001` の「検証(UT/IT/AT)」列に、主要テストケースID（`UT-CASE`/`IT-CASE`/`AT-SCN`）を直接記載する。
-13. バッチ仕様を変更した場合は、`BD-APP-API-002` と `DD-APP-API-*` の入力スキーマ・実行制約・失敗時挙動を同一変更で更新する。
+2. FR/NFRを変更した場合は `RQ-RTM-001` の「検証(UT/IT/AT)」列に、主要テストケースID（`UT-CASE`/`IT-CASE`/`AT-SCN`）を直接記載する。
+3. RQ文書の `## 変更履歴` 各行には、関連RDRリンク（`[[RQ-RDR-xxx]]`）を必ず記載する。
+
+### BD
+1. BD更新時はADR経路を確認し、意味変更はADRを同一変更で更新する。
+2. バッチ仕様を変更した場合は、`BD-APP-API-002` を正本として更新する。
+
+### DD
+1. DD更新時は対応BDとの責務境界を確認し、正本分散を作らない。
+2. バッチ仕様変更時は `DD-APP-API-*` の入力スキーマ・実行制約・失敗時挙動を同一変更で更新する。
+
+### UT/IT/AT
+1. RQ/BD/DD変更で受入条件に影響する場合は、UT/IT/AT文書の参照IDと判定条件を同一変更で追従する。
+2. テスト文書の変更後は `RQ-RTM-001` / `RQ-RTM-002` で追跡可能性を確認する。
+
+### 共通
+1. 文書更新で規約・テンプレート・運用手順に変更がある場合は、同一変更で `.opencode/skills` の対応スキル（`SKILL.md`/`TEMPLATE.md`）を更新する。
+2. 共通運用規約変更時は、`skill-maintainer`、`docops-orchestrator`、`obsidian-doc-*` を同一変更で更新する。
+3. 本文更新後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス...>` を実行し、用語（`RQ-GL-*`）をWikiリンク化する。
+4. 変更後に整合チェック（`python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets <対象Markdownパス...>`）を実行する。
+5. 用語改定時は `RQ-GL-*` のfrontmatter（`deprecated_terms` / `deprecated_terms_allow_in`）を更新し、廃止語検査ルールをGL正本へ反映する。
+6. RQ/BD/DD/UT/IT/ATを更新した場合は、`task docs:trace` を実行し、`RQ-RTM-001`（要求別）と `RQ-RTM-002`（設計別）の静的ビューを再生成・反映する。
+7. docs変更を含むコミットでは `.pre-commit-config.yaml` のリンク検査ゲートを通過させる。
+8. PRでは `.github/workflows/docs-link-check.yml` のリンク検査ゲートを通過するまでマージしない。
 
 ## 受入基準
 - 用語集に定義された語彙（`RQ-GL-*`）が本文でObsidianリンク化されている。
@@ -55,8 +69,10 @@ tags:
 - RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれている。
 - FR/NFR変更を含む差分では `RQ-RTM-001` の該当要求行に、直接検証リンク（`UT-CASE`/`IT-CASE`/`AT-SCN`）が存在する。
 - バッチ仕様変更を含む差分では、`BD-APP-API-002` と `DD-APP-API-*` の間で入力スキーマ/実行制約/エラーハンドリングの整合が取れている。
+- 工程別フロー（RQ/BD/DD/UT/IT/AT）に対応する変更証跡（RDR/ADR/RTM/テスト文書）が同一変更に含まれている。
 
 ## 変更履歴
+- 2026-02-14: 改修フローを工程別（RQ/BD/DD/UT/IT/AT）へ分割し、同一変更ゲートを明確化 [[RQ-RDR-043]]
 - 2026-02-14: バッチ仕様変更時の正本参照を `BD-SYS-ARCH-001` から `BD-APP-API-002` へ移管し、DD参照を `DD-APP-API-*` へ統一 [[RQ-RDR-038]]
 - 2026-02-14: 廃止語検査ルールをGL frontmatter起点へ移行（`deprecated_terms` / `deprecated_terms_allow_in`） [[RQ-RDR-040]]
 - 2026-02-14: 廃止用語ポリシー検査（`deprecated_term_issues`）をFail条件へ追加 [[RQ-RDR-040]]
