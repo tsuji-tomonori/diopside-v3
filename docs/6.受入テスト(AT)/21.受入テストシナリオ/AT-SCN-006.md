@@ -9,16 +9,16 @@ owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-11'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
 - '[[RQ-FR-025]]'
-- '[[BD-ADR-021]]'
-- '[[BD-DEP-004]]'
-- '[[BD-API-004]]'
-- '[[DD-DEP-002]]'
-- '[[DD-API-010]]'
+- '[[BD-SYS-ADR-021]]'
+- '[[BD-INF-DEP-004]]'
+- '[[BD-APP-API-004]]'
+- '[[DD-INF-DEP-002]]'
+- '[[DD-APP-API-010]]'
 tags:
 - diopside
 - AT
@@ -29,7 +29,7 @@ tags:
 - 単一CloudFront上で `/web` `/docs` `/openapi` `/api/v1` が競合なく分岐し、認証境界が成立することを確認する。
 
 ## 前提条件
-- CloudFront behaviorが [[DD-DEP-002]] の順序で適用されている。
+- CloudFront behaviorが [[DD-INF-DEP-002]] の順序で適用されている。
 - OpenAPI仕様は `/openapi/v1/openapi.json` に配置済み。
 
 ## 手順
@@ -58,5 +58,5 @@ tags:
 - 判定（Pass/Fail）
 
 ## 変更履歴
-- 2026-02-11: web/data静的JSON確認と情報漏えい観点を追加 [[BD-ADR-021]]
+- 2026-02-11: web/data静的JSON確認と情報漏えい観点を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: 新規作成

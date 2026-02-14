@@ -10,11 +10,11 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[IT-PLAN-001]]'
-- '[[BD-MON-001]]'
+- '[[BD-INF-MON-001]]'
 related:
 - '[[AT-SCN-005]]'
-- '[[DD-API-008]]'
-- '[[DD-API-009]]'
+- '[[DD-APP-API-008]]'
+- '[[DD-APP-API-009]]'
 tags:
 - diopside
 - IT
@@ -27,8 +27,8 @@ tags:
 - 障害検知（diagnostics API）と復旧（[[RQ-GL-011|再収集]]API）の連携を結合環境で検証する。
 
 ## 対応フロー
-- [[BD-MON-001]] の「障害検知→復旧導線」
-- [[DD-API-009]] → [[DD-API-008]] の連携
+- [[BD-INF-MON-001]] の「障害検知→復旧導線」
+- [[DD-APP-API-009]] → [[DD-APP-API-008]] の連携
 
 ## 前提条件
 - 結合環境で意図的な障害状態を再現できる。

@@ -1,0 +1,63 @@
+---
+id: DD-APP-API-010
+title: API経路バージョニング詳細
+doc_type: API詳細
+phase: DD
+version: 1.0.1
+status: 下書き
+owner: RQ-SH-001
+created: 2026-02-11
+updated: '2026-02-11'
+up:
+- '[[BD-APP-API-004]]'
+- '[[BD-SYS-ADR-014]]'
+related:
+- '[[RQ-FR-025]]'
+- '[[DD-APP-API-002]]'
+- '[[DD-APP-API-003]]'
+- '[[DD-APP-API-008]]'
+- '[[DD-APP-API-009]]'
+- '[[AT-SCN-006]]'
+tags:
+- diopside
+- DD
+- API
+---
+
+## 目的
+- 業務API経路を `/api/v1/*` に統一し、OpenAPI配布経路との版対応を固定する。
+
+## 経路仕様
+- [[DD-APP-API-002]]: `POST /api/v1/ops/ingestion/runs`
+- [[DD-APP-API-003]]: `GET /api/v1/ops/ingestion/runs/{runId}`
+- [[DD-APP-API-008]]: `POST /api/v1/ops/ingestion/runs/{runId}/retry`
+- [[DD-APP-API-009]]:
+  - `GET /api/v1/ops/ingestion/latest`
+  - `GET /api/v1/ops/diagnostics/health`
+
+## OpenAPI版対応
+- OpenAPI仕様は `/openapi/v1/openapi.json` を正本とする。
+- `/api/v1/*` の変更は同一変更でOpenAPI仕様を更新する。
+
+## 経路変換ルール
+- 旧経路 `/ops/*` は受理しない。`410 PATH_DEPRECATED` を返し `/api/v1/ops/*` へ移行を促す。
+- `/api/v1/*` へ rewrite や拡張子補完を適用しない。
+- `/openapi/*` と `/api/v1/*` の認証境界を共通設定で維持する。
+
+## 処理ロジック
+1. CloudFrontで経路優先順位を評価し、`/api/v1/*` を業務API originへルーティングする。
+2. API Gateway/Lambda到達前にJWTを検証し、未認証は401で終了する。
+3. ルート解決できない場合は404、旧経路一致時は410を返す。
+4. 例外時は共通エラーモデルで `traceId` を返却する。
+
+## 認証
+- `/api/v1/*` はJWT必須。
+- 未認証アクセスは 401 を返却し、処理を実行しない。
+
+## 受入観点
+- `/api/v1/*` と `/openapi/v1/openapi.json` の版が一致すること。
+- 未認証で `/api/v1/*` にアクセスした場合に 401 を返すこと。
+
+## 変更履歴
+- 2026-02-11: 旧経路廃止ルールと経路処理ロジックを追加 [[BD-SYS-ADR-014]]
+- 2026-02-11: 新規作成

@@ -15,8 +15,8 @@ related:
 - '[[RQ-SEC-001]]'
 - '[[RQ-OBY-001]]'
 - '[[RQ-RTM-001]]'
-- '[[BD-INF-001]]'
-- '[[BD-ADR-028]]'
+- '[[BD-INF-PLAT-001]]'
+- '[[BD-SYS-ADR-028]]'
 tags:
 - diopside
 - RQ

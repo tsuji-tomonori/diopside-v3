@@ -10,7 +10,7 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-012]]'
+- '[[DD-APP-API-012]]'
 related:
 - '[[IT-CASE-010]]'
 - '[[RQ-UC-009]]'
@@ -22,8 +22,8 @@ tags:
 
 
 ## 対象API
-- `POST /api/v1/ops/rechecks`（[[DD-API-012]]）
-- `GET /api/v1/ops/rechecks/{recheckRunId}`（[[DD-API-012]]）
+- `POST /api/v1/ops/rechecks`（[[DD-APP-API-012]]）
+- `GET /api/v1/ops/rechecks/{recheckRunId}`（[[DD-APP-API-012]]）
 
 ## テスト目的
 - 配信前後のメタデータ差分確認runの作成と結果取得を単体で検証する。

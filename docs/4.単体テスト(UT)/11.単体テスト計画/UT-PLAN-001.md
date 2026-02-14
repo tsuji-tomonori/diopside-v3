@@ -9,8 +9,8 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-11'
 up:
-- '[[BD-TST-001]]'
-- '[[DD-API-001]]'
+- '[[BD-DEV-TEST-001]]'
+- '[[DD-APP-API-001]]'
 related:
 - '[[UT-PLAN-002]]'
 - '[[UT-PLAN-003]]'
@@ -53,4 +53,4 @@ tags:
 - 2026-02-11: 領域分割（DOC/INF/FE/BE）の統括計画へ再編し、[[UT-PLAN-002]]〜[[UT-PLAN-005]]を追加
 - 2026-02-11: API参照ID（DD-API系）をObsidianリンクへ統一
 - 2026-02-10: 新規作成
-- 2026-02-10: [[DD-API-002]]〜[[DD-API-009]]に合わせてUTケースをAPI単位に再編
+- 2026-02-10: [[DD-APP-API-002]]〜[[DD-APP-API-009]]に合わせてUTケースをAPI単位に再編

@@ -30,7 +30,7 @@ metadata:
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
 - 可観測性要求の受入基準に、観測対象（例: `run_id`、成功/失敗件数、応答時間）、通知条件、保存期間が含まれていることを確認する。
-- `[[BD-MON-001]]` / `[[DD-LOG-001]]` / `[[RQ-COST-001]]` など、監視設計・ログ設計・コスト制約との整合リンクを確認する。
+- `[[BD-INF-MON-001]]` / `[[DD-APP-LOG-001]]` / `[[RQ-COST-001]]` など、監視設計・ログ設計・コスト制約との整合リンクを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
 

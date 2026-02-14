@@ -13,7 +13,7 @@ up:
 related:
 - '[[RQ-DG-001]]'
 - '[[RQ-DEV-001]]'
-- '[[BD-CM-001]]'
+- '[[BD-INF-CM-001]]'
 - '[[RQ-PC-007]]'
 - '[[RQ-PC-009]]'
 tags:
@@ -34,7 +34,7 @@ tags:
 
 ## 影響
 - 要求文書: [[RQ-DG-001]] と [[RQ-DEV-001]] を意味変更として更新する。
-- 設計文書: [[BD-CM-001]] と [[BD-ADR-012]] で、同期設計と責務分担を明文化する。
+- 設計文書: [[BD-INF-CM-001]] と [[BD-SYS-ADR-012]] で、同期設計と責務分担を明文化する。
 - スキル運用: `skill-maintainer` / `docops-orchestrator` / `doc-rq-dg` / `doc-bd-cm` へ同一方針を反映する。
 
 ## 変更履歴

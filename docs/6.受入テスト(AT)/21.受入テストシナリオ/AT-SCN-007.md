@@ -9,17 +9,17 @@ owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-11'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
 - '[[RQ-FR-019]]'
 - '[[RQ-UC-009]]'
-- '[[DD-UI-006]]'
-- '[[DD-API-005]]'
-- '[[DD-API-012]]'
-- '[[DD-API-013]]'
-- '[[DD-API-015]]'
+- '[[DD-APP-UI-006]]'
+- '[[DD-APP-API-005]]'
+- '[[DD-APP-API-012]]'
+- '[[DD-APP-API-013]]'
+- '[[DD-APP-API-015]]'
 tags:
 - diopside
 - AT
@@ -30,10 +30,10 @@ tags:
 - 配信前後再確認、手動タグ付け、公開反映までの運用フローが受入手順として実行可能であることを確認する。
 
 ## 対応DD-API
-- [[DD-API-005]]（[[RQ-GL-005|タグ辞書]]API/公開反映起動）
-- [[DD-API-012]]（配信前後再確認API）
-- [[DD-API-013]]（タグ管理API）
-- [[DD-API-015]]（配信反映ジョブ状態API）
+- [[DD-APP-API-005]]（[[RQ-GL-005|タグ辞書]]API/公開反映起動）
+- [[DD-APP-API-012]]（配信前後再確認API）
+- [[DD-APP-API-013]]（タグ管理API）
+- [[DD-APP-API-015]]（配信反映ジョブ状態API）
 
 ## 前提条件
 - [[RQ-SH-001|管理者]]が管理画面（UI-A04）にアクセスできる。
@@ -55,10 +55,10 @@ sequenceDiagram
   autonumber
   actor Admin as 管理者(RQ-SH-001)
   participant UI as 運用ステータス画面(UI-A04)
-  participant Recheck as 再確認API(DD-API-012)
-  participant Tagging as タグ管理API(DD-API-013)
-  participant PublishKick as 公開反映起動API(DD-API-005)
-  participant PublishStatus as 配信反映状態API(DD-API-015)
+  participant Recheck as 再確認API(DD-APP-API-012)
+  participant Tagging as タグ管理API(DD-APP-API-013)
+  participant PublishKick as 公開反映起動API(DD-APP-API-005)
+  participant PublishStatus as 配信反映状態API(DD-APP-API-015)
   participant DB as DB正本
   participant Static as 公開成果物(tag_master/archive_index)
 
@@ -123,7 +123,7 @@ sequenceDiagram
 - `validatedCount/appliedCount/rejectedCount`
 - `nextAction` と公開反映の最終状態
 - エラーコードとエラー明細
-- 対応DD-API（[[DD-API-005]], [[DD-API-012]], [[DD-API-013]], [[DD-API-015]]）
+- 対応DD-API（[[DD-APP-API-005]], [[DD-APP-API-012]], [[DD-APP-API-013]], [[DD-APP-API-015]]）
 - 判定（Pass/Fail）
 
 ## 変更履歴

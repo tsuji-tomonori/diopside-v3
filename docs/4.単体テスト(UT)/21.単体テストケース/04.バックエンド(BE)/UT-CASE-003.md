@@ -10,7 +10,7 @@ created: 2026-01-31
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-004]]'
+- '[[DD-APP-API-004]]'
 related:
 - '[[IT-CASE-003]]'
 tags:
@@ -22,7 +22,7 @@ tags:
 
 ## 対象API
 - `GET /bootstrap.json`
-- `GET /archive_index.p{page}.json`（[[DD-API-004]]）
+- `GET /archive_index.p{page}.json`（[[DD-APP-API-004]]）
 
 ## テスト目的
 - 一覧配信JSONの必須項目、型、件数整合を単体で検証する。
@@ -46,4 +46,4 @@ tags:
 ## 変更履歴
 - 2026-02-11: バックエンド領域へ再配置し、上位計画を [[UT-PLAN-005]] に更新
 - 2026-02-10: 新規作成
-- 2026-02-10: DD-API-004対応のAPI単位ケースへ細分化
+- 2026-02-10: DD-APP-API-004対応のAPI単位ケースへ細分化

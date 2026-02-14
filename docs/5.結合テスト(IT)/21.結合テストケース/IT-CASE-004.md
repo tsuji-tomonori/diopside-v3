@@ -10,7 +10,7 @@ created: 2026-02-10
 updated: '2026-02-10'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-API-005]]'
+- '[[DD-APP-API-005]]'
 related:
 - '[[AT-SCN-002]]'
 tags:
@@ -20,7 +20,7 @@ tags:
 ---
 
 ## 対象API
-- `GET /tag_master.json`（[[DD-API-005]]）
+- `GET /tag_master.json`（[[DD-APP-API-005]]）
 
 ## テスト目的
 - [[RQ-GL-005|タグ辞書]]生成、配信、Web反映の連携を検証する。

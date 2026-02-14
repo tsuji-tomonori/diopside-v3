@@ -16,9 +16,9 @@ related:
 - '[[RQ-FR-022]]'
 - '[[RQ-FR-023]]'
 - '[[RQ-RTM-001]]'
-- '[[BD-ARCH-001]]'
-- '[[BD-API-001]]'
-- '[[BD-API-002]]'
+- '[[BD-SYS-ARCH-001]]'
+- '[[BD-APP-API-001]]'
+- '[[BD-APP-API-002]]'
 tags:
 - diopside
 - RQ

@@ -10,7 +10,7 @@ created: 2026-02-10
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-009]]'
+- '[[DD-APP-API-009]]'
 related:
 - '[[IT-CASE-008]]'
 tags:
@@ -21,7 +21,7 @@ tags:
 
 ## 対象API
 - `GET /ops/ingestion/latest`
-- `GET /ops/diagnostics/health`（[[DD-API-009]]）
+- `GET /ops/diagnostics/health`（[[DD-APP-API-009]]）
 
 ## テスト目的
 - 健全性判定（ok/degraded/critical）と最新収集情報の算出を単体で検証する。

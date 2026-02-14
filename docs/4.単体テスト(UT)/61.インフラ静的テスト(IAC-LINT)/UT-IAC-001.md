@@ -10,7 +10,7 @@ created: 2026-02-13
 updated: '2026-02-14'
 up:
 - '[[UT-PLAN-001]]'
-- '[[DD-IAC-001]]'
+- '[[DD-INF-IAC-002]]'
 related:
 - '[[UT-STAT-001]]'
 tags:

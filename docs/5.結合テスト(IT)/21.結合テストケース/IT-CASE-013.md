@@ -10,11 +10,11 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[IT-PLAN-001]]'
-- '[[BD-MON-001]]'
+- '[[BD-INF-MON-001]]'
 related:
 - '[[AT-SCN-005]]'
-- '[[DD-API-009]]'
-- '[[DD-API-013]]'
+- '[[DD-APP-API-009]]'
+- '[[DD-APP-API-013]]'
 tags:
 - diopside
 - IT

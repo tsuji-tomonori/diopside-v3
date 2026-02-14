@@ -19,10 +19,10 @@ related:
 - '[[RQ-RDR-039]]'
 - '[[RQ-DEV-002]]'
 - '[[RQ-PC-009]]'
-- '[[BD-BUILD-001]]'
-- '[[BD-DEP-001]]'
-- '[[BD-DEP-003]]'
-- '[[BD-DEP-004]]'
+- '[[BD-DEV-PIPE-001]]'
+- '[[BD-INF-DEP-001]]'
+- '[[BD-INF-DEP-003]]'
+- '[[BD-INF-DEP-004]]'
 tags:
 - diopside
 - RQ
@@ -60,7 +60,7 @@ tags:
   - [[RQ-RDR-025]]
   - [[RQ-DEV-002]]
   - [[RQ-PC-009]]
-  - [[BD-BUILD-001]]
+  - [[BD-DEV-PIPE-001]]
 
 ## 変更履歴
 - 2026-02-13: CDKオンリー方針と標準反映フロー（`cdk synth/diff/deploy`）を受入基準へ追加 [[RQ-RDR-039]]

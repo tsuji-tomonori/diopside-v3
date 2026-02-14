@@ -16,8 +16,8 @@ related:
 - '[[RQ-DEV-001]]'
 - '[[RQ-SEC-001]]'
 - '[[RQ-INT-001]]'
-- '[[BD-DEP-004]]'
-- '[[BD-API-004]]'
+- '[[BD-INF-DEP-004]]'
+- '[[BD-APP-API-004]]'
 - '[[AT-SCN-006]]'
 tags:
 - diopside

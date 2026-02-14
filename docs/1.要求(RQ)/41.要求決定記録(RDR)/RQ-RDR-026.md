@@ -15,11 +15,11 @@ related:
 - '[[RQ-DEV-001]]'
 - '[[RQ-SEC-001]]'
 - '[[RQ-INT-001]]'
-- '[[BD-ADR-014]]'
-- '[[BD-DEP-004]]'
-- '[[BD-API-004]]'
-- '[[DD-DEP-002]]'
-- '[[DD-API-010]]'
+- '[[BD-SYS-ADR-014]]'
+- '[[BD-INF-DEP-004]]'
+- '[[BD-APP-API-004]]'
+- '[[DD-INF-DEP-002]]'
+- '[[DD-APP-API-010]]'
 - '[[AT-SCN-006]]'
 tags:
 - diopside
@@ -41,8 +41,8 @@ tags:
 
 ## 影響
 - 要求文書: [[RQ-FR-025]] を追加し、パス分岐と認証境界の受入条件を明文化する。
-- 設計文書: [[BD-ADR-014]] / [[BD-DEP-004]] / [[BD-API-004]] でルーティング、配信、OpenAPI配布契約を定義する。
-- 詳細設計: [[DD-DEP-002]] / [[DD-API-010]] でCloudFront behavior順序と `/api/v1/*` ルーティングを具体化する。
+- 設計文書: [[BD-SYS-ADR-014]] / [[BD-INF-DEP-004]] / [[BD-APP-API-004]] でルーティング、配信、OpenAPI配布契約を定義する。
+- 詳細設計: [[DD-INF-DEP-002]] / [[DD-APP-API-010]] でCloudFront behavior順序と `/api/v1/*` ルーティングを具体化する。
 - 受入: [[AT-SCN-006]] で4経路の到達性、認証、rewrite非干渉を検証する。
 
 ## 変更履歴

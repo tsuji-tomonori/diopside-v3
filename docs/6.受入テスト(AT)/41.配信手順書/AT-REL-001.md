@@ -9,12 +9,12 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-11'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
-- '[[BD-DEP-003]]'
-- '[[BD-DEP-004]]'
+- '[[BD-INF-DEP-003]]'
+- '[[BD-INF-DEP-004]]'
 - '[[AT-RUN-001]]'
 tags:
 - diopside
@@ -38,7 +38,7 @@ tags:
 4. S3配置完了とCloudFront invalidation実行を確認する。
 5. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
 6. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
-7. Phase 2適用後は [[BD-DEP-004]] / [[DD-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
+7. Phase 2適用後は [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
 
 ## 判定基準
 - 公開手順が単一コマンドで完了し、配信サイトに更新内容が反映される。

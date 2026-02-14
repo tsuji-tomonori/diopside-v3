@@ -10,10 +10,10 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-011]]'
+- '[[DD-APP-API-011]]'
 related:
 - '[[IT-CASE-009]]'
-- '[[DD-API-003]]'
+- '[[DD-APP-API-003]]'
 tags:
 - diopside
 - UT
@@ -22,7 +22,7 @@ tags:
 
 
 ## 対象API
-- `GET /api/v1/ops/ingestion/runs/{runId}/items`（[[DD-API-011]]）
+- `GET /api/v1/ops/ingestion/runs/{runId}/items`（[[DD-APP-API-011]]）
 
 ## テスト目的
 - run単位の動画単位成功/失敗/未処理の追跡と、失敗理由の取得を単体で検証する。

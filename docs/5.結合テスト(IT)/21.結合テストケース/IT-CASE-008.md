@@ -10,7 +10,7 @@ created: 2026-02-10
 updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-API-009]]'
+- '[[DD-APP-API-009]]'
 related:
 - '[[AT-SCN-005]]'
 tags:
@@ -21,7 +21,7 @@ tags:
 
 ## 対象API
 - `GET /api/v1/ops/ingestion/latest`
-- `GET /api/v1/ops/diagnostics/health`（[[DD-API-009]]）
+- `GET /api/v1/ops/diagnostics/health`（[[DD-APP-API-009]]）
 
 ## テスト目的
 - 収集実行結果と診断状態表示の連携を検証する。

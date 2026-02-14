@@ -9,13 +9,13 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-11'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
-- '[[DD-API-002]]'
-- '[[DD-API-003]]'
-- '[[DD-API-009]]'
+- '[[DD-APP-API-002]]'
+- '[[DD-APP-API-003]]'
+- '[[DD-APP-API-009]]'
 tags:
 - diopside
 - AT
@@ -26,9 +26,9 @@ tags:
 - 収集開始から結果確認までの運用フローが実行可能であることを確認する。
 
 ## 対応DD-API
-- `DD-API-002`（[[RQ-GL-002|収集ジョブ]]起動API）
-- `DD-API-003`（[[RQ-GL-002|収集ジョブ]]状態API）
-- `DD-API-009`（運用診断API）
+- `DD-APP-API-002`（[[RQ-GL-002|収集ジョブ]]起動API）
+- `DD-APP-API-003`（[[RQ-GL-002|収集ジョブ]]状態API）
+- `DD-APP-API-009`（運用診断API）
 
 ## 前提条件
 - 管理者権限で `/api/v1/ops` API を実行できる。
@@ -54,7 +54,7 @@ tags:
 - 実行時間
 - official/appearance/total 件数
 - warnings 有無
-- 対応DD-API（`DD-API-002`, `DD-API-003`, `DD-API-009`）
+- 対応DD-API（`DD-APP-API-002`, `DD-APP-API-003`, `DD-APP-API-009`）
 - 判定（Pass/Fail）
 
 ## 変更履歴

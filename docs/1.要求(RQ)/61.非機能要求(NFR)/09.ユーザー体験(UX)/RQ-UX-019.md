@@ -12,7 +12,7 @@ up:
 - '[[RQ-SC-001]]'
 related:
 - '[[RQ-RDR-018]]'
-- '[[BD-BUILD-001]]'
+- '[[BD-DEV-PIPE-001]]'
 - '[[RQ-UX-021]]'
 tags:
 - diopside

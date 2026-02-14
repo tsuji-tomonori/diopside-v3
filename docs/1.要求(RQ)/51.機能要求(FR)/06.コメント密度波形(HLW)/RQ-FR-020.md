@@ -16,9 +16,9 @@ related:
 - '[[RQ-FR-013]]'
 - '[[RQ-FR-014]]'
 - '[[RQ-FR-022]]'
-- '[[BD-API-001]]'
-- '[[BD-UI-001]]'
-- '[[BD-UI-002]]'
+- '[[BD-APP-API-001]]'
+- '[[BD-APP-UI-001]]'
+- '[[BD-APP-UI-002]]'
 - '[[RQ-RDR-022]]'
 - '[[RQ-RDR-038]]'
 tags:

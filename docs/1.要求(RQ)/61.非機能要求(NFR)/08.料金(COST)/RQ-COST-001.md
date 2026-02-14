@@ -14,9 +14,9 @@ related:
 - '[[RQ-RDR-017]]'
 - '[[RQ-RDR-027]]'
 - '[[RQ-PC-006]]'
-- '[[BD-ADR-015]]'
-- '[[BD-DEP-001]]'
-- '[[DD-COST-001]]'
+- '[[BD-SYS-ADR-015]]'
+- '[[BD-INF-DEP-001]]'
+- '[[DD-SYS-COST-001]]'
 - '[[AT-OPS-001]]'
 tags:
 - diopside
@@ -47,8 +47,8 @@ tags:
   - [[RQ-RDR-027]]
   - [[RQ-RDR-017]]
   - [[RQ-PC-006]]
-  - [[BD-ADR-015]]
-  - [[DD-COST-001]]
+  - [[BD-SYS-ADR-015]]
+  - [[DD-SYS-COST-001]]
 
 ## 変更履歴
 - 2026-02-14: 環境運用を `dev/prod` へ統一した方針に合わせ、`Environment` 列挙値を2値へ更新 [[RQ-RDR-027]]

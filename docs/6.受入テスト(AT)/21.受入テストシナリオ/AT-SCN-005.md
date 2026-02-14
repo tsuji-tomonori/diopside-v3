@@ -9,13 +9,13 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-11'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
-- '[[DD-API-003]]'
-- '[[DD-API-008]]'
-- '[[DD-API-009]]'
+- '[[DD-APP-API-003]]'
+- '[[DD-APP-API-008]]'
+- '[[DD-APP-API-009]]'
 tags:
 - diopside
 - AT
@@ -26,9 +26,9 @@ tags:
 - 収集失敗または配信劣化時に、運用手順で復旧判断まで到達できることを確認する。
 
 ## 対応DD-API
-- `DD-API-003`（[[RQ-GL-002|収集ジョブ]]状態API）
-- `DD-API-008`（[[RQ-GL-011|再収集]]API）
-- `DD-API-009`（運用診断API）
+- `DD-APP-API-003`（[[RQ-GL-002|収集ジョブ]]状態API）
+- `DD-APP-API-008`（[[RQ-GL-011|再収集]]API）
+- `DD-APP-API-009`（運用診断API）
 
 ## 前提条件
 - 失敗run、または診断APIで`degraded/critical`となる状態を再現済み。
@@ -54,7 +54,7 @@ tags:
 - 影響範囲
 - 実施手順
 - 復旧可否
-- 対応DD-API（`DD-API-003`, `DD-API-008`, `DD-API-009`）
+- 対応DD-API（`DD-APP-API-003`, `DD-APP-API-008`, `DD-APP-API-009`）
 - 判定（Pass/Fail）
 
 ## 変更履歴

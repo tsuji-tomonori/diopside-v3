@@ -10,7 +10,7 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-014]]'
+- '[[DD-APP-API-014]]'
 related:
 - '[[IT-CASE-012]]'
 - '[[RQ-FR-024]]'
@@ -22,8 +22,8 @@ tags:
 
 
 ## 対象API
-- `POST /api/v1/admin/docs/publish`（[[DD-API-014]]）
-- `GET /api/v1/admin/docs/publish/{docsPublishRunId}`（[[DD-API-014]]）
+- `POST /api/v1/admin/docs/publish`（[[DD-APP-API-014]]）
+- `GET /api/v1/admin/docs/publish/{docsPublishRunId}`（[[DD-APP-API-014]]）
 
 ## テスト目的
 - ドキュメント公開runの起動とステップ追跡を単体で検証する。

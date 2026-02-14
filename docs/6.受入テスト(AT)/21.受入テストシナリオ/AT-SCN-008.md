@@ -9,7 +9,7 @@ owner: RQ-SH-001
 created: 2026-02-12
 updated: '2026-02-12'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
@@ -17,7 +17,7 @@ related:
 - '[[RQ-FR-003]]'
 - '[[RQ-FR-004]]'
 - '[[RQ-PS-001]]'
-- '[[DD-API-002]]'
+- '[[DD-APP-API-002]]'
 tags:
 - diopside
 - AT
@@ -35,8 +35,8 @@ tags:
 - [[RQ-FR-004]]: メタデータ正規化
 
 ## 対応DD-API
-- [[DD-API-002]]（[[RQ-GL-002|収集ジョブ]]起動API）
-- [[DD-API-011]]（収集結果明細API）
+- [[DD-APP-API-002]]（[[RQ-GL-002|収集ジョブ]]起動API）
+- [[DD-APP-API-011]]（収集結果明細API）
 
 ## 前提条件
 - 受入環境で[[RQ-GL-002|収集ジョブ]]が実行可能。

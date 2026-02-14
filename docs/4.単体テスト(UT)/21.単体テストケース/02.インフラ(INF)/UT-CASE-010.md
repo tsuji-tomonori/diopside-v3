@@ -10,7 +10,7 @@ created: 2026-02-11
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-003]]'
-- '[[DD-DEP-001]]'
+- '[[DD-INF-DEP-001]]'
 related:
 - '[[IT-PLAN-001]]'
 tags:

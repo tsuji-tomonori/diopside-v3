@@ -13,7 +13,7 @@ up:
 related:
 - '[[RQ-RDR-023]]'
 - '[[RQ-RDR-018]]'
-- '[[BD-SEC-001]]'
+- '[[BD-SYS-SEC-001]]'
 - '[[AT-OPS-001]]'
 tags:
 - diopside

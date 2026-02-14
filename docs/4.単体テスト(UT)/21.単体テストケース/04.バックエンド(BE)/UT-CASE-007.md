@@ -10,7 +10,7 @@ created: 2026-02-10
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-008]]'
+- '[[DD-APP-API-008]]'
 related:
 - '[[IT-CASE-007]]'
 tags:
@@ -20,7 +20,7 @@ tags:
 ---
 
 ## 対象API
-- `POST /ops/ingestion/runs/{runId}/retry`（[[DD-API-008]]）
+- `POST /ops/ingestion/runs/{runId}/retry`（[[DD-APP-API-008]]）
 
 ## テスト目的
 - [[RQ-GL-011|再収集]]APIの再実行条件、上限管理、監査項目付与を単体で検証する。

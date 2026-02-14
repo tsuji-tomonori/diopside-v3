@@ -9,12 +9,12 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-13'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
-- '[[DD-API-005]]'
-- '[[DD-API-006]]'
+- '[[DD-APP-API-005]]'
+- '[[DD-APP-API-006]]'
 - '[[RQ-UX-006]]'
 - '[[RQ-UX-007]]'
 - '[[RQ-UX-012]]'
@@ -29,8 +29,8 @@ tags:
 - キーワード、タグ、日付、再生時間、並び順の複合条件で目的動画へ到達できることを確認する。
 
 ## 対応DD-API
-- `DD-API-005`（[[RQ-GL-005|タグ辞書]]配信契約）
-- `DD-API-006`（検索契約）
+- `DD-APP-API-005`（[[RQ-GL-005|タグ辞書]]配信契約）
+- `DD-APP-API-006`（検索契約）
 
 ## 前提条件
 - `tag_master.json` と `archive_index` が取得可能。
@@ -65,7 +65,7 @@ tags:
 - 入力した[[RQ-GL-014|検索条件]]
 - 結果件数
 - 先頭動画ID（desc/asc）
-- 対応DD-API（`DD-API-005`, `DD-API-006`）
+- 対応DD-API（`DD-APP-API-005`, `DD-APP-API-006`）
 - 判定（Pass/Fail）
 
 ## 変更履歴

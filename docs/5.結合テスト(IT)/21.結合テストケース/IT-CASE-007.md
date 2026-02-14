@@ -10,7 +10,7 @@ created: 2026-02-10
 updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-API-008]]'
+- '[[DD-APP-API-008]]'
 related:
 - '[[AT-SCN-005]]'
 tags:
@@ -20,7 +20,7 @@ tags:
 ---
 
 ## 対象API
-- `POST /api/v1/ops/ingestion/runs/{runId}/retry`（[[DD-API-008]]）
+- `POST /api/v1/ops/ingestion/runs/{runId}/retry`（[[DD-APP-API-008]]）
 
 ## テスト目的
 - 失敗runの[[RQ-GL-011|再収集]]実行と追跡API連携を検証する。

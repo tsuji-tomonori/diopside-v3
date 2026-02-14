@@ -10,9 +10,9 @@ created: 2026-02-11
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-001]]'
-- '[[BD-TST-001]]'
-- '[[BD-DEP-003]]'
-- '[[DD-DEP-001]]'
+- '[[BD-DEV-TEST-001]]'
+- '[[BD-INF-DEP-003]]'
+- '[[DD-INF-DEP-001]]'
 related:
 - '[[UT-CASE-010]]'
 - '[[IT-PLAN-001]]'

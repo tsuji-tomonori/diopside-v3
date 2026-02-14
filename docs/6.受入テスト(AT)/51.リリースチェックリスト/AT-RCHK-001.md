@@ -9,7 +9,7 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-10'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'

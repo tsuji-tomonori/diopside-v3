@@ -14,10 +14,10 @@ related:
 - '[[RQ-RDR-023]]'
 - '[[RQ-RDR-017]]'
 - '[[RQ-RDR-035]]'
-- '[[BD-QUAL-001]]'
-- '[[BD-MON-001]]'
-- '[[BD-ADR-022]]'
-- '[[DD-LOG-001]]'
+- '[[BD-SYS-QUAL-001]]'
+- '[[BD-INF-MON-001]]'
+- '[[BD-SYS-ADR-022]]'
+- '[[DD-APP-LOG-001]]'
 tags:
 - diopside
 - RQ
@@ -47,9 +47,9 @@ tags:
 - 依存・関連:
   - [[RQ-RDR-035]]
   - [[RQ-RDR-017]]
-  - [[BD-QUAL-001]]
-  - [[BD-ADR-022]]
-  - [[DD-LOG-001]]
+  - [[BD-SYS-QUAL-001]]
+  - [[BD-SYS-ADR-022]]
+  - [[DD-APP-LOG-001]]
 
 ## 変更履歴
 - 2026-02-10: 新規作成 [[RQ-RDR-017]]

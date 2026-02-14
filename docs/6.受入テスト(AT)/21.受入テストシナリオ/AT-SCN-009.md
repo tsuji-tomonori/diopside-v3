@@ -9,13 +9,13 @@ owner: RQ-SH-001
 created: 2026-02-12
 updated: '2026-02-12'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
 - '[[RQ-FR-005]]'
 - '[[RQ-FR-009]]'
-- '[[DD-API-013]]'
+- '[[DD-APP-API-013]]'
 tags:
 - diopside
 - AT
@@ -32,8 +32,8 @@ tags:
 - [[RQ-FR-009]]: タグの廃止・統合
 
 ## 対応DD-API
-- [[DD-API-013]]（タグ管理API）
-- [[DD-API-015]]（配信反映ジョブ状態API）
+- [[DD-APP-API-013]]（タグ管理API）
+- [[DD-APP-API-015]]（配信反映ジョブ状態API）
 
 ## 前提条件
 - 受入環境で管理画面が起動している。

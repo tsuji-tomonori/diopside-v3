@@ -10,7 +10,7 @@ created: 2026-01-31
 updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-API-003]]'
+- '[[DD-APP-API-003]]'
 related:
 - '[[AT-SCN-004]]'
 tags:
@@ -21,7 +21,7 @@ tags:
 
 
 ## 対象API
-- `GET /api/v1/ops/ingestion/runs/{runId}`（[[DD-API-003]]）
+- `GET /api/v1/ops/ingestion/runs/{runId}`（[[DD-APP-API-003]]）
 
 ## テスト目的
 - run状態取得APIと実行エンジン状態反映の整合を検証する。
@@ -41,4 +41,4 @@ tags:
 ## 変更履歴
 - 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成
-- 2026-02-10: DD-API-003対応のAPI単位ケースへ細分化
+- 2026-02-10: DD-APP-API-003対応のAPI単位ケースへ細分化

@@ -10,7 +10,7 @@ created: 2026-01-31
 updated: '2026-02-11'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-API-002]]'
+- '[[DD-APP-API-002]]'
 related:
 - '[[AT-SCN-004]]'
 tags:
@@ -21,7 +21,7 @@ tags:
 
 
 ## 対象API
-- `POST /api/v1/ops/ingestion/runs`（[[DD-API-002]]）
+- `POST /api/v1/ops/ingestion/runs`（[[DD-APP-API-002]]）
 
 ## テスト目的
 - 起動APIと実行キュー、実行履歴保存の連携を検証する。
@@ -44,4 +44,4 @@ tags:
 ## 変更履歴
 - 2026-02-11: API経路を `/api/v1/ops` へ更新
 - 2026-02-10: 新規作成
-- 2026-02-10: DD-API-002対応のAPI単位ケースへ細分化
+- 2026-02-10: DD-APP-API-002対応のAPI単位ケースへ細分化

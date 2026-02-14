@@ -10,7 +10,7 @@ created: 2026-01-31
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-003]]'
+- '[[DD-APP-API-003]]'
 related:
 - '[[IT-CASE-002]]'
 tags:
@@ -21,7 +21,7 @@ tags:
 
 
 ## 対象API
-- `GET /ops/ingestion/runs/{runId}`（[[DD-API-003]]）
+- `GET /ops/ingestion/runs/{runId}`（[[DD-APP-API-003]]）
 
 ## テスト目的
 - run状態取得の状態遷移表現、404判定、失敗時の要約返却を検証する。
@@ -45,4 +45,4 @@ tags:
 ## 変更履歴
 - 2026-02-11: バックエンド領域へ再配置し、上位計画を [[UT-PLAN-005]] に更新
 - 2026-02-10: 新規作成
-- 2026-02-10: DD-API-003対応のAPI単位ケースへ細分化
+- 2026-02-10: DD-APP-API-003対応のAPI単位ケースへ細分化

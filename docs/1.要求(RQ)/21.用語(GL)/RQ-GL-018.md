@@ -13,10 +13,10 @@ up:
 - '[[RQ-SC-001]]'
 related:
 - '[[RQ-RDR-034]]'
-- '[[BD-ARCH-001]]'
-- '[[BD-ARCH-004]]'
-- '[[BD-DATA-001]]'
-- '[[BD-UI-003]]'
+- '[[BD-SYS-ARCH-001]]'
+- '[[BD-SYS-ARCH-004]]'
+- '[[BD-APP-DATA-001]]'
+- '[[BD-APP-UI-003]]'
 tags:
 - diopside
 - RQ

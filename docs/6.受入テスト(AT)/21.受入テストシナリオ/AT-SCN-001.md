@@ -9,11 +9,11 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-13'
 up:
-- '[[BD-TST-001]]'
+- '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
 related:
 - '[[AT-GO-001]]'
-- '[[DD-API-004]]'
+- '[[DD-APP-API-004]]'
 - '[[RQ-UX-011]]'
 - '[[RQ-UX-018]]'
 - '[[RQ-UX-019]]'
@@ -28,7 +28,7 @@ tags:
 - 初回アクセス利用者が動画一覧を閲覧でき、基本的な情報到達が可能であることを確認する。
 
 ## 対応DD-API
-- [[DD-API-004]]（アーカイブ一覧配信契約）
+- [[DD-APP-API-004]]（アーカイブ一覧配信契約）
 
 ## 前提条件
 - 配信データ（`bootstrap.json`）が最新化済み。
@@ -62,7 +62,7 @@ tags:
 - 実行日時
 - 実行者
 - 使用データ版（bootstrapVersion/archiveVersion）
-- 対応DD-API（[[DD-API-004]]）
+- 対応DD-API（[[DD-APP-API-004]]）
 - 判定（Pass/Fail）
 
 ## 変更履歴

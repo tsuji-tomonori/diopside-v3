@@ -16,7 +16,7 @@ related:
 - '[[RQ-GL-008]]'
 - '[[RQ-DM-004]]'
 - '[[RQ-DM-007]]'
-- '[[BD-UI-002]]'
+- '[[BD-APP-UI-002]]'
 tags:
 - diopside
 - RQ

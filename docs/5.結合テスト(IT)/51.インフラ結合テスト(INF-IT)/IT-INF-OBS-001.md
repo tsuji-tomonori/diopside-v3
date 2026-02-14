@@ -10,9 +10,9 @@ created: 2026-02-13
 updated: '2026-02-13'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-OBS-001]]'
+- '[[DD-INF-MON-001]]'
 related:
-- '[[BD-MON-001]]'
+- '[[BD-INF-MON-001]]'
 tags:
 - diopside
 - IT

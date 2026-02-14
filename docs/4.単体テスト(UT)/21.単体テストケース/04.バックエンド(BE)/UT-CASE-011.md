@@ -10,7 +10,7 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-013]]'
+- '[[DD-APP-API-013]]'
 related:
 - '[[IT-CASE-011]]'
 - '[[RQ-FR-005]]'
@@ -23,11 +23,11 @@ tags:
 
 
 ## 対象API
-- `POST /api/v1/admin/tags`（[[DD-API-013]]）
-- `PATCH /api/v1/admin/tags/{tagId}`（[[DD-API-013]]）
-- `PATCH /api/v1/admin/videos/{videoId}/tags`（[[DD-API-013]]）
-- `POST /api/v1/admin/tagging/prompts`（[[DD-API-013]]）
-- `POST /api/v1/admin/tagging/imports`（[[DD-API-013]]）
+- `POST /api/v1/admin/tags`（[[DD-APP-API-013]]）
+- `PATCH /api/v1/admin/tags/{tagId}`（[[DD-APP-API-013]]）
+- `PATCH /api/v1/admin/videos/{videoId}/tags`（[[DD-APP-API-013]]）
+- `POST /api/v1/admin/tagging/prompts`（[[DD-APP-API-013]]）
+- `POST /api/v1/admin/tagging/imports`（[[DD-APP-API-013]]）
 
 ## テスト目的
 - [[RQ-GL-005|タグ辞書]]の作成/更新/無効化と、動画への手動タグ付け、LLM支援タグ運用を単体で検証する。

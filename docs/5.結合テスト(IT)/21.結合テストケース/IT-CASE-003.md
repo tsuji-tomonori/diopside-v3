@@ -10,7 +10,7 @@ created: 2026-01-31
 updated: '2026-02-10'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-API-004]]'
+- '[[DD-APP-API-004]]'
 related:
 - '[[AT-SCN-001]]'
 tags:
@@ -22,7 +22,7 @@ tags:
 
 ## 対象API
 - `GET /bootstrap.json`
-- `GET /archive_index.p{page}.json`（[[DD-API-004]]）
+- `GET /archive_index.p{page}.json`（[[DD-APP-API-004]]）
 
 ## テスト目的
 - 収集成果物が配信領域へ正しく配置され、Webが[[RQ-GL-010|段階ロード]]で参照できることを検証する。
@@ -41,4 +41,4 @@ tags:
 
 ## 変更履歴
 - 2026-02-10: 新規作成
-- 2026-02-10: DD-API-004対応のAPI単位ケースへ細分化
+- 2026-02-10: DD-APP-API-004対応のAPI単位ケースへ細分化

@@ -10,9 +10,9 @@ created: 2026-02-13
 updated: '2026-02-13'
 up:
 - '[[IT-PLAN-001]]'
-- '[[BD-INF-002]]'
+- '[[BD-INF-ENV-001]]'
 related:
-- '[[DD-IAC-002]]'
+- '[[DD-INF-IAC-003]]'
 tags:
 - diopside
 - IT
@@ -34,7 +34,7 @@ tags:
 
 ## 失敗時判定
 - `destroy` 後の残存リソースが1件でもあればNG。
-- 同一原因で2回連続失敗した場合、`DD-IAC-002` の修正を必須化する。
+- 同一原因で2回連続失敗した場合、`DD-INF-IAC-003` の修正を必須化する。
 
 ## 期待結果
 - deploy/destroyともに成功し、残存リソースがない。

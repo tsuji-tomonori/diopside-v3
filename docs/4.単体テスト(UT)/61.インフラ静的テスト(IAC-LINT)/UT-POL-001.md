@@ -10,9 +10,9 @@ created: 2026-02-13
 updated: '2026-02-13'
 up:
 - '[[UT-PLAN-001]]'
-- '[[DD-IAM-001]]'
+- '[[DD-INF-SEC-002]]'
 related:
-- '[[DD-IAC-001]]'
+- '[[DD-INF-IAC-002]]'
 tags:
 - diopside
 - UT

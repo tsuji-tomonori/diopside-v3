@@ -14,7 +14,7 @@ related:
 - '[[RQ-RDR-025]]'
 - '[[RQ-RDR-030]]'
 - '[[RQ-DEV-001]]'
-- '[[BD-DEP-003]]'
+- '[[BD-INF-DEP-003]]'
 - '[[AT-REL-001]]'
 tags:
 - diopside

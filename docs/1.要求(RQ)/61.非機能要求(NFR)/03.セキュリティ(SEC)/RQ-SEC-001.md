@@ -14,10 +14,10 @@ related:
 - '[[RQ-RDR-017]]'
 - '[[RQ-RDR-026]]'
 - '[[RQ-RDR-027]]'
-- '[[BD-SEC-001]]'
-- '[[BD-ADR-015]]'
-- '[[DD-SEC-001]]'
-- '[[DD-COST-001]]'
+- '[[BD-SYS-SEC-001]]'
+- '[[BD-SYS-ADR-015]]'
+- '[[DD-SYS-SEC-001]]'
+- '[[DD-SYS-COST-001]]'
 - '[[AT-OPS-001]]'
 tags:
 - diopside
@@ -48,10 +48,10 @@ tags:
 - 依存・関連:
   - [[RQ-RDR-027]]
   - [[RQ-RDR-017]]
-  - [[BD-ADR-015]]
-  - [[BD-SEC-001]]
-  - [[DD-COST-001]]
-  - [[DD-SEC-001]]
+  - [[BD-SYS-ADR-015]]
+  - [[BD-SYS-SEC-001]]
+  - [[DD-SYS-COST-001]]
+  - [[DD-SYS-SEC-001]]
 
 ## 変更履歴
 - 2026-02-11: AWSタグの禁止情報/予約プレフィックス/表記ゆれ統制を受入基準へ追加 [[RQ-RDR-027]]

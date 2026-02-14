@@ -10,7 +10,7 @@ created: 2026-02-10
 updated: '2026-02-11'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-007]]'
+- '[[DD-APP-API-007]]'
 related:
 - '[[IT-CASE-006]]'
 tags:
@@ -21,7 +21,7 @@ tags:
 
 ## 対象API
 - `GET /api/videos/{videoId}`（将来）
-- MVP組み立て仕様（[[DD-API-007]]）
+- MVP組み立て仕様（[[DD-APP-API-007]]）
 
 ## テスト目的
 - 動画詳細表示のデータ組み立てとURL生成を単体で検証する。

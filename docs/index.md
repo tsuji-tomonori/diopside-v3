@@ -26,7 +26,7 @@ tags:
 - [[RQ-SC-001]]
 - [[RQ-RTM-001]]
 - [[RQ-RTM-002]]
-- [[BD-ARCH-001]]
+- [[BD-SYS-ARCH-001]]
 - [[AT-GO-001]]
 
 ## 変更履歴

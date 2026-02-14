@@ -13,7 +13,7 @@ up:
 related:
 - '[[RQ-RDR-018]]'
 - '[[RQ-DEV-001]]'
-- '[[BD-BUILD-001]]'
+- '[[BD-DEV-PIPE-001]]'
 - '[[AT-SCN-002]]'
 - '[[AT-REL-001]]'
 tags:

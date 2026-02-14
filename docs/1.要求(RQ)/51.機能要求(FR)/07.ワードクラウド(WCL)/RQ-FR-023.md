@@ -19,8 +19,8 @@ related:
 - '[[RQ-FR-021]]'
 - '[[RQ-PRC-001]]'
 - '[[RQ-PC-003]]'
-- '[[BD-API-001]]'
-- '[[BD-UI-002]]'
+- '[[BD-APP-API-001]]'
+- '[[BD-APP-UI-002]]'
 - '[[RQ-RDR-038]]'
 tags:
 - diopside

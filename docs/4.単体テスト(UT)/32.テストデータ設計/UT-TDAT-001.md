@@ -9,8 +9,8 @@ owner: RQ-SH-001
 created: 2026-01-31
 updated: '2026-02-10'
 up:
-- '[[BD-TST-001]]'
-- '[[DD-API-001]]'
+- '[[BD-DEV-TEST-001]]'
+- '[[DD-APP-API-001]]'
 related:
 - '[[IT-PLAN-001]]'
 tags:

@@ -15,10 +15,10 @@ related:
 - '[[RQ-RDR-022]]'
 - '[[RQ-FR-004]]'
 - '[[RQ-FR-020]]'
-- '[[BD-ADR-010]]'
-- '[[BD-API-001]]'
-- '[[BD-UI-001]]'
-- '[[BD-UI-002]]'
+- '[[BD-SYS-ADR-010]]'
+- '[[BD-APP-API-001]]'
+- '[[BD-APP-UI-001]]'
+- '[[BD-APP-UI-002]]'
 - '[[RQ-RDR-038]]'
 tags:
 - diopside

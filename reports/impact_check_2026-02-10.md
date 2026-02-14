@@ -8,16 +8,16 @@
 - 決定記録: RDRおよびADRを同一変更で更新済み。
 
 ## 追記（主要文書深掘り）
-- 対象: `RQ-SC-001` / `BD-ARCH-001` / `DD-API-001` / `AT-PLAN-001`
+- 対象: `RQ-SC-001` / `BD-SYS-ARCH-001` / `DD-APP-API-001` / `AT-PLAN-001`
 - 実施: スコープ境界、アーキテクチャ責務、API契約分類、受入判定基準を具体化。
 - 影響確認:
-  - 要求→設計: `RQ-SC-001` の収集対象定義と `BD-ARCH-001` の責務分割が整合。
-  - 設計→詳細: `BD-ARCH-001` の段階ロード方針と `DD-API-001` の配信契約が整合。
-  - 設計→受入: `DD-API-001` の契約内容と `AT-PLAN-001` の判定項目が整合。
+  - 要求→設計: `RQ-SC-001` の収集対象定義と `BD-SYS-ARCH-001` の責務分割が整合。
+  - 設計→詳細: `BD-SYS-ARCH-001` の段階ロード方針と `DD-APP-API-001` の配信契約が整合。
+  - 設計→受入: `DD-APP-API-001` の契約内容と `AT-PLAN-001` の判定項目が整合。
 - 判定: 関連リンクに破綻なし、追加の追従更新は現時点で不要。
 
 ## 追記（API詳細・ATシナリオ具体化）
-- 対象: `DD-API-002`〜`DD-API-009`, `AT-SCN-001`〜`AT-SCN-005`, `RQ-PP-001`〜`RQ-PP-003`
+- 対象: `DD-APP-API-002`〜`DD-APP-API-009`, `AT-SCN-001`〜`AT-SCN-005`, `RQ-PP-001`〜`RQ-PP-003`
 - 実施: API個別契約、受入手順、判定記録項目を具体化。
 - 重複修正: PP配下3文書を目的/価値/KPIで役割分離。
 
@@ -28,7 +28,7 @@
 - 決定記録: `RQ-RDR-011` を新規追加し、要求意味変更の根拠を記録。
 - 影響確認:
   - スコープ整合: `RQ-SC-001` の公開データ対象定義と `RQ-PC-003` が整合。
-  - 環境整合: `RQ-PC-005` のAWS固定方針と `BD-ARCH-001` のS3/CloudFront構成が整合。
+  - 環境整合: `RQ-PC-005` のAWS固定方針と `BD-SYS-ARCH-001` のS3/CloudFront構成が整合。
   - 開発整合: `RQ-PC-007`/`RQ-PC-009` のAI開発条件と既存の受入判定運用に矛盾なし。
 
 ## 追記（ステークホルダー2者化）
@@ -42,7 +42,7 @@
 
 ## 追記（UT/IT API単位細分化）
 - 対象: `UT-CASE-001`〜`UT-CASE-008`, `IT-CASE-001`〜`IT-CASE-008`, `UT-PLAN-001`, `IT-PLAN-001`
-- 実施: DD-API-002〜009に対して1API=1ケースで対応関係を定義。
+- 実施: DD-APP-API-002〜009に対して1API=1ケースで対応関係を定義。
 - 判定: ATシナリオとの接続リンクを追加し、受入判定へのトレースを強化。
 
 ## 追記（owner統一と運用・受入本文統一確認）
@@ -96,13 +96,13 @@
 - 検証: `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` 実行済み（issues/broken_links=0）。
 
 ## 追記（用語自動リンク化のスクリプト運用追加）
-- 対象: `.opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py`, `.opencode/skills/**/SKILL.md`, `RQ-DG-001`, `BD-CM-001`
+- 対象: `.opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py`, `.opencode/skills/**/SKILL.md`, `RQ-DG-001`, `BD-INF-CM-001`
 - 実施:
   - 用語集 `RQ-GL-*` を参照して本文語彙を `[[RQ-GL-xxx|用語]]` へ自動変換するスクリプトを追加。
   - `doc-*` / `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` の手順に、`auto_link_glossary.py` 実行を追加。
-  - 文書運用ガイド（`RQ-DG-001`）と構成管理（`BD-CM-001`）に標準実行順（自動リンク化→整合チェック）を反映。
+  - 文書運用ガイド（`RQ-DG-001`）と構成管理（`BD-INF-CM-001`）に標準実行順（自動リンク化→整合チェック）を反映。
 - 検証:
-  - `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py "docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md" "docs/2.基本設計(BD)/52.構成管理/BD-CM-001.md"`
+  - `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py "docs/1.要求(RQ)/81.ドキュメント更新フローと受け入れ基準(DG)/RQ-DG-001.md" "docs/2.基本設計(BD)/52.構成管理/BD-INF-CM-001.md"`
   - `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md`
 
 ## 追記（ドメインモデル具体化）
@@ -111,8 +111,8 @@
   - 7件のドメインモデルを雛形記述から具体化し、主キー/外部キー/論理識別子、主要属性、関連、整合条件を明文化。
   - `RQ-RDR-013` を新規追加し、意味変更の決定根拠と影響範囲を要求決定記録として残した。
 - 影響確認:
-  - 要求→設計: `RQ-DM-*` の run追跡要件と `DD-API-002/003/008` の run契約が整合。
-  - 要求→データ設計: `RQ-DM-*` の識別子方針と `BD-DATA-001` / `BD-ERD-001` の方向性に矛盾なし。
+  - 要求→設計: `RQ-DM-*` の run追跡要件と `DD-APP-API-002/003/008` の run契約が整合。
+  - 要求→データ設計: `RQ-DM-*` の識別子方針と `BD-APP-DATA-001` / `BD-APP-DATA-002` の方向性に矛盾なし。
 
 ## 追記（用語定義の具体化）
 - 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-012`
@@ -120,26 +120,26 @@
 - 決定記録: `RQ-RDR-012` を新規作成し、用語意味変更の理由と影響を記録。
 - 影響確認:
   - 要求整合: `RQ-SC-001` の収集対象定義と `RQ-GL-003/004` の判定条件が整合。
-  - 設計整合: `DD-API-001` の配信契約と `RQ-GL-007/008/009/010` の定義が整合。
+  - 設計整合: `DD-APP-API-001` の配信契約と `RQ-GL-007/008/009/010` の定義が整合。
   - 運用整合: `AT-PLAN-001` の運用判定導線と `RQ-GL-011/012` の定義が整合。
 
 ## 追記（ステークホルダー表現の残存修正）
-- 対象: `RQ-UC-001`〜`RQ-UC-008`, `RQ-SC-001`, `RQ-PP-002`, `RQ-PC-004`, `RQ-PC-008`, `BD-ARCH-001`, `DD-API-003`, `DD-API-009`, `AT-SCN-004`
+- 対象: `RQ-UC-001`〜`RQ-UC-008`, `RQ-SC-001`, `RQ-PP-002`, `RQ-PC-004`, `RQ-PC-008`, `BD-SYS-ARCH-001`, `DD-APP-API-003`, `DD-APP-API-009`, `AT-SCN-004`
 - 実施: ステークホルダー2者（管理者/利用者）に存在しない主体表現（`収集担当者`/`運用担当者`/`運用者`）を `管理者` または `利用者` へ統一。
 - 影響確認:
   - ユースケース: 8文書の開始主体をユースケース目的に合わせて明確化（管理者起点3件、利用者起点5件）。
-  - 設計/受入: `BD-ARCH-001` のMermaidアクター名、`DD-API-*` と `AT-SCN-004` の主体・権限表現を管理者へ統一。
+  - 設計/受入: `BD-SYS-ARCH-001` のMermaidアクター名、`DD-API-*` と `AT-SCN-004` の主体・権限表現を管理者へ統一。
   - 要求制約: `RQ-PC-008` の権限名を `管理者権限` へ統一。
 - 判定: `docs` 全体で `収集担当者` / `運用担当者` / `利用者または運用者` の残存参照は0件。
 
 ## 追記（用語英名term_enの追加）
-- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-013`, `RQ-DG-001`, `BD-CM-001`, `.opencode/skills/**`
+- 対象: `RQ-GL-001`〜`RQ-GL-012`, `RQ-RDR-013`, `RQ-DG-001`, `BD-INF-CM-001`, `.opencode/skills/**`
 - 実施: 用語文書に `term_en`（ASCII `snake_case`）を追加し、`## 定義` に英名を併記。
 - 決定記録: `RQ-RDR-013` を新規作成し、機械可読な英名運用の採用理由を記録。
 - スキル更新: `docops-orchestrator` / `obsidian-doc-*` / `skill-maintainer` / `doc-rq-gl` に英名運用ルールを反映。
 - 影響確認:
   - 要求整合: `RQ-DG-001` の受入基準へ `term_en` 必須化を反映。
-  - 設計整合: `BD-CM-001` の構成管理方針へ英名運用を反映。
+  - 設計整合: `BD-INF-CM-001` の構成管理方針へ英名運用を反映。
   - 自動化整合: `auto_link_glossary.py` が `title` と `term_en` の両方をリンク対象として処理可能。
 
 ## 追記（用語定義の表形式統一）
@@ -157,7 +157,7 @@
   - 主キー/外部キー/論理識別子、監査属性の記述を削除し、日本語での解説へ置換。
   - `RQ-RDR-014` を追加し、要求段階ではドメイン記述を正本とする決定を記録。
 - 影響確認:
-  - 要求→設計: `RQ-DM-*` の業務制約を `BD-DATA-001` / `BD-ERD-001` の詳細化前提として維持可能。
+  - 要求→設計: `RQ-DM-*` の業務制約を `BD-APP-DATA-001` / `BD-APP-DATA-002` の詳細化前提として維持可能。
   - 要求→運用: 各モデルでどの [[RQ-GL-002|収集ジョブ]] 結果を前提にするかを業務文脈で説明可能。
 
 ## 追記（画面構成起点の用語追加）
@@ -167,7 +167,7 @@
   - DMは業務概念に限定し、種別集合と条件規則の正本参照先を用語文書へ移した。
   - 要求決定記録 `RQ-RDR-015` を追加し、GL中心運用への整理方針を記録。
 - 影響確認:
-  - 要求→設計: `BD-UI-002` の画面要素と `RQ-GL-013/014` の用語定義が対応。
+  - 要求→設計: `BD-APP-UI-002` の画面要素と `RQ-GL-013/014` の用語定義が対応。
   - 要求→DM: `RQ-DM-004/007` が語彙正本をGL参照する構成となり、責務分離を維持。
 
 ## 追記（ドメイン参照リンクの統一）

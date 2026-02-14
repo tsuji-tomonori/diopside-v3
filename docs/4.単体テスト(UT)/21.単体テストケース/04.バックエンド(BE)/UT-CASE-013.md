@@ -10,11 +10,11 @@ created: 2026-02-12
 updated: '2026-02-12'
 up:
 - '[[UT-PLAN-005]]'
-- '[[DD-API-015]]'
+- '[[DD-APP-API-015]]'
 related:
 - '[[IT-CASE-013]]'
-- '[[DD-API-013]]'
-- '[[DD-API-014]]'
+- '[[DD-APP-API-013]]'
+- '[[DD-APP-API-014]]'
 tags:
 - diopside
 - UT
@@ -23,7 +23,7 @@ tags:
 
 
 ## 対象API
-- `GET /api/v1/admin/publish/{publishRunId}`（[[DD-API-015]]）
+- `GET /api/v1/admin/publish/{publishRunId}`（[[DD-APP-API-015]]）
 
 ## テスト目的
 - タグ公開反映および公開runの状態照会を単体で検証する。

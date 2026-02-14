@@ -10,10 +10,10 @@ created: 2026-02-13
 updated: '2026-02-13'
 up:
 - '[[IT-PLAN-001]]'
-- '[[DD-IAC-002]]'
+- '[[DD-INF-IAC-003]]'
 related:
-- '[[DD-CICD-INF-001]]'
-- '[[BD-INF-007]]'
+- '[[DD-INF-IAC-001]]'
+- '[[BD-INF-IAC-001]]'
 tags:
 - diopside
 - IT
