@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diopside ドキュメントレビュー補完レポート</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --accent: #0f766e;
+      --warn: #b45309;
+      --high: #b91c1c;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 20px 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    h1, h2, h3 { margin: 0 0 12px; line-height: 1.35; }
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.2rem; color: var(--accent); }
+    h3 { font-size: 1rem; }
+    p, li { margin: 0 0 8px; }
+    ul { margin: 0; padding-left: 1.2rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: #f3f4f6; }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.82rem;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      background: #f9fafb;
+    }
+    .high { color: var(--high); font-weight: 700; }
+    .warn { color: var(--warn); font-weight: 700; }
+    code {
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Diopside ドキュメントレビュー補完レポート</h1>
+      <div class="meta">
+        <div>対象: Diopside Obsidian Vault</div>
+        <div>作成日: 2026-02-14</div>
+        <div>作成種別: 文字起こしレビューの補完・正規化</div>
+        <div>準拠方針: AGENTS.md / RQ-DG 運用</div>
+      </div>
+      <p style="margin-top:12px;">
+        本レポートは、レビュー文字起こしの揺れを補正し、diopside の文書運用規約に合わせて
+        <strong>実行可能な指摘事項</strong>と<strong>確認事項</strong>へ再構成したものです。
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>1. 補完方針（正規化ルール）</h2>
+      <ul>
+        <li>指摘は <strong>用語・表記統制 / 文書構造再編 / インフラ具体化 / 運用ゲート強化</strong> の4分類に再編。</li>
+        <li>「削除」系の指摘は、原則 <strong>責務移管 + リンク更新 + RDR/ADR履歴追記</strong> で扱う。</li>
+        <li>採番はタイトルではなく文書ID（<code>RQ-RDR-xxx</code> / <code>BD-SYS-ADR-xxx</code>）を正本とする。</li>
+        <li>本文は日本語統一。ただし <code>id</code> / <code>term_en</code> / APIパス等の規約英字は例外。</li>
+      </ul>
+      <div style="margin-top:10px;">
+        <span class="tag">1トピック=1ファイル</span>
+        <span class="tag">Obsidianリンク正本</span>
+        <span class="tag">RDR/ADR同時更新</span>
+        <span class="tag">phase分離</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. 指摘事項（修正対応が必要）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>分類</th>
+            <th>補完後の指摘</th>
+            <th>推奨対応</th>
+            <th>優先度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>DOM構成</td><td>DOM章はコンテキストマップ/サブドメイン分類を残し、重複定義を除去</td><td>DOM正本へ集約し、RQ/BD側は参照化</td><td class="warn">中</td></tr>
+          <tr><td>2</td><td>用語</td><td>技術固有語の混入（例: Bootstrap）を用語集から整理</td><td>業務語彙中心に整理し、必要時は別語彙へ移管</td><td class="warn">中</td></tr>
+          <tr><td>3</td><td>用語</td><td>TagMaster 呼称の揺れを統一（日本語名「タグマネージャー」を併記）</td><td><code>[[RQ-GL-008|tag_master]]（タグマネージャー）</code> に統一</td><td class="high">高</td></tr>
+          <tr><td>4</td><td>更新フロー</td><td>文書更新フローを RQ/BD/DD/UT/IT/AT で明示分割</td><td><code>RQ-DG</code> に工程別手順と受入条件を固定</td><td class="high">高</td></tr>
+          <tr><td>5</td><td>品質特性</td><td>品質特性の責務境界が曖昧（App/Infra、BE/FE）</td><td>品質特性を責務別に再編</td><td class="warn">中</td></tr>
+          <tr><td>6</td><td>API/Batch</td><td>収集API実態がバッチ契約と混在</td><td>「API一覧」と「バッチ契約正本」を分離</td><td class="high">高</td></tr>
+          <tr><td>7</td><td>端末要件</td><td>閲覧端末条件が不明確</td><td>利用端末/画面制約をUI設計へ明記</td><td class="warn">中</td></tr>
+          <tr><td>8</td><td>情報構造</td><td>INF章に限らず、無意味な多階層化が散見される</td><td>全章で階層を浅く再設計し、掘り下げは責務分離に必須な場合のみに限定</td><td class="high">高</td></tr>
+          <tr><td>9</td><td>INF全体像</td><td>AWSサービス全体像に監視・イベント要素不足</td><td>監視/イベント系リソースの責務を明示</td><td class="warn">中</td></tr>
+          <tr><td>10</td><td>IaC/CM</td><td>インフラ変更フローと構成管理の分離不足</td><td>IaC章へ変更フロー・CM方針を集約</td><td class="high">高</td></tr>
+          <tr><td>11</td><td>デプロイ</td><td>初回以外の配備範囲が曖昧</td><td>通常/初回/緊急の配備境界を定義</td><td class="high">高</td></tr>
+          <tr><td>12</td><td>デプロイ</td><td>配備単位の責務が曖昧</td><td>BE/FE/Infra/DB/Doc/TestAsset の6分類化</td><td class="high">高</td></tr>
+          <tr><td>13</td><td>IAM</td><td>権限分離の粒度が未確定</td><td>環境軸 + アプリ責務軸で分離方針化</td><td class="high">高</td></tr>
+          <tr><td>14</td><td>CI/CD</td><td>パイプライン責務が混在</td><td>BE/FE/Infra/Doc分離、品質ゲート共通化</td><td class="warn">中</td></tr>
+          <tr><td>15</td><td>DD再編</td><td>UI・セキュリティ・ログ/エラーの責務が分散</td><td>UIは画面/コンポーネント分離、セキュリティはINF配下統一、エラー正本はAPI側へ</td><td class="warn">中</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>3. 確認事項（要質問・保留）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>論点</th>
+            <th>確認内容</th>
+            <th>推奨デフォルト</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>API一覧外項目</td>
+            <td>コメント密度波形/静的配信契約/PowerCloud がAPI一覧外の理由</td>
+            <td>API契約でなく配信契約・運用契約のため一覧外と定義</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>正本の定義</td>
+            <td>「正本」表現の意図と適用範囲</td>
+            <td>Single Source of Truth（参照先一意）として語彙定義化</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>通常デプロイ範囲</td>
+            <td>初回以外でInfraを含める条件</td>
+            <td>差分配備原則（Infra差分がある場合のみ含める）</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>IAM粒度</td>
+            <td>環境単位かアプリ単位か</td>
+            <td>環境×責務マトリクスで併用管理</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>収集API命名</td>
+            <td>バッチ化後の命名規約</td>
+            <td>API名でなく <code>BAT-xxx</code> 系IDへ統一</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>4. 総評（構造観点）</h2>
+      <ul>
+        <li>再構築の主眼は、責務分離（App/Infra/UI）と設計階層（BD/DD）の再整列にある。</li>
+        <li>とくにデプロイ単位・IAM粒度・バッチ契約正本の明確化は、運用時の迷いを大きく減らす。</li>
+        <li>修正は単発ではなく、RDR/ADR/RTMを同一変更で追従させる前提で実施すべき。</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>5. 推奨実施順（ロードマップ）</h2>
+      <ol>
+        <li><strong>Phase 1（整合修正）</strong>: 用語統一、正本定義、API/Batch境界明確化。</li>
+        <li><strong>Phase 2（構造再編）</strong>: BD/DD章の責務再配置、INF/IAM/Deploy再整理。</li>
+        <li><strong>Phase 3（運用固定）</strong>: RQ-DG受入基準更新、RTM追跡反映、チェックゲート強化。</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>
