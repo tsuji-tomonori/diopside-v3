@@ -3,7 +3,7 @@ id: RQ-DG-001
 title: ドキュメント更新フロー
 doc_type: ドキュメント運用ガイド
 phase: RQ
-version: 1.0.24
+version: 1.0.25
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -37,7 +37,7 @@ tags:
 10. PRでは `.github/workflows/docs-link-check.yml` のリンク検査ゲートを通過するまでマージしない。
 11. RQ文書の `## 変更履歴` 各行には、関連RDRリンク（`[[RQ-RDR-xxx]]`）を必ず記載する。
 12. FR/NFRを変更した場合は `RQ-RTM-001` の「検証(UT/IT/AT)」列に、主要テストケースID（`UT-CASE`/`IT-CASE`/`AT-SCN`）を直接記載する。
-13. バッチ仕様を変更した場合は、`BD-SYS-ARCH-001` と `DD-API-*` の入力スキーマ・実行制約・失敗時挙動を同一変更で更新する。
+13. バッチ仕様を変更した場合は、`BD-APP-API-002` と `DD-APP-API-*` の入力スキーマ・実行制約・失敗時挙動を同一変更で更新する。
 
 ## 受入基準
 - 用語集に定義された語彙（`RQ-GL-*`）が本文でObsidianリンク化されている。
@@ -54,9 +54,10 @@ tags:
 - `validate_vault.py` の `issues` / `deprecated_term_issues` / `nonlinked_doc_ids` / `broken_links` / `backlink_issues` が1件でもある場合はFailとする。
 - RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれている。
 - FR/NFR変更を含む差分では `RQ-RTM-001` の該当要求行に、直接検証リンク（`UT-CASE`/`IT-CASE`/`AT-SCN`）が存在する。
-- バッチ仕様変更を含む差分では、`BD-SYS-ARCH-001` と `DD-API-*` の間で入力スキーマ/実行制約/エラーハンドリングの整合が取れている。
+- バッチ仕様変更を含む差分では、`BD-APP-API-002` と `DD-APP-API-*` の間で入力スキーマ/実行制約/エラーハンドリングの整合が取れている。
 
 ## 変更履歴
+- 2026-02-14: バッチ仕様変更時の正本参照を `BD-SYS-ARCH-001` から `BD-APP-API-002` へ移管し、DD参照を `DD-APP-API-*` へ統一 [[RQ-RDR-038]]
 - 2026-02-14: 廃止語検査ルールをGL frontmatter起点へ移行（`deprecated_terms` / `deprecated_terms_allow_in`） [[RQ-RDR-040]]
 - 2026-02-14: 廃止用語ポリシー検査（`deprecated_term_issues`）をFail条件へ追加 [[RQ-RDR-040]]
 - 2026-02-13: FR/NFR変更時のRTM直接検証リンク必須化と、バッチ仕様変更時のBD/DD同時更新ゲートを追加 [[RQ-RDR-038]]

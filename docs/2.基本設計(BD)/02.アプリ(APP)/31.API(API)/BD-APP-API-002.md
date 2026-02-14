@@ -3,7 +3,7 @@ id: BD-APP-API-002
 title: 収集API設計
 doc_type: API設計
 phase: BD
-version: 1.1.7
+version: 1.1.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -39,6 +39,7 @@ tags:
 - 収集要求は [[RQ-RDR-028]] に従い「公式取り込み」「出演補完取り込み」「差分更新」の3モードを共通契約で扱う。
 - 配信前後再確認は [[RQ-FR-019]] の責務として同一run体系で追跡可能にする。
 - 本APIは管理画面の更新系契約を担い、利用者向け検索参照契約（静的JSON）と混在させない。
+- バッチ一覧/バッチイベント/バッチ実行制約の正本は本書で管理し、システムコンテキストでは実行境界のみを扱う。
 - 実処理は単一のBackend API（Hono）内で完結し、別デプロイのworkerサービスを持たない。
 - 定期実行は外部スケジューラが同一運用APIを呼び出して開始し、処理本体は同一Backend API内で実行する。
 - HTTPメソッド/ステータス/ページング/エラー表現/互換性は [[BD-APP-API-005]] を共通規約として適用する。
@@ -54,6 +55,56 @@ tags:
 | タグ提案取込契約 | LLM出力JSONを検証してDB反映 | [[RQ-FR-019]], [[RQ-FR-005]] |
 | タグ更新契約 | [[RQ-GL-005|タグ辞書]]の追加/更新/無効化 | [[RQ-FR-005]], [[RQ-FR-009]] |
 | 配信反映契約 | DB正本から配信JSON再生成を起動 | [[RQ-FR-019]], [[RQ-FR-025]] |
+
+## バッチ仕様正本
+- バッチ一覧、バッチイベント一覧、バッチ実行制約、補助データ生成バッチ入出力契約、同時実行制御の正本は本書とする。
+- システム全体の責務境界・配置境界は [[BD-SYS-ARCH-001]] を参照する。
+
+## バッチ一覧
+| バッチID | バッチ名 | 起動契約 | 主な責務 | 状態遷移 | 詳細設計 |
+|---|---|---|---|---|---|
+| BAT-001 | 収集runバッチ | `POST /api/v1/ops/ingestion/runs` | 収集対象解決、[[RQ-GL-002|収集実行]]、run採番/集計 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
+| BAT-002 | [[RQ-GL-011|再収集]]runバッチ | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | 失敗run再実行、親run連結、再実行回数制御 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-008]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
+| BAT-003 | 配信前後再確認バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-012]], [[DD-APP-DB-013]] |
+| BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-APP-API-015]], [[DD-APP-DB-015]] |
+| BAT-005 | docs公開バッチ | `POST /api/v1/admin/docs/publish` | docsビルド、配信反映、無効化処理 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-014]], [[DD-APP-DB-015]] |
+| BAT-006 | 補助データ生成バッチ | 収集run完了トリガ（内部） | [[RQ-GL-016|コメント密度波形]]・[[RQ-GL-017|ワードクラウド]]生成 | `queued -> running -> succeeded\|failed\|partial` | [[DD-APP-API-004]], [[RQ-FR-022]], [[RQ-FR-023]] |
+| BAT-007 | タグマスター即時更新バッチ | `POST /api/v1/admin/publish/tag-master`（publishScope=[[RQ-GL-008|tag_master]]） | [[RQ-GL-005|タグ辞書]]変更後の即時公開反映 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-013]], [[DD-APP-API-015]] |
+
+## バッチイベント一覧
+| イベントID | イベント名 | 発火条件 | 対象バッチ | 記録先 | 詳細設計 |
+|---|---|---|---|---|---|
+| BEV-001 | `queued` | API受理直後にrun作成 | BAT-001〜BAT-005 | `ingestion_runs` / `recheck_runs` / `publish_runs` の `status=queued` | [[DD-APP-DB-010]], [[DD-APP-DB-013]], [[DD-APP-DB-015]] |
+| BEV-002 | `running` | 同一Backend API内ジョブ実行モジュールで処理開始 | BAT-001〜BAT-005 | runテーブル `status=running`、`started_at` | [[DD-APP-API-002]], [[DD-APP-API-012]], [[DD-APP-API-014]], [[DD-APP-API-015]] |
+| BEV-003 | `succeeded` | 全ステップ成功で正常終了 | BAT-001〜BAT-005 | runテーブル終端状態、成功件数/公開時刻 | [[DD-APP-API-003]], [[DD-APP-API-012]], [[DD-APP-API-015]], [[DD-APP-DB-015]] |
+| BEV-004 | `failed` | 非復旧エラーで終了 | BAT-001〜BAT-005 | `error_code`/`error_message`、監査ログ | [[DD-APP-API-003]], [[DD-APP-API-008]], [[DD-APP-API-014]], [[DD-APP-LOG-001]] |
+| BEV-005 | `partial` | 一部対象のみ成功して終了 | BAT-001〜BAT-003 | 件数差分（`success_count`/`failed_count`/`unchanged_count`） | [[DD-APP-API-003]], [[DD-APP-API-012]], [[DD-APP-DB-010]], [[DD-APP-DB-013]] |
+| BEV-006 | `rolled_back` | 公開切替失敗後に旧版へ切戻し完了 | BAT-004〜BAT-005 | `publish_runs.rollback_executed=true` | [[DD-APP-API-014]], [[DD-APP-API-015]], [[DD-APP-DB-015]] |
+| BEV-007 | `cancelled` | 運用判断または安全停止で中断 | BAT-001〜BAT-004 | runテーブル終端状態 `cancelled` | [[DD-APP-API-003]], [[DD-APP-API-008]], [[DD-APP-API-012]], [[DD-APP-DB-010]] |
+
+## バッチ実行制約
+| バッチID | 最大実行時間 | Retry回数 | Retry間隔 | 同時実行数 | 備考 |
+|---|---|---|---|---|---|
+| BAT-001 | 60分 | 3回 | 30秒（指数バックオフ） | 1 | 外部API制限考慮 |
+| BAT-002 | 30分 | 2回 | 1分 | 1 | 親runの制約を継承 |
+| BAT-003 | 30分 | 2回 | 30秒 | 1 | - |
+| BAT-004 | 15分 | 3回 | 30秒 | 1 | ロールバック時間含む |
+| BAT-005 | 30分 | 2回 | 1分 | 1 | ビルド時間含む |
+| BAT-006 | 60分 | 3回 | 30秒 | 3 | 動画単位で並列可 |
+| BAT-007 | 10分 | 3回 | 15秒 | 1 | - |
+
+## BAT-006 入出力契約
+- **起動イベント**: `S3 ObjectCreated` または収集run完了イベント。
+- **入力スキーマ（必須）**: `video_id`, `channel_id`, `meta_type`, `message_text`。
+- **波形生成入力条件**: `meta_type=textMessageEvent` の行のみ対象とし、検出パターン初期値は `草|w|くさ|kusa`。
+- **[[RQ-GL-017|ワードクラウド]]入力条件**: 形態素抽出対象は `message_text`。公開チャット由来以外は処理対象外。
+- **出力契約**: `highlights/{videoId}.json` と `wordcloud/{videoId}.png` を動画ID単位で再生成し、同一キー上書きで冪等性を担保する。
+- **障害時挙動**: 波形/[[RQ-GL-017|ワードクラウド]]の片系失敗は `partial` とし、失敗成果物のみ前回確定版を維持する。
+
+## 同時実行制御
+- BAT-001〜BAT-005 は同時実行数1を維持し、実行中は同種runを受け付けない。
+- BAT-006 は動画IDハッシュで最大3並列まで許容し、同一動画IDの重複実行は禁止する。
+- 同時実行判定は run作成時にロックを取得し、失敗時は `409 RUN_ALREADY_ACTIVE` を返す。
 
 ## 実行受付契約
 - **必須入力**: `trigger_mode`, `run_kind`, `target_scope`。
@@ -139,6 +190,7 @@ tags:
 - 将来追加する高度検索APIの検索アルゴリズムとランキング詳細。
 
 ## 変更履歴
+- 2026-02-14: バッチ一覧/イベント/実行制約およびBAT-006入出力契約・同時実行制御の正本を本書へ移管 [[BD-SYS-ADR-027]]
 - 2026-02-13: 実行起動文脈（`trigger_mode`）と収集種別（`run_kind`）を分離し、run状態語彙へ `cancelled` を追加 [[BD-SYS-ADR-027]]
 - 2026-02-13: LLM提案取込の手動フォールバックと上流APIクォータ制御ルールを追加 [[BD-SYS-ADR-027]]
 - 2026-02-11: 単一Backend API（Hono）モノリス前提（手動/定期とも同一API起動）を明記 [[BD-SYS-ADR-021]]

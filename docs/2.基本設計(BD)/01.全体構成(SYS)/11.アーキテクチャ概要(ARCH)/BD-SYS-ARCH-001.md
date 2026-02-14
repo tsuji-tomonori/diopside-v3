@@ -3,7 +3,7 @@ id: BD-SYS-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.13
+version: 1.0.14
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -64,57 +64,15 @@ tags:
 - Web App: [[RQ-GL-010|段階ロード]]、クライアント検索、絞り込み、詳細表示。
 - Admin Console/Runbook: 収集失敗検知、[[RQ-GL-011|再収集]]実行、タグ更新、配信反映判定、[[RQ-GL-012|受入判定]]。
 
-## バッチ一覧
-| バッチID | バッチ名 | 起動契約 | 主な責務 | 状態遷移 | 詳細設計 |
-|---|---|---|---|---|---|
-| BAT-001 | 収集runバッチ | `POST /api/v1/ops/ingestion/runs` | 収集対象解決、[[RQ-GL-002|収集実行]]、run採番/集計 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
-| BAT-002 | [[RQ-GL-011|再収集]]runバッチ | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | 失敗run再実行、親run連結、再実行回数制御 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-008]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
-| BAT-003 | 配信前後再確認バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-012]], [[DD-APP-DB-013]] |
-| BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-APP-API-015]], [[DD-APP-DB-015]] |
-| BAT-005 | docs公開バッチ | `POST /api/v1/admin/docs/publish` | docsビルド、配信反映、無効化処理 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-014]], [[DD-APP-DB-015]] |
-| BAT-006 | 補助データ生成バッチ | 収集run完了トリガ（内部） | [[RQ-GL-016|コメント密度波形]]・[[RQ-GL-017|ワードクラウド]]生成 | `queued -> running -> succeeded\|failed\|partial` | [[DD-APP-API-004]], [[RQ-FR-022]], [[RQ-FR-023]] |
-| BAT-007 | タグマスター即時更新バッチ | `POST /api/v1/admin/publish/tag-master`（publishScope=[[RQ-GL-008|tag_master]]） | [[RQ-GL-005|タグ辞書]]変更後の即時公開反映 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-013]], [[DD-APP-API-015]] |
-
-## バッチイベント一覧
-| イベントID | イベント名 | 発火条件 | 対象バッチ | 記録先 | 詳細設計 |
-|---|---|---|---|---|---|
-| BEV-001 | `queued` | API受理直後にrun作成 | BAT-001〜BAT-005 | `ingestion_runs` / `recheck_runs` / `publish_runs` の `status=queued` | [[DD-APP-DB-010]], [[DD-APP-DB-013]], [[DD-APP-DB-015]] |
-| BEV-002 | `running` | 同一Backend API内ジョブ実行モジュールで処理開始 | BAT-001〜BAT-005 | runテーブル `status=running`、`started_at` | [[DD-APP-API-002]], [[DD-APP-API-012]], [[DD-APP-API-014]], [[DD-APP-API-015]] |
-| BEV-003 | `succeeded` | 全ステップ成功で正常終了 | BAT-001〜BAT-005 | runテーブル終端状態、成功件数/公開時刻 | [[DD-APP-API-003]], [[DD-APP-API-012]], [[DD-APP-API-015]], [[DD-APP-DB-015]] |
-| BEV-004 | `failed` | 非復旧エラーで終了 | BAT-001〜BAT-005 | `error_code`/`error_message`、監査ログ | [[DD-APP-API-003]], [[DD-APP-API-008]], [[DD-APP-API-014]], [[DD-APP-LOG-001]] |
-| BEV-005 | `partial` | 一部対象のみ成功して終了 | BAT-001〜BAT-003 | 件数差分（`success_count`/`failed_count`/`unchanged_count`） | [[DD-APP-API-003]], [[DD-APP-API-012]], [[DD-APP-DB-010]], [[DD-APP-DB-013]] |
-| BEV-006 | `rolled_back` | 公開切替失敗後に旧版へ切戻し完了 | BAT-004〜BAT-005 | `publish_runs.rollback_executed=true` | [[DD-APP-API-014]], [[DD-APP-API-015]], [[DD-APP-DB-015]] |
-| BEV-007 | `cancelled` | 運用判断または安全停止で中断 | BAT-001〜BAT-004 | runテーブル終端状態 `cancelled` | [[DD-APP-API-003]], [[DD-APP-API-008]], [[DD-APP-API-012]], [[DD-APP-DB-010]] |
-
-## バッチ実行制約
-| バッチID | 最大実行時間 | Retry回数 | Retry間隔 | 同時実行数 | 備考 |
-|---|---|---|---|---|---|
-| BAT-001 | 60分 | 3回 | 30秒（指数バックオフ） | 1 | 外部API制限考慮 |
-| BAT-002 | 30分 | 2回 | 1分 | 1 | 親runの制約を継承 |
-| BAT-003 | 30分 | 2回 | 30秒 | 1 | - |
-| BAT-004 | 15分 | 3回 | 30秒 | 1 | ロールバック時間含む |
-| BAT-005 | 30分 | 2回 | 1分 | 1 | ビルド時間含む |
-| BAT-006 | 60分 | 3回 | 30秒 | 3 | 動画単位で並列可 |
-| BAT-007 | 10分 | 3回 | 15秒 | 1 | - |
+## バッチ仕様参照
+- バッチ一覧/バッチイベント一覧/バッチ実行制約の正本は [[BD-APP-API-002]] を参照する。
+- 本書では「Batch RunnerをBackend API（Hono）内で実行する境界」と「外部スケジューラ起動」の構成方針のみを保持する。
 
 ## 3層責務境界
 - プレゼンテーション層: `Web App` / `Admin Console` / `docs` を提供する。
 - アプリケーション層: `Backend API` が更新系処理と配信生成トリガを担う。
 - データ層: `DB` を正本とし、`S3配信用JSON` と `docs/テスト結果` を公開成果物として保持する。
 - 将来の高度検索はアプリケーション層へ `検索API` を追加して段階導入する（現行MVPは静的JSON参照を継続）。
-
-## BAT-006 入出力契約
-- **起動イベント**: `S3 ObjectCreated` または収集run完了イベント。
-- **入力スキーマ（必須）**: `video_id`, `channel_id`, `meta_type`, `message_text`。
-- **波形生成入力条件**: `meta_type=textMessageEvent` の行のみ対象とし、検出パターン初期値は `草|w|くさ|kusa`。
-- **[[RQ-GL-017|ワードクラウド]]入力条件**: 形態素抽出対象は `message_text`。公開チャット由来以外は処理対象外。
-- **出力契約**: `highlights/{videoId}.json` と `wordcloud/{videoId}.png` を動画ID単位で再生成し、同一キー上書きで冪等性を担保する。
-- **障害時挙動**: 波形/[[RQ-GL-017|ワードクラウド]]の片系失敗は `partial` とし、失敗成果物のみ前回確定版を維持する。
-
-## 同時実行制御
-- BAT-001〜BAT-005 は同時実行数1を維持し、実行中は同種runを受け付けない。
-- BAT-006 は動画IDハッシュで最大3並列まで許容し、同一動画IDの重複実行は禁止する。
-- 同時実行判定は run作成時にロックを取得し、失敗時は `409 RUN_ALREADY_ACTIVE` を返す。
 
 ## Web実行境界（Next.js App Router）
 - Server Components を標準とし、状態保持・イベント処理・ブラウザAPI依存の部分だけを Client Components に切り出す。
@@ -195,6 +153,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-14: バッチ仕様正本（一覧/イベント/実行制約/BAT-006入出力/同時実行制御）を [[BD-APP-API-002]] へ移管し、本書は境界方針の記述へ整理 [[BD-SYS-ADR-027]]
 - 2026-02-14: DOM軸接続（[[DOM-CTX-001]]）と Published Language（`contracts/static-json/*.schema.json`）の公式化を追加 [[BD-SYS-ADR-029]]
 - 2026-02-13: BAT-006の入力スキーマ/出力契約/片系失敗時挙動と同時実行制御を追加 [[BD-SYS-ADR-027]]
 - 2026-02-13: 変更履歴のADRリンク記載漏れを補正 [[BD-SYS-ADR-021]]
