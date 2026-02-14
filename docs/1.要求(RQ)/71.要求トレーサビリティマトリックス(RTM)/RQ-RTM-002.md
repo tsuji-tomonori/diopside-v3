@@ -7,7 +7,7 @@ version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-RTM-001]]'
 related:
@@ -130,8 +130,8 @@ tags:
 | [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[RQ-DEV-001]], [[RQ-PRC-001]], [[RQ-SEC-001]], [[RQ-UX-014]], [[RQ-UX-016]], [[RQ-UX-022]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPS-001]] |
 | [[DD-APP-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | - | - | [[UT-PLAN-001]] |
 | [[DD-APP-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001]] | [[RQ-RDR-034]] | - | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
-| [[DD-APP-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]] | - | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-APP-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-APP-API-002]] | [[RQ-GL-002|収集実行]]起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]] | - | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-APP-API-003]] | [[RQ-GL-002|収集実行]]状態API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-APP-API-004]] | アーカイブ一覧API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-001]], [[IT-CASE-003]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-003]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-APP-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[AT-SCN-007]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-004]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-APP-API-006]] | 検索API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-005]], [[IT-PLAN-001]], [[UT-CASE-005]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
@@ -172,7 +172,7 @@ tags:
 | [[DD-APP-UI-004]] | 詳細モーダル | [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-020]], [[RQ-FR-021]] | - | - | [[UT-PLAN-001]] |
 | [[DD-APP-UI-005]] | 検索バー | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-UX-003]] | - | - | [[UT-PLAN-001]] |
 | [[DD-APP-UI-006]] | 運用ステータス画面 | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]] | [[RQ-RDR-036]] | - | [[AT-SCN-007]], [[UT-PLAN-001]] |
-| [[DD-APP-UI-007]] | 収集実行画面 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]] | - | - | [[UT-PLAN-001]] |
+| [[DD-APP-UI-007]] | [[RQ-GL-002|収集実行]]画面 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]] | - | - | [[UT-PLAN-001]] |
 | [[DD-APP-UI-008]] | [[RQ-GL-011|再収集]]設定画面 | [[RQ-FR-018]] | - | - | [[UT-PLAN-001]] |
 | [[DD-APP-UI-009]] | 配信前後確認・手動タグ付け画面 | [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-019]] | - | - | [[UT-PLAN-001]] |
 | [[DD-APP-UI-010]] | 配信反映ジョブ画面 | [[RQ-FR-005]], [[RQ-FR-024]], [[RQ-FR-025]] | - | - | [[UT-PLAN-001]] |
@@ -221,7 +221,7 @@ tags:
 | [[RQ-DATA-001]] | データ要件 | [[AT-SCN-004]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001]] | DevOps要件 | [[AT-SCN-002]], [[AT-SCN-006]] | [[AT-GO-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-002]] | AIエージェント運用要件 | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-OPS-INF-001]] | PASS |
-| [[RQ-FR-001]] | 管理画面から公開動画[[RQ-GL-002|収集ジョブ]]を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-DR-001]], [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SLO-001]] | PASS |
+| [[RQ-FR-001]] | 管理画面から公開動画[[RQ-GL-002|収集実行]]を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-DR-001]], [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SLO-001]] | PASS |
 | [[RQ-FR-002]] | 管理画面で公式投稿の公開動画をチャンネルID一致で取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-003]] | 管理画面で出演条件一致の公開動画を判定して取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-004]] | 管理画面の収集結果として動画メタデータを正規化できる | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
@@ -237,7 +237,7 @@ tags:
 | [[RQ-FR-014]] | YouTube視聴ページへ遷移できる | [[AT-SCN-003]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-015]] | 初回読み込みを高速化する[[RQ-GL-010|段階ロード]]で漸進表示できる | [[AT-SCN-002]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-016]] | 管理画面で読み込み失敗を通知できる | [[AT-SCN-002]], [[AT-SCN-007]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-017]] | 管理画面で収集実行結果を確認できる | [[AT-SCN-005]], [[AT-SCN-007]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-017]] | 管理画面で[[RQ-GL-002|収集実行]]結果を確認できる | [[AT-SCN-005]], [[AT-SCN-007]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-018]] | 管理画面で手動[[RQ-GL-011|再収集]]を実行できる | [[AT-SCN-005]], [[AT-SCN-007]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-019]] | 管理画面で配信前後のメタデータ再取得と差分確認を運用できる | [[AT-SCN-007]] | [[AT-PLAN-001]] | PASS |
 | [[RQ-FR-020]] | 詳細画面で[[RQ-GL-016|コメント密度波形]]を表示し[[RQ-GL-015|盛り上がり区間]]へ遷移できる | [[AT-SCN-003]] | [[AT-PLAN-001]] | PASS |
@@ -354,8 +354,8 @@ tags:
 | --- | --- | --- | --- | --- |
 | [[DD-APP-ALG-001]] | 検索アルゴリズム | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-API-001]] | API詳細総論 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
-| [[DD-APP-API-002]] | [[RQ-GL-002|収集ジョブ]]起動API | [[UT-CASE-001]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
-| [[DD-APP-API-003]] | [[RQ-GL-002|収集ジョブ]]状態API | [[UT-CASE-002]], [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
+| [[DD-APP-API-002]] | [[RQ-GL-002|収集実行]]起動API | [[UT-CASE-001]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
+| [[DD-APP-API-003]] | [[RQ-GL-002|収集実行]]状態API | [[UT-CASE-002]], [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-APP-API-004]] | アーカイブ一覧API | [[UT-CASE-003]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-APP-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[UT-CASE-004]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-APP-API-006]] | 検索API | [[UT-CASE-005]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
@@ -396,7 +396,7 @@ tags:
 | [[DD-APP-UI-004]] | 詳細モーダル | [[UT-CASE-004]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-005]] | 検索バー | [[UT-CASE-001]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-006]] | 運用ステータス画面 | [[UT-CASE-002]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]] | [[UT-PLAN-001]] | PASS |
-| [[DD-APP-UI-007]] | 収集実行画面 | [[UT-CASE-001]] | [[UT-PLAN-001]] | PASS |
+| [[DD-APP-UI-007]] | [[RQ-GL-002|収集実行]]画面 | [[UT-CASE-001]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-008]] | [[RQ-GL-011|再収集]]設定画面 | [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-009]] | 配信前後確認・手動タグ付け画面 | [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-010]] | 配信反映ジョブ画面 | [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |

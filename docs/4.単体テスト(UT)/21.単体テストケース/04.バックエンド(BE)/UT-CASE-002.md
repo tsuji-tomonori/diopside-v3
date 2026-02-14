@@ -1,13 +1,13 @@
 ---
 id: UT-CASE-002
-title: 収集ジョブ状態API 単体テスト
+title: 収集実行状態API 単体テスト
 doc_type: 単体テストケース
 phase: UT
 version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[UT-PLAN-005]]'
 - '[[DD-APP-API-003]]'

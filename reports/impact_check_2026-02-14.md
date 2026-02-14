@@ -77,3 +77,21 @@
 ## 検証（追加4）
 - `task docs:guard`: Integrator 実行欄（未実行）。
 - `task docs:check`: Integrator 判断で実行（未実行）。
+
+## 実施内容（追加5）
+- 対象: 用語 `RQ-GL-002` の正本語彙を「[[RQ-GL-002|収集実行]]」へ統一し、`docs` 全体の旧称「収集ジョブ」を置換。
+- 主要更新:
+  - 要求: `RQ-GL-011`, `RQ-UC-001`, `RQ-FR-001`, `RQ-OBY-001`, `RQ-RTM-001`, `RQ-RTM-002`
+  - 基本設計: `BD-SYS-ARCH-001`, `BD-APP-API-001`, `BD-APP-API-002`, `BD-APP-UI-001`
+  - 詳細設計: `DD-SYS-SCALE-001`, `DD-APP-API-001`, `DD-APP-API-002`, `DD-APP-API-003`, `DD-APP-UI-007`, `DD-APP-LOG-001`
+  - テスト文書: `UT-PLAN-005`, `UT-CASE-001`, `UT-CASE-002`, `IT-PLAN-001`, `IT-CASE-001`, `IT-CASE-002`, `IT-CASE-009`, `AT-SCN-004`, `AT-SCN-005`, `AT-SCN-008`
+  - ドメイン: `DOM-BC-001`
+
+## 影響確認（追加5）
+- 用語整合: 運用/設計/試験で `[[RQ-GL-002|収集実行]]` を一貫使用し、`収集ジョブ` は互換説明（`RQ-GL-002` 本文）に限定。
+- 再収集整合: `RQ-GL-011` 定義を「再収集は `[[RQ-GL-002|収集実行]]` の再実行」として更新。
+- 契約整合: API/UI/RTM の名称を「収集実行起動API」「収集実行状態API」へ統一し、要求-設計-試験の追跡語彙を一致化。
+
+## 検証（追加5）
+- `rg -n "収集ジョブ|ingestion_job" docs` を実行し、旧称は `RQ-GL-002`（旧称明記）と `RQ-RDR-040`（不一致理由の記録）に限定されることを確認。
+- `task docs:guard` を実行し、`issues: 0` / `broken_links: 0` / `backlink_issues: 0` を確認。

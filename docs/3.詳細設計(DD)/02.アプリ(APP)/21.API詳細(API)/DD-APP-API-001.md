@@ -7,7 +7,7 @@ version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-API-001]]'
@@ -57,7 +57,7 @@ tags:
   - `tag_master.json`: 全[[RQ-GL-005|タグ辞書]]と[[RQ-GL-013|タグ種別]]定義。
   - `archive_index.p{page}.json`: 全件閲覧用の[[RQ-GL-009|archive_index（ページング済み索引）]]。
 - Ops Control Contract（運用契約）
-  - [[RQ-GL-002|収集ジョブ]]開始、実行状態確認、失敗ジョブ再実行、直近結果照会。
+  - [[RQ-GL-002|収集実行]]開始、実行状態確認、失敗ジョブ再実行、直近結果照会。
   - 実行履歴は運用監査対象として保持する。
 
 ## Public Read Contract 詳細
@@ -81,7 +81,7 @@ tags:
 
 ## Ops Control Contract 詳細
 - `POST /api/v1/ops/ingestion/runs`
-  - 用途: [[RQ-GL-002|収集ジョブ]]開始。
+  - 用途: [[RQ-GL-002|収集実行]]開始。
   - 応答: `runId`, `acceptedAt`, `triggerMode`（manual/scheduled）, `runKind`（official_ingestion/appearance_supplement/incremental_update）。
 - `GET /api/v1/ops/ingestion/runs/{runId}`
   - 用途: 実行状態確認。

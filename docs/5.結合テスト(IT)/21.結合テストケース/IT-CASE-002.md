@@ -1,13 +1,13 @@
 ---
 id: IT-CASE-002
-title: 収集ジョブ状態API 結合テスト
+title: 収集実行状態API 結合テスト
 doc_type: 結合テストケース
 phase: IT
 version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-APP-API-003]]'

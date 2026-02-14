@@ -7,7 +7,7 @@ version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-INF-MON-001]]'
 - '[[BD-INF-MON-002]]'
@@ -75,7 +75,7 @@ tags:
 ## イベント語彙
 | event.name | category | severity既定 | 説明 |
 | --- | --- | --- | --- |
-| `ingestion.run_started` | operational | INFO | [[RQ-GL-002|収集ジョブ]]開始 |
+| `ingestion.run_started` | operational | INFO | [[RQ-GL-002|収集実行]]開始 |
 | `ingestion.run_completed` | operational | INFO | 収集完了（件数付き） |
 | `ingestion.run_failed` | operational | ERROR | 収集失敗 |
 | `search.request_completed` | operational | INFO | 検索API正常応答 |
@@ -132,7 +132,7 @@ tags:
 - 受入報告では [[AT-RPT-001]] に可用率、性能p95、ログ品質指標を転記する。
 
 ## I/Oまたは責務
-- 入力: APIリクエスト、[[RQ-GL-002|収集ジョブ]]実行結果、管理操作イベント、依存先応答、監視アラート。
+- 入力: APIリクエスト、[[RQ-GL-002|収集実行]]結果、管理操作イベント、依存先応答、監視アラート。
 - 出力: CloudWatch構造化ログ、ログ品質メトリクス、運用日次サマリ。
 
 ## 変更履歴

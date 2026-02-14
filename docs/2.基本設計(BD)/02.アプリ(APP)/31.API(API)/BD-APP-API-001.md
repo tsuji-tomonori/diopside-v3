@@ -7,7 +7,7 @@ version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -61,7 +61,7 @@ tags:
 |---|---|---|---|---|
 | 配信契約 | `bootstrap.json` / `archive_index.p{page}.json` | 初期表示と[[RQ-GL-010|段階ロード]]一覧 | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-015]] | [[DD-APP-API-004]] |
 | 配信契約 | `tag_master.json` / `highlights/{videoId}.json` / `wordcloud/{videoId}.png` | [[RQ-GL-005|タグ辞書]]と詳細補助表示（波形/[[RQ-GL-017|ワードクラウド]]） | [[RQ-FR-005]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]] | [[DD-APP-API-005]] |
-| 運用API | `POST /api/v1/ops/ingestion/runs` | [[RQ-GL-002|収集ジョブ]]起動 | [[RQ-FR-001]], [[RQ-FR-003]] | [[DD-APP-API-002]] |
+| 運用API | `POST /api/v1/ops/ingestion/runs` | [[RQ-GL-002|収集実行]]起動 | [[RQ-FR-001]], [[RQ-FR-003]] | [[DD-APP-API-002]] |
 | 運用API | `GET /api/v1/ops/ingestion/runs/{runId}` | 収集run状態確認 | [[RQ-FR-017]] | [[DD-APP-API-003]] |
 | 運用API | `GET /api/v1/ops/ingestion/runs/{runId}/items` | 収集結果明細確認 | [[RQ-FR-004]], [[RQ-FR-017]] | [[DD-APP-API-011]] |
 | 運用API | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | [[RQ-GL-011|再収集]]実行 | [[RQ-FR-018]] | [[DD-APP-API-008]] |

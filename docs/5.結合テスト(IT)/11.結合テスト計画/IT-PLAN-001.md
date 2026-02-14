@@ -7,7 +7,7 @@ version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[UT-PLAN-001]]'
@@ -29,8 +29,8 @@ tags:
 - 障害時の[[RQ-GL-011|再収集]]と診断導線を検証する。
 
 ## API単位ケース一覧
-- [[IT-CASE-001]]: [[DD-APP-API-002]]（[[RQ-GL-002|収集ジョブ]]起動API）
-- [[IT-CASE-002]]: [[DD-APP-API-003]]（[[RQ-GL-002|収集ジョブ]]状態API）
+- [[IT-CASE-001]]: [[DD-APP-API-002]]（[[RQ-GL-002|収集実行]]起動API）
+- [[IT-CASE-002]]: [[DD-APP-API-003]]（[[RQ-GL-002|収集実行]]状態API）
 - [[IT-CASE-003]]: [[DD-APP-API-004]]（アーカイブ一覧配信契約）
 - [[IT-CASE-004]]: [[DD-APP-API-005]]（[[RQ-GL-005|タグ辞書]]配信契約）
 - [[IT-CASE-005]]: [[DD-APP-API-006]]（検索契約）

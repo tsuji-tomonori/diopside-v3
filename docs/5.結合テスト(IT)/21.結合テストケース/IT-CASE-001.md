@@ -1,13 +1,13 @@
 ---
 id: IT-CASE-001
-title: 収集ジョブ起動API 結合テスト
+title: 収集実行起動API 結合テスト
 doc_type: 結合テストケース
 phase: IT
 version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-APP-API-002]]'
@@ -27,7 +27,7 @@ tags:
 - 起動APIと実行キュー、実行履歴保存の連携を検証する。
 
 ## 前提
-- 結合環境で[[RQ-GL-002|収集ジョブ]]ランナーが稼働している。
+- 結合環境で[[RQ-GL-002|収集実行]]ランナーが稼働している。
 
 ## 手順
 1. `manual` 起動を実行する。

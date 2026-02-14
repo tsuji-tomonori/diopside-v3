@@ -7,7 +7,7 @@ version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
@@ -26,7 +26,7 @@ tags:
 - 収集失敗または配信劣化時に、運用手順で復旧判断まで到達できることを確認する。
 
 ## 対応DD-API
-- `DD-APP-API-003`（[[RQ-GL-002|収集ジョブ]]状態API）
+- `DD-APP-API-003`（[[RQ-GL-002|収集実行]]状態API）
 - `DD-APP-API-008`（[[RQ-GL-011|再収集]]API）
 - `DD-APP-API-009`（運用診断API）
 
