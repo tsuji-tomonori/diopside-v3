@@ -60,13 +60,13 @@ tags:
 | 設計ID | タイトル | 根拠要件(FR/NFR) | RDR | ADR | 検証(UT/IT/AT) |
 | --- | --- | --- | --- | --- | --- |
 | [[BD-APP-API-001]] | API一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-FR-024]], [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-021]], [[RQ-RDR-034]], [[RQ-RDR-038]] | - | - |
-| [[BD-APP-API-002]] | 収集API設計 | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-017]], [[RQ-FR-019]], [[RQ-FR-025]] | [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-038]] | - | - |
+| [[BD-APP-API-002]] | 収集API設計 | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-017]], [[RQ-FR-019]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-FR-025]] | [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-038]] | - | - |
 | [[BD-APP-API-003]] | エラーモデル | [[RQ-FR-001]] | - | - | - |
 | [[BD-APP-API-004]] | OpenAPI配布とAPIバージョン境界 | [[RQ-FR-025]], [[RQ-INT-001]] | [[RQ-RDR-026]] | - | [[AT-SCN-006]] |
 | [[BD-APP-API-005]] | HTTP API契約共通方針 | [[RQ-DEV-001]], [[RQ-INT-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | [[RQ-RDR-038]] | - | - |
 | [[BD-APP-DATA-001]] | データアーキテクチャ | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-004]], [[RQ-FR-009]], [[RQ-PRC-001]] | [[RQ-RDR-014]], [[RQ-RDR-017]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-038]] | - | - |
 | [[BD-APP-DATA-002]] | ER図（概要） | [[RQ-DATA-001]], [[RQ-FR-001]] | [[RQ-RDR-014]] | - | - |
-| [[BD-APP-DATA-003]] | データ保持・削除方針 | [[RQ-FR-001]] | - | - | - |
+| [[BD-APP-DATA-003]] | データ保持・削除方針 | [[RQ-DATA-001]], [[RQ-PRC-001]] | [[RQ-RDR-034]], [[RQ-RDR-035]] | - | - |
 | [[BD-APP-UI-001]] | 画面一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-036]] | - | - |
 | [[BD-APP-UI-002]] | 検索画面情報設計 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-UX-001]], [[RQ-UX-002]], [[RQ-UX-003]], [[RQ-UX-004]], [[RQ-UX-005]], [[RQ-UX-006]], [[RQ-UX-007]], [[RQ-UX-008]], [[RQ-UX-009]], [[RQ-UX-010]], [[RQ-UX-011]], [[RQ-UX-012]], [[RQ-UX-013]], [[RQ-UX-015]], [[RQ-UX-018]], [[RQ-UX-020]], [[RQ-UX-024]] | [[RQ-RDR-015]], [[RQ-RDR-018]], [[RQ-RDR-021]], [[RQ-RDR-032]] | - | [[UT-PLAN-004]] |
 | [[BD-APP-UI-003]] | 画面遷移 | [[RQ-FR-001]], [[RQ-FR-005]], [[RQ-FR-014]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-024]], [[RQ-FR-025]] | - | - | - |
@@ -121,7 +121,8 @@ tags:
 | [[BD-SYS-ADR-027]] | バッチ実行制約と補助データ生成の運用境界を固定する | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | - | - | - |
 | [[BD-SYS-ADR-028]] | インフラ文書を本体開発フローへ統合する | - | [[RQ-RDR-039]] | - | - |
 | [[BD-SYS-ADR-029]] | DOM軸導入とPublished Language公式化で境界契約を管理する | - | [[RQ-RDR-040]] | - | - |
-| [[BD-SYS-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-038]], [[RQ-RDR-040]] | - | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] |
+| [[BD-SYS-ADR-030]] | データ保持・削除方針の責務をDB正本へ限定する | [[RQ-DATA-001]], [[RQ-OBY-001]], [[RQ-PRC-001]] | [[RQ-RDR-034]], [[RQ-RDR-035]] | - | - |
+| [[BD-SYS-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-038]], [[RQ-RDR-040]] | - | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[RQ-FR-001]] | [[RQ-RDR-034]] | - | - |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[RQ-DEV-001]], [[RQ-FR-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | - | - | - |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[RQ-FR-001]] | - | - | - |
@@ -280,13 +281,13 @@ tags:
 | 設計ID(BD) | タイトル | ITケース(IT-CASE) | 補助IT文書 | 判定 |
 | --- | --- | --- | --- | --- |
 | [[BD-APP-API-001]] | API一覧 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
-| [[BD-APP-API-002]] | 収集API設計 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-APP-API-002]] | 収集API設計 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-APP-API-003]] | エラーモデル | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-APP-API-004]] | OpenAPI配布とAPIバージョン境界 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-API-005]] | HTTP API契約共通方針 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-APP-DATA-001]] | データアーキテクチャ | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-DATA-002]] | ER図（概要） | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-APP-DATA-003]] | データ保持・削除方針 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-APP-DATA-003]] | データ保持・削除方針 | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-UI-001]] | 画面一覧 | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-UI-002]] | 検索画面情報設計 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-APP-UI-003]] | 画面遷移 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
@@ -336,12 +337,13 @@ tags:
 | [[BD-SYS-ADR-022]] | Lambda構造化ログをCloudWatch 30日保持で運用する | [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-OBS-001]] | PASS |
 | [[BD-SYS-ADR-023]] | HTTP API契約をRFC準拠で統一する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-024]] | Next.js App Router運用指針を基本設計へ標準化する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-SYS-ADR-025]] | Hono + Zod の入力検証と例外処理を標準化する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
+| [[BD-SYS-ADR-025]] | Hono + Zod の入力検証と例外処理を標準化する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-026]] | テスト戦略をUT/IT/ATの三層品質ゲートで運用する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-027]] | バッチ実行制約と補助データ生成の運用境界を固定する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-028]] | インフラ文書を本体開発フローへ統合する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-029]] | DOM軸導入とPublished Language公式化で境界契約を管理する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-SYS-ARCH-001]] | システムコンテキスト | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-SYS-ADR-030]] | データ保持・削除方針の責務をDB正本へ限定する | [[IT-CASE-007]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-SYS-ARCH-001]] | システムコンテキスト | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |

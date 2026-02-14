@@ -22,6 +22,7 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 保持対象データ、保持期間、削除条件、例外時の扱い、監査可能性、関連リンク。
+- 対象境界（例: DB正本のみ）を明示し、対象外（例: CloudWatch/S3/バックアップ）は参照先のインフラ文書へ委譲する。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -32,6 +33,7 @@ metadata:
 ## 出力契約
 - 出力は `BD-RET-*` 1ファイルを対象とし、`filename == id` と Frontmatter必須キーを満たす。
 - 本文は少なくとも「保持対象/保持期間/削除条件/例外時の扱い/変更履歴」を含み、公開YouTubeアーカイブ前提に矛盾しない。
+- 対象外の保持ポリシーを本文で決定しない（必要な場合は `related` でインフラ設計文書へリンクし、責務境界を維持する）。
 - `up/related` で根拠要求（`RQ-*`）と関連設計（`BD-*` / `DD-*`）へ辿れ、保持・削除方針の理由を追跡できる。
 
 ## Frontmatter運用
