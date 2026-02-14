@@ -95,3 +95,20 @@
 ## 検証（追加5）
 - `rg -n "収集ジョブ|ingestion_job" docs` を実行し、旧称は `RQ-GL-002`（旧称明記）と `RQ-RDR-040`（不一致理由の記録）に限定されることを確認。
 - `task docs:guard` を実行し、`issues: 0` / `broken_links: 0` / `backlink_issues: 0` を確認。
+
+## 実施内容（追加6）
+- 対象: RQ-UC/RQ-FRの記述主体を「システム」から「アクターがやりたいこと」へ統一。
+- 要求決定記録追加: `RQ-RDR-041`（UC/FRの主体表現統一ルールを決定）。
+- ユースケース更新: `RQ-UC-001`, `RQ-UC-007`, `RQ-UC-008`, `RQ-UC-009`。
+- 機能要求更新: `RQ-FR-001`, `RQ-FR-005`, `RQ-FR-017`, `RQ-FR-018`, `RQ-FR-019`。
+- スキル更新: `.opencode/skills/doc-rq-uc/SKILL.md`, `.opencode/skills/doc-rq-uc/TEMPLATE.md`, `.opencode/skills/doc-rq-fr/SKILL.md`, `.opencode/skills/obsidian-doc-new/assets/snowcard_ja.md`, `.opencode/skills/skill-maintainer/SKILL.md`, `.opencode/skills/docops-orchestrator/SKILL.md`。
+
+## 影響確認（追加6）
+- 要求整合: 管理者系UC/FRで `システムは` / `本システムは` を要求主体から排除し、アクター目的主体へ統一。
+- 追跡整合: 対象UC/FRの `related` と `変更履歴` に `[[RQ-RDR-041]]` を追加し、決定根拠を同一変更で追跡可能化。
+- 運用整合: skill群へ同規約を同期し、以後の文書更新で同一方針を再利用可能化。
+
+## 検証（追加6）
+- `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py` を対象9文書へ実行。
+- `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md --targets ...` を対象10文書へ実行。
+- `task docs:guard` を実行し、整合チェックを確認。
