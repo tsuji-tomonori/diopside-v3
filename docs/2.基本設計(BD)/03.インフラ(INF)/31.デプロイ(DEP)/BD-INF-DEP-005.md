@@ -51,9 +51,9 @@ tags:
 ## AWSリソース一覧（管理対象）
 | AWSサービス | 論理個数（本番） | 構築理由 | 根拠文書 | 導入段階 |
 |---|---:|---|---|---|
-| Amazon CloudFront | 1 Distribution | 画面・ドキュメント・OpenAPI・APIを単一配信境界で経路分離して運用するため。 | [[BD-INF-DEP-004]], [[BD-SYS-ARCH-006]] | Phase 1導入済 |
+| Amazon CloudFront | 1 Distribution | 画面・ドキュメント・OpenAPI・APIを単一配信境界で経路分離して運用するため。 | [[BD-INF-DEP-004]], [[BD-SYS-ARCH-003]] | Phase 1導入済 |
 | Amazon S3 | 1 Bucket（静的配信オリジン） | 静的成果物（`web/`, `docs/`, `openapi/`）をプレフィックス分離で配置し、CloudFrontから配信するため。 | [[BD-INF-DEP-004]], [[BD-DEV-ENV-002]] | Phase 1導入済 |
-| AWS Lambda | 3ワークロード（API/運用/配信関連） | API処理・運用処理・配信関連処理を同一実行基盤で運用するため。 | [[DD-APP-LOG-001]], [[BD-SYS-ARCH-006]] | Phase 2で拡張 |
+| AWS Lambda | 3ワークロード（API/運用/配信関連） | API処理・運用処理・配信関連処理を同一実行基盤で運用するため。 | [[DD-APP-LOG-001]], [[BD-SYS-ARCH-003]] | Phase 2で拡張 |
 | Amazon CloudWatch Logs | 3ログ系統 | Lambdaの構造化ログを集約し、30日保持で監視判定へ利用するため。 | [[BD-SYS-ADR-022]], [[DD-APP-LOG-001]], [[DD-INF-MON-002]] | Phase 1導入済 |
 | AWS IAM | 3ロール（配備実行/運用参照/監査参照） | 最小権限で配備・運用参照・監査参照を分離するため。 | [[DD-INF-SEC-003]] | Phase 1導入済 |
 | AWS Config | 1ルール（`required-tags`） | 必須タグ欠落を日次検知し、是正運用へ接続するため。 | [[BD-SYS-ADR-015]], [[DD-SYS-COST-001]] | Phase 1導入済 |
