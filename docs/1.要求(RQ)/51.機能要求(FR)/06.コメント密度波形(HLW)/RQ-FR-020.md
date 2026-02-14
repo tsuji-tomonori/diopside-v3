@@ -3,11 +3,11 @@ id: RQ-FR-020
 title: 詳細画面でコメント密度波形を表示し盛り上がり区間へ遷移できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-006]]'
@@ -21,6 +21,8 @@ related:
 - '[[BD-APP-UI-002]]'
 - '[[RQ-RDR-022]]'
 - '[[RQ-RDR-038]]'
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ

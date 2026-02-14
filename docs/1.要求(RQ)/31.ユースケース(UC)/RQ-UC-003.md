@@ -3,14 +3,16 @@ id: RQ-UC-003
 title: 利用者がキーワードで動画を探す
 doc_type: ユースケース
 phase: RQ
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related: []
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ

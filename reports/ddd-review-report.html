@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDD観点 用語・ドメインモデルレビュー — diopside-v3</title>
+<style>
+  :root {
+    --c-bg: #f8f9fa;
+    --c-card: #ffffff;
+    --c-border: #dee2e6;
+    --c-primary: #2563eb;
+    --c-good: #16a34a;
+    --c-critical: #dc2626;
+    --c-major: #ea580c;
+    --c-minor: #ca8a04;
+    --c-text: #1e293b;
+    --c-muted: #64748b;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; background: var(--c-bg); color: var(--c-text); line-height: 1.7; padding: 2rem 1rem; }
+  .container { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.75rem; margin-bottom: .25rem; }
+  .subtitle { color: var(--c-muted); margin-bottom: 2rem; font-size: .95rem; }
+  h2 { font-size: 1.35rem; margin: 2.5rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--c-primary); }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 .75rem; }
+
+  /* Score card */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .score-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+  .score-card .value { font-size: 2rem; font-weight: 700; }
+  .score-card .label { font-size: .8rem; color: var(--c-muted); }
+  .score-card.good .value { color: var(--c-good); }
+  .score-card.warn .value { color: var(--c-major); }
+
+  /* Badges */
+  .badge { display: inline-block; font-size: .75rem; font-weight: 600; padding: .15em .55em; border-radius: 4px; vertical-align: middle; }
+  .badge-critical { background: #fecaca; color: var(--c-critical); }
+  .badge-major { background: #fed7aa; color: var(--c-major); }
+  .badge-minor { background: #fef08a; color: var(--c-minor); }
+  .badge-good { background: #bbf7d0; color: var(--c-good); }
+  .badge-cat { background: #dbeafe; color: var(--c-primary); }
+
+  /* Card */
+  .card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-header { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; flex-wrap: wrap; }
+  .card-header .title { font-weight: 600; }
+  .card p, .card ul { margin-top: .4rem; }
+  .card ul { padding-left: 1.2rem; }
+  .card li { margin-bottom: .25rem; }
+  .file-ref { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: .85em; color: var(--c-primary); background: #eff6ff; padding: .1em .35em; border-radius: 3px; }
+  .recommend { background: #f0fdf4; border-left: 3px solid var(--c-good); padding: .6rem .8rem; margin-top: .5rem; border-radius: 0 var(--radius) var(--radius) 0; font-size: .92rem; }
+  .recommend::before { content: "→ 推奨: "; font-weight: 600; }
+
+  /* Good points */
+  .good-list { list-style: none; padding: 0; }
+  .good-list li { padding: .5rem .75rem; margin-bottom: .5rem; background: #f0fdf4; border-radius: var(--radius); border-left: 3px solid var(--c-good); }
+  .good-list li::before { content: "✓ "; color: var(--c-good); font-weight: 700; }
+
+  /* Summary table */
+  table.summary { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .92rem; }
+  table.summary th, table.summary td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--c-border); }
+  table.summary th { background: #f1f5f9; font-weight: 600; }
+
+  /* Roadmap */
+  .roadmap-phase { margin-bottom: 1.5rem; }
+  .phase-label { display: inline-block; font-weight: 700; font-size: .85rem; padding: .2em .6em; border-radius: 4px; margin-bottom: .5rem; }
+  .phase-1 { background: #fecaca; color: var(--c-critical); }
+  .phase-2 { background: #fed7aa; color: var(--c-major); }
+  .phase-3 { background: #fef08a; color: var(--c-minor); }
+  .roadmap-phase ol { padding-left: 1.4rem; }
+  .roadmap-phase li { margin-bottom: .3rem; }
+
+  /* TOC */
+  .toc { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1rem 1.5rem; margin-bottom: 2rem; }
+  .toc h3 { margin-top: 0; }
+  .toc ol { padding-left: 1.2rem; }
+  .toc li { margin-bottom: .2rem; }
+  .toc a { color: var(--c-primary); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--c-border); color: var(--c-muted); font-size: .82rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>DDD観点 用語・ドメインモデルレビュー</h1>
+<p class="subtitle">diopside-v3 プロジェクト — レビュー日: 2026-02-14</p>
+
+<!-- TOC -->
+<nav class="toc">
+  <h3>目次</h3>
+  <ol>
+    <li><a href="#score">総合評価</a></li>
+    <li><a href="#good">良い点</a></li>
+    <li><a href="#issues">課題一覧</a></li>
+    <li><a href="#details">個別指摘</a></li>
+    <li><a href="#roadmap">改善ロードマップ</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ -->
+<h2 id="score">1. 総合評価</h2>
+<!-- ================================================================ -->
+
+<div class="score-grid">
+  <div class="score-card warn">
+    <div class="value">58<span style="font-size:.9rem">/100</span></div>
+    <div class="label">DDD適合度 総合スコア</div>
+  </div>
+  <div class="score-card good">
+    <div class="value">80</div>
+    <div class="label">用語集フォーマット</div>
+  </div>
+  <div class="score-card warn">
+    <div class="value">55</div>
+    <div class="label">ユビキタス言語一貫性</div>
+  </div>
+  <div class="score-card warn">
+    <div class="value">45</div>
+    <div class="label">ドメインモデル構造</div>
+  </div>
+  <div class="score-card warn">
+    <div class="value">40</div>
+    <div class="label">境界づけられたコンテキスト</div>
+  </div>
+  <div class="score-card warn">
+    <div class="value">60</div>
+    <div class="label">用語-コード整合性</div>
+  </div>
+</div>
+
+<table class="summary">
+  <thead><tr><th>カテゴリ</th><th>Critical</th><th>Major</th><th>Minor</th><th>計</th></tr></thead>
+  <tbody>
+    <tr><td>A. ユビキタス言語の一貫性</td><td>1</td><td>2</td><td>1</td><td>4</td></tr>
+    <tr><td>B. ドメインモデルの構造</td><td>1</td><td>2</td><td>1</td><td>4</td></tr>
+    <tr><td>C. 境界づけられたコンテキスト</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+    <tr><td>D. 用語-コード間の整合性</td><td>0</td><td>1</td><td>1</td><td>2</td></tr>
+    <tr><td>E. 用語集の網羅性</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr style="font-weight:600"><td>合計</td><td>3</td><td>6</td><td>3</td><td>12</td></tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="good">2. 良い点</h2>
+<!-- ================================================================ -->
+
+<ul class="good-list">
+  <li><strong>統一フォーマットの用語集</strong> — RQ-GL-001〜018 の18件が表形式（用語名, term_en, 定義, 判定条件）で統一管理されており、機械的な参照が可能。</li>
+  <li><strong>構造化されたドメインモデル</strong> — RQ-DM-001〜009 が「目的・主要要素・制約・関連」の共通構造で記述されており、モデル間の関連が把握しやすい。</li>
+  <li><strong>用語自動リンクツール</strong> — glossary autolink ツールによりドキュメント横断で用語参照が強制され、用語の一貫的な使用を仕組み化している。</li>
+  <li><strong>変更履歴のトレーサビリティ</strong> — 各文書の変更履歴に RDR/ADR リンクが紐づき、意思決定根拠まで追跡できる。</li>
+  <li><strong>契約スキーマの分離</strong> — <span class="file-ref">contracts/static-json/*.schema.json</span> でフロントエンド向けの契約を JSON Schema として管理し、境界の定義が明確。</li>
+  <li><strong>データアーキテクチャ文書群</strong> — BD-APP-DATA-001〜003 および DD-APP-DB-001〜005 でER図から物理設計まで一貫して文書化。</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="issues">3. 課題一覧</h2>
+<!-- ================================================================ -->
+
+<table class="summary">
+  <thead><tr><th>#</th><th>重要度</th><th>カテゴリ</th><th>課題</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-cat">A</span></td><td>「収集ジョブ」vs「収集実行」— 用語・DB間の不一致</td></tr>
+    <tr><td>2</td><td><span class="badge badge-major">Major</span></td><td><span class="badge badge-cat">A</span></td><td>「タグ辞書」vs「tag_master」— 同一概念の分裂リスク</td></tr>
+    <tr><td>3</td><td><span class="badge badge-major">Major</span></td><td><span class="badge badge-cat">A</span></td><td>「アーカイブ索引」英名不一致 (archive_index_catalog / archive_index_pages)</td></tr>
+    <tr><td>4</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-cat">B</span></td><td>集約ルート未定義</td></tr>
+    <tr><td>5</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-cat">C</span></td><td>境界づけられたコンテキストマップ未定義</td></tr>
+    <tr><td>6</td><td><span class="badge badge-major">Major</span></td><td><span class="badge badge-cat">B</span></td><td>値オブジェクト / エンティティの区別なし</td></tr>
+    <tr><td>7</td><td><span class="badge badge-major">Major</span></td><td><span class="badge badge-cat">B</span></td><td>ドメインイベントパターン不在</td></tr>
+    <tr><td>8</td><td><span class="badge badge-major">Major</span></td><td><span class="badge badge-cat">E</span></td><td>配信反映実行のDMモデル欠落</td></tr>
+    <tr><td>9</td><td><span class="badge badge-major">Major</span></td><td><span class="badge badge-cat">D</span></td><td>再確認 (recheck) の用語・DMモデル欠落</td></tr>
+    <tr><td>10</td><td><span class="badge badge-minor">Minor</span></td><td><span class="badge badge-cat">A</span></td><td>channel_type 値と term_en 不一致</td></tr>
+    <tr><td>11</td><td><span class="badge badge-minor">Minor</span></td><td><span class="badge badge-cat">D</span></td><td>コード内の未定義概念 (TagGroupMap, StagedDataLoader 等)</td></tr>
+    <tr><td>12</td><td><span class="badge badge-minor">Minor</span></td><td><span class="badge badge-cat">B</span></td><td>DM命名の不統一 (「エンティティ」vs「モデル」)</td></tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="details">4. 個別指摘</h2>
+<!-- ================================================================ -->
+
+<!-- #1 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-critical">Critical</span>
+    <span class="badge badge-cat">A. ユビキタス言語</span>
+    <span class="title">#1 「収集ジョブ」vs「収集実行」— 用語・DB間の不一致</span>
+  </div>
+  <p>同一の概念に対して3つの異なる用語が使用されている。</p>
+  <ul>
+    <li><span class="file-ref">RQ-GL-002</span> — <code>ingestion_job</code>（収集ジョブ）</li>
+    <li><span class="file-ref">RQ-DM-005</span> — 「収集実行エンティティ」</li>
+    <li><span class="file-ref">DD-APP-DB-*</span> — テーブル名 <code>ingestion_runs</code></li>
+  </ul>
+  <p>DDDのユビキタス言語原則では、同一概念は全レイヤーで同一用語を使用すべき。<code>job</code> / <code>実行</code> / <code>runs</code> の3つが混在している。</p>
+  <div class="recommend">
+    用語を <strong>「収集実行 (ingestion_run)」</strong> に統一する。GL-002 の term_en を <code>ingestion_run</code> に修正し、DM-005 のタイトルと整合させる。DBテーブル名 <code>ingestion_runs</code> は複数形として許容。
+  </div>
+</div>
+
+<!-- #2 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-major">Major</span>
+    <span class="badge badge-cat">A. ユビキタス言語</span>
+    <span class="title">#2 「タグ辞書」vs「tag_master」— 同一概念の分裂リスク</span>
+  </div>
+  <p><span class="file-ref">RQ-GL-005</span>（タグ辞書 / tag_dictionary）と <span class="file-ref">RQ-GL-008</span>（タグマスタ / tag_master）が同一概念の異なるビューとなっているが、境界が不明確で混同リスクがある。</p>
+  <ul>
+    <li>コード上は <code>tag_master.json</code>（<span class="file-ref">web/src/lib/schema.ts</span>: <code>TagMasterJson</code>）で統一</li>
+    <li>契約スキーマも <span class="file-ref">contracts/static-json/tag_master.schema.json</span></li>
+    <li>GL-005 の <code>tag_dictionary</code> はどこにも登場しない</li>
+  </ul>
+  <div class="recommend">
+    GL-005 とGL-008 の関係を明示する。GL-005 をDB上の正規化テーブル（tags + tag_types）の用語、GL-008 を配信用非正規化ビューの用語として定義し、それぞれの利用コンテキストを明記する。
+  </div>
+</div>
+
+<!-- #3 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-major">Major</span>
+    <span class="badge badge-cat">A. ユビキタス言語</span>
+    <span class="title">#3 「アーカイブ索引」英名不一致</span>
+  </div>
+  <p>アーカイブ索引に関して英名が複数存在する。</p>
+  <ul>
+    <li><span class="file-ref">RQ-GL-006</span> — <code>archive_index_catalog</code></li>
+    <li><span class="file-ref">RQ-GL-009</span> — <code>archive_index_pages</code></li>
+    <li>契約スキーマ — <code>archive_index_page</code>（単数形）</li>
+    <li>コード — <code>ArchiveIndexPageJson</code></li>
+  </ul>
+  <p><code>catalog</code> vs <code>pages</code> vs <code>page</code> で混乱が生じうる。</p>
+  <div class="recommend">
+    GL-006 を「アーカイブ索引カタログ (archive_index_catalog)」＝メタ情報全体、GL-009 を「アーカイブ索引ページ (archive_index_page)」＝個別ページとして関係を明示。スキーマ・コードの <code>archive_index_page</code> と合わせて GL-009 の term_en を単数形に修正。
+  </div>
+</div>
+
+<!-- #4 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-critical">Critical</span>
+    <span class="badge badge-cat">B. ドメインモデル構造</span>
+    <span class="title">#4 集約ルート未定義</span>
+  </div>
+  <p>RQ-DM-001〜009 のいずれにおいても、どのエンティティが<strong>集約ルート (Aggregate Root)</strong>であるかが明示されていない。</p>
+  <ul>
+    <li>DM-001（動画メタデータ）と DM-003（タグ割当）は密結合だが、集約境界が不明</li>
+    <li>DM-005（収集実行）が DM-004（外部チャンネル）を参照するが、参照方向と所有権が不明</li>
+    <li>ER図 <span class="file-ref">BD-APP-DATA-002</span> にもFK関係はあるが集約は示されていない</li>
+  </ul>
+  <div class="recommend">
+    各DMに「集約ルート」セクションを追加し、以下の集約を定義する:<br>
+    ・<strong>動画集約</strong>: 動画メタデータ(root) + タグ割当 + メディアURL<br>
+    ・<strong>収集実行集約</strong>: 収集実行(root) + 収集対象チャンネル<br>
+    ・<strong>タグ辞書集約</strong>: タグ種別(root) + タグ<br>
+    ・<strong>アーカイブ索引集約</strong>: カタログ(root) + ページ
+  </div>
+</div>
+
+<!-- #5 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-critical">Critical</span>
+    <span class="badge badge-cat">C. 境界づけられたコンテキスト</span>
+    <span class="title">#5 境界づけられたコンテキストマップ未定義</span>
+  </div>
+  <p><span class="file-ref">BD-SYS-ARCH-001</span> のシステムコンテキスト図でコンポーネント間の関係は暗示されているが、DDDの<strong>境界づけられたコンテキスト (Bounded Context)</strong> として明示的にドキュメント化されていない。</p>
+  <ul>
+    <li>「収集」「タグ管理」「配信」「閲覧」の各コンテキストが識別可能だが、境界が未定義</li>
+    <li>コンテキスト間の関係パターン（Shared Kernel / Customer-Supplier / Anti-Corruption Layer 等）が不明</li>
+    <li>contracts/static-json/ のスキーマが「配信コンテキスト」と「閲覧コンテキスト」間の契約であるべきだが、位置づけが不明確</li>
+  </ul>
+  <div class="recommend">
+    コンテキストマップ文書を新規作成する（例: <code>BD-SYS-ARCH-005</code>）。以下の4コンテキストを定義:<br>
+    ・<strong>収集コンテキスト</strong>: 外部API → ingestion_runs → videos<br>
+    ・<strong>タグ管理コンテキスト</strong>: tag_types + tags + tag_assignments<br>
+    ・<strong>配信コンテキスト</strong>: bootstrap / tag_master / archive_index 生成<br>
+    ・<strong>閲覧コンテキスト</strong>: フロントエンド (web/) での表示・検索<br>
+    コンテキスト間は <code>contracts/static-json/</code> を Published Language として位置づける。
+  </div>
+</div>
+
+<!-- #6 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-major">Major</span>
+    <span class="badge badge-cat">B. ドメインモデル構造</span>
+    <span class="title">#6 値オブジェクト / エンティティの区別なし</span>
+  </div>
+  <p>RQ-DM-001〜009 ではすべての概念が同列に扱われており、DDDにおける<strong>値オブジェクト (Value Object)</strong> と <strong>エンティティ (Entity)</strong> の区別がない。</p>
+  <ul>
+    <li><span class="file-ref">RQ-DM-007</span>（検索条件）は不変かつ同値性で比較される典型的な値オブジェクトだが、エンティティと同列に扱われている</li>
+    <li><span class="file-ref">RQ-DM-002</span>（メディアURL）も値オブジェクト候補</li>
+    <li>逆に DM-001（動画メタデータ）は明確にエンティティ（video_id で識別）</li>
+  </ul>
+  <div class="recommend">
+    各DMの冒頭に「ステレオタイプ」欄を追加し、Entity / Value Object / Domain Service のいずれかを明記する。少なくとも DM-007 を Value Object、DM-002 を Value Object として分類する。
+  </div>
+</div>
+
+<!-- #7 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-major">Major</span>
+    <span class="badge badge-cat">B. ドメインモデル構造</span>
+    <span class="title">#7 ドメインイベントパターン不在</span>
+  </div>
+  <p><span class="file-ref">RQ-DM-006</span> は「収集イベントエンティティ」として定義されているが、DDDの<strong>ドメインイベント (Domain Event)</strong> パターンとしては設計されていない。</p>
+  <ul>
+    <li>イベントの発行者 (Publisher) と購読者 (Subscriber) が不明</li>
+    <li>イベントが不変であるべきという制約が記述されていない</li>
+    <li>イベント駆動での後続処理（配信反映、再確認等）との連鎖が未定義</li>
+  </ul>
+  <div class="recommend">
+    DM-006 を DDDドメインイベントとして再設計する。<code>IngestionCompleted</code>, <code>TagAssignmentChanged</code> 等のイベント名を定義し、発行条件・ペイロード・購読者を明記する。
+  </div>
+</div>
+
+<!-- #8 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-major">Major</span>
+    <span class="badge badge-cat">E. 用語集の網羅性</span>
+    <span class="title">#8 配信反映実行のDMモデル欠落</span>
+  </div>
+  <p><span class="file-ref">RQ-GL-018</span> で「配信反映実行 (publish_run)」は用語として定義済みだが、対応するドメインモデル（RQ-DM-xxx）が存在しない。</p>
+  <ul>
+    <li>配信反映実行は bootstrap.json / tag_master.json / archive_index を生成する重要なプロセス</li>
+    <li>配信コンテキストの中核エンティティであるべき</li>
+  </ul>
+  <div class="recommend">
+    <code>RQ-DM-010 配信反映実行エンティティ</code> を新規作成する。publish_run の状態遷移、生成対象（bootstrap/tag_master/archive_index）、トリガー条件を定義する。
+  </div>
+</div>
+
+<!-- #9 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-major">Major</span>
+    <span class="badge badge-cat">D. 用語-コード整合性</span>
+    <span class="title">#9 再確認 (recheck) の用語・DMモデル欠落</span>
+  </div>
+  <p>DB物理設計（<span class="file-ref">DD-APP-DB-*</span>）に <code>recheck</code> 関連のカラムやロジックが存在するが、用語集 (GL) にもドメインモデル (DM) にも定義がない。</p>
+  <ul>
+    <li>「再確認」の業務的意味（どのような条件で発生し、何を目的とするか）が不明</li>
+    <li>開発者がコードから意味を逆推論する必要がある</li>
+  </ul>
+  <div class="recommend">
+    <code>RQ-GL-019 再確認 (recheck)</code> を新規作成し、定義・判定条件・関連DMを明記する。必要に応じて <code>RQ-DM-011</code> も作成する。
+  </div>
+</div>
+
+<!-- #10 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-minor">Minor</span>
+    <span class="badge badge-cat">A. ユビキタス言語</span>
+    <span class="title">#10 channel_type 値と term_en 不一致</span>
+  </div>
+  <p>チャンネル種別の列挙値がコンテキストによって異なる。</p>
+  <ul>
+    <li>GL/DM側: <code>official</code> / <code>appearance</code></li>
+    <li>DB・コード側: <code>official_uploaded_video</code> / <code>appearance_video</code></li>
+  </ul>
+  <p>短縮形と完全形が混在しており、grep や全文検索で用語を追跡しづらい。</p>
+  <div class="recommend">
+    GL側の定義に「DB/コード上の値」列を追加し、対応を明示する。将来的にはどちらかに統一する。
+  </div>
+</div>
+
+<!-- #11 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-minor">Minor</span>
+    <span class="badge badge-cat">D. 用語-コード整合性</span>
+    <span class="title">#11 コード内の未定義概念</span>
+  </div>
+  <p>フロントエンドコードに用語集・ドメインモデルに登場しない概念が存在する。</p>
+  <ul>
+    <li><span class="file-ref">web/src/lib/tags.ts</span> — <code>TagGroupMap</code>, <code>UiGroup</code>, <code>TagInfo</code></li>
+    <li><span class="file-ref">web/src/lib/data.ts</span> — <code>StagedDataLoader</code></li>
+    <li><span class="file-ref">web/src/lib/schema.ts</span> — <code>VideoItem</code>, <code>BootstrapJson</code></li>
+  </ul>
+  <p>これらは閲覧コンテキスト固有の概念であり、GLに追加するか、コンテキストマップで位置づけるべき。</p>
+  <div class="recommend">
+    閲覧コンテキスト固有のコード上の型名は、コンテキストマップ文書（#5で提案）で「閲覧コンテキストのローカル用語」として整理する。特に <code>TagGroupMap</code> は UI表示ロジックに関わるため GL-020 として追加を検討する。
+  </div>
+</div>
+
+<!-- #12 -->
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-minor">Minor</span>
+    <span class="badge badge-cat">B. ドメインモデル構造</span>
+    <span class="title">#12 DM命名の不統一 (「エンティティ」vs「モデル」)</span>
+  </div>
+  <p>ドメインモデル文書のタイトルで、命名規則が統一されていない。</p>
+  <ul>
+    <li>DM-001〜006: 「〜エンティティ」（例: 動画メタデータエンティティ）</li>
+    <li>DM-007〜009: 「〜モデル」（例: 検索条件モデル）</li>
+  </ul>
+  <p>DDDの文脈では「エンティティ」はステレオタイプとして意味を持つため、単なるタイトル装飾として使うと混乱を招く。</p>
+  <div class="recommend">
+    #6 の対応と合わせ、タイトルからステレオタイプを除去して「動画メタデータ」「検索条件」等のドメイン名のみにする。ステレオタイプは別欄で管理する。
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="roadmap">5. 改善ロードマップ</h2>
+<!-- ================================================================ -->
+
+<div class="roadmap-phase">
+  <div class="phase-label phase-1">Phase 1 — 即時対応（Critical / 1〜2週間）</div>
+  <ol>
+    <li><strong>用語統一 (#1)</strong>: 「収集ジョブ」→「収集実行 (ingestion_run)」に GL-002, DM-005 を修正</li>
+    <li><strong>集約ルート定義 (#4)</strong>: 各 DM に「集約ルート」セクションを追加、集約境界を明示</li>
+    <li><strong>コンテキストマップ作成 (#5)</strong>: BD-SYS-ARCH-005 として4つの境界づけられたコンテキストと関係パターンを文書化</li>
+  </ol>
+</div>
+
+<div class="roadmap-phase">
+  <div class="phase-label phase-2">Phase 2 — 短期対応（Major / 2〜4週間）</div>
+  <ol>
+    <li><strong>タグ辞書整理 (#2)</strong>: GL-005 / GL-008 の関係と利用コンテキストを明記</li>
+    <li><strong>アーカイブ索引英名統一 (#3)</strong>: GL-009 の term_en を <code>archive_index_page</code> に修正</li>
+    <li><strong>VO/Entity分類 (#6)</strong>: 各 DM にステレオタイプ欄を追加</li>
+    <li><strong>ドメインイベント設計 (#7)</strong>: DM-006 をドメインイベントパターンとして再設計</li>
+    <li><strong>欠落DMの追加 (#8)</strong>: RQ-DM-010（配信反映実行）を新規作成</li>
+    <li><strong>recheck用語追加 (#9)</strong>: RQ-GL-019（再確認）を新規作成</li>
+  </ol>
+</div>
+
+<div class="roadmap-phase">
+  <div class="phase-label phase-3">Phase 3 — 中期対応（Minor / 1〜2ヶ月）</div>
+  <ol>
+    <li><strong>channel_type値統一 (#10)</strong>: GL定義にDB/コード上の値の対応列を追加</li>
+    <li><strong>コード用語整理 (#11)</strong>: 閲覧コンテキスト固有の型名をコンテキストマップに記載</li>
+    <li><strong>DM命名統一 (#12)</strong>: タイトルからステレオタイプを除去し別欄管理に移行</li>
+  </ol>
+</div>
+
+<footer>
+  Generated by DDD Review — diopside-v3 — 2026-02-14
+</footer>
+
+</div><!-- /.container -->
+</body>
+</html>

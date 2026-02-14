@@ -3,11 +3,11 @@ id: RQ-FR-019
 title: 管理画面で配信前後のメタデータ再取得と差分確認を運用できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-001]]'
@@ -20,6 +20,8 @@ related:
 - '[[BD-APP-API-001]]'
 - '[[BD-APP-API-002]]'
 - '[[BD-APP-UI-001]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ

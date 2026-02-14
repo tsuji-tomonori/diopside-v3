@@ -3,11 +3,11 @@ id: RQ-FR-004
 title: 管理画面の収集結果として動画メタデータを正規化できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-001]]'
@@ -19,6 +19,8 @@ related:
 - '[[BD-APP-DATA-001]]'
 - '[[BD-APP-UI-001]]'
 - '[[RQ-RDR-037]]'
+bounded_context: Ingestion
+subdomain: Core
 tags:
 - diopside
 - RQ

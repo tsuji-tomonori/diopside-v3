@@ -3,14 +3,16 @@ id: RQ-UC-002
 title: 利用者が一覧から動画を閲覧する
 doc_type: ユースケース
 phase: RQ
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-12'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related: []
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ

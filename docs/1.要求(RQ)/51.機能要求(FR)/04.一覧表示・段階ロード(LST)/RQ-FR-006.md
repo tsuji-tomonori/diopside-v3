@@ -3,11 +3,11 @@ id: RQ-FR-006
 title: ページング済み索引を生成できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-001]]'
@@ -19,6 +19,8 @@ related:
 - '[[RQ-RDR-009]]'
 - '[[RQ-RDR-037]]'
 - '[[AT-SCN-007]]'
+bounded_context: Publishing
+subdomain: Supporting
 tags:
 - diopside
 - RQ

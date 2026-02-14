@@ -3,11 +3,11 @@ id: RQ-FR-016
 title: 管理画面で読み込み失敗を通知できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-007]]'
@@ -20,6 +20,8 @@ related:
 - '[[RQ-RDR-037]]'
 - '[[AT-SCN-002]]'
 - '[[AT-SCN-007]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ

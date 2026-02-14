@@ -3,11 +3,11 @@ id: RQ-FR-014
 title: YouTube視聴ページへ遷移できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-006]]'
@@ -18,6 +18,8 @@ related:
 - '[[RQ-RDR-009]]'
 - '[[RQ-RDR-037]]'
 - '[[AT-SCN-003]]'
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ

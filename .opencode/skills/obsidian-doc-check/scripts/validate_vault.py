@@ -41,6 +41,17 @@ REQUIRED_KEYS = [
     "tags",
 ]
 
+ALLOWED_BOUNDED_CONTEXTS = [
+    "Ingestion",
+    "TagManagement",
+    "Publishing",
+    "Viewing",
+    "Administration",
+    "Analytics",
+]
+
+ALLOWED_SUBDOMAINS = ["Core", "Supporting", "Generic"]
+
 
 LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -295,6 +306,8 @@ def main() -> int:
         issues.append(f"- {p}: forbidden file under docs/ (README.md / TEMPLATE.md are not allowed)")
 
     date_re = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+    allowed_bounded_contexts = set(ALLOWED_BOUNDED_CONTEXTS)
+    allowed_subdomains = set(ALLOWED_SUBDOMAINS)
 
     def in_scope(doc_path: Path) -> bool:
         if not target_paths:
@@ -329,6 +342,42 @@ def main() -> int:
                     issues.append(
                         f"- {d.path}: 'term_en' must be ASCII snake_case: {term_en_str}"
                     )
+
+        # DDD metadata keys for FR/UC docs
+        is_fr_or_uc = d.id.startswith("RQ-FR-") or d.id.startswith("RQ-UC-")
+        bounded_context = d.frontmatter.get("bounded_context")
+        subdomain = d.frontmatter.get("subdomain")
+
+        if is_fr_or_uc and (bounded_context is None or str(bounded_context).strip() == ""):
+            issues.append(
+                "- "
+                f"{d.path}: missing key 'bounded_context' for FR/UC doc "
+                f"(allowed: {', '.join(ALLOWED_BOUNDED_CONTEXTS)})"
+            )
+        if is_fr_or_uc and (subdomain is None or str(subdomain).strip() == ""):
+            issues.append(
+                "- "
+                f"{d.path}: missing key 'subdomain' for FR/UC doc "
+                f"(allowed: {', '.join(ALLOWED_SUBDOMAINS)})"
+            )
+
+        if bounded_context is not None and str(bounded_context).strip() != "":
+            bounded_context_str = str(bounded_context).strip()
+            if bounded_context_str not in allowed_bounded_contexts:
+                issues.append(
+                    "- "
+                    f"{d.path}: invalid 'bounded_context' value '{bounded_context_str}' "
+                    f"(allowed: {', '.join(ALLOWED_BOUNDED_CONTEXTS)})"
+                )
+
+        if subdomain is not None and str(subdomain).strip() != "":
+            subdomain_str = str(subdomain).strip()
+            if subdomain_str not in allowed_subdomains:
+                issues.append(
+                    "- "
+                    f"{d.path}: invalid 'subdomain' value '{subdomain_str}' "
+                    f"(allowed: {', '.join(ALLOWED_SUBDOMAINS)})"
+                )
 
         # date format
         for k in ["created", "updated"]:

@@ -3,15 +3,17 @@ id: RQ-UC-008
 title: 管理者が再収集を実施する
 doc_type: ユースケース
 phase: RQ
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
 - '[[RQ-RDR-030]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ

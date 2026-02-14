@@ -3,11 +3,11 @@ id: RQ-FR-022
 title: コメント密度波形表示用データを生成できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-001]]'
@@ -20,6 +20,8 @@ related:
 - '[[BD-APP-UI-001]]'
 - '[[BD-APP-UI-002]]'
 - '[[RQ-RDR-038]]'
+bounded_context: Analytics
+subdomain: Supporting
 tags:
 - diopside
 - RQ

@@ -3,11 +3,11 @@ id: RQ-FR-012
 title: 並び順を切り替えできる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-002]]'
@@ -18,6 +18,8 @@ related:
 - '[[RQ-RDR-009]]'
 - '[[RQ-RDR-037]]'
 - '[[AT-SCN-002]]'
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ

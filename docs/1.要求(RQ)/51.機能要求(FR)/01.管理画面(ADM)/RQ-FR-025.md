@@ -3,11 +3,11 @@ id: RQ-FR-025
 title: 管理画面運用の前提として単一CloudFrontで配信経路をパス分岐できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -19,6 +19,8 @@ related:
 - '[[BD-INF-DEP-004]]'
 - '[[BD-APP-API-004]]'
 - '[[AT-SCN-006]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ

@@ -3,11 +3,11 @@ id: RQ-FR-024
 title: 管理画面でドキュメント公開を一括実行できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -16,6 +16,8 @@ related:
 - '[[RQ-DEV-001]]'
 - '[[BD-INF-DEP-003]]'
 - '[[AT-REL-001]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ

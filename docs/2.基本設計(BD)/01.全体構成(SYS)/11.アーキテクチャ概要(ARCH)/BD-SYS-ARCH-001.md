@@ -3,11 +3,11 @@ id: BD-SYS-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.12
+version: 1.0.13
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -19,6 +19,8 @@ related:
 - '[[RQ-RDR-034]]'
 - '[[RQ-RDR-038]]'
 - '[[BD-SYS-ADR-027]]'
+- '[[BD-SYS-ADR-029]]'
+- '[[DOM-CTX-001]]'
 - '[[BD-SYS-ARCH-002]]'
 - '[[BD-SYS-ARCH-003]]'
 - '[[BD-SYS-ARCH-004]]'
@@ -40,6 +42,8 @@ tags:
 - 利用者体験は「高速初期表示」と「高精度絞り込み」を優先し、[[RQ-GL-010|段階ロード]]を採用する。
 - 原本データはDBで一元管理し、利用者向け参照は配信用静的JSONを正規経路とする。
 - Web公開層は Next.js App Router を前提に、Server Components を既定として `"use client"` 境界を最小化する。
+- ドメイン境界は [[DOM-CTX-001]] を正本として管理し、工程別文書体系（RQ/BD/DD/UT/IT/AT）に対して直交するDOM軸として追跡する。
+- Publishing BC と Viewing BC 間の境界契約は `contracts/static-json/*.schema.json` を Published Language として固定し、契約変更時は両BC合意を必須とする。
 
 ## システム境界
 - 本システムの責務は「公開動画メタデータの収集・加工・配信・検索」であり、動画本体配信はYouTube側責務とする。
@@ -63,7 +67,7 @@ tags:
 ## バッチ一覧
 | バッチID | バッチ名 | 起動契約 | 主な責務 | 状態遷移 | 詳細設計 |
 |---|---|---|---|---|---|
-| BAT-001 | 収集runバッチ | `POST /api/v1/ops/ingestion/runs` | 収集対象解決、収集実行、run採番/集計 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
+| BAT-001 | 収集runバッチ | `POST /api/v1/ops/ingestion/runs` | 収集対象解決、[[RQ-GL-002|収集実行]]、run採番/集計 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
 | BAT-002 | [[RQ-GL-011|再収集]]runバッチ | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | 失敗run再実行、親run連結、再実行回数制御 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-008]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
 | BAT-003 | 配信前後再確認バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-012]], [[DD-APP-DB-013]] |
 | BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-APP-API-015]], [[DD-APP-DB-015]] |
@@ -126,6 +130,12 @@ tags:
 - 定期実行は外部スケジューラが運用APIを呼び出して開始し、実処理は単一Backend API（Hono）内で完結させる。
 - 監視面は「収集成功率」「最新更新時刻」「配信エラー率」を最小必須指標とする。
 
+## ドメイン境界と契約境界
+- ドメイン境界は [[DOM-CTX-001]] に従い、Ingestion/TagManagement/Publishing/Viewing/Administration/Analytics の5+1 BCで責務を固定する。
+- BC間連携は Context Map で定義した関係（ACL / Customer-Supplier / Published Language / Shared Kernel / OHS）に従い、実装都合での越境参照を禁止する。
+- Publishing BC から Viewing BC への公開契約は `contracts/static-json/*.schema.json` を Published Language として管理し、配信JSONの後方互換境界を機械検証で保証する。
+- 境界契約を更新する場合は [[BD-SYS-ADR-029]] を起点に判断根拠・影響範囲・移行条件を追跡する。
+
 ## 図
 ```mermaid
 flowchart TD
@@ -185,6 +195,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-14: DOM軸接続（[[DOM-CTX-001]]）と Published Language（`contracts/static-json/*.schema.json`）の公式化を追加 [[BD-SYS-ADR-029]]
 - 2026-02-13: BAT-006の入力スキーマ/出力契約/片系失敗時挙動と同時実行制御を追加 [[BD-SYS-ADR-027]]
 - 2026-02-13: 変更履歴のADRリンク記載漏れを補正 [[BD-SYS-ADR-021]]
 - 2026-02-12: 補助データ生成バッチ（BAT-006）、タグマスター即時更新バッチ（BAT-007）、バッチ実行制約を追加 [[BD-SYS-ADR-021]]

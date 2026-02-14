@@ -3,11 +3,11 @@ id: RQ-UC-009
 title: 管理者が配信前後の再確認と手動タグ付けを実施する
 doc_type: ユースケース
 phase: RQ
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -17,6 +17,8 @@ related:
 - '[[RQ-RDR-019]]'
 - '[[RQ-RDR-036]]'
 - '[[RQ-RDR-030]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ

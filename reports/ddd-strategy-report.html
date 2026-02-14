@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDD戦略レポート — diopside-v3</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryBorderColor: '#2563eb', lineColor: '#64748b', textColor: '#1e293b' } });</script>
+<style>
+  :root {
+    --c-bg: #f8f9fa;
+    --c-card: #ffffff;
+    --c-border: #dee2e6;
+    --c-primary: #2563eb;
+    --c-good: #16a34a;
+    --c-critical: #dc2626;
+    --c-major: #ea580c;
+    --c-minor: #ca8a04;
+    --c-text: #1e293b;
+    --c-muted: #64748b;
+    --radius: 8px;
+    /* Subdomain colours */
+    --c-core: #2563eb;
+    --c-core-bg: #dbeafe;
+    --c-supporting: #d97706;
+    --c-supporting-bg: #fef3c7;
+    --c-generic: #6b7280;
+    --c-generic-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; background: var(--c-bg); color: var(--c-text); line-height: 1.7; padding: 2rem 1rem; }
+  .container { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.75rem; margin-bottom: .25rem; }
+  .subtitle { color: var(--c-muted); margin-bottom: 2rem; font-size: .95rem; }
+  h2 { font-size: 1.35rem; margin: 2.5rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--c-primary); }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 .75rem; }
+  h4 { font-size: 1rem; margin: 1rem 0 .5rem; }
+
+  /* Score card */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .score-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+  .score-card .value { font-size: 2rem; font-weight: 700; }
+  .score-card .label { font-size: .8rem; color: var(--c-muted); }
+  .score-card.good .value { color: var(--c-good); }
+  .score-card.warn .value { color: var(--c-major); }
+
+  /* Badges */
+  .badge { display: inline-block; font-size: .75rem; font-weight: 600; padding: .15em .55em; border-radius: 4px; vertical-align: middle; }
+  .badge-critical { background: #fecaca; color: var(--c-critical); }
+  .badge-major { background: #fed7aa; color: var(--c-major); }
+  .badge-minor { background: #fef08a; color: var(--c-minor); }
+  .badge-good { background: #bbf7d0; color: var(--c-good); }
+  .badge-cat { background: #dbeafe; color: var(--c-primary); }
+  .badge-core { background: var(--c-core-bg); color: var(--c-core); }
+  .badge-supporting { background: var(--c-supporting-bg); color: var(--c-supporting); }
+  .badge-generic { background: var(--c-generic-bg); color: var(--c-generic); }
+
+  /* Card */
+  .card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-header { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; flex-wrap: wrap; }
+  .card-header .title { font-weight: 600; }
+  .card p, .card ul { margin-top: .4rem; }
+  .card ul { padding-left: 1.2rem; }
+  .card li { margin-bottom: .25rem; }
+  .file-ref { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: .85em; color: var(--c-primary); background: #eff6ff; padding: .1em .35em; border-radius: 3px; }
+  .recommend { background: #f0fdf4; border-left: 3px solid var(--c-good); padding: .6rem .8rem; margin-top: .5rem; border-radius: 0 var(--radius) var(--radius) 0; font-size: .92rem; }
+  .recommend::before { content: "→ "; font-weight: 600; }
+
+  /* BC Card */
+  .bc-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; border-left: 4px solid var(--c-core); }
+  .bc-card.core { border-left-color: var(--c-core); }
+  .bc-card.supporting { border-left-color: var(--c-supporting); }
+  .bc-card.generic { border-left-color: var(--c-generic); }
+  .bc-card .bc-title { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; display: flex; align-items: center; gap: .5rem; }
+  .bc-card dl { display: grid; grid-template-columns: 8em 1fr; gap: .2rem .8rem; font-size: .92rem; margin-top: .5rem; }
+  .bc-card dt { font-weight: 600; color: var(--c-muted); }
+  .bc-card dd { margin: 0; }
+
+  /* Good points */
+  .good-list { list-style: none; padding: 0; }
+  .good-list li { padding: .5rem .75rem; margin-bottom: .5rem; background: #f0fdf4; border-radius: var(--radius); border-left: 3px solid var(--c-good); }
+  .good-list li::before { content: "✓ "; color: var(--c-good); font-weight: 700; }
+
+  /* Gap list */
+  .gap-list { list-style: none; padding: 0; }
+  .gap-list li { padding: .5rem .75rem; margin-bottom: .5rem; background: #fef2f2; border-radius: var(--radius); border-left: 3px solid var(--c-critical); }
+  .gap-list li::before { content: "✗ "; color: var(--c-critical); font-weight: 700; }
+
+  /* Summary table */
+  table.summary { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .92rem; }
+  table.summary th, table.summary td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--c-border); }
+  table.summary th { background: #f1f5f9; font-weight: 600; }
+
+  /* FR mapping table */
+  table.fr-map { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .85rem; }
+  table.fr-map th, table.fr-map td { text-align: left; padding: .4rem .5rem; border: 1px solid var(--c-border); }
+  table.fr-map th { background: #f1f5f9; font-weight: 600; font-size: .8rem; }
+  table.fr-map .bc-ingestion { background: #dbeafe; }
+  table.fr-map .bc-tag { background: #e0e7ff; }
+  table.fr-map .bc-publishing { background: #fef3c7; }
+  table.fr-map .bc-viewing { background: #dbeafe; }
+  table.fr-map .bc-admin { background: #fef3c7; }
+  table.fr-map .bc-analytics { background: #f3f4f6; }
+
+  /* Roadmap */
+  .roadmap-phase { margin-bottom: 1.5rem; }
+  .phase-label { display: inline-block; font-weight: 700; font-size: .85rem; padding: .2em .6em; border-radius: 4px; margin-bottom: .5rem; }
+  .phase-1 { background: #dbeafe; color: var(--c-core); }
+  .phase-2 { background: #fef3c7; color: var(--c-supporting); }
+  .phase-3 { background: #f3f4f6; color: var(--c-generic); }
+  .roadmap-phase ol { padding-left: 1.4rem; }
+  .roadmap-phase li { margin-bottom: .3rem; }
+
+  /* TOC */
+  .toc { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1rem 1.5rem; margin-bottom: 2rem; }
+  .toc h3 { margin-top: 0; }
+  .toc ol { padding-left: 1.2rem; }
+  .toc li { margin-bottom: .2rem; }
+  .toc a { color: var(--c-primary); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Mermaid */
+  .mermaid { margin: 1.5rem 0; text-align: center; }
+
+  /* Callout */
+  .callout { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); padding: .8rem 1rem; margin: 1rem 0; font-size: .92rem; }
+  .callout-title { font-weight: 600; color: var(--c-primary); margin-bottom: .3rem; }
+
+  /* Code */
+  code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: .85em; background: #f1f5f9; padding: .1em .35em; border-radius: 3px; }
+  pre { background: #f1f5f9; border-radius: var(--radius); padding: 1rem; overflow-x: auto; font-size: .85rem; margin: 1rem 0; }
+  pre code { background: none; padding: 0; }
+
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--c-border); color: var(--c-muted); font-size: .82rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>DDD戦略レポート</h1>
+<p class="subtitle">diopside-v3 プロジェクト — 作成日: 2026-02-14 — 補完対象: <a href="ddd-review-report.html">DDD用語・ドメインモデルレビュー（58/100）</a></p>
+
+<!-- TOC -->
+<nav class="toc">
+  <h3>目次</h3>
+  <ol>
+    <li><a href="#executive">エグゼクティブサマリー</a></li>
+    <li><a href="#readiness">現状分析（DDD Readiness）</a></li>
+    <li><a href="#subdomain">サブドメイン分類</a></li>
+    <li><a href="#bc">境界づけられたコンテキスト定義（5+1 BC）</a></li>
+    <li><a href="#context-map">コンテキストマップ</a></li>
+    <li><a href="#fr-mapping">FR → BC マッピング</a></li>
+    <li><a href="#dm-gl-mapping">DM/GL → BC マッピング</a></li>
+    <li><a href="#strategy">推奨戦略（現実解 3フェーズ）</a></li>
+    <li><a href="#actions">アクションアイテム</a></li>
+    <li><a href="#appendix">付録</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ -->
+<h2 id="executive">1. エグゼクティブサマリー</h2>
+<!-- ================================================================ -->
+
+<div class="score-grid">
+  <div class="score-card warn">
+    <div class="value">58<span style="font-size:.9rem">/100</span></div>
+    <div class="label">戦術的DDD適合度<br><small>（既存レビュー）</small></div>
+  </div>
+  <div class="score-card warn">
+    <div class="value">35<span style="font-size:.9rem">/100</span></div>
+    <div class="label">戦略的DDD適合度<br><small>（本レポート評価）</small></div>
+  </div>
+  <div class="score-card good">
+    <div class="value">371</div>
+    <div class="label">管理文書数</div>
+  </div>
+  <div class="score-card good">
+    <div class="value">5+1</div>
+    <div class="label">提案BC数</div>
+  </div>
+</div>
+
+<h3>位置づけ</h3>
+<p>本レポートは、<a href="ddd-review-report.html">DDD用語・ドメインモデルレビュー</a>（戦術レベル: 用語一貫性、モデル構造、集約定義）を<strong>戦略レベル</strong>で補完する。戦術レビューが「個々のモデルの品質」を評価したのに対し、本レポートは「ドメイン全体の境界設計と組織化方針」を扱う。</p>
+
+<h3>現状の強み</h3>
+<ul class="good-list">
+  <li><strong>工程別管理の成熟度</strong> — RQ/BD/DD/UT/IT/AT の6フェーズ体系で371文書を統一フォーマット管理。配信ライフサイクルの追跡に有効。</li>
+  <li><strong>契約スキーマの分離</strong> — <span class="file-ref">contracts/static-json/</span> が事実上の Published Language として機能し、配信→閲覧間の境界が暗黙的に存在。</li>
+  <li><strong>バッチ処理の明確な識別</strong> — BD-SYS-ARCH-001 で BAT-001〜007 が状態遷移・制約とともに定義済み。</li>
+  <li><strong>ドメインモデル文書群</strong> — RQ-DM-001〜009 が共通構造で記述され、モデル間の関連が把握可能。</li>
+</ul>
+
+<h3>主要ギャップ</h3>
+<ul class="gap-list">
+  <li><strong>境界づけられたコンテキスト未定義</strong> — ドメイン知識が RQ/BD/DD のフェーズ軸に分散し、ドメイン軸での俯瞰ができない。</li>
+  <li><strong>サブドメイン分類なし</strong> — Core / Supporting / Generic の区別がなく、投資優先度の判断基準が不在。</li>
+  <li><strong>コンテキスト間関係パターン未定義</strong> — Customer-Supplier、ACL、Shared Kernel 等の関係が暗黙的にしか存在しない。</li>
+  <li><strong>FR分類がUI中心</strong> — 機能要求がUI操作軸（管理画面/検索/タグ管理/一覧/詳細/波形/ワードクラウド）で整理され、ドメインの責務境界と一致しない。</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="readiness">2. 現状分析（DDD Readiness）</h2>
+<!-- ================================================================ -->
+
+<table class="summary">
+  <thead><tr><th>DDD要素</th><th>対応状況</th><th>根拠</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>ユビキタス言語</td>
+      <td><span class="badge badge-major">部分対応</span></td>
+      <td>RQ-GL-001〜018 で用語集を統一管理。ただし用語・DB・コード間に不一致あり（<a href="ddd-review-report.html">#1, #2, #3, #10</a>）</td>
+    </tr>
+    <tr>
+      <td>ドメインモデル</td>
+      <td><span class="badge badge-major">部分対応</span></td>
+      <td>RQ-DM-001〜009 で9モデル定義済み。集約ルート未定義、VO/Entity区別なし（<a href="ddd-review-report.html">#4, #6</a>）</td>
+    </tr>
+    <tr>
+      <td>境界づけられたコンテキスト</td>
+      <td><span class="badge badge-critical">未対応</span></td>
+      <td>BD-SYS-ARCH-001 のコンポーネント図で暗示されるのみ。明示的BC定義なし（<a href="ddd-review-report.html">#5</a>）</td>
+    </tr>
+    <tr>
+      <td>コンテキストマップ</td>
+      <td><span class="badge badge-critical">未対応</span></td>
+      <td>コンテキスト間の関係パターンが文書化されていない</td>
+    </tr>
+    <tr>
+      <td>サブドメイン分類</td>
+      <td><span class="badge badge-critical">未対応</span></td>
+      <td>Core/Supporting/Genericの区別が存在しない</td>
+    </tr>
+    <tr>
+      <td>ドメインイベント</td>
+      <td><span class="badge badge-major">部分対応</span></td>
+      <td>BEV-001〜007 でバッチイベント定義済み。DDD的なドメインイベントパターンとしては未設計（<a href="ddd-review-report.html">#7</a>）</td>
+    </tr>
+    <tr>
+      <td>契約/Published Language</td>
+      <td><span class="badge badge-good">対応済み</span></td>
+      <td><span class="file-ref">contracts/static-json/*.schema.json</span> が事実上のPublished Language</td>
+    </tr>
+    <tr>
+      <td>集約パターン</td>
+      <td><span class="badge badge-critical">未対応</span></td>
+      <td>集約ルート・集約境界が未定義（<a href="ddd-review-report.html">#4</a>）</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="subdomain">3. サブドメイン分類</h2>
+<!-- ================================================================ -->
+
+<p>diopsideの業務ドメインを、DDDのサブドメイン3分類に整理する。</p>
+
+<table class="summary">
+  <thead><tr><th>サブドメイン</th><th>分類</th><th>理由</th><th>投資優先度</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>アーカイブ収集</strong></td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>YouTube API連携・受入判定・メタデータ正規化はdiopside固有の競争優位。外部サービスでは代替不可能。</td>
+      <td>最優先</td>
+    </tr>
+    <tr>
+      <td><strong>タグ管理</strong></td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>独自タグ体系（種別・辞書・割当）はアーカイブの発見性を決定する核心機能。</td>
+      <td>最優先</td>
+    </tr>
+    <tr>
+      <td><strong>アーカイブ閲覧</strong></td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>検索・絞り込み・段階ロード・詳細表示はエンドユーザー価値の直接的な提供手段。</td>
+      <td>最優先</td>
+    </tr>
+    <tr>
+      <td><strong>配信（Publishing）</strong></td>
+      <td><span class="badge badge-supporting">Supporting</span></td>
+      <td>DB正本→静的JSON/画像の生成・公開切替。重要だがビジネスルールは薄い。</td>
+      <td>標準</td>
+    </tr>
+    <tr>
+      <td><strong>運用管理</strong></td>
+      <td><span class="badge badge-supporting">Supporting</span></td>
+      <td>管理画面・監視・ジョブ制御。固有ドメインモデルを持たない調整・統制役。</td>
+      <td>標準</td>
+    </tr>
+    <tr>
+      <td><strong>分析（Analytics）</strong></td>
+      <td><span class="badge badge-supporting">Supporting</span></td>
+      <td>コメント密度波形・ワードクラウド生成。付加価値提供だがオプショナル。</td>
+      <td>低（段階導入）</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="bc">4. 境界づけられたコンテキスト定義（5+1 BC）</h2>
+<!-- ================================================================ -->
+
+<p>以下の5つの境界づけられたコンテキスト（+ 1オプション）を定義する。各BCはサブドメインに対応し、独自のユビキタス言語とモデルを持つ。</p>
+
+<!-- BC1: Ingestion -->
+<div class="bc-card core">
+  <div class="bc-title">
+    <span class="badge badge-core">Core</span>
+    BC1: Ingestion（収集）
+  </div>
+  <dl>
+    <dt>責務</dt>
+    <dd>YouTube APIからの公開アーカイブ収集、受入判定、メタデータ正規化、収集実行管理</dd>
+    <dt>バッチ処理</dt>
+    <dd>BAT-001（収集runバッチ）、BAT-002（再収集runバッチ）</dd>
+    <dt>ドメインモデル</dt>
+    <dd>
+      <span class="file-ref">RQ-DM-001</span> 動画エンティティ、
+      <span class="file-ref">RQ-DM-002</span> チャンネルエンティティ、
+      <span class="file-ref">RQ-DM-005</span> 収集実行エンティティ、
+      <span class="file-ref">RQ-DM-006</span> 収集イベントエンティティ
+    </dd>
+    <dt>用語（GL）</dt>
+    <dd>GL-001 diopside、GL-002 収集ジョブ、GL-003 公式投稿動画、GL-004 出演動画、GL-011 再収集、GL-012 受入判定</dd>
+    <dt>主要テーブル</dt>
+    <dd>videos, channels, ingestion_runs, ingestion_events, ingestion_items</dd>
+    <dt>ユビキタス言語</dt>
+    <dd>収集実行(ingestion_run)、収集イベント(ingestion_event)、受入判定(acceptance_check)、公式投稿動画(official_uploaded_video)、出演動画(appearance_video)</dd>
+  </dl>
+</div>
+
+<!-- BC2: TagManagement -->
+<div class="bc-card core">
+  <div class="bc-title">
+    <span class="badge badge-core">Core</span>
+    BC2: TagManagement（タグ管理）
+  </div>
+  <dl>
+    <dt>責務</dt>
+    <dd>タグ種別・タグの辞書管理、動画へのタグ割当、タグマスタ即時公開</dd>
+    <dt>バッチ処理</dt>
+    <dd>BAT-007（タグマスター即時更新バッチ）</dd>
+    <dt>ドメインモデル</dt>
+    <dd>
+      <span class="file-ref">RQ-DM-003</span> タグエンティティ、
+      <span class="file-ref">RQ-DM-004</span> タグ種別エンティティ
+    </dd>
+    <dt>用語（GL）</dt>
+    <dd>GL-005 タグ辞書、GL-008 tag_master、GL-013 タグ種別</dd>
+    <dt>主要テーブル</dt>
+    <dd>tag_types, tags, video_tags</dd>
+    <dt>ユビキタス言語</dt>
+    <dd>タグ辞書(tag_dictionary)、タグマスタ(tag_master)、タグ種別(tag_type)、タグ割当(tag_assignment)</dd>
+  </dl>
+</div>
+
+<!-- BC3: Publishing -->
+<div class="bc-card supporting">
+  <div class="bc-title">
+    <span class="badge badge-supporting">Supporting</span>
+    BC3: Publishing（配信）
+  </div>
+  <dl>
+    <dt>責務</dt>
+    <dd>DB正本から配信成果物（bootstrap.json / tag_master.json / archive_index / highlights / wordcloud）を生成し、公開切替・ロールバックを管理</dd>
+    <dt>バッチ処理</dt>
+    <dd>BAT-003（配信前後再確認バッチ）、BAT-004（配信反映バッチ）、BAT-005（docs公開バッチ）</dd>
+    <dt>ドメインモデル</dt>
+    <dd>
+      <span class="file-ref">RQ-DM-010</span>（提案）配信反映実行エンティティ
+    </dd>
+    <dt>用語（GL）</dt>
+    <dd>GL-006 アーカイブ索引、GL-007 bootstrap、GL-009 archive_index、GL-010 段階ロード、GL-018 配信反映実行</dd>
+    <dt>主要テーブル</dt>
+    <dd>publish_runs, publish_steps, publish_artifacts, recheck_runs, recheck_items</dd>
+    <dt>ユビキタス言語</dt>
+    <dd>配信反映実行(publish_run)、公開切替(publish_switch)、ロールバック(rollback)、再確認(recheck)</dd>
+    <dt>Published Language</dt>
+    <dd>
+      <span class="file-ref">contracts/static-json/bootstrap.schema.json</span><br>
+      <span class="file-ref">contracts/static-json/tag_master.schema.json</span><br>
+      <span class="file-ref">contracts/static-json/archive_index_page.schema.json</span>
+    </dd>
+  </dl>
+</div>
+
+<!-- BC4: Viewing -->
+<div class="bc-card core">
+  <div class="bc-title">
+    <span class="badge badge-core">Core</span>
+    BC4: Viewing（閲覧）
+  </div>
+  <dl>
+    <dt>責務</dt>
+    <dd>利用者向けWebアプリケーション。検索・絞り込み・並び替え・一覧表示・段階ロード・詳細表示・外部遷移</dd>
+    <dt>実装</dt>
+    <dd><span class="file-ref">web/</span>（Vite + React + TypeScript）</dd>
+    <dt>ドメインモデル</dt>
+    <dd>
+      <span class="file-ref">RQ-DM-007</span> 検索条件モデル、
+      <span class="file-ref">RQ-DM-008</span> 盛り上がり区間モデル、
+      <span class="file-ref">RQ-DM-009</span> ワードクラウド成果物モデル
+    </dd>
+    <dt>用語（GL）</dt>
+    <dd>GL-014 検索条件、GL-015 盛り上がり区間、GL-016 コメント密度波形、GL-017 ワードクラウド</dd>
+    <dt>ローカル用語</dt>
+    <dd>TagGroupMap, UiGroup, TagInfo, StagedDataLoader, VideoItem, BootstrapJson（コード上の型名、GL未登録）</dd>
+    <dt>ユビキタス言語</dt>
+    <dd>検索条件(search_criteria)、盛り上がり区間(highlight_section)、段階ロード(staged_loading)</dd>
+  </dl>
+</div>
+
+<!-- BC5: Administration -->
+<div class="bc-card supporting">
+  <div class="bc-title">
+    <span class="badge badge-supporting">Supporting</span>
+    BC5: Administration（運用管理）
+  </div>
+  <dl>
+    <dt>責務</dt>
+    <dd>管理者向けコンソール。収集起動・監視・再収集・公開運用・配信経路確認のUI/APIオーケストレーション</dd>
+    <dt>特性</dt>
+    <dd><strong>固有ドメインモデルを保有しない調整役</strong>。他BCのコマンドを発行し、結果を集約して管理者に提示する。</dd>
+    <dt>対象FR</dt>
+    <dd>01.管理画面(ADM) カテゴリの全FR</dd>
+    <dt>ユビキタス言語</dt>
+    <dd>各BCの用語をそのまま利用（独自変換しない）</dd>
+  </dl>
+</div>
+
+<!-- BC6: Analytics -->
+<div class="bc-card supporting">
+  <div class="bc-title">
+    <span class="badge badge-supporting">Supporting（オプション）</span>
+    BC6: Analytics（分析）
+  </div>
+  <dl>
+    <dt>責務</dt>
+    <dd>コメント密度波形・ワードクラウド等の補助分析データ生成</dd>
+    <dt>バッチ処理</dt>
+    <dd>BAT-006（補助データ生成バッチ）</dd>
+    <dt>ドメインモデル</dt>
+    <dd>
+      <span class="file-ref">RQ-DM-008</span> 盛り上がり区間モデル（Viewingと共有）、
+      <span class="file-ref">RQ-DM-009</span> ワードクラウド成果物モデル（Viewingと共有）
+    </dd>
+    <dt>共有モデル</dt>
+    <dd>DM-008/DM-009 は Analytics（生成側）と Viewing（消費側）の Shared Kernel</dd>
+    <dt>用語（GL）</dt>
+    <dd>GL-015 盛り上がり区間、GL-016 コメント密度波形、GL-017 ワードクラウド</dd>
+  </dl>
+</div>
+
+<div class="callout">
+  <div class="callout-title">設計判断: BCは5つ（+Analytics）</div>
+  <p>Administration は全BCに跨る調整役であり、固有のドメインモデルを保有しない。しかし、管理画面のFRが10件と多く、UIの凝集性も高いため明示的なBC境界を設ける。Analytics はDM-008/DM-009 をViewingと共有するため、チーム規模が小さい間は Viewing に統合し、成長に応じて分離する。</p>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="context-map">5. コンテキストマップ</h2>
+<!-- ================================================================ -->
+
+<p>BC間の依存関係と統合パターンを以下に定義する。</p>
+
+<div class="mermaid">
+graph TB
+  subgraph Core
+    ING["BC1: Ingestion<br/>収集"]
+    TAG["BC2: TagManagement<br/>タグ管理"]
+    VIEW["BC4: Viewing<br/>閲覧"]
+  end
+
+  subgraph Supporting
+    PUB["BC3: Publishing<br/>配信"]
+    ADM["BC5: Administration<br/>運用管理"]
+    ANA["BC6: Analytics<br/>分析"]
+  end
+
+  EXT["External:<br/>YouTube Data API"]
+
+  EXT -->|"ACL"| ING
+  ING -->|"Customer-Supplier<br/>(U:ING → D:PUB)"| PUB
+  TAG -->|"Customer-Supplier<br/>(U:TAG → D:PUB)"| PUB
+  PUB -->|"Published Language<br/>(contracts/static-json/)"| VIEW
+  ING -->|"Shared Kernel<br/>(videos, channels)"| TAG
+  ANA -->|"Shared Kernel<br/>(DM-008, DM-009)"| VIEW
+  ING -->|"Customer-Supplier<br/>(U:ING → D:ANA)"| ANA
+  ADM -.->|"OHS/Command"| ING
+  ADM -.->|"OHS/Command"| TAG
+  ADM -.->|"OHS/Command"| PUB
+
+  style ING fill:#dbeafe,stroke:#2563eb
+  style TAG fill:#dbeafe,stroke:#2563eb
+  style VIEW fill:#dbeafe,stroke:#2563eb
+  style PUB fill:#fef3c7,stroke:#d97706
+  style ADM fill:#fef3c7,stroke:#d97706
+  style ANA fill:#f3f4f6,stroke:#6b7280
+  style EXT fill:#fee2e2,stroke:#dc2626
+</div>
+
+<h3>統合パターン一覧</h3>
+
+<table class="summary">
+  <thead><tr><th>上流 (U)</th><th>下流 (D)</th><th>パターン</th><th>契約/境界</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>YouTube Data API</td>
+      <td>BC1: Ingestion</td>
+      <td><strong>Anti-Corruption Layer (ACL)</strong></td>
+      <td>外部APIレスポンスを内部ドメインモデル（動画エンティティ、チャンネルエンティティ）に変換。外部スキーマ変更の影響を遮断。</td>
+    </tr>
+    <tr>
+      <td>BC1: Ingestion</td>
+      <td>BC3: Publishing</td>
+      <td><strong>Customer-Supplier</strong></td>
+      <td>Ingestionが収集したvideos/channelsデータをPublishingが成果物生成に利用。スキーマはDB正本。</td>
+    </tr>
+    <tr>
+      <td>BC2: TagManagement</td>
+      <td>BC3: Publishing</td>
+      <td><strong>Customer-Supplier</strong></td>
+      <td>TagManagementが管理するtag_types/tags/video_tagsをPublishingがtag_master.json生成に利用。</td>
+    </tr>
+    <tr>
+      <td>BC3: Publishing</td>
+      <td>BC4: Viewing</td>
+      <td><strong>Published Language</strong></td>
+      <td><span class="file-ref">contracts/static-json/</span> の3スキーマ（bootstrap, tag_master, archive_index_page）が公式契約。</td>
+    </tr>
+    <tr>
+      <td>BC1: Ingestion</td>
+      <td>BC2: TagManagement</td>
+      <td><strong>Shared Kernel</strong></td>
+      <td>videos, channels テーブルを共有。video_tags はTagManagementが所有し、video_id でIngestionのvideosを参照。</td>
+    </tr>
+    <tr>
+      <td>BC6: Analytics</td>
+      <td>BC4: Viewing</td>
+      <td><strong>Shared Kernel</strong></td>
+      <td>DM-008（盛り上がり区間）、DM-009（ワードクラウド成果物）を共有。Analyticsが生成し、Viewingが消費。</td>
+    </tr>
+    <tr>
+      <td>BC1: Ingestion</td>
+      <td>BC6: Analytics</td>
+      <td><strong>Customer-Supplier</strong></td>
+      <td>収集完了をトリガーに補助データ生成を起動（BAT-006）。</td>
+    </tr>
+    <tr>
+      <td>BC5: Administration</td>
+      <td>BC1/BC2/BC3</td>
+      <td><strong>Open Host Service (OHS)</strong></td>
+      <td>管理画面はREST APIを通じて各BCにコマンドを発行。固有の変換ロジックは持たない。</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <div class="callout-title">設計判断: contracts/static-json/ を Published Language として公式化</div>
+  <p>Publishing → Viewing 間の契約として既に機能している3つのJSONスキーマを、DDDの Published Language パターンとして正式に位置づける。これにより、スキーマ変更は両BCの合意を必要とする明示的なガバナンスが成立する。</p>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="fr-mapping">6. FR → BC マッピング</h2>
+<!-- ================================================================ -->
+
+<p>25件の機能要求を5+1 BCに割り当てる。現行のUI中心分類（左列）とドメイン中心分類（右列）を対比する。</p>
+
+<table class="fr-map">
+  <thead>
+    <tr>
+      <th>FR ID</th>
+      <th>タイトル</th>
+      <th>現行カテゴリ<br><small>（UI中心）</small></th>
+      <th>BC割当<br><small>（ドメイン中心）</small></th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- ADM → 各BC -->
+    <tr>
+      <td>RQ-FR-001</td>
+      <td>管理画面から公開動画収集ジョブを実行できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span> → <span class="badge badge-core">Ingestion</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-002</td>
+      <td>管理画面で公式投稿の公開動画をチャンネルID一致で取り込める</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-ingestion"><span class="badge badge-core">Ingestion</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-003</td>
+      <td>管理画面で出演条件一致の公開動画を判定して取り込める</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-ingestion"><span class="badge badge-core">Ingestion</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-004</td>
+      <td>管理画面の収集結果として動画メタデータを正規化できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-ingestion"><span class="badge badge-core">Ingestion</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-016</td>
+      <td>管理画面で読み込み失敗を通知できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-017</td>
+      <td>管理画面で収集実行結果を確認できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-018</td>
+      <td>管理画面で手動再収集を実行できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span> → <span class="badge badge-core">Ingestion</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-019</td>
+      <td>管理画面で配信前後のメタデータ再取得と差分確認を運用できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span> → <span class="badge badge-supporting">Publishing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-024</td>
+      <td>管理画面でドキュメント公開を一括実行できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span> → <span class="badge badge-supporting">Publishing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-025</td>
+      <td>管理画面運用の前提として単一CloudFrontで配信経路をパス分岐できる</td>
+      <td>01.管理画面(ADM)</td>
+      <td class="bc-admin"><span class="badge badge-supporting">Admin</span>（インフラ関心事）</td>
+    </tr>
+    <!-- SCH → Viewing -->
+    <tr>
+      <td>RQ-FR-008</td>
+      <td>キーワード検索できる</td>
+      <td>02.検索(SCH)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-010</td>
+      <td>日付範囲で絞り込みできる</td>
+      <td>02.検索(SCH)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-011</td>
+      <td>再生時間で絞り込みできる</td>
+      <td>02.検索(SCH)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-012</td>
+      <td>並び順を切り替えできる</td>
+      <td>02.検索(SCH)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <!-- TAG -->
+    <tr>
+      <td>RQ-FR-005</td>
+      <td>タグ辞書を更新できる</td>
+      <td>03.タグ管理(TAG)</td>
+      <td class="bc-tag"><span class="badge badge-core">TagMgmt</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-009</td>
+      <td>タグ条件で絞り込みできる</td>
+      <td>03.タグ管理(TAG)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <!-- LST → Publishing + Viewing -->
+    <tr>
+      <td>RQ-FR-006</td>
+      <td>ページング済み索引を生成できる</td>
+      <td>04.一覧表示(LST)</td>
+      <td class="bc-publishing"><span class="badge badge-supporting">Publishing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-007</td>
+      <td>アーカイブ一覧を表示できる</td>
+      <td>04.一覧表示(LST)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-015</td>
+      <td>初回読み込みを高速化する段階ロードで漸進表示できる</td>
+      <td>04.一覧表示(LST)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <!-- DET → Viewing -->
+    <tr>
+      <td>RQ-FR-013</td>
+      <td>動画詳細モーダルを表示できる</td>
+      <td>05.詳細表示(DET)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-014</td>
+      <td>YouTube視聴ページへ遷移できる</td>
+      <td>05.詳細表示(DET)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <!-- HLW → Analytics + Viewing -->
+    <tr>
+      <td>RQ-FR-020</td>
+      <td>詳細画面でコメント密度波形を表示し盛り上がり区間へ遷移できる</td>
+      <td>06.コメント密度波形(HLW)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-022</td>
+      <td>コメント密度波形表示用データを生成できる</td>
+      <td>06.コメント密度波形(HLW)</td>
+      <td class="bc-analytics"><span class="badge badge-supporting">Analytics</span></td>
+    </tr>
+    <!-- WCL → Analytics + Viewing -->
+    <tr>
+      <td>RQ-FR-021</td>
+      <td>動画詳細でワードクラウドを表示できる</td>
+      <td>07.ワードクラウド(WCL)</td>
+      <td class="bc-viewing"><span class="badge badge-core">Viewing</span></td>
+    </tr>
+    <tr>
+      <td>RQ-FR-023</td>
+      <td>ワードクラウド表示用画像を生成できる</td>
+      <td>07.ワードクラウド(WCL)</td>
+      <td class="bc-analytics"><span class="badge badge-supporting">Analytics</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>対比分析</h3>
+<table class="summary">
+  <thead><tr><th>観点</th><th>UI中心分類（現行）</th><th>ドメイン中心分類（BC）</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>分類軸</td>
+      <td>画面・操作の種類（7カテゴリ）</td>
+      <td>ドメインの責務境界（5+1 BC）</td>
+    </tr>
+    <tr>
+      <td>管理画面FR</td>
+      <td>10件が1カテゴリに集中</td>
+      <td>Admin(4), Ingestion(3), Publishing(2), インフラ(1)に分散</td>
+    </tr>
+    <tr>
+      <td>タグ絞り込み(FR-009)</td>
+      <td>03.タグ管理(TAG)に配置</td>
+      <td>Viewing（利用者の検索体験）に帰属</td>
+    </tr>
+    <tr>
+      <td>索引生成(FR-006)</td>
+      <td>04.一覧表示(LST)に配置</td>
+      <td>Publishing（成果物生成）に帰属</td>
+    </tr>
+    <tr>
+      <td>波形/WC生成</td>
+      <td>表示カテゴリ(HLW/WCL)に混在</td>
+      <td>生成=Analytics、表示=Viewingに分離</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <div class="callout-title">設計判断: FR分類はUI中心のまま維持</div>
+  <p>現行の7カテゴリ分類は利用者操作の観点から自然であり、変更コストに見合わない。代わりに各FRのフロントマターに <code>bounded_context</code> メタデータを追加することで、ドメイン軸を直交的に提供する。</p>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="dm-gl-mapping">7. DM/GL → BC マッピング</h2>
+<!-- ================================================================ -->
+
+<h3>ドメインモデル（DM-001〜009）</h3>
+<table class="summary">
+  <thead><tr><th>ID</th><th>タイトル</th><th>BC割当</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr><td>RQ-DM-001</td><td>動画エンティティ</td><td><span class="badge badge-core">Ingestion</span></td><td>収集の主要出力。TagMgmtからも参照（Shared Kernel）</td></tr>
+    <tr><td>RQ-DM-002</td><td>チャンネルエンティティ</td><td><span class="badge badge-core">Ingestion</span></td><td>収集対象の識別。値オブジェクト候補</td></tr>
+    <tr><td>RQ-DM-003</td><td>タグエンティティ</td><td><span class="badge badge-core">TagMgmt</span></td><td>タグ辞書の構成要素</td></tr>
+    <tr><td>RQ-DM-004</td><td>タグ種別エンティティ</td><td><span class="badge badge-core">TagMgmt</span></td><td>タグの分類体系</td></tr>
+    <tr><td>RQ-DM-005</td><td>収集実行エンティティ</td><td><span class="badge badge-core">Ingestion</span></td><td>BAT-001/002の実行単位</td></tr>
+    <tr><td>RQ-DM-006</td><td>収集イベントエンティティ</td><td><span class="badge badge-core">Ingestion</span></td><td>ドメインイベント候補（<a href="ddd-review-report.html">#7</a>）</td></tr>
+    <tr><td>RQ-DM-007</td><td>検索条件モデル</td><td><span class="badge badge-core">Viewing</span></td><td>値オブジェクト候補（<a href="ddd-review-report.html">#6</a>）</td></tr>
+    <tr><td>RQ-DM-008</td><td>盛り上がり区間モデル</td><td><span class="badge badge-supporting">Analytics</span> / <span class="badge badge-core">Viewing</span></td><td>Shared Kernel。Analyticsが生成、Viewingが消費</td></tr>
+    <tr><td>RQ-DM-009</td><td>ワードクラウド成果物モデル</td><td><span class="badge badge-supporting">Analytics</span> / <span class="badge badge-core">Viewing</span></td><td>Shared Kernel。Analyticsが生成、Viewingが消費</td></tr>
+  </tbody>
+</table>
+
+<h3>用語集（GL-001〜018）</h3>
+<table class="summary">
+  <thead><tr><th>ID</th><th>用語</th><th>BC割当</th></tr></thead>
+  <tbody>
+    <tr><td>RQ-GL-001</td><td>diopside</td><td><span class="badge badge-cat">横断</span>（プロジェクト名）</td></tr>
+    <tr><td>RQ-GL-002</td><td>収集ジョブ</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>RQ-GL-003</td><td>公式投稿動画</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>RQ-GL-004</td><td>出演動画</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>RQ-GL-005</td><td>タグ辞書</td><td><span class="badge badge-core">TagMgmt</span></td></tr>
+    <tr><td>RQ-GL-006</td><td>アーカイブ索引</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>RQ-GL-007</td><td>bootstrap</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>RQ-GL-008</td><td>tag_master</td><td><span class="badge badge-core">TagMgmt</span> / <span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>RQ-GL-009</td><td>archive_index</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>RQ-GL-010</td><td>段階ロード</td><td><span class="badge badge-core">Viewing</span></td></tr>
+    <tr><td>RQ-GL-011</td><td>再収集</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>RQ-GL-012</td><td>受入判定</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>RQ-GL-013</td><td>タグ種別</td><td><span class="badge badge-core">TagMgmt</span></td></tr>
+    <tr><td>RQ-GL-014</td><td>検索条件</td><td><span class="badge badge-core">Viewing</span></td></tr>
+    <tr><td>RQ-GL-015</td><td>盛り上がり区間</td><td><span class="badge badge-supporting">Analytics</span> / <span class="badge badge-core">Viewing</span></td></tr>
+    <tr><td>RQ-GL-016</td><td>コメント密度波形</td><td><span class="badge badge-supporting">Analytics</span> / <span class="badge badge-core">Viewing</span></td></tr>
+    <tr><td>RQ-GL-017</td><td>ワードクラウド</td><td><span class="badge badge-supporting">Analytics</span> / <span class="badge badge-core">Viewing</span></td></tr>
+    <tr><td>RQ-GL-018</td><td>配信反映実行</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="strategy">8. 推奨戦略（現実解 3フェーズ）</h2>
+<!-- ================================================================ -->
+
+<div class="callout">
+  <div class="callout-title">設計判断: メタデータ優先、ディレクトリ再構成しない</div>
+  <p>工程別管理（RQ/BD/DD/UT/IT/AT）は配信ライフサイクル追跡に有効であり、DDD軸はフロントマターメタデータで直交的に提供する。ディレクトリ構造の変更は371文書のリンク修正を伴い、リスクに見合わない。</p>
+</div>
+
+<div class="roadmap-phase">
+  <div class="phase-label phase-1">Phase 1 — 基盤整備（1〜2週間）</div>
+  <ol>
+    <li><strong><code>docs/0.ドメイン(DOM)/</code> ディレクトリ追加</strong>
+      <ul>
+        <li><code>DOM-CTX-001.md</code> — コンテキストマップ文書（本レポートのセクション5を正式文書化）</li>
+        <li><code>DOM-BC-001.md</code>〜<code>DOM-BC-006.md</code> — 各BCの定義文書（本レポートのセクション4を正式文書化）</li>
+        <li><code>DOM-SUB-001.md</code> — サブドメイン分類文書（本レポートのセクション3を正式文書化）</li>
+      </ul>
+    </li>
+    <li><strong>BD-SYS-ARCH-001 更新</strong> — コンテキストマップへの参照（<code>[[DOM-CTX-001]]</code>）を追加</li>
+    <li><strong>contracts/static-json/ を Published Language として公式化</strong> — README またはDOM文書で位置づけを明記</li>
+  </ol>
+</div>
+
+<div class="roadmap-phase">
+  <div class="phase-label phase-2">Phase 2 — メタデータ統合（2〜4週間）</div>
+  <ol>
+    <li><strong>フロントマター拡張</strong> — 全FR/DM/GL/UC文書に以下のキーを追加:
+      <pre><code>bounded_context: Ingestion    # BC1〜BC6
+subdomain: Core               # Core / Supporting / Generic</code></pre>
+    </li>
+    <li><strong>CI検証追加</strong> — <code>validate_vault.py</code> に以下のルールを追加:
+      <ul>
+        <li><code>bounded_context</code> が定義済みBC名のいずれかであること</li>
+        <li><code>subdomain</code> が Core / Supporting / Generic のいずれかであること</li>
+        <li>DM文書の <code>bounded_context</code> がDOM-BC-xxx 定義と整合すること</li>
+      </ul>
+    </li>
+    <li><strong>既存レビュー指摘対応</strong> — <a href="ddd-review-report.html">戦術レビュー</a> の Phase 1〜2 指摘（#1〜#9）をBC定義と整合させながら実施</li>
+  </ol>
+</div>
+
+<div class="roadmap-phase">
+  <div class="phase-label phase-3">Phase 3 — 成熟（1〜3ヶ月、任意）</div>
+  <ol>
+    <li><strong>ドメインイベントカタログ</strong> — BC間の非同期通信をドメインイベントとして体系化（BAT-006トリガーの正式化等）</li>
+    <li><strong>集約パターン適用</strong> — 戦術レビュー #4 の集約ルート定義をBC単位で実施</li>
+    <li><strong>Quartz ドメインビュー</strong> — DOM層文書からBC別のナビゲーションビューを自動生成</li>
+    <li><strong>チーム境界の検討</strong> — チーム成長時にBC境界をチーム境界と整合させる（Conway's Law対応）</li>
+  </ol>
+  <p style="margin-top:.5rem; font-size:.9rem; color:var(--c-muted);">※ ディレクトリ再構成は推奨しない。メタデータとDOM層による直交的なドメインビューで十分な効果が得られる。</p>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="actions">9. アクションアイテム</h2>
+<!-- ================================================================ -->
+
+<h3>既存レビュー指摘との統合</h3>
+<p><a href="ddd-review-report.html">戦術レビュー</a>の12件の指摘と本レポートの戦略的アクションを統合し、優先度マトリクスで整理する。</p>
+
+<table class="summary">
+  <thead><tr><th>#</th><th>アクション</th><th>種別</th><th>関連指摘</th><th>対応Phase</th><th>優先度</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>S1</td>
+      <td><code>0.ドメイン(DOM)/</code> ディレクトリ新規作成</td>
+      <td>戦略</td>
+      <td>戦術#5（BC未定義）</td>
+      <td>Phase 1</td>
+      <td><span class="badge badge-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>S2</td>
+      <td>コンテキストマップ文書（DOM-CTX-001）作成</td>
+      <td>戦略</td>
+      <td>戦術#5</td>
+      <td>Phase 1</td>
+      <td><span class="badge badge-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>S3</td>
+      <td>BC定義文書（DOM-BC-001〜006）作成</td>
+      <td>戦略</td>
+      <td>戦術#5</td>
+      <td>Phase 1</td>
+      <td><span class="badge badge-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>S4</td>
+      <td>サブドメイン分類文書（DOM-SUB-001）作成</td>
+      <td>戦略</td>
+      <td>—</td>
+      <td>Phase 1</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>S5</td>
+      <td>Published Language の公式化（contracts/static-json/）</td>
+      <td>戦略</td>
+      <td>戦術#5（契約位置づけ）</td>
+      <td>Phase 1</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T1</td>
+      <td>用語統一: 「収集ジョブ」→「収集実行」</td>
+      <td>戦術</td>
+      <td>戦術#1</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>T2</td>
+      <td>集約ルート定義</td>
+      <td>戦術</td>
+      <td>戦術#4</td>
+      <td>Phase 2〜3</td>
+      <td><span class="badge badge-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>S6</td>
+      <td>フロントマターに bounded_context / subdomain 追加</td>
+      <td>戦略</td>
+      <td>—</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>S7</td>
+      <td>CI検証にBC整合チェック追加</td>
+      <td>戦略</td>
+      <td>—</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T3</td>
+      <td>タグ辞書/タグマスタ関係明示</td>
+      <td>戦術</td>
+      <td>戦術#2</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T4</td>
+      <td>アーカイブ索引英名統一</td>
+      <td>戦術</td>
+      <td>戦術#3</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T5</td>
+      <td>VO/Entity分類</td>
+      <td>戦術</td>
+      <td>戦術#6</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T6</td>
+      <td>ドメインイベント設計</td>
+      <td>戦術</td>
+      <td>戦術#7</td>
+      <td>Phase 3</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T7</td>
+      <td>RQ-DM-010（配信反映実行）新規作成</td>
+      <td>戦術</td>
+      <td>戦術#8</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T8</td>
+      <td>RQ-GL-019（再確認/recheck）新規作成</td>
+      <td>戦術</td>
+      <td>戦術#9</td>
+      <td>Phase 2</td>
+      <td><span class="badge badge-major">Major</span></td>
+    </tr>
+    <tr>
+      <td>T9</td>
+      <td>channel_type値統一</td>
+      <td>戦術</td>
+      <td>戦術#10</td>
+      <td>Phase 3</td>
+      <td><span class="badge badge-minor">Minor</span></td>
+    </tr>
+    <tr>
+      <td>T10</td>
+      <td>コード内未定義概念の整理</td>
+      <td>戦術</td>
+      <td>戦術#11</td>
+      <td>Phase 3</td>
+      <td><span class="badge badge-minor">Minor</span></td>
+    </tr>
+    <tr>
+      <td>T11</td>
+      <td>DM命名統一</td>
+      <td>戦術</td>
+      <td>戦術#12</td>
+      <td>Phase 3</td>
+      <td><span class="badge badge-minor">Minor</span></td>
+    </tr>
+    <tr>
+      <td>S8</td>
+      <td>ドメインイベントカタログ作成</td>
+      <td>戦略</td>
+      <td>戦術#7</td>
+      <td>Phase 3</td>
+      <td><span class="badge badge-minor">Minor</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="appendix">10. 付録</h2>
+<!-- ================================================================ -->
+
+<h3>A. 提案フロントマタスキーマ</h3>
+
+<p>既存のフロントマター必須キー（<span class="file-ref">AGENTS.md</span> §1）に以下を追加する。</p>
+
+<pre><code>---
+# 既存キー（変更なし）
+id: RQ-FR-008
+title: キーワード検索できる
+doc_type: 機能要求
+phase: RQ
+version: 1.0.4
+status: 下書き
+owner: RQ-SH-001
+created: 2026-01-31
+updated: '2026-02-13'
+up: ['[[RQ-SC-001]]', '[[RQ-UC-003]]']
+related: ['[[RQ-RDR-004]]', '[[BD-APP-API-001]]']
+tags: [diopside, RQ, FR]
+
+# DDD戦略メタデータ（新規追加）
+bounded_context: Viewing       # Ingestion | TagManagement | Publishing | Viewing | Administration | Analytics
+subdomain: Core                # Core | Supporting | Generic
+---</code></pre>
+
+<h4>バリデーションルール</h4>
+<table class="summary">
+  <thead><tr><th>キー</th><th>必須</th><th>許容値</th><th>適用対象</th></tr></thead>
+  <tbody>
+    <tr><td><code>bounded_context</code></td><td>SHOULD</td><td>Ingestion, TagManagement, Publishing, Viewing, Administration, Analytics</td><td>FR, DM, GL, UC, BD, DD</td></tr>
+    <tr><td><code>subdomain</code></td><td>SHOULD</td><td>Core, Supporting, Generic</td><td>FR, DM, GL, UC, BD, DD</td></tr>
+  </tbody>
+</table>
+
+<h3>B. DOM層ディレクトリ案</h3>
+
+<pre><code>docs/
+  0.ドメイン(DOM)/
+    DOM-SUB-001.md          # サブドメイン分類
+    DOM-CTX-001.md          # コンテキストマップ
+    01.Ingestion(ING)/
+      DOM-BC-001.md         # BC定義: Ingestion
+    02.TagManagement(TAG)/
+      DOM-BC-002.md         # BC定義: TagManagement
+    03.Publishing(PUB)/
+      DOM-BC-003.md         # BC定義: Publishing
+    04.Viewing(VIEW)/
+      DOM-BC-004.md         # BC定義: Viewing
+    05.Administration(ADM)/
+      DOM-BC-005.md         # BC定義: Administration
+    06.Analytics(ANA)/
+      DOM-BC-006.md         # BC定義: Analytics</code></pre>
+
+<p>DOM層は既存の工程別管理（1.要求〜6.受入テスト）と直交する <strong>ドメイン軸のインデックス</strong> として機能する。各BC定義文書から該当するFR/DM/GL/BD/DD文書への <code>[[リンク]]</code> を張り、ドメイン視点でのナビゲーションを提供する。</p>
+
+<h3>C. BC別 バッチ処理割当</h3>
+<table class="summary">
+  <thead><tr><th>BAT ID</th><th>バッチ名</th><th>BC割当</th></tr></thead>
+  <tbody>
+    <tr><td>BAT-001</td><td>収集runバッチ</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>BAT-002</td><td>再収集runバッチ</td><td><span class="badge badge-core">Ingestion</span></td></tr>
+    <tr><td>BAT-003</td><td>配信前後再確認バッチ</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>BAT-004</td><td>配信反映バッチ</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>BAT-005</td><td>docs公開バッチ</td><td><span class="badge badge-supporting">Publishing</span></td></tr>
+    <tr><td>BAT-006</td><td>補助データ生成バッチ</td><td><span class="badge badge-supporting">Analytics</span></td></tr>
+    <tr><td>BAT-007</td><td>タグマスター即時更新バッチ</td><td><span class="badge badge-core">TagMgmt</span></td></tr>
+  </tbody>
+</table>
+
+<footer>
+  Generated by DDD Strategy Review — diopside-v3 — 2026-02-14<br>
+  補完対象: <a href="ddd-review-report.html">DDD用語・ドメインモデルレビュー（戦術レベル）</a>
+</footer>
+
+</div><!-- /.container -->
+</body>
+</html>

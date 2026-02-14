@@ -3,11 +3,11 @@ id: RQ-FR-009
 title: タグ条件で絞り込みできる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-004]]'
@@ -16,6 +16,8 @@ related:
 - '[[BD-APP-API-001]]'
 - '[[BD-APP-DATA-001]]'
 - '[[BD-APP-UI-001]]'
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ

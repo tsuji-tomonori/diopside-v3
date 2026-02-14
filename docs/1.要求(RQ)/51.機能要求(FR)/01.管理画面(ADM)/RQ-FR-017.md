@@ -3,11 +3,11 @@ id: RQ-FR-017
 title: 管理画面で収集実行結果を確認できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-007]]'
@@ -21,6 +21,8 @@ related:
 - '[[AT-SCN-005]]'
 - '[[AT-SCN-007]]'
 - '[[AT-SCN-008]]'
+bounded_context: Administration
+subdomain: Supporting
 tags:
 - diopside
 - RQ
@@ -32,7 +34,7 @@ tags:
 - 要求ID: RQ-FR-017
 - 種別: 機能要求
 - 優先度: MUST
-- 要求: 本システムは、[[RQ-SH-001|管理者]]が管理画面で収集実行結果（成功/失敗/未処理）を確認できることを提供する。
+- 要求: 本システムは、[[RQ-SH-001|管理者]]が管理画面で[[RQ-GL-002|収集実行]]結果（成功/失敗/未処理）を確認できることを提供する。
 - 根拠: 運用継続のためには、実行成否だけでなく失敗内訳の把握が必要であるため。
 - 受入基準:
   - run単位で対象件数・成功件数・失敗件数・未処理件数を確認できる。

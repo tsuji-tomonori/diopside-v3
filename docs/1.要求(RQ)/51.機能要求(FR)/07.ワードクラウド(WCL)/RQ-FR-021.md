@@ -3,11 +3,11 @@ id: RQ-FR-021
 title: 動画詳細でワードクラウドを表示できる
 doc_type: 機能要求
 phase: RQ
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-14'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-UC-006]]'
@@ -22,6 +22,8 @@ related:
 - '[[BD-APP-UI-002]]'
 - '[[BD-APP-UI-004]]'
 - '[[RQ-RDR-022]]'
+bounded_context: Viewing
+subdomain: Core
 tags:
 - diopside
 - RQ
