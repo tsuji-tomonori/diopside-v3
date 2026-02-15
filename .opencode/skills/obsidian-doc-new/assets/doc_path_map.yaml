@@ -48,12 +48,12 @@ BD-APP-UI: docs/2.基本設計(BD)/02.アプリ(APP)/41.UI(UI)
 BD-DEV-ENV: docs/2.基本設計(BD)/04.開発(DEV)/11.開発環境(ENV)
 BD-DEV-PIPE: docs/2.基本設計(BD)/04.開発(DEV)/21.CI_CD(PIPE)
 BD-DEV-TEST: docs/2.基本設計(BD)/04.開発(DEV)/31.テスト戦略(TEST)
-BD-INF-CM: docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC/構成管理(IAC_CM)
+BD-INF-CM: docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC
 BD-INF-DEP: docs/2.基本設計(BD)/03.インフラ(INF)/31.デプロイ(DEP)
-BD-INF-ENV: docs/2.基本設計(BD)/03.インフラ(INF)/11.環境/アカウント/ネットワーク(ENV_NET)
-BD-INF-IAC: docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC/構成管理(IAC_CM)
+BD-INF-ENV: docs/2.基本設計(BD)/03.インフラ(INF)/11.環境
+BD-INF-IAC: docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC
 BD-INF-MON: docs/2.基本設計(BD)/03.インフラ(INF)/41.監視(MON)
-BD-INF-NET: docs/2.基本設計(BD)/03.インフラ(INF)/11.環境/アカウント/ネットワーク(ENV_NET)
+BD-INF-NET: docs/2.基本設計(BD)/03.インフラ(INF)/11.環境
 BD-INF-PLAT: docs/2.基本設計(BD)/03.インフラ(INF)/21.基盤サービス(PLAT)
 BD-INF-SEC: docs/2.基本設計(BD)/03.インフラ(INF)/51.セキュリティ(SEC)
 BD-SYS-ADR: docs/2.基本設計(BD)/01.全体構成(SYS)/12.設計判断(ADR)
@@ -63,8 +63,8 @@ BD-SYS-SEC: docs/2.基本設計(BD)/01.全体構成(SYS)/22.セキュリティ(S
 DD-APP-ALG: docs/3.詳細設計(DD)/02.アプリ(APP)/51.アルゴリズム(ALG)
 DD-APP-API: docs/3.詳細設計(DD)/02.アプリ(APP)/21.API詳細(API)
 DD-APP-DB: docs/3.詳細設計(DD)/02.アプリ(APP)/22.DB物理設計(DB)
-DD-APP-ERR: docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ/エラー(LOG_ERR)
-DD-APP-LOG: docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ/エラー(LOG_ERR)
+DD-APP-ERR: docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ
+DD-APP-LOG: docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ
 DD-APP-MOD: docs/3.詳細設計(DD)/02.アプリ(APP)/11.モジュール仕様(MOD)
 DD-APP-UI: docs/3.詳細設計(DD)/02.アプリ(APP)/31.UI詳細(UI)
 DD-DEV-CODE: docs/3.詳細設計(DD)/04.開発(DEV)/51.実装規約(CODE)

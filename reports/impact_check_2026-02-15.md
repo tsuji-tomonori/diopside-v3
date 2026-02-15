@@ -17,3 +17,22 @@
 ## 検証（追加1）
 - `task docs:guard` を実行し、リンク・frontmatter・相互参照整合を確認する。
 - 必要に応じて `task docs:check` を実行し、全体整合（`issues`, `broken_links`, `nonlinked_doc_ids`）を確認する。
+
+## 実施内容（追加2）
+- 対象: 非番号の中間ディレクトリによる過剰階層を解消。
+- パス修正:
+  - `docs/2.基本設計(BD)/03.インフラ(INF)/11.環境/アカウント/ネットワーク(ENV_NET)/BD-INF-ENV-001.md` -> `docs/2.基本設計(BD)/03.インフラ(INF)/11.環境/BD-INF-ENV-001.md`
+  - `docs/2.基本設計(BD)/03.インフラ(INF)/11.環境/アカウント/ネットワーク(ENV_NET)/BD-INF-NET-001.md` -> `docs/2.基本設計(BD)/03.インフラ(INF)/11.環境/BD-INF-NET-001.md`
+  - `docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC/構成管理(IAC_CM)/BD-INF-CM-001.md` -> `docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC/BD-INF-CM-001.md`
+  - `docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC/構成管理(IAC_CM)/BD-INF-IAC-001.md` -> `docs/2.基本設計(BD)/03.インフラ(INF)/22.IaC/BD-INF-IAC-001.md`
+  - `docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ/エラー(LOG_ERR)/DD-APP-ERR-001.md` -> `docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ/DD-APP-ERR-001.md`
+  - `docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ/エラー(LOG_ERR)/DD-APP-LOG-001.md` -> `docs/3.詳細設計(DD)/02.アプリ(APP)/41.ログ/DD-APP-LOG-001.md`
+- 連携更新:
+  - `.opencode/skills/obsidian-doc-new/assets/doc_path_map.yaml` の `BD-INF-CM` / `BD-INF-ENV` / `BD-INF-IAC` / `BD-INF-NET` / `DD-APP-ERR` / `DD-APP-LOG` を新パスへ更新。
+
+## 影響確認（追加2）
+- 既存文書の `[[ID]]` 参照はID解決のため本文更新は不要。
+- 文書生成・配置ルールは `doc_path_map.yaml` を新ディレクトリ構造へ同期済み。
+
+## 検証（追加2）
+- `task docs:guard` を実行し、過剰階層解消後のリンク・frontmatter整合を確認する。
