@@ -100,7 +100,7 @@ tags:
 - 手順5: `200` と `rejectedCount > 0`, `errors[]` に `UNKNOWN_TAG_ID` を含む。
 - 手順6: `200` と `rejectedCount > 0`, `errors[]` に `INACTIVE_TAG_ID` を含む。
 
-## [[RQ-GL-012|受入判定]]との対応
+## [[AT-GO-001|リリース判定]]との対応
 - [[RQ-FR-005]] タグ管理機能を検証する。
 - [[RQ-FR-019]] LLM支援タグ運用を検証する。
 

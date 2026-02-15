@@ -69,7 +69,7 @@ tags:
 | BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-APP-API-015]], [[DD-APP-DB-015]] |
 | BAT-005 | docs公開バッチ | `POST /api/v1/admin/docs/publish` | docsビルド、配信反映、無効化処理 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-014]], [[DD-APP-DB-015]] |
 | BAT-006 | 補助データ生成バッチ | 収集run完了トリガ（内部） | [[RQ-GL-016|コメント密度波形]]・[[RQ-GL-017|ワードクラウド]]生成 | `queued -> running -> succeeded\|failed\|partial` | [[DD-APP-API-004]], [[RQ-FR-022]], [[RQ-FR-023]] |
-| BAT-007 | タグマネージャー即時更新バッチ | `POST /api/v1/admin/publish/tag-master`（publishScope=[[RQ-GL-008|tag_master]]） | [[RQ-GL-005|タグ辞書]]変更後の即時公開反映 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-013]], [[DD-APP-API-015]] |
+| BAT-007 | [[RQ-GL-008|タグマスター]]即時更新バッチ | `POST /api/v1/admin/publish/tag-master`（publishScope=[[RQ-GL-008|タグマスター]]） | [[RQ-GL-005|タグ辞書]]変更後の即時公開反映 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-013]], [[DD-APP-API-015]] |
 
 ## バッチイベント一覧
 | イベントID | イベント名 | 発火条件 | 対象バッチ | 記録先 | 詳細設計 |
@@ -191,7 +191,7 @@ tags:
 
 ## 変更履歴
 - 2026-02-14: バッチ一覧/イベント/実行制約およびBAT-006入出力契約・同時実行制御の正本を本書へ移管 [[BD-SYS-ADR-027]]
-- 2026-02-14: BAT-007名称を `[[RQ-GL-008|tag_master]]（タグマネージャー）` 表記へ統一 [[BD-SYS-ADR-031]]
+- 2026-02-14: BAT-007名称を `[[RQ-GL-008|タグマスター]]（タグマスター）` 表記へ統一 [[BD-SYS-ADR-031]]
 - 2026-02-13: 実行起動文脈（`trigger_mode`）と収集種別（`run_kind`）を分離し、run状態語彙へ `cancelled` を追加 [[BD-SYS-ADR-027]]
 - 2026-02-13: LLM提案取込の手動フォールバックと上流APIクォータ制御ルールを追加 [[BD-SYS-ADR-027]]
 - 2026-02-11: 単一Backend API（Hono）モノリス前提（手動/定期とも同一API起動）を明記 [[BD-SYS-ADR-021]]

@@ -37,8 +37,8 @@ tags:
 | 対象 | パス | バックアップ方式 | 保持期間 |
 |------|------|-----------------|---------|
 | [[RQ-GL-007|bootstrap]].json | `/web/bootstrap.json` | S3バージョニング | 30日 |
-| [[RQ-GL-008|tag_master]].json | `/web/tag_master.json` | S3バージョニング | 30日 |
-| [[RQ-GL-009|archive_index]].pN.json | `/web/archive_index.p*.json` | S3バージョニング | 30日 |
+| [[RQ-GL-008|タグマスター]].json | `/web/tag_master.json` | S3バージョニング | 30日 |
+| [[RQ-GL-009|アーカイブ索引]].pN.json | `/web/archive_index.p*.json` | S3バージョニング | 30日 |
 | highlights/*.json | `/web/highlights/*.json` | S3バージョニング | 30日 |
 | wordcloud/*.png | `/web/wordcloud/*.png` | S3バージョニング | 30日 |
 

@@ -231,8 +231,8 @@ const HighlightWavePanel = dynamic(
 | リソース | キャッシュ設定 | 理由 |
 |---------|--------------|------|
 | [[RQ-GL-007|bootstrap]].json | revalidate: 60 | 頻繁に変更されない |
-| [[RQ-GL-008|tag_master]].json | revalidate: 300 | タグ更新は低頻度 |
-| [[RQ-GL-009|archive_index]].pN.json | revalidate: 60 | 収集後に更新 |
+| [[RQ-GL-008|タグマスター]].json | revalidate: 300 | タグ更新は低頻度 |
+| [[RQ-GL-009|アーカイブ索引]].pN.json | revalidate: 60 | 収集後に更新 |
 | highlights/*.json | revalidate: 3600 | 生成後は不変 |
 
 ## 禁止事項

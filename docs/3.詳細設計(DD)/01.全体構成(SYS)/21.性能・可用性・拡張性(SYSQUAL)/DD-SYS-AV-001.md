@@ -49,7 +49,7 @@ tags:
 | 合格基準 | 運用時間帯内（平日09:00-21:00 JST）は30分以内 |
 
 ### MTTR判定の補足
-- 基準SLIは `/web`経路（[[RQ-GL-007|bootstrap]].json, [[RQ-GL-008|tag_master]].json, [[RQ-GL-009|archive_index]].pN.json）の成功率を単一指標とする。
+- 基準SLIは `/web`経路（[[RQ-GL-007|bootstrap]].json, [[RQ-GL-008|タグマスター]].json, [[RQ-GL-009|アーカイブ索引]].pN.json）の成功率を単一指標とする。
 - 他の経路（`/docs`, `/api/v1`）は参考値として記録するが、MTTR算出には用いない。
 - 3分連続判定は単発の一時的エラー（ネットワークジッタ等）を除外するための閾値である。
 

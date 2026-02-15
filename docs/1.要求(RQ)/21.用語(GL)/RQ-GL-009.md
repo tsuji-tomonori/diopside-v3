@@ -1,14 +1,14 @@
 ---
 id: RQ-GL-009
-title: archive_index
+title: アーカイブ索引
 term_en: archive_index_pages
 doc_type: 用語
 phase: RQ
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-15'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -24,16 +24,18 @@ tags:
 | 項目 | 内容 |
 |---|---|
 | 用語ID | `RQ-GL-009` |
-| 用語名 | [[RQ-GL-009|archive_index]] |
-| 別名 | ページング済み索引 |
+| 用語名 | [[RQ-GL-009|アーカイブ索引]] |
+| 別名 | `archive_index` / ページング済み索引 |
 | 英名 | `archive_index_pages` |
 | 定義 | 全件閲覧・絞り込みに利用するページ分割済み索引データ群。 |
 | 判定条件/適用範囲 | `page/pageSize/total/items` を持つページ索引契約として、一覧表示と[[RQ-GL-014|検索条件]]反映に適用する。 |
 
 ## 利用ルール
 - 文書・実装・テストで同じ意味で使用する。
+- 表記は `[[RQ-GL-009|アーカイブ索引]]（archive_index）` を正本とする。
 
 ## 変更履歴
+- 2026-02-15: 正式名称を「[[RQ-GL-009|アーカイブ索引]]」に統一し、別名を `archive_index` へ整理 [[RQ-RDR-044]]
 - 2026-02-14: 定義から具体ファイル名を除外し、要求レベルの概念記述へ統一 [[RQ-RDR-042]]
 - 2026-02-11: 別名「ページング済み索引」を追加し、[[RQ-FR-006]] との関連を明記
 - 2026-02-10: 定義を表形式（標準）へ統一

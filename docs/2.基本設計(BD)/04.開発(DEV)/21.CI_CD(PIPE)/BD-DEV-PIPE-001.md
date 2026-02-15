@@ -72,7 +72,7 @@ tags:
 - Construct/Stack内部で `process.env` を直接参照せず、設定は型付きpropsで注入する。
 
 ### Next.js本番品質ゲート
-- App Router構成では `next build` 成功後に `next start` で本番相当起動を確認し、開発時挙動との差分を[[RQ-GL-012|受入判定]]に含める。
+- App Router構成では `next build` 成功後に `next start` で本番相当起動を確認し、開発時挙動との差分を[[AT-GO-001|リリース判定]]に含める。
 - ウォーターフォール検知のため、Server Components の逐次 await をレビュー対象にし、並列取得/preload/Suspense適用有無を確認する。
 - Dynamic API（`cookies()` / `headers()` / `searchParams`）利用箇所を記録し、Root Layout で全体動的化を起こしていないことを検証する。
 - `fetch` は `cache` / `next.revalidate` / `next.tags` を意図的に指定し、再検証は `revalidatePath` / `revalidateTag` のどちらを使うかを設計に明示する。
