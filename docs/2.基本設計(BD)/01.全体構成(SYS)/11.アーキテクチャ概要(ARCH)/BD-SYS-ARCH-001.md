@@ -3,7 +3,7 @@ id: BD-SYS-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.15
+version: 1.0.16
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -24,6 +24,7 @@ related:
 - '[[BD-SYS-ARCH-002]]'
 - '[[BD-SYS-ARCH-003]]'
 - '[[BD-SYS-ARCH-004]]'
+- '[[BD-SYS-ADR-033]]'
 - '[[BD-APP-DATA-002]]'
 - '[[BD-APP-API-002]]'
 - '[[BD-APP-API-003]]'
@@ -73,6 +74,10 @@ tags:
 - アプリケーション層: `Backend API` が更新系処理と配信生成トリガを担う。
 - データ層: `DB` を正本とし、`S3配信用JSON` と `docs/テスト結果` を公開成果物として保持する。
 - 将来の高度検索はアプリケーション層へ `検索API` を追加して段階導入する（現行MVPは静的JSON参照を継続）。
+
+## 論理構成参照
+- 論理構成の正本は [[BD-SYS-ARCH-002]] とし、構成要素を `フロントエンド` `バックエンド` `インフラ` `データベース` の4区分で扱う。
+- バックエンド内部は `リアルタイムAPI` と `バッチ処理` の2処理形態に分離し、起動契約と実行責務を区別する。
 
 ## Web実行境界（Next.js App Router）
 - Server Components を標準とし、状態保持・イベント処理・ブラウザAPI依存の部分だけを Client Components に切り出す。
@@ -153,6 +158,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-15: 論理構成正本（[[BD-SYS-ARCH-002]]）への参照を追加し、4区分とバックエンド内処理形態分離を明確化 [[BD-SYS-ADR-033]]
 - 2026-02-15: ドメイン境界正本参照を [[BD-SYS-DOM-001]] へ移管し、旧DOM参照を廃止 [[BD-SYS-ADR-029]]
 - 2026-02-14: バッチ仕様正本（一覧/イベント/実行制約/BAT-006入出力/同時実行制御）を [[BD-APP-API-002]] へ移管し、本書は境界方針の記述へ整理 [[BD-SYS-ADR-027]]
 - 2026-02-14: DOM軸接続（現: [[BD-SYS-DOM-001]]）と Published Language（`contracts/static-json/*.schema.json`）の公式化を追加 [[BD-SYS-ADR-029]]
