@@ -11,6 +11,10 @@ vars:
   CDK_ARGS: ''
   DOCS_SITE_URL: ''
 
+  # Single-PDF build output (Pandoc + XeLaTeX + Mermaid)
+  DOCS_PDF_OUT: '{{.ROOT_DIR}}/reports/diopside-docs.pdf'
+  DOCS_PDF_BUILD_DIR: '{{.ROOT_DIR}}/.build/docs-pdf'
+
 tasks:
   precommit:
     desc: Install pre-commit hook
@@ -181,6 +185,23 @@ tasks:
       - task docs:mermaid:fix:changed
       - task docs:autolink:changed
       - task docs:check:changed
+
+  docs:pdf:
+    desc: Build a single PDF from docs (Mermaid rendered, links preserved)
+    cmds:
+      - |
+        bash -lc 'set -e
+        command -v pandoc >/dev/null || { echo "pandoc not found"; exit 1; }
+        command -v xelatex >/dev/null || { echo "xelatex not found (install TeX Live xetex)"; exit 1; }
+        command -v node >/dev/null || { echo "node not found (needed for Mermaid rendering)"; exit 1; }
+        python3 -c "import yaml" >/dev/null 2>&1 || { echo "PyYAML not found (pip install PyYAML)"; exit 1; }'
+      - python3 scripts/docs_pdf/build_docs_pdf.py --out "{{.DOCS_PDF_OUT}}" --build-dir "{{.DOCS_PDF_BUILD_DIR}}"
+
+  docs:pdf:clean:
+    desc: Clean docs PDF build artifacts
+    cmds:
+      - rm -rf "{{.DOCS_PDF_BUILD_DIR}}"
+      - rm -f "{{.DOCS_PDF_OUT}}"
 
   quartz:prepare:
     desc: Clone Quartz if missing (not tracked)
