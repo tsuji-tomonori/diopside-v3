@@ -3,11 +3,11 @@ id: DD-APP-DB-004
 title: 一意制約・チェック制約
 doc_type: DB制約
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-19'
 up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-DATA-001]]'
@@ -51,7 +51,7 @@ tags:
 | `ingestion_items.source_type` | 取得元区分 | `official/appearance/supplement/incremental` |
 | `video_tags.applied_by` | 付与主体 | `system` または `operator` |
 | `video_tags.confidence` | 信頼度 | `0 <= confidence <= 1` |
-| `ingestion_runs.run_kind` | run種別 | `official_ingestion/appearance_supplement/incremental_update/retry/recheck` |
+| `ingestion_runs.run_kind` | run種別 | `official_ingestion/appearance_supplement/incremental_update` |
 | `ingestion_runs.status` | run状態 | `queued/running/succeeded/failed/partial/cancelled` |
 | `ingestion_events.event_status` | イベント状態 | `success/warn/failure` |
 | `recheck_runs.mode` | 再確認モード | `before_delivery/after_delivery` |
@@ -72,6 +72,7 @@ tags:
 - 出力: 一意制約/チェック制約セット、例外時の是正手順。
 
 ## 変更履歴
+- 2026-02-19: `ingestion_runs.run_kind` の値域を収集runの3値へ統一 [[BD-SYS-ADR-034]]
 - 2026-02-11: 再確認/公開反映の一意制約とチェック制約、run状態語彙統一を追加
 - 2026-02-11: 一意制約、チェック制約、段階有効化ルールを追加
 - 2026-02-10: 新規作成

@@ -3,11 +3,11 @@ id: BD-SYS-ARCH-001
 title: システムコンテキスト
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.17
+version: 1.0.18
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-15'
+updated: '2026-02-19'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -25,6 +25,7 @@ related:
 - '[[BD-SYS-ARCH-003]]'
 - '[[BD-SYS-ARCH-004]]'
 - '[[BD-SYS-ADR-033]]'
+- '[[BD-SYS-ADR-034]]'
 - '[[BD-APP-DATA-002]]'
 - '[[BD-APP-API-002]]'
 - '[[BD-APP-API-003]]'
@@ -87,6 +88,13 @@ tags:
 | バックエンド（バッチ処理） | Batch Runner, Source Resolver, Collector, Incremental Updater, Normalizer, Tag Resolver, Index Builder, Static Distributor, Publish Orchestrator | 収集/整形/生成/公開切替の非同期実行責務を担う。 |
 | インフラ | （本書では詳細を扱わず、配置・経路の正本を [[BD-SYS-ARCH-003]] 参照） | 配信経路と運用経路の分離、実行基盤提供を担う。 |
 | データベース | （本書では `DB` を正本として参照し、データ構造正本を [[BD-APP-DATA-001]] 参照） | 原本データとrun状態の正本を担う。 |
+
+## 読解導線（上から読む前提）
+- 全体像把握: 本書（`システムコンテキスト`）
+- 論理設計: [[BD-SYS-ARCH-002]]
+- 物理配置設計: [[BD-SYS-ARCH-003]]
+- データフロー設計: [[BD-SYS-ARCH-004]]
+- API契約境界: [[BD-APP-API-001]] / [[BD-APP-API-002]]
 
 ## Web実行境界（Next.js App Router）
 - Server Components を標準とし、状態保持・イベント処理・ブラウザAPI依存の部分だけを Client Components に切り出す。
@@ -167,6 +175,7 @@ flowchart TD
 - 拡張性: [[RQ-GL-013|タグ種別]]と索引ページングを分離し、新しい分類軸追加時の影響を局所化する。
 
 ## 変更履歴
+- 2026-02-19: 上から読む前提の読解導線を追加し、論理設計/物理配置設計の参照順を明示 [[BD-SYS-ADR-034]]
 - 2026-02-15: 論理コンポーネントを表形式へ再編し、[[BD-SYS-ARCH-002]] への論理構成マッピングを追加 [[BD-SYS-ADR-033]]
 - 2026-02-15: 論理構成正本（[[BD-SYS-ARCH-002]]）への参照を追加し、4区分とバックエンド内処理形態分離を明確化 [[BD-SYS-ADR-033]]
 - 2026-02-15: ドメイン境界正本参照を [[BD-SYS-DOM-001]] へ移管し、旧DOM参照を廃止 [[BD-SYS-ADR-029]]

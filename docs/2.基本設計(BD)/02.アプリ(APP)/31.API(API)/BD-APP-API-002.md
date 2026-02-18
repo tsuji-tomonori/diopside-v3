@@ -3,11 +3,11 @@ id: BD-APP-API-002
 title: 収集API設計
 doc_type: API設計
 phase: BD
-version: 1.1.8
+version: 1.1.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-19'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -27,6 +27,7 @@ related:
 - '[[DD-APP-API-001]]'
 - '[[RQ-RDR-038]]'
 - '[[BD-SYS-ADR-027]]'
+- '[[BD-SYS-ADR-034]]'
 tags:
 - diopside
 - BD
@@ -107,7 +108,7 @@ tags:
 - 同時実行判定は run作成時にロックを取得し、失敗時は `409 RUN_ALREADY_ACTIVE` を返す。
 
 ## 実行受付契約
-- **必須入力**: `trigger_mode`, `run_kind`, `target_scope`。
+- **必須入力**: `trigger_mode`, `run_kind`, `target_types`。
 - **trigger_mode定義**:
   - `manual`: 管理画面からの手動起動。
   - `scheduled`: 外部スケジューラからの定期起動。
@@ -119,6 +120,10 @@ tags:
   - `candidate_source_ref`: 出演補完入力の参照ID（モードが `appearance_supplement` のときのみ必須）。
   - `time_window`: 差分更新の対象期間（モードが `incremental_update` のとき任意）。
 - **受付応答**: `run_id`, `accepted_at`, `trigger_mode`, `run_kind`, `requested_by` を返す。
+
+## 契約キー命名ルール
+- 運用APIの外部入出力キーは `snake_case` を正本とする。
+- 内部実装（変数/関数名）の命名規約はDD実装規約（`camelCase`）に従うが、外部契約へ透過しない。
 
 ## 実行状態契約
 - **状態遷移**: `queued -> running -> succeeded|failed|partial|cancelled`。
@@ -190,6 +195,7 @@ tags:
 - 将来追加する高度検索APIの検索アルゴリズムとランキング詳細。
 
 ## 変更履歴
+- 2026-02-19: 実行受付契約の必須入力を `target_types` へ統一し、外部契約キーの `snake_case` 正本を追記 [[BD-SYS-ADR-034]]
 - 2026-02-14: バッチ一覧/イベント/実行制約およびBAT-006入出力契約・同時実行制御の正本を本書へ移管 [[BD-SYS-ADR-027]]
 - 2026-02-14: BAT-007名称を `[[RQ-GL-008|タグマスター]]（タグマスター）` 表記へ統一 [[BD-SYS-ADR-031]]
 - 2026-02-13: 実行起動文脈（`trigger_mode`）と収集種別（`run_kind`）を分離し、run状態語彙へ `cancelled` を追加 [[BD-SYS-ADR-027]]

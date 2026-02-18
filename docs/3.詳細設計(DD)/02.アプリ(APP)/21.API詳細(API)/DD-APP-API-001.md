@@ -3,11 +3,11 @@ id: DD-APP-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.10
+version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-19'
 up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-API-001]]'
@@ -20,6 +20,7 @@ related:
 - '[[BD-SYS-ADR-031]]'
 - '[[BD-APP-API-003]]'
 - '[[BD-APP-API-005]]'
+- '[[BD-SYS-ADR-034]]'
 - '[[DD-APP-ERR-001]]'
 - '[[UT-PLAN-001]]'
 tags:
@@ -84,16 +85,20 @@ tags:
 ## Ops Control Contract 詳細
 - `POST /api/v1/ops/ingestion/runs`
   - 用途: [[RQ-GL-002|収集実行]]開始。
-  - 応答: `runId`, `acceptedAt`, `triggerMode`（manual/scheduled）, `runKind`（official_ingestion/appearance_supplement/incremental_update）。
-- `GET /api/v1/ops/ingestion/runs/{runId}`
+  - 応答: `run_id`, `accepted_at`, `trigger_mode`（manual/scheduled）, `run_kind`（official_ingestion/appearance_supplement/incremental_update）。
+- `GET /api/v1/ops/ingestion/runs/{run_id}`
   - 用途: 実行状態確認。
-  - 応答: `status`（queued/running/succeeded/failed/partial/cancelled）, `processedCount`, `errorSummary`。
-- `POST /api/v1/ops/ingestion/runs/{runId}/retry`
+  - 応答: `status`（queued/running/succeeded/failed/partial/cancelled）, `processed_count`, `error_summary`。
+- `POST /api/v1/ops/ingestion/runs/{run_id}/retry`
   - 用途: 失敗ジョブの再実行。
-  - 応答: 新しい`runId`と関連元`runId`。
+  - 応答: 新しい`run_id`と関連元`run_id`。
 - `GET /api/v1/ops/ingestion/latest`
   - 用途: 最新収集結果の確認。
-  - 応答: `lastSuccessAt`, `targetCounts`, `warnings`。
+  - 応答: `last_success_at`, `target_counts`, `warnings`。
+
+## 契約表記ルール
+- 運用APIの外部入出力キーは `snake_case` を正本とする。
+- 実装言語側のローカル変数で `camelCase` を使う場合でも、外部契約へは変換して公開する。
 
 ## 処理ロジック共通規約
 - 認証: `/api/v1/*` はJWT必須。未認証は401で即時終了し、副作用を発生させない。
@@ -150,6 +155,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-19: Ops契約の外部入出力キーを `snake_case` へ統一し、契約表記ルールを追加 [[BD-SYS-ADR-034]]
 - 2026-02-14: DDエラー契約正本を本書へ統合し、`[[DD-APP-ERR-001]]` を参照互換文書へ変更 [[BD-SYS-ADR-031]]
 - 2026-02-13: 収集起動応答を `triggerMode/runKind` へ更新し、run状態語彙へ `partial/cancelled` を明記 [[BD-SYS-ADR-027]]
 - 2026-02-11: 配信契約の JSON Schema 正本（Draft 2020-12）参照と必須項目の実データ整合を追加 [[BD-SYS-ADR-021]]

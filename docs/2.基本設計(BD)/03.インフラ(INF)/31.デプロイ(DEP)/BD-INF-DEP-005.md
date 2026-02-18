@@ -3,11 +3,11 @@ id: BD-INF-DEP-005
 title: インフラデプロイ設計（配信境界）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-14'
+updated: '2026-02-19'
 up:
   - '[[RQ-FR-025]]'
   - '[[RQ-DEV-001]]'
@@ -48,7 +48,7 @@ tags:
 ## 配備モード境界
 | モード | 適用条件 | 許可配備単位 | 不許可操作 | 最低確認 |
 |---|---|---|---|---|
-| 通常配備 | 定常の差分反映 | 差分のある単位のみ | 全経路invalidation（`/*`） | `/web/`, `/docs/`, `/openapi/`, `/api/v1/health` |
+| 通常配備 | 定常の差分反映 | 差分のある単位のみ | 全経路invalidation（`/*`） | `/web/`, `/docs/`, `/openapi/`, `/api/v1/ops/diagnostics/health` |
 | 初回配備 | 新規環境立上げ、全面初期化 | 6単位すべて | 省略配備 | 監視/認証/配信経路の全件疎通 |
 | 緊急配備 | 重大障害復旧、回避策即時反映 | 影響単位 + 必要最小限Infra | 非関連単位の同時変更 | 障害導線の復旧確認 + 監査記録 |
 
@@ -83,9 +83,10 @@ tags:
 ## 品質ゲート
 - 配備前に `docs:guard` を通過し、リンク・参照不整合を解消する。
 - infra配備は `lint` / `test` / `cdk synth` / `cdk diff` / `cdk-nag` を通過条件とする。
-- 配備後は `/docs/` `/web/` `/openapi/` `/api/v1/health` の到達を確認する。
+- 配備後は `/docs/` `/web/` `/openapi/` `/api/v1/ops/diagnostics/health` の到達を確認する。
 
 ## 変更履歴
+- 2026-02-19: ヘルスチェック確認経路を `/api/v1/ops/diagnostics/health` へ統一 [[BD-SYS-ADR-034]]
 - 2026-02-14: 配備モード（通常/初回/緊急）を定義し、配備責務を6分類（BE/FE/Infra/DB/Doc/TestAsset）へ拡張 [[BD-SYS-ADR-031]]
 - 2026-02-13: CDK反映順序（`cdk diff` 先行、`cdk deploy` 後続）と品質ゲートを追加 [[BD-SYS-ADR-028]]
 - 2026-02-13: 管理対象AWSサービス基準（サービス単位の個数/構築理由/導入段階/除外ルール）へ表記を統一 [[BD-SYS-ADR-028]]

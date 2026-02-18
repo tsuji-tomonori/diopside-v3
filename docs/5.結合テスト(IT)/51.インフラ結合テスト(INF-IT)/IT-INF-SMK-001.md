@@ -3,11 +3,11 @@ id: IT-INF-SMK-001
 title: インフラスモークテスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-19'
 up:
 - '[[IT-PLAN-001]]'
 - '[[DD-INF-IAC-001]]'
@@ -23,7 +23,7 @@ tags:
 - `cdk deploy` 後の到達性、DNS、TLS、ヘルスチェックが成立することを確認する。
 
 ## 手順
-1. `/docs/`, `/web/`, `/openapi/`, `/api/v1/health` へ順次アクセスする。
+1. `/docs/`, `/web/`, `/openapi/`, `/api/v1/ops/diagnostics/health` へ順次アクセスする。
 2. DNS解決先と証明書CN/SANを確認する。
 3. TLSバージョン/暗号スイートが方針値を満たすことを確認する。
 4. 失敗経路がある場合は経路単位で再配備し、再確認する。
@@ -41,6 +41,7 @@ tags:
 - 必須エンドポイントが全て期待応答を返す。
 
 ## 変更履歴
+- 2026-02-19: スモークテストのヘルスチェック経路を `/api/v1/ops/diagnostics/health` へ統一
 - 2026-02-13: 目的記述をCDK標準語彙（deploy後検証）へ更新
 - 2026-02-13: 手順、証跡項目、失敗時判定を追加
 - 2026-02-13: 新規作成
