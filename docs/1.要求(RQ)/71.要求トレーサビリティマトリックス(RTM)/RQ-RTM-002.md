@@ -67,7 +67,7 @@ tags:
 | [[BD-APP-DATA-001]] | データアーキテクチャ | [[RQ-DATA-001]], [[RQ-FR-001]], [[RQ-FR-004]], [[RQ-FR-009]], [[RQ-PRC-001]] | [[RQ-RDR-014]], [[RQ-RDR-017]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-038]] | - | - |
 | [[BD-APP-DATA-002]] | ER図（概要） | [[RQ-DATA-001]], [[RQ-FR-001]] | [[RQ-RDR-014]] | - | - |
 | [[BD-APP-DATA-003]] | データ保持・削除方針 | [[RQ-DATA-001]], [[RQ-PRC-001]] | [[RQ-RDR-034]], [[RQ-RDR-035]] | - | - |
-| [[BD-APP-UI-001]] | 画面一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-036]] | - | - |
+| [[BD-APP-UI-001]] | 画面一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-036]], [[RQ-RDR-047]] | - | - |
 | [[BD-APP-UI-002]] | 検索画面情報設計 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-UX-001]], [[RQ-UX-002]], [[RQ-UX-003]], [[RQ-UX-004]], [[RQ-UX-005]], [[RQ-UX-006]], [[RQ-UX-007]], [[RQ-UX-008]], [[RQ-UX-009]], [[RQ-UX-010]], [[RQ-UX-011]], [[RQ-UX-012]], [[RQ-UX-013]], [[RQ-UX-015]], [[RQ-UX-018]], [[RQ-UX-020]], [[RQ-UX-024]] | [[RQ-RDR-015]], [[RQ-RDR-018]], [[RQ-RDR-021]], [[RQ-RDR-032]] | - | [[UT-PLAN-004]] |
 | [[BD-APP-UI-003]] | 画面遷移 | [[RQ-FR-001]], [[RQ-FR-005]], [[RQ-FR-014]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-024]], [[RQ-FR-025]] | - | - | - |
 | [[BD-APP-UI-004]] | アクセシビリティ方針 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-UX-017]] | [[RQ-RDR-021]] | - | - |
@@ -126,6 +126,7 @@ tags:
 | [[BD-SYS-ADR-032]] | AnalyticsをCoreサブドメインとして扱う | [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-040]] | - | - |
 | [[BD-SYS-ADR-033]] | 論理構成を4区分化しバックエンド処理形態を分離する | - | [[RQ-RDR-034]] | - | - |
 | [[BD-SYS-ADR-034]] | API契約語彙と運用ヘルス経路を統一する | - | [[RQ-RDR-046]] | - | - |
+| [[BD-SYS-ADR-035]] | Web実行基盤選定ADRの評価要件とスコープを固定する | [[RQ-DEV-001]], [[RQ-PS-001]], [[RQ-UX-001]] | - | - | - |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-038]], [[RQ-RDR-040]] | - | [[AT-GO-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[RQ-FR-001]] | [[RQ-RDR-034]] | - | - |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[RQ-DEV-001]], [[RQ-FR-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | - | - | - |
@@ -134,10 +135,10 @@ tags:
 | [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-040]], [[RQ-RDR-044]] | - | - |
 | [[BD-SYS-QUAL-001]] | 品質特性 | [[RQ-AV-001]], [[RQ-DEV-001]], [[RQ-OBY-001]], [[RQ-PS-001]], [[RQ-UX-001]], [[RQ-UX-023]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
 | [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[RQ-DEV-001]], [[RQ-PRC-001]], [[RQ-SEC-001]], [[RQ-UX-014]], [[RQ-UX-016]], [[RQ-UX-022]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPS-001]] |
-| [[DD-APP-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | - | - | [[UT-PLAN-001]] |
+| [[DD-APP-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | [[RQ-RDR-047]] | - | [[UT-PLAN-001]] |
 | [[DD-APP-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001]] | [[RQ-RDR-034]] | - | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
 | [[DD-APP-API-002]] | [[RQ-GL-002|収集実行]]起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]], [[RQ-RDR-046]] | - | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
-| [[DD-APP-API-003]] | [[RQ-GL-002|収集実行]]状態API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
+| [[DD-APP-API-003]] | [[RQ-GL-002|収集実行]]状態API | [[RQ-FR-001]] | [[RQ-RDR-047]] | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-005]], [[IT-CASE-002]], [[IT-PLAN-001]], [[UT-CASE-002]], [[UT-CASE-009]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-APP-API-004]] | アーカイブ一覧API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-001]], [[IT-CASE-003]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-003]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-APP-API-005]] | [[RQ-GL-005|タグ辞書]]API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[AT-SCN-007]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-PLAN-001]], [[UT-CASE-004]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
 | [[DD-APP-API-006]] | 検索API | [[RQ-FR-001]] | - | - | [[AT-GO-001]], [[AT-RPT-001]], [[AT-SCN-002]], [[IT-CASE-005]], [[IT-PLAN-001]], [[UT-CASE-005]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
@@ -310,7 +311,7 @@ tags:
 | [[BD-APP-API-004]] | OpenAPI配布とAPIバージョン境界 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-API-005]] | HTTP API契約共通方針 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-APP-DATA-001]] | データアーキテクチャ | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
-| [[BD-APP-DATA-002]] | ER図（概要） | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-APP-DATA-002]] | ER図（概要） | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-DATA-003]] | データ保持・削除方針 | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-UI-001]] | 画面一覧 | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-UI-002]] | 検索画面情報設計 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
@@ -336,7 +337,7 @@ tags:
 | [[BD-INF-NET-001]] | ネットワーク境界方針 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-NET-001]], [[IT-INF-SMK-001]] | PASS |
 | [[BD-INF-PLAT-001]] | インフラ全体像 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-PLAT-002]] | DR/BCP方針 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-INF-SEC-001]] | セキュリティ設計方針 | [[IT-CASE-007]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-INF-SEC-001]] | セキュリティ設計方針 | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-001]] | 収集対象を公式+出演にする | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-002]] | [[RQ-GL-010|段階ロード]]JSONを採用する | [[IT-CASE-003]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ADR-003]] | [[RQ-GL-005|タグ辞書]]分離を採用する | [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
@@ -371,10 +372,11 @@ tags:
 | [[BD-SYS-ADR-032]] | AnalyticsをCoreサブドメインとして扱う | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-033]] | 論理構成を4区分化しバックエンド処理形態を分離する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-034]] | API契約語彙と運用ヘルス経路を統一する | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
+| [[BD-SYS-ADR-035]] | Web実行基盤選定ADRの評価要件とスコープを固定する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
-| [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[IT-CASE-001]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-QUAL-001]] | 品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-INF-OBS-001]] | PASS |
@@ -400,7 +402,7 @@ tags:
 | [[DD-APP-API-014]] | ドキュメント公開実行API | [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-003]], [[UT-PLAN-005]] | PASS |
 | [[DD-APP-API-015]] | 配信反映ジョブ状態API | [[UT-CASE-013]] | [[UT-PLAN-001]], [[UT-PLAN-005]] | PASS |
 | [[DD-APP-DB-001]] | DB制約方針 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
-| [[DD-APP-DB-002]] | DDL一覧 | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
+| [[DD-APP-DB-002]] | DDL一覧 | [[UT-CASE-001]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-DB-003]] | DB移行方針 | [[UT-CASE-001]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-DB-004]] | 一意制約・チェック制約 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-DB-005]] | channelsテーブル | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
@@ -421,7 +423,7 @@ tags:
 | [[DD-APP-MOD-001]] | コンポーネント分割 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-MOD-002]] | Next.js App Router 実装ガイド | [[UT-CASE-003]] | [[UT-COV-001]], [[UT-PLAN-001]], [[UT-PLAN-004]], [[UT-SEC-001]] | PASS |
 | [[DD-APP-MOD-003]] | 責務対応表 | [[UT-CASE-003]] | [[UT-PLAN-001]] | PASS |
-| [[DD-APP-UI-001]] | UI詳細総論 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
+| [[DD-APP-UI-001]] | UI詳細総論 | [[UT-CASE-001]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-002]] | 一覧画面 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]], [[UT-PLAN-004]] | PASS |
 | [[DD-APP-UI-003]] | フィルタドロワー | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]] | PASS |
 | [[DD-APP-UI-004]] | 詳細モーダル | [[UT-CASE-004]] | [[UT-PLAN-001]] | PASS |
@@ -451,7 +453,7 @@ tags:
 | [[DD-INF-MON-002]] | インフラ監視ログ詳細 | [[UT-CASE-001]], [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-INF-NET-001]] | ネットワーク詳細設計 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
 | [[DD-INF-SEC-001]] | DR復旧手順詳細 | [[UT-CASE-001]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
-| [[DD-INF-SEC-002]] | IAM詳細設計 | [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-POL-001]], [[UT-SEC-001]] | PASS |
+| [[DD-INF-SEC-002]] | IAM詳細設計 | [[UT-CASE-001]], [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-POL-001]], [[UT-SEC-001]] | PASS |
 | [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-PLAN-001]], [[UT-SEC-001]] | PASS |
 | [[DD-SYS-AV-001]] | 可用性詳細 | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-PLAN-001]] | PASS |
 | [[DD-SYS-AV-002]] | インフラ可用性詳細 | [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |

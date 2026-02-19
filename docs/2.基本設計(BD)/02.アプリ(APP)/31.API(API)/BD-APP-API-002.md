@@ -3,7 +3,7 @@ id: BD-APP-API-002
 title: 収集API設計
 doc_type: API設計
 phase: BD
-version: 1.1.9
+version: 1.1.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -38,13 +38,14 @@ tags:
 ## 設計方針
 - 収集APIは、運用制御API（実行受付・状態確認）として定義し、取得実装のライブラリや実行基盤には依存しない。
 - 収集要求は [[RQ-RDR-028]] に従い「公式取り込み」「出演補完取り込み」「差分更新」の3モードを共通契約で扱う。
-- 配信前後再確認は [[RQ-FR-019]] の責務として同一run体系で追跡可能にする。
+- 配信前後[[RQ-GL-019|再確認実行]]は [[RQ-FR-019]] の責務として同一run体系で追跡可能にする。
 - 本APIは管理画面の更新系契約を担い、利用者向け検索参照契約（静的JSON）と混在させない。
 - バッチ一覧/バッチイベント/バッチ実行制約の正本は本書で管理し、システムコンテキストでは実行境界のみを扱う。
 - 実処理は単一のBackend API（Hono）内で完結し、別デプロイのworkerサービスを持たない。
 - 定期実行は外部スケジューラが同一運用APIを呼び出して開始し、処理本体は同一Backend API内で実行する。
 - HTTPメソッド/ステータス/ページング/エラー表現/互換性は [[BD-APP-API-005]] を共通規約として適用する。
 - 実装時の入力検証・例外集約（Hono + Zod）は [[BD-APP-API-005]] と [[BD-SYS-ADR-025]] の規約に従う。
+- 具体的な入出力スキーマ、閾値パラメータ、エラーコード詳細の正本は DD（`DD-APP-API-*`）で管理し、本書は契約境界と運用ルールを正本とする。
 
 ## 契約対象
 | 契約 | 用途 | 対応要求 |
@@ -66,7 +67,7 @@ tags:
 |---|---|---|---|---|---|
 | BAT-001 | 収集runバッチ | `POST /api/v1/ops/ingestion/runs` | 収集対象解決、[[RQ-GL-002|収集実行]]、run採番/集計 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
 | BAT-002 | [[RQ-GL-011|再収集]]runバッチ | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | 失敗run再実行、親run連結、再実行回数制御 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-008]], [[DD-APP-API-003]], [[DD-APP-DB-010]] |
-| BAT-003 | 配信前後再確認バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-012]], [[DD-APP-DB-013]] |
+| BAT-003 | 配信前後[[RQ-GL-019|再確認実行]]バッチ | `POST /api/v1/ops/rechecks` | 配信前後メタデータ差分判定、差分集計記録 | `queued -> running -> succeeded\|failed\|partial\|cancelled` | [[DD-APP-API-012]], [[DD-APP-DB-013]] |
 | BAT-004 | 配信反映バッチ | `POST /api/v1/admin/publish/tag-master` | DB正本から成果物再生成、公開切替、失敗時ロールバック | `queued -> running -> succeeded\|failed\|rolled_back\|cancelled` | [[DD-APP-API-015]], [[DD-APP-DB-015]] |
 | BAT-005 | docs公開バッチ | `POST /api/v1/admin/docs/publish` | docsビルド、配信反映、無効化処理 | `queued -> running -> succeeded\|failed\|rolled_back` | [[DD-APP-API-014]], [[DD-APP-DB-015]] |
 | BAT-006 | 補助データ生成バッチ | 収集run完了トリガ（内部） | [[RQ-GL-016|コメント密度波形]]・[[RQ-GL-017|ワードクラウド]]生成 | `queued -> running -> succeeded\|failed\|partial` | [[DD-APP-API-004]], [[RQ-FR-022]], [[RQ-FR-023]] |
@@ -195,6 +196,7 @@ tags:
 - 将来追加する高度検索APIの検索アルゴリズムとランキング詳細。
 
 ## 変更履歴
+- 2026-02-19: [[RQ-GL-019|再確認実行]] 用語を導入し、BDの責務を契約境界中心へ明示 [[BD-SYS-ADR-034]]
 - 2026-02-19: 実行受付契約の必須入力を `target_types` へ統一し、外部契約キーの `snake_case` 正本を追記 [[BD-SYS-ADR-034]]
 - 2026-02-14: バッチ一覧/イベント/実行制約およびBAT-006入出力契約・同時実行制御の正本を本書へ移管 [[BD-SYS-ADR-027]]
 - 2026-02-14: BAT-007名称を `[[RQ-GL-008|タグマスター]]（タグマスター）` 表記へ統一 [[BD-SYS-ADR-031]]
