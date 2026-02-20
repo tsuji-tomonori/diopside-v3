@@ -1,13 +1,13 @@
 ---
 id: DD-INF-DEP-002
-title: CloudFrontパス分岐詳細
+title: CloudFrontパス分岐詳細（デプロイ適用条件）
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-21'
 up:
 - '[[BD-INF-DEP-004]]'
 - '[[BD-SYS-ADR-014]]'
@@ -15,6 +15,8 @@ related:
 - '[[RQ-FR-025]]'
 - '[[DD-APP-API-010]]'
 - '[[AT-SCN-006]]'
+- '[[DD-INF-CF-001]]'
+- '[[DD-INF-CF-002]]'
 tags:
 - diopside
 - DD
@@ -22,6 +24,7 @@ tags:
 ---
 
 ## 詳細仕様
+- CloudFront設定値の正本は [[DD-INF-CF-001]] と [[DD-INF-CF-002]] へ移管し、本書はデプロイ時の適用条件と確認観点を扱う。
 - CloudFront behaviorは次順序で定義する。
   1. `/api/*`
   2. `/openapi/*`
@@ -58,5 +61,6 @@ tags:
 - `/openapi/v1/openapi.json` の可用性
 
 ## 変更履歴
+- 2026-02-21: CloudFront設定値の正本を [[DD-INF-CF-001]] / [[DD-INF-CF-002]] へ移管し、本書をデプロイ適用条件へ再定義 [[BD-SYS-ADR-036]]
 - 2026-02-11: Phase 2適用条件（Phase 1安定化前提）を追記
 - 2026-02-11: 新規作成

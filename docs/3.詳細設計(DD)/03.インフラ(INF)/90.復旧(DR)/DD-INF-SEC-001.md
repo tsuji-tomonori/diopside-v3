@@ -3,11 +3,11 @@ id: DD-INF-SEC-001
 title: DR復旧手順詳細
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-19'
+updated: '2026-02-21'
 up:
 - '[[BD-INF-PLAT-002]]'
 - '[[RQ-AV-001]]'
@@ -60,6 +60,7 @@ tags:
 - 四半期演習で所要時間を測定し、RTO/RPOとの差分を報告する。
 
 ## 変更履歴
+- 2026-02-21: DD-INF章再編に合わせて `90.復旧(DR)` へ移設（ID維持） [[BD-SYS-ADR-036]]
 - 2026-02-19: サービス断Runbookのヘルスチェック経路を `/api/v1/ops/diagnostics/health` へ統一 [[BD-SYS-ADR-034]]
 - 2026-02-13: リソース別DR設定（配信/データ/認証/監視）と目標値根拠を追加
 - 2026-02-13: シナリオ別Runbook、役割分担、依存順序、完了判定を具体化

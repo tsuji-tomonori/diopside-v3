@@ -3,17 +3,18 @@ id: DD-INF-SEC-002
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-21'
 up:
 - '[[BD-INF-SEC-001]]'
 - '[[RQ-SEC-001]]'
 related:
 - '[[UT-POL-001]]'
 - '[[AT-OPS-INF-001]]'
+- '[[DD-INF-CFG-001]]'
 tags:
 - diopside
 - DD
@@ -49,6 +50,7 @@ tags:
 - 主要操作は監査ログへ `actor`, `role`, `resource`, `result` を記録する。
 
 ## 変更履歴
+- 2026-02-21: DD-INF章再編に合わせて `70.統制と監査(GOV)` へ移設し、Config統制文書との関連を追加 [[BD-SYS-ADR-036]]
 - 2026-02-13: `infra-deploy-role` の主権限をCDK標準操作（synth/diff/deploy）へ更新
 - 2026-02-13: ロール一覧・権限境界・Secrets/KMS運用・特権昇格条件を具体化
 - 2026-02-13: 新規作成

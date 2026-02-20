@@ -3,11 +3,11 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-21'
 up:
 - '[[BD-INF-DEP-003]]'
 - '[[BD-SYS-ADR-013]]'
@@ -17,6 +17,8 @@ related:
 - '[[RQ-RDR-029]]'
 - '[[AT-REL-001]]'
 - '[[AT-RUN-001]]'
+- '[[DD-INF-CF-001]]'
+- '[[DD-INF-S3-001]]'
 tags:
 - diopside
 - DD
@@ -25,6 +27,7 @@ tags:
 
 
 ## 詳細仕様
+- CloudFront/S3の設定値（Behavior/OAC/prefix/暗号化）は [[DD-INF-CF-001]] / [[DD-INF-S3-001]] を正本とし、本書は配備フローを正本とする。
 - 公開実行は `task docs:deploy` を起点に `docs -> infra -> quartz/infra build -> cdk deploy` の順で実行する。
 - Quartz成果物は `npx quartz build -d ../docs` の出力 `quartz/public` を正本とする。
 - CDK実行時は `--context siteAssetPath=<repo>/quartz/public` を必須指定し、明示値が未指定の場合は `../../quartz/public` を既定値として解決する。
@@ -102,6 +105,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-21: CloudFront/S3設定値の正本をサービス別詳細へ分離し、本書を配備フロー正本として明確化 [[BD-SYS-ADR-036]]
 - 2026-02-11: CDK決定性運用（副作用ゼロ、context差分管理、stateful分離）とCDKテスト方針を追加
 - 2026-02-11: 公開トップの解決先を `index.html` に統一し、`/docs/` の同値到達を明記
 - 2026-02-11: cdk-nag除外（IAM4/IAM5/L1/S1/CFR1/CFR2/CFR3/CFR4）の理由と運用ルールを追記
