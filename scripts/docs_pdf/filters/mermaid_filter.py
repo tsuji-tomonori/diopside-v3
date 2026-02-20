@@ -17,6 +17,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import platform
 import shlex
 import subprocess
 import sys
@@ -33,6 +34,51 @@ def _run(cmd: List[str]) -> None:
             "Install it (e.g. `npm i -g @mermaid-js/mermaid-cli`) "
             "or set MMDC to a runnable command."
         )
+
+
+def _has_puppeteer_config_arg(cmd: List[str]) -> bool:
+    for i, token in enumerate(cmd):
+        if token == "-p":
+            return i + 1 < len(cmd)
+        if token == "--puppeteerConfigFile":
+            return i + 1 < len(cmd)
+        if token.startswith("--puppeteerConfigFile="):
+            return True
+    return False
+
+
+def _should_use_no_sandbox() -> bool:
+    # Auto-enable in GitHub Actions on Linux, where Chromium sandbox can be unavailable.
+    # Override with MERMAID_NO_SANDBOX=0/false/no to disable, 1/true/yes to force.
+    raw = os.environ.get("MERMAID_NO_SANDBOX", "").strip().lower()
+    if raw in {"1", "true", "yes", "on"}:
+        return True
+    if raw in {"0", "false", "no", "off"}:
+        return False
+    return os.environ.get("GITHUB_ACTIONS") == "true" and platform.system().lower() == "linux"
+
+
+def _ensure_puppeteer_config(out_dir: Path) -> Path:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    cfg_path = out_dir / "puppeteer-no-sandbox.json"
+    config = {
+        "args": [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+        ]
+    }
+    cfg_path.write_text(json.dumps(config, ensure_ascii=True), encoding="utf-8")
+    return cfg_path
+
+
+def prepare_mmdc_cmd(mmdc_cmd: List[str], out_dir: Path) -> List[str]:
+    if _has_puppeteer_config_arg(mmdc_cmd):
+        return mmdc_cmd
+    if not _should_use_no_sandbox():
+        return mmdc_cmd
+
+    cfg_path = _ensure_puppeteer_config(out_dir)
+    return [*mmdc_cmd, "--puppeteerConfigFile", str(cfg_path)]
 
 
 def render_mermaid(code: str, out_dir: Path, scale: int, mmdc_cmd: List[str]) -> Path:
@@ -75,7 +121,10 @@ def is_mermaid_codeblock(node: Dict[str, Any]) -> bool:
     if node.get("t") != "CodeBlock":
         return False
     try:
-        [[_ident, classes, _kvs], _code] = node.get("c")
+        content = node.get("c")
+        if not isinstance(content, list) or len(content) != 2:
+            return False
+        [[_ident, classes, _kvs], _code] = content
         return "mermaid" in classes
     except Exception:
         return False
@@ -118,6 +167,7 @@ def main() -> None:
     mmdc_cmd = shlex.split(mmdc_raw)
     if not mmdc_cmd:
         mmdc_cmd = ["mmdc"]
+    mmdc_cmd = prepare_mmdc_cmd(mmdc_cmd, out_dir=out_dir)
 
     def fn(node: Dict[str, Any]) -> Dict[str, Any] | None:
         try:
