@@ -9,7 +9,7 @@ metadata:
 - diopside（白雪 巴 公開YouTubeアーカイブ収集・蓄積・検索）の文書を、Obsidian運用規約に沿って更新する。
 
 ## このスキルを使う条件
-- `docs/6.受入テスト(AT)/42.障害対応手順書/AT-RUN-*.md` を作成・更新するとき。
+- `docs/7.運用・リリース(OPS_REL)/21.障害対応手順書/AT-RUN-*.md` を作成・更新するとき。
 - デプロイ/公開導線（Quartz build, CDK deploy, CloudFront反映, API認証など）の障害切り分けと復旧手順を更新するとき。
 - `AT-GO` / `AT-REL` / `BD-DEP-*` と整合する運用時の復旧判断基準を定義・改訂するとき。
 

@@ -34,13 +34,13 @@ IT-PLAN: docs/5.結合テスト(IT)/11.結合テスト計画
 IT-RST: docs/5.結合テスト(IT)/41.結合テスト結果
 IT-TDAT: docs/5.結合テスト(IT)/32.テストデータ設計
 AT-GO: docs/6.受入テスト(AT)/52.リリース判定
-AT-GUIDE: docs/6.受入テスト(AT)/71.ユーザーガイド
+AT-GUIDE: docs/8.ユーザーガイド(GUIDE)/11.ユーザーガイド
 AT-OPS: docs/6.受入テスト(AT)/31.運用受入チェックリスト
 AT-PLAN: docs/6.受入テスト(AT)/11.受入テスト計画
 AT-RCHK: docs/6.受入テスト(AT)/51.リリースチェックリスト
-AT-REL: docs/6.受入テスト(AT)/41.配信手順書
+AT-REL: docs/7.運用・リリース(OPS_REL)/11.配信手順書
 AT-RPT: docs/6.受入テスト(AT)/61.受入テスト報告
-AT-RUN: docs/6.受入テスト(AT)/42.障害対応手順書
+AT-RUN: docs/7.運用・リリース(OPS_REL)/21.障害対応手順書
 AT-SCN: docs/6.受入テスト(AT)/21.受入テストシナリオ
 BD-APP-API: docs/2.基本設計(BD)/02.アプリ(APP)/31.API(API)
 BD-APP-DATA: docs/2.基本設計(BD)/02.アプリ(APP)/21.データ(DATA)

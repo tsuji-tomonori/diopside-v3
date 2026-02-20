@@ -26,6 +26,8 @@ diopside（白雪 巴/Shirayuki Tomoe の公開YouTubeアーカイブ収集・�
 - `docs/4.単体テスト(UT)`
 - `docs/5.結合テスト(IT)`
 - `docs/6.受入テスト(AT)`
+- `docs/7.運用・リリース(OPS_REL)`
+- `docs/8.ユーザーガイド(GUIDE)`
 
 機能要求（FR）の管理方針と最新構成は次を参照してください。
 
