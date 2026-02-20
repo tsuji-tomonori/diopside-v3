@@ -78,20 +78,24 @@ tags:
 | [[BD-INF-CM-001]] | 構成管理方針 | [[RQ-FR-001]] | [[RQ-RDR-013]], [[RQ-RDR-024]] | - | - |
 | [[BD-INF-DEP-001]] | デプロイ方式 | [[RQ-COST-001]], [[RQ-DEV-001]], [[RQ-FR-001]] | - | - | - |
 | [[BD-INF-DEP-002]] | デプロイ運用ルール | [[RQ-FR-001]] | - | - | - |
-| [[BD-INF-DEP-003]] | ドキュメント公開フロー（Quartz + CDK） | [[RQ-DEV-001]], [[RQ-FR-024]] | [[RQ-RDR-025]] | - | [[AT-REL-001]], [[AT-RUN-001]], [[UT-PLAN-003]] |
-| [[BD-INF-DEP-004]] | 単一CloudFrontパス分岐デプロイ設計 | [[RQ-DEV-001]], [[RQ-FR-025]] | [[RQ-RDR-026]], [[RQ-RDR-034]] | - | [[AT-REL-001]], [[AT-RUN-001]], [[AT-SCN-006]] |
-| [[BD-INF-DEP-005]] | インフラデプロイ設計（配信境界） | [[RQ-DEV-001]], [[RQ-FR-025]] | - | - | [[AT-REL-001]], [[AT-RUN-001]] |
-| [[BD-INF-DEP-006]] | バックアップ・リカバリ設計 | [[RQ-AV-001]], [[RQ-COST-001]] | - | - | [[AT-RUN-001]] |
-| [[BD-INF-ENV-001]] | 環境分割方針 | - | - | - | [[IT-ENV-001]], [[IT-INF-ENV-001]] |
+| [[BD-INF-DEP-003]] | CI/CD基本設計（Quartz + CDK） | [[RQ-DEV-001]], [[RQ-FR-024]] | [[RQ-RDR-025]] | - | [[AT-REL-001]], [[AT-RUN-001]], [[UT-PLAN-003]] |
+| [[BD-INF-DEP-004]] | エッジ・DNS・証明書設計 | [[RQ-DEV-001]], [[RQ-FR-025]], [[RQ-SEC-001]] | [[RQ-RDR-026]], [[RQ-RDR-034]] | - | [[AT-REL-001]], [[AT-RUN-001]], [[AT-SCN-006]] |
+| [[BD-INF-DEP-005]] | コンピュートと配備設計 | [[RQ-DEV-001]], [[RQ-FR-025]] | - | - | [[AT-REL-001]], [[AT-RUN-001]] |
+| [[BD-INF-DEP-006]] | バックアップ・DR設計 | [[RQ-AV-001]], [[RQ-COST-001]] | - | - | [[AT-RUN-001]] |
+| [[BD-INF-ENV-001]] | アカウント・環境分割方針 | [[RQ-DEV-001]], [[RQ-SEC-001]] | - | - | [[IT-ENV-001]], [[IT-INF-ENV-001]] |
 | [[BD-INF-IAC-001]] | インフラ変更フロー | - | - | - | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] |
 | [[BD-INF-MON-001]] | 監視設計 | [[RQ-AV-001]], [[RQ-OBY-001]], [[RQ-PS-001]] | - | - | [[AT-OPS-001]], [[IT-CASE-012]], [[IT-CASE-013]], [[IT-INF-OBS-001]] |
 | [[BD-INF-MON-002]] | SLO運用 | [[RQ-AV-001]], [[RQ-OBY-001]], [[RQ-PS-001]] | - | - | [[AT-GO-001]], [[AT-OPS-001]], [[AT-RPT-001]] |
-| [[BD-INF-MON-003]] | インフラ監視運用 | [[RQ-AV-001]], [[RQ-OBY-001]], [[RQ-PS-001]] | - | - | [[AT-GO-001]], [[AT-OPS-001]] |
-| [[BD-INF-MON-004]] | インフラ可観測性方針 | [[RQ-OBY-001]] | - | - | [[AT-SLO-001]] |
+| [[BD-INF-MON-003]] | 監査・追跡設計 | [[RQ-SEC-001]], [[RQ-OBY-001]], [[RQ-DEV-001]] | - | - | [[AT-GO-001]], [[AT-OPS-001]] |
+| [[BD-INF-MON-004]] | 運用ガバナンス方針 | [[RQ-DEV-001]], [[RQ-COST-001]] | - | - | [[AT-SLO-001]] |
 | [[BD-INF-NET-001]] | ネットワーク境界方針 | [[RQ-SEC-001]] | - | - | [[IT-INF-NET-001]], [[IT-INF-SMK-001]] |
-| [[BD-INF-PLAT-001]] | インフラ全体像 | [[RQ-AV-001]], [[RQ-DEV-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | [[RQ-RDR-039]] | - | - |
-| [[BD-INF-PLAT-002]] | DR/BCP方針 | [[RQ-AV-001]] | - | - | [[AT-DR-001]] |
-| [[BD-INF-SEC-001]] | セキュリティ設計方針 | [[RQ-DEV-001]], [[RQ-SEC-001]], [[RQ-UX-022]] | - | - | [[AT-OPS-INF-001]] |
+| [[BD-INF-PLAT-001]] | インフラ基本設計の章構成と全体構成 | [[RQ-AV-001]], [[RQ-DEV-001]], [[RQ-OBY-001]], [[RQ-SEC-001]] | [[RQ-RDR-039]] | - | - |
+| [[BD-INF-PLAT-002]] | データストア基本設計 | [[RQ-AV-001]], [[RQ-PS-001]], [[RQ-SEC-001]] | - | - | [[AT-DR-001]] |
+| [[BD-INF-SEC-001]] | IAM・セキュリティ境界方針 | [[RQ-DEV-001]], [[RQ-SEC-001]], [[RQ-UX-022]] | - | - | [[AT-OPS-INF-001]] |
+| [[BD-INF-WAF-001]] | L7防御設計（WAF/Shield） | [[RQ-SEC-001]], [[RQ-DEV-001]] | - | - | [[AT-OPS-INF-001]] |
+| [[BD-INF-KMS-001]] | 暗号化・鍵管理方針 | [[RQ-SEC-001]] | - | - | [[AT-OPS-INF-001]] |
+| [[BD-INF-AUD-001]] | 監査証跡基本設計（CloudTrail中心） | [[RQ-SEC-001]], [[RQ-DEV-001]] | - | - | [[AT-OPS-INF-001]] |
+| [[BD-INF-OPS-001]] | インフラ運用ガバナンス設計 | [[RQ-DEV-001]], [[RQ-COST-001]] | - | - | [[AT-OPS-001]] |
 | [[BD-SYS-ADR-001]] | 収集対象を公式+出演にする | - | [[RQ-RDR-001]], [[RQ-RDR-002]], [[RQ-RDR-003]], [[RQ-RDR-004]], [[RQ-RDR-005]], [[RQ-RDR-006]], [[RQ-RDR-007]], [[RQ-RDR-008]], [[RQ-RDR-009]] | - | - |
 | [[BD-SYS-ADR-002]] | [[RQ-GL-010|段階ロード]]JSONを採用する | - | [[RQ-RDR-001]] | - | - |
 | [[BD-SYS-ADR-003]] | [[RQ-GL-005|タグ辞書]]分離を採用する | - | [[RQ-RDR-001]] | - | - |

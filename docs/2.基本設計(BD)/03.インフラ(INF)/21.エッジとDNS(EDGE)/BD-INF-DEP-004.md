@@ -1,13 +1,13 @@
 ---
 id: BD-INF-DEP-004
-title: 単一CloudFrontパス分岐デプロイ設計
+title: エッジ・DNS・証明書設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-20'
 up:
 - '[[RQ-FR-025]]'
 - '[[BD-SYS-ADR-014]]'
@@ -24,11 +24,17 @@ tags:
 ---
 
 ## 目的
-- 1つのCloudFront Distributionで、画面・ドキュメント・OpenAPI・APIを経路分離して配信する設計を定義する。
+- Route 53 / CloudFront / ACM を入口として、公開経路とキャッシュ境界を固定する。
 
 ## 導入位置づけ
 - 本設計は [[BD-INF-DEP-003]] のPhase 2（拡張）で適用する。
 - Phase 1（`/docs/*` 単独公開）の運用安定化完了を前提条件とする。
+
+## 必須設計項目
+- DNS設計（ALIAS、ヘルスチェック、切替方式）。
+- CloudFrontオリジン設計（S3/ALB/API）。
+- キャッシュ方針（HTML短TTL、静的資産長TTL）。
+- 証明書管理（ACM発行/更新、ドメイン検証方式）。
 
 ## パス予約
 - `/web/*`: 画面配信（SPA）
@@ -74,6 +80,7 @@ tags:
 - データ混在: DB接続情報や非公開成果物が `/web/*` `/docs/*` へ公開されていないことを確認する。
 
 ## 変更履歴
+- 2026-02-20: 章再編に合わせてエッジ/DNS/証明書の必須設計項目を追加 [[BD-SYS-ADR-036]]
 - 2026-02-11: 3層再設計の段階実行計画（Phase A-D）を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: DB正本前提の公開境界（`/web/*` 配信領域と docs/test結果分離）を追記 [[BD-SYS-ADR-021]]
 - 2026-02-11: Phase 2適用の位置づけと前提条件を追記 [[BD-SYS-ADR-014]]

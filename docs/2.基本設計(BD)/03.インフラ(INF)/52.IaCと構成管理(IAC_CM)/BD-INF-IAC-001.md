@@ -7,7 +7,7 @@ version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-20'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
@@ -17,6 +17,7 @@ related:
 - '[[DD-INF-IAC-001]]'
 - '[[IT-INF-ROLL-001]]'
 - '[[BD-SYS-ADR-028]]'
+- '[[BD-SYS-ADR-036]]'
 tags:
 - diopside
 - BD
@@ -45,6 +46,7 @@ tags:
 - 破壊的変更は事前にロールバック手順を定義し、適用前に検証済みであることを必須化する。
 
 ## 変更履歴
+- 2026-02-20: INF章再編に合わせてIaC章の正本位置を更新 [[BD-SYS-ADR-036]]
 - 2026-02-13: CDK標準フロー（synth/diff/deploy）へ変更管理フェーズを再定義 [[BD-SYS-ADR-028]]
 - 2026-02-13: 変更フローのフェーズ責務・承認条件・禁止事項を具体化 [[BD-SYS-ADR-028]]
 - 2026-02-13: 新規作成（IaC変更フローと承認/ロールバック規約を追加） [[BD-SYS-ADR-028]]

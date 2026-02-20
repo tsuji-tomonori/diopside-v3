@@ -1,13 +1,13 @@
 ---
 id: BD-INF-DEP-005
-title: インフラデプロイ設計（配信境界）
+title: コンピュートと配備設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-19'
+updated: '2026-02-20'
 up:
   - '[[RQ-FR-025]]'
   - '[[RQ-DEV-001]]'
@@ -29,6 +29,12 @@ tags:
 
 ## 目的
 - インフラ配備の責務を `BE/FE/Infra/DB/Doc/TestAsset` の6領域で分離し、配備モードごとの再実行範囲を限定する。
+
+## 必須設計項目
+- 実行基盤選定（EC2/ASG、ECS、EKS）と採否理由。
+- L7入口（ALB/API Gateway）とヘルスチェック境界。
+- オートスケーリング指標（CPU/メモリ/RPS）と下限/上限。
+- 配備モード（通常/初回/緊急）別の確認項目。
 
 ## 正本境界
 - 本書は「配信境界に依存するデプロイ順序/確認ポイント」の正本とする。
@@ -86,6 +92,7 @@ tags:
 - 配備後は `/docs/` `/web/` `/openapi/` `/api/v1/ops/diagnostics/health` の到達を確認する。
 
 ## 変更履歴
+- 2026-02-20: 章再編に合わせてコンピュート選定・スケーリング必須項目を追加 [[BD-SYS-ADR-036]]
 - 2026-02-19: ヘルスチェック確認経路を `/api/v1/ops/diagnostics/health` へ統一 [[BD-SYS-ADR-034]]
 - 2026-02-14: 配備モード（通常/初回/緊急）を定義し、配備責務を6分類（BE/FE/Infra/DB/Doc/TestAsset）へ拡張 [[BD-SYS-ADR-031]]
 - 2026-02-13: CDK反映順序（`cdk diff` 先行、`cdk deploy` 後続）と品質ゲートを追加 [[BD-SYS-ADR-028]]

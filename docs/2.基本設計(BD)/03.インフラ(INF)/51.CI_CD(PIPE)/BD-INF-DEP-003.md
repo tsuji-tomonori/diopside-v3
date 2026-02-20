@@ -1,13 +1,13 @@
 ---
 id: BD-INF-DEP-003
-title: ドキュメント公開フロー（Quartz + CDK）
+title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-20'
 up:
 - '[[RQ-FR-024]]'
 - '[[BD-SYS-ADR-013]]'
@@ -24,6 +24,12 @@ tags:
 
 ## 目的
 - Quartz と infra（AWS CDK）を連携したドキュメント公開フローの実行順序と責務分担を明確化する。
+
+## 必須設計項目
+- パイプライン入口（手動/自動）と承認境界。
+- IaC差分確認（`cdk diff`）と配備条件。
+- 成果物境界（docs/openapi/web）と配信経路。
+- 失敗時ロールバック判定と監査記録。
 
 ## 前提
 - 将来運用では `quartz/` と `infra/` を同一リポジトリ配下に配置し、`task docs:deploy` を公開標準コマンドとして提供する。
@@ -109,6 +115,7 @@ flowchart TD
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-20: 章再編に合わせてCI/CD必須設計項目を追加 [[BD-SYS-ADR-036]]
 - 2026-02-11: CDK決定性方針（副作用ゼロ、context固定、props注入、論理IDレビュー）を追加
 - 2026-02-11: 公開トップのリライト先を `RQ-HM-001.html` から `index.html` へ変更
 - 2026-02-11: cdk-nag品質ゲートと除外許可条件（Phase 1限定の根拠）を追記

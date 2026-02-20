@@ -7,7 +7,7 @@ version: 1.0.15
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-20'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -43,6 +43,7 @@ tags:
 - インフラ変更は [[BD-INF-IAC-001]] の `cdk synth -> cdk diff -> review -> approve -> cdk deploy -> verify` を必須手順として実施する。
 
 ## 変更履歴
+- 2026-02-20: INF章再編に合わせてIaC/構成管理章へ再配置 [[BD-SYS-ADR-036]]
 - 2026-02-13: インフラ構成管理フローをCDK標準手順（synth/diff/deploy）へ更新（関連ADR: [[BD-SYS-ADR-028]]）
 - 2026-02-13: インフラ変更管理フロー（[[BD-INF-IAC-001]]）を構成管理標準へ追加（関連ADR: [[BD-SYS-ADR-028]]）
 - 2026-02-11: BD文書の変更履歴へ関連ADRリンクを必須化（関連ADR: [[BD-SYS-ADR-012]]）
