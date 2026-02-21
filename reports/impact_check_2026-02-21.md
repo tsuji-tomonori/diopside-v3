@@ -99,3 +99,17 @@
 
 ## 検証（GitHub Actions 設定値の文書化）
 - `task docs:guard` でFrontmatter/リンク整合を確認する。
+
+## 実施内容（CI向けdocs配備の直列化）
+- 対象: `Taskfile.yaml`, `.github/workflows/docs-deploy.yml`, `DD-INF-DEP-001`, `AT-REL-001`。
+- 変更内容:
+  - Taskfileに `quartz:build:ci`, `infra:deploy:ci`, `docs:deploy:ci` を追加し、Quartz準備/依存導入/設定同期/ビルド/配備を直列化。
+  - `docs-deploy.yml` の実行コマンドを `task docs:deploy` から `task docs:deploy:ci` へ変更。
+  - 詳細設計と配信手順書へ、CIでは直列タスクを使う運用を追記。
+
+## 影響確認（CI向けdocs配備の直列化）
+- `quartz:prepare` の同時実行競合（clone/checkout競合）を回避し、`quartz:sync-config` の失敗確率を低減できる。
+- ローカル運用（`docs:deploy`）は維持しつつ、CIだけを安全実行経路へ切り替えられる。
+
+## 検証（CI向けdocs配備の直列化）
+- `task docs:guard` でFrontmatter/リンク整合を確認する。

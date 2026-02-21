@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.11
+version: 1.0.12
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -44,12 +44,21 @@ tags:
 - `docs:deploy`
   - 役割: 公開一括実行（標準入口）
   - 手順: `docs:guard` -> `quartz:build` -> `infra:build` -> `infra:deploy` -> `docs:verify`
+- `docs:deploy:ci`
+  - 役割: CI向け公開一括実行（直列実行）
+  - 手順: `docs:guard` -> `infra:deploy:ci` -> `docs:verify`
 - `quartz:build`
   - 役割: 文書ビルド
   - 実行: `npx quartz build -d ../docs`
+- `quartz:build:ci`
+  - 役割: CIでのQuartz直列ビルド
+  - 実行: `task quartz:prepare` -> `npm ci` -> `quartz:sync-config` 相当コピー -> `npx quartz build -d ../docs`
 - `infra:deploy`
   - 役割: CDK配備とinvalidation
   - 実行: `npm run deploy -- --context siteAssetPath=<repo>/quartz/public`
+- `infra:deploy:ci`
+  - 役割: CIでのCDK直列配備
+  - 実行: `task quartz:build:ci` -> `npm ci` -> `npm run build` -> `npm run deploy -- --context siteAssetPath=<repo>/quartz/public`
 - `docs:verify`
   - 役割: 公開反映確認
   - 確認: `/docs/` 到達、更新差分、主要リンク導線
@@ -71,7 +80,7 @@ tags:
   - `permissions` は `id-token: write` / `contents: read` を最小構成で付与する。
   - `aws-actions/configure-aws-credentials@v6` を使用し、`AWS_ROLE_ARN` + `AWS_REGION` で OIDC Assume を実行する。
   - Assume直後に `aws sts get-caller-identity` を実行し、誤アカウント配備を検知する。
-  - 実行順: `task docs:deploy`（`docs:guard` -> `infra:deploy` -> `docs:verify`）
+  - 実行順: `task docs:deploy:ci`（`docs:guard` -> `infra:deploy:ci` -> `docs:verify`）
 
 ## GitHub Actions パラメータ・設定値（`docs-deploy.yml`）
 | 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
@@ -89,12 +98,12 @@ tags:
 | Env var | `AWS_REGION` | `ap-northeast-1`（運用標準） | Yes | GitHub Environment `prod` variables | AWS API実行リージョンを固定するため。 |
 | Env var | `DOCS_SITE_URL` | `https://<docs-domain>` | No | GitHub Environment `prod` variables | `task docs:verify` のHTTP確認先を指定するため。 |
 | Step | `actions/checkout` | `@v4` (`fetch-depth: 0`) | Yes | workflow定義 | 差分判定に必要な履歴を取得するため。 |
-| Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task docs:deploy` 実行のため。 |
+| Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task docs:deploy:ci` 実行のため。 |
 | Step | `actions/setup-python` | `@v5` (`python-version: 3.11`) | Yes | workflow定義 | docs検証スクリプトの実行環境を固定するため。 |
 | Step | `actions/setup-node` | `@v4` (`node-version: 20`) | Yes | workflow定義 | Quartz/CDK実行環境を固定するため。 |
 | Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ vars.AWS_ROLE_ARN }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
 | Verify | `aws sts get-caller-identity` | 0終了コード | Yes | workflow定義 | 誤アカウント配備を検知するため。 |
-| Deploy | 実行コマンド | `task docs:deploy` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
+| Deploy | 実行コマンド | `task docs:deploy:ci` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
 
 ## OIDC信頼条件（固定値）
 - Provider URL: `https://token.actions.githubusercontent.com`
@@ -158,6 +167,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-21: CI競合回避のため `docs:deploy:ci` / `infra:deploy:ci` / `quartz:build:ci` を追加し、workflow実行コマンドを直列タスクへ更新
 - 2026-02-21: `docs-deploy.yml` のパラメータ/設定値一覧と OIDC信頼条件の固定値を追加
 - 2026-02-21: `docs-deploy.yml` を追加し、初回ローカル配備 -> GitHub OIDC配備へ移行する実行手順を確定 [[BD-SYS-ADR-038]]
 - 2026-02-21: `docs-pdf.yml` のArtifact名を `.zip` とし、PDF本体との役割を分離 [[BD-SYS-ADR-037]]

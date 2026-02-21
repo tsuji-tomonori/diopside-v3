@@ -238,6 +238,16 @@ tasks:
     cmds:
       - npx quartz build -d ../docs
 
+  quartz:build:ci:
+    desc: Build Quartz public sequentially for CI
+    dir: '{{.QUARTZ_DIR}}'
+    cmds:
+      - task quartz:prepare
+      - npm ci
+      - cp "{{.QUARTZ_CONFIG_SOURCE}}" "{{.QUARTZ_DIR}}/quartz.config.ts"
+      - cp "{{.QUARTZ_CUSTOM_STYLE_SOURCE}}" "{{.QUARTZ_DIR}}/quartz/styles/custom.scss"
+      - npx quartz build -d ../docs
+
   infra:install:
     desc: Install CDK dependencies
     dir: '{{.INFRA_DIR}}'
@@ -270,6 +280,15 @@ tasks:
     cmds:
       - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
 
+  infra:deploy:ci:
+    desc: Deploy docs assets with CDK (CI serial)
+    dir: '{{.INFRA_DIR}}'
+    cmds:
+      - task quartz:build:ci
+      - npm ci
+      - npm run build
+      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
+
   docs:verify:
     desc: Verify deployed docs top page (optional DOCS_SITE_URL)
     cmds:
@@ -287,4 +306,11 @@ tasks:
     cmds:
       - task docs:guard
       - task infra:deploy
+      - task docs:verify
+
+  docs:deploy:ci:
+    desc: Run docs deploy with serial CI steps
+    cmds:
+      - task docs:guard
+      - task infra:deploy:ci
       - task docs:verify

@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.10
+version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -25,7 +25,7 @@ tags:
 
 
 ## 運用目的
-- `task docs:deploy` を用いたドキュメント公開手順を標準化し、反映確認までの再現性を担保する。
+- ローカルでは `task docs:deploy`、GitHub Actions では `task docs:deploy:ci` を用いた公開手順を標準化し、反映確認までの再現性を担保する。
 
 ## 前提条件
 - 初回のみローカルAWS認証情報（`CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）で `task infra:deploy` を実行し、OIDC Provider/Assume先ロールを作成済みである。
@@ -46,7 +46,7 @@ tags:
 2. Stack Output `GithubActionsDeployRoleArn` を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
 3. GitHub Actions `Docs Deploy` を `workflow_dispatch` で実行し、`Validate required variables` の成功を確認する。
 4. `Configure AWS credentials (OIDC)` と `aws sts get-caller-identity` が成功することを確認する。
-5. `task docs:deploy` 実行ログで `docs:guard -> infra:deploy -> docs:verify` が完了することを確認する。
+5. `task docs:deploy:ci` 実行ログで `docs:guard -> infra:deploy:ci -> docs:verify` が完了することを確認する。
 6. `task quartz:build` が `quartz/public` を生成し、`task infra:deploy` が `siteAssetPath=quartz/public` を参照してS3配置とCloudFront invalidationを完了することを確認する。
 7. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
 8. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
@@ -72,6 +72,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-21: GitHub Actions 実行を `task docs:deploy:ci`（直列実行）へ更新し、CI向け手順を明確化
 - 2026-02-21: GitHub Actions の Environment variables 設定手順と設定不備時の確認手順を追加
 - 2026-02-21: 初回ローカル配備後に GitHub OIDC AssumeRole へ移行する運用手順と判定基準を追加
 - 2026-02-20: テスト章再編に合わせて「7.運用・リリース(OPS_REL)」へ移設し、AT判定からの参照位置づけを明記
