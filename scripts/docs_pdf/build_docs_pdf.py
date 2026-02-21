@@ -47,6 +47,7 @@ class NoteInfo:
     note_id: str
     title: str
     anchor: str
+    dir_parts: Tuple[str, ...]
     meta: Dict[str, Any]
     body: str
 
@@ -56,6 +57,7 @@ WIKILINK_RE = re.compile(r"\[\[([^\]|#]+?)(?:\|([^\]]+))?\]\]")
 MD_LINK_MD_RE = re.compile(r"\]\(([^\)\s]+?\.md)(?:#[^\)\s]+)?\)")
 # Inline code spans: `...`
 INLINE_CODE_RE = re.compile(r"`([^`]+)`")
+ATX_HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
 
 def sh(cmd: List[str], *, cwd: Optional[Path] = None, env: Optional[Dict[str, str]] = None) -> None:
@@ -171,7 +173,28 @@ def convert_inline_code_paths(text: str) -> str:
     return INLINE_CODE_RE.sub(repl, text)
 
 
-def process_markdown_body(body: str, id_to_anchor: Dict[str, str], stem_to_anchor: Dict[str, str]) -> str:
+def _rewrite_heading_line(line: str, heading_offset: int) -> str:
+    m = ATX_HEADING_RE.match(line)
+    if not m:
+        return line
+
+    level = len(m.group(1))
+    rest = m.group(2).strip()
+    new_level = min(6, max(1, level + heading_offset))
+
+    # Exclude note-body headings from the global TOC.
+    if "{.unlisted" not in rest and "{#" not in rest and not rest.endswith("}"):
+        rest = f"{rest} {{.unlisted}}"
+
+    return f"{'#' * new_level} {rest}"
+
+
+def process_markdown_body(
+    body: str,
+    id_to_anchor: Dict[str, str],
+    stem_to_anchor: Dict[str, str],
+    heading_offset: int,
+) -> str:
     lines = body.splitlines()
     out: List[str] = []
 
@@ -198,6 +221,7 @@ def process_markdown_body(body: str, id_to_anchor: Dict[str, str], stem_to_ancho
         line2 = convert_wikilinks(line, id_to_anchor)
         line2 = rewrite_md_links_to_internal(line2, stem_to_anchor)
         line2 = convert_inline_code_paths(line2)
+        line2 = _rewrite_heading_line(line2, heading_offset=heading_offset)
         out.append(line2)
 
     # Normalize trailing whitespace
@@ -252,7 +276,7 @@ def render_metadata(meta: Dict[str, Any], id_to_anchor: Dict[str, str]) -> str:
         if k not in keys and k not in ("id", "title"):
             keys.append(k)
 
-    lines = ["### Metadata"]
+    lines = ["### Metadata {.unlisted .unnumbered}"]
     for k in keys:
         lines.append(f"- {k}: {fmt_value(meta.get(k))}")
 
@@ -299,7 +323,15 @@ def collect_notes(docs_root: Path, exclude_subdirs: Iterable[str]) -> List[NoteI
         note_id = str(meta.get("id") or p.stem)
         title = str(meta.get("title") or p.stem)
         anchor = id_to_anchor[note_id]
-        processed = process_markdown_body(body, id_to_anchor=id_to_anchor, stem_to_anchor=stem_to_anchor)
+        dir_parts = tuple(rel.parts[:-1])
+        note_level = min(6, len(dir_parts) + 1)
+        heading_offset = max(0, note_level - 1)
+        processed = process_markdown_body(
+            body,
+            id_to_anchor=id_to_anchor,
+            stem_to_anchor=stem_to_anchor,
+            heading_offset=heading_offset,
+        )
         notes.append(
             NoteInfo(
                 src_path=p,
@@ -307,6 +339,7 @@ def collect_notes(docs_root: Path, exclude_subdirs: Iterable[str]) -> List[NoteI
                 note_id=note_id,
                 title=title,
                 anchor=anchor,
+                dir_parts=dir_parts,
                 meta=meta,
                 body=processed,
             )
@@ -331,13 +364,22 @@ lang: ja-JP
     for n in notes:
         id_to_anchor[n.src_path.stem] = n.anchor
 
-    for i, note in enumerate(notes):
-        # Page break between notes (except first)
-        if i != 0:
-            parts.append("\\newpage\n")
+    current_dirs: Tuple[str, ...] = tuple()
 
-        # Note heading with stable anchor
-        parts.append(f"# {note.note_id} {note.title} {{#{note.anchor}}}\n")
+    for note in notes:
+        common = 0
+        while common < len(current_dirs) and common < len(note.dir_parts) and current_dirs[common] == note.dir_parts[common]:
+            common += 1
+
+        for idx in range(common, len(note.dir_parts)):
+            level = min(6, idx + 1)
+            parts.append(f"{'#' * level} {note.dir_parts[idx]}\n")
+
+        current_dirs = note.dir_parts
+
+        # Note heading with stable anchor. Level follows directory depth.
+        note_level = min(6, len(note.dir_parts) + 1)
+        parts.append(f"{'#' * note_level} {note.note_id} {note.title} {{#{note.anchor}}}\n")
 
         # Visible metadata
         parts.append(render_metadata(note.meta, id_to_anchor=id_to_anchor))
@@ -424,7 +466,7 @@ def main() -> None:
     ap.add_argument("--vault-root", default=".", help="Vault root (default: .)")
     ap.add_argument("--out", default="reports/diopside-docs.pdf", help="Output PDF path")
     ap.add_argument("--build-dir", default=".build/docs-pdf", help="Build workdir")
-    ap.add_argument("--toc-depth", type=int, default=3, help="TOC depth")
+    ap.add_argument("--toc-depth", type=int, default=6, help="TOC depth")
     ap.add_argument("--mainfont", default="Noto Sans CJK JP", help="Main font for PDF")
     ap.add_argument("--monofont", default="Noto Sans Mono CJK JP", help="Monospace font for code")
     ap.add_argument(
