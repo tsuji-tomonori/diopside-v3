@@ -17,6 +17,9 @@ related:
 - '[[BD-INF-DEP-004]]'
 - '[[DD-INF-DEP-001]]'
 - '[[AT-RUN-001]]'
+- '[[RQ-DEV-006]]'
+- '[[RQ-RDR-050]]'
+- '[[BD-SYS-ADR-039]]'
 tags:
 - diopside
 - AT
@@ -65,6 +68,7 @@ tags:
 - 公開手順が単一コマンドで完了し、配信サイトに更新内容が反映される。
 - `siteAssetPath` 解決先とS3配置先に不整合がない。
 - GitHub Actions 側で OIDC Assume が成功し、長期アクセスキーを使用せずに配備できる。
+- GitHub Environment `prod` の承認ゲートと `concurrency` 制御が有効な実行履歴を確認できる。
 - Phase 1では `'/'` と `'/docs/*'` の到達性が維持される。
 - Phase 2では `'/web/*'`, `'/docs/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路境界が維持される。
 - 異常時は [[AT-RUN-001]] の切り分け手順で復旧できる。
@@ -74,6 +78,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-21: GitHub Actions要件追加に合わせ、Environment承認とconcurrency確認を判定基準へ追記 [[RQ-RDR-050]]
 - 2026-02-21: Node 22固定とQuartzワークスペース初期化/自己修復をCI手順へ追加
 - 2026-02-21: GitHub Actions 実行を `task docs:deploy:ci`（直列実行）へ更新し、CI向け手順を明確化
 - 2026-02-21: GitHub Actions の Environment variables 設定手順と設定不備時の確認手順を追加

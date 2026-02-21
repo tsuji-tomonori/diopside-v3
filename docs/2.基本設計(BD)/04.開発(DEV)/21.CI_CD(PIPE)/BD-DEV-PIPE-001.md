@@ -3,11 +3,11 @@ id: BD-DEV-PIPE-001
 title: ビルド方針（デプロイ単位分離）
 doc_type: ビルド設計
 phase: BD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-21'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -24,6 +24,11 @@ related:
 - '[[BD-INF-DEP-004]]'
 - '[[BD-APP-API-004]]'
 - '[[DD-DEV-CODE-001]]'
+- '[[RQ-DEV-005]]'
+- '[[RQ-DEV-006]]'
+- '[[RQ-DEV-007]]'
+- '[[RQ-SEC-005]]'
+- '[[BD-SYS-ADR-039]]'
 tags:
 - diopside
 - BD
@@ -88,6 +93,14 @@ tags:
 - 検査結果はArtifactsまたは監査ログとして90日以上保持し、`AT-RPT-001` と `AT-GO-001` で参照可能にする。
 - 自動検査だけで代替せず、リリース前にキーボード操作とスクリーンリーダーの手動確認を補助ゲートとして運用する。
 
+### GitHub Actions実装補足
+- PR品質ゲートはGitHub Actions `ci` ワークフローで実行し、必須ステータスチェック名は `ci-docs` / `ci-web` / `ci-api` / `ci-infra` を正本とする。
+- 必須ステータスチェック名とjob名は1対1で管理し、別ワークフローで同名jobを作成しない。
+- 単位別ジョブの実行条件は `paths` を基準に制御し、共有設定変更時は影響単位を拡張実行する。
+- デプロイ系ワークフローは環境単位 `concurrency` を必須設定とし、同一環境への並列反映を禁止する。
+- 本番デプロイはGitHub Environment `prod` の承認ゲートを必須とし、`workflow_dispatch` 実行時も同じ保護ルールを適用する。
+- Artifacts命名は `<単位>-<branch>-<shortsha>` で統一し、a11y結果を含む判定証跡は90日以上保持する。
+
 ## 受入基準
 - CIで `tsc --noEmit` と lint が常時成功し、上記4つの `tsconfig` オプションが有効である。
 - 新規追加コードに `any` を導入する場合は、理由と除去計画をPR本文へ明記しない限り受入不可とする。
@@ -115,6 +128,7 @@ tags:
 - a11y検査結果が90日以上保持され、`AT-RPT-001` と `AT-GO-001` から参照可能である。
 
 ## 変更履歴
+- 2026-02-21: GitHub Actions採用に伴う実装補足（必須チェック名、paths、concurrency、Environment承認、Artifacts命名）を追加 [[BD-SYS-ADR-039]]
 - 2026-02-13: [[RQ-UX-021]] 対応としてアクセシビリティCIゲート（重大度閾値、期限付き例外、90日保持、手動補助ゲート）を追加 [[BD-SYS-ADR-024]]
 - 2026-02-11: Next.js App Router向け品質ゲート（build/start、Dynamic API、fetch再検証、画像/Script、Web Vitals）を追加 [[BD-SYS-ADR-024]]
 - 2026-02-11: 防御的型付けゲート（Brand、境界decode、センチネル禁止、NonEmpty、資源解放）を追加 [[BD-SYS-ADR-022]]
