@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as path from "path";
@@ -51,6 +52,121 @@ export class QuartzSiteStack extends cdk.Stack {
     const siteAssetPath =
       (this.node.tryGetContext("siteAssetPath") as string | undefined) ??
       path.join(__dirname, "../../quartz/public");
+    const githubOwner =
+      (this.node.tryGetContext("githubOwner") as string | undefined) ??
+      "tsuji-tomonori";
+    const githubRepo =
+      (this.node.tryGetContext("githubRepo") as string | undefined) ??
+      "diopside-v3";
+    const githubEnvironment =
+      (this.node.tryGetContext("githubEnvironment") as string | undefined) ??
+      "prod";
+    const githubSub = `repo:${githubOwner}/${githubRepo}:environment:${githubEnvironment}`;
+
+    const githubOidcProvider = new iam.OpenIdConnectProvider(
+      this,
+      "GithubOidcProvider",
+      {
+        url: "https://token.actions.githubusercontent.com",
+        clientIds: ["sts.amazonaws.com"],
+      },
+    );
+
+    const githubActionsDeployRole = new iam.Role(this, "GithubActionsDeployRole", {
+      description: "Assumed by GitHub Actions (OIDC) to run docs deploy via CDK",
+      maxSessionDuration: cdk.Duration.hours(1),
+      assumedBy: new iam.OpenIdConnectPrincipal(githubOidcProvider).withConditions(
+        {
+          StringEquals: {
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+            "token.actions.githubusercontent.com:sub": githubSub,
+          },
+        },
+      ),
+      inlinePolicies: {
+        DocsDeployPolicy: new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: [
+                "cloudformation:CreateChangeSet",
+                "cloudformation:DeleteChangeSet",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:DescribeStacks",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:GetTemplate",
+                "cloudformation:UpdateStack",
+              ],
+              resources: ["*"],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: [
+                "cloudfront:CreateInvalidation",
+                "cloudfront:GetDistribution",
+                "cloudfront:GetDistributionConfig",
+                "cloudfront:ListDistributions",
+                "cloudfront:TagResource",
+                "cloudfront:UntagResource",
+                "cloudfront:UpdateDistribution",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:GetRole",
+                "iam:PassRole",
+                "iam:PutRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:TagRole",
+                "iam:UntagRole",
+                "iam:UpdateAssumeRolePolicy",
+                "lambda:AddPermission",
+                "lambda:CreateFunction",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:GetLayerVersion",
+                "lambda:ListVersionsByFunction",
+                "lambda:PublishLayerVersion",
+                "lambda:RemovePermission",
+                "lambda:TagResource",
+                "lambda:UntagResource",
+                "lambda:UpdateFunctionCode",
+                "lambda:UpdateFunctionConfiguration",
+                "s3:CreateBucket",
+                "s3:DeleteBucket",
+                "s3:DeleteObject",
+                "s3:GetBucketLocation",
+                "s3:GetBucketPolicy",
+                "s3:GetBucketTagging",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutBucketPolicy",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:PutBucketTagging",
+                "s3:PutEncryptionConfiguration",
+                "s3:PutObject",
+                "s3:PutBucketVersioning",
+                "s3:PutLifecycleConfiguration",
+                "s3:PutBucketOwnershipControls",
+                "ssm:GetParameter",
+              ],
+              resources: ["*"],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ["sts:AssumeRole"],
+              resources: [
+                cdk.Stack.of(this).formatArn({
+                  service: "iam",
+                  account: cdk.Aws.ACCOUNT_ID,
+                  resource: "role",
+                  resourceName: "cdk-*",
+                  region: "",
+                }),
+              ],
+            }),
+          ],
+        }),
+      },
+    });
 
     const siteBucket = new s3.Bucket(this, "SiteBucket", {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
@@ -99,6 +215,16 @@ export class QuartzSiteStack extends cdk.Stack {
       value: distribution.domainName,
     });
 
+    new cdk.CfnOutput(this, "GithubActionsDeployRoleArn", {
+      value: githubActionsDeployRole.roleArn,
+      description: "Assume role ARN for GitHub Actions docs deploy workflow",
+    });
+
+    new cdk.CfnOutput(this, "GithubOidcProviderArn", {
+      value: githubOidcProvider.openIdConnectProviderArn,
+      description: "OIDC provider ARN for token.actions.githubusercontent.com",
+    });
+
     NagSuppressions.addResourceSuppressions(siteBucket, [
       {
         id: "AwsSolutions-S1",
@@ -137,6 +263,17 @@ export class QuartzSiteStack extends cdk.Stack {
       {
         id: "AwsSolutions-L1",
         reason: "CDK BucketDeployment uses framework-managed provider Lambda runtime outside direct stack control.",
+      },
+      {
+        id: "AwsSolutions-IAM5",
+        reason: "GitHub deploy role policy starts broad for bootstrap and will be narrowed with CloudTrail evidence in follow-up hardening.",
+      },
+    ], true);
+
+    NagSuppressions.addResourceSuppressions(githubActionsDeployRole, [
+      {
+        id: "AwsSolutions-IAM5",
+        reason: "Docs deploy role currently requires wildcard resources to run CDK stack operations and bootstrap role assumption.",
       },
     ], true);
 

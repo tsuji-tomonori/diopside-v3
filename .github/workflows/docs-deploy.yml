@@ -1,0 +1,71 @@
+name: Docs Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**/*.md"
+      - "infra/**"
+      - "config/quartz/**"
+      - "Taskfile.yaml"
+      - ".github/workflows/docs-deploy.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: docs-deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: prod
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      DOCS_SITE_URL: ${{ vars.DOCS_SITE_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate required variables
+        run: |
+          test -n "${{ vars.AWS_ROLE_ARN }}" || { echo "Missing variable: AWS_ROLE_ARN"; exit 1; }
+          test -n "${AWS_REGION}" || { echo "Missing variable: AWS_REGION"; exit 1; }
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify assumed identity
+        run: aws sts get-caller-identity
+
+      - name: Install Task
+        uses: go-task/setup-task@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "PyYAML>=6,<7"
+
+      - name: Deploy docs
+        run: task docs:deploy

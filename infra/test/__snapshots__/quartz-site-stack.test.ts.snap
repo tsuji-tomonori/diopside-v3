@@ -17,6 +17,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           "id": "AwsSolutions-L1",
           "reason": "CDK BucketDeployment uses framework-managed provider Lambda runtime outside direct stack control.",
         },
+        {
+          "id": "AwsSolutions-IAM5",
+          "reason": "GitHub deploy role policy starts broad for bootstrap and will be narrowed with CloudTrail evidence in follow-up hardening.",
+        },
       ],
     },
   },
@@ -29,6 +33,21 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
         ],
       },
     },
+    "GithubActionsDeployRoleArn": {
+      "Description": "Assume role ARN for GitHub Actions docs deploy workflow",
+      "Value": {
+        "Fn::GetAtt": [
+          "GithubActionsDeployRole3AEBE7B4",
+          "Arn",
+        ],
+      },
+    },
+    "GithubOidcProviderArn": {
+      "Description": "OIDC provider ARN for token.actions.githubusercontent.com",
+      "Value": {
+        "Ref": "GithubOidcProviderD8241A88",
+      },
+    },
   },
   "Parameters": {
     "BootstrapVersion": {
@@ -38,6 +57,73 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
     },
   },
   "Resources": {
+    "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderHandlerF2C543E0": {
+      "DependsOn": [
+        "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "62fa02efcaa700e1c247e1d3cc2aa0cd07a0808a9a3e3d2230e51f57a02233fb.zip",
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs22.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "iam:CreateOpenIDConnectProvider",
+                    "iam:DeleteOpenIDConnectProvider",
+                    "iam:UpdateOpenIDConnectProviderThumbprint",
+                    "iam:AddClientIDToOpenIDConnectProvider",
+                    "iam:RemoveClientIDFromOpenIDConnectProvider",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Inline",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBB049752D": {
       "DependsOn": [
         "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRoleDefaultPolicy0801355D",
@@ -411,6 +497,182 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
         },
       },
       "Type": "AWS::CloudFront::OriginAccessControl",
+    },
+    "GithubActionsDeployRole3AEBE7B4": {
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Docs deploy role currently requires wildcard resources to run CDK stack operations and bootstrap role assumption.",
+            },
+          ],
+        },
+      },
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+                  "token.actions.githubusercontent.com:sub": "repo:tsuji-tomonori/diopside-v3:environment:prod",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": {
+                  "Ref": "GithubOidcProviderD8241A88",
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Description": "Assumed by GitHub Actions (OIDC) to run docs deploy via CDK",
+        "MaxSessionDuration": 3600,
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:CreateChangeSet",
+                    "cloudformation:DeleteChangeSet",
+                    "cloudformation:DescribeChangeSet",
+                    "cloudformation:DescribeStacks",
+                    "cloudformation:ExecuteChangeSet",
+                    "cloudformation:GetTemplate",
+                    "cloudformation:UpdateStack",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                {
+                  "Action": [
+                    "cloudfront:CreateInvalidation",
+                    "cloudfront:GetDistribution",
+                    "cloudfront:GetDistributionConfig",
+                    "cloudfront:ListDistributions",
+                    "cloudfront:TagResource",
+                    "cloudfront:UntagResource",
+                    "cloudfront:UpdateDistribution",
+                    "iam:CreateRole",
+                    "iam:DeleteRole",
+                    "iam:GetRole",
+                    "iam:PassRole",
+                    "iam:PutRolePolicy",
+                    "iam:DeleteRolePolicy",
+                    "iam:TagRole",
+                    "iam:UntagRole",
+                    "iam:UpdateAssumeRolePolicy",
+                    "lambda:AddPermission",
+                    "lambda:CreateFunction",
+                    "lambda:DeleteFunction",
+                    "lambda:GetFunction",
+                    "lambda:GetLayerVersion",
+                    "lambda:ListVersionsByFunction",
+                    "lambda:PublishLayerVersion",
+                    "lambda:RemovePermission",
+                    "lambda:TagResource",
+                    "lambda:UntagResource",
+                    "lambda:UpdateFunctionCode",
+                    "lambda:UpdateFunctionConfiguration",
+                    "s3:CreateBucket",
+                    "s3:DeleteBucket",
+                    "s3:DeleteObject",
+                    "s3:GetBucketLocation",
+                    "s3:GetBucketPolicy",
+                    "s3:GetBucketTagging",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:PutBucketPolicy",
+                    "s3:PutBucketPublicAccessBlock",
+                    "s3:PutBucketTagging",
+                    "s3:PutEncryptionConfiguration",
+                    "s3:PutObject",
+                    "s3:PutBucketVersioning",
+                    "s3:PutLifecycleConfiguration",
+                    "s3:PutBucketOwnershipControls",
+                    "ssm:GetParameter",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                {
+                  "Action": "sts:AssumeRole",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::",
+                        {
+                          "Ref": "AWS::AccountId",
+                        },
+                        ":role/cdk-*",
+                      ],
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "DocsDeployPolicy",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "CostCenter",
+            "Value": "CC0000",
+          },
+          {
+            "Key": "Environment",
+            "Value": "Development",
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CDK",
+          },
+          {
+            "Key": "Name",
+            "Value": "QuartzSiteStackTest-GithubActionsDeployRole",
+          },
+          {
+            "Key": "Owner",
+            "Value": "platform-team",
+          },
+          {
+            "Key": "Project",
+            "Value": "diopside",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "GithubOidcProviderD8241A88": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ClientIDList": [
+          "sts.amazonaws.com",
+        ],
+        "CodeHash": "62fa02efcaa700e1c247e1d3cc2aa0cd07a0808a9a3e3d2230e51f57a02233fb",
+        "RejectUnauthorized": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderHandlerF2C543E0",
+            "Arn",
+          ],
+        },
+        "Url": "https://token.actions.githubusercontent.com",
+      },
+      "Type": "Custom::AWSCDKOpenIdConnectProvider",
+      "UpdateReplacePolicy": "Delete",
     },
     "PrettyUrlRewriteFnB44A6F25": {
       "Properties": {

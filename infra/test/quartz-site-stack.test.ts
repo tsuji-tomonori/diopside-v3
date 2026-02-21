@@ -190,6 +190,7 @@ describe("QuartzSiteStack", () => {
       "AWS::Lambda::LayerVersion",
       "AWS::S3::Bucket",
       "AWS::S3::BucketPolicy",
+      "Custom::AWSCDKOpenIdConnectProvider",
       "Custom::CDKBucketDeployment",
     ].sort();
 

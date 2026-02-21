@@ -49,3 +49,22 @@
 
 ## 検証（docs PDF配布仕様）
 - `task docs:guard` で文書リンク/Frontmatter整合を確認する。
+
+## 実施内容（docs-deploy OIDC自動配備）
+- 対象: `infra/lib/quartz-site-stack.ts`, `.github/workflows/docs-deploy.yml`, `BD-INF-DEP-003`, `DD-INF-DEP-001`, `DD-INF-SEC-002`, `AT-REL-001`。
+- 変更内容:
+  - CDKで GitHub OIDC Provider（`token.actions.githubusercontent.com`）と Assume先ロール `GithubActionsDeployRole` を構築する。
+  - Trust Policy を `aud=sts.amazonaws.com` + `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` に固定する。
+  - Stack Output に `GithubActionsDeployRoleArn` / `GithubOidcProviderArn` を追加する。
+  - `docs-deploy.yml` を新設し、`push(main)` と `workflow_dispatch` で `task docs:deploy` を OIDC で実行する。
+  - 初回はローカル `task infra:deploy`、2回目以降はGitHub Actions実行へ移行する運用へ統一する。
+  - ADRとして `[[BD-SYS-ADR-038]]` を追加し、判断根拠を記録する。
+
+## 影響確認（docs-deploy OIDC自動配備）
+- Assume先ロールをCDK管理に統一したため、Trust条件と権限変更をIaC差分で追跡可能になった。
+- `environment: prod` により、`sub` 条件とGitHub保護ルールの二段で実行境界を固定できる。
+- 初回ブートストラップ順序（ロール未作成）をローカル1回実行で解消できる。
+
+## 検証（docs-deploy OIDC自動配備）
+- `npm --prefix infra run test` でCDKテンプレート変更とcdk-nag検査の回帰確認を実施する。
+- `task docs:guard` で文書リンク/Frontmatter整合を確認する。

@@ -3,7 +3,7 @@ id: BD-INF-DEP-003
 title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -15,6 +15,7 @@ related:
 - '[[BD-INF-DEP-001]]'
 - '[[BD-SYS-ADR-016]]'
 - '[[BD-SYS-ADR-037]]'
+- '[[BD-SYS-ADR-038]]'
 - '[[AT-REL-001]]'
 - '[[DD-INF-DEP-001]]'
 tags:
@@ -85,9 +86,11 @@ flowchart TD
   - 配布名: `diopside-docs-{branch}-{shortsha}.pdf`（branchは `github.event.release.target_commitish` を同一規則で正規化）
   - 上書き方針: 同名Assetは `--clobber` で置換する。
 - `docs-deploy`:
-  - 起動: `workflow_dispatch`（手動）を標準、必要に応じてmain反映時
-  - 役割: `task docs:guard` -> `lint` / `test` / `cdk synth` / `cdk-nag` -> `task docs:deploy` -> 公開URL検証
-  - 認証: OIDCでAWSロール引き受け（長期キー不使用）
+  - 起動: `workflow_dispatch` と `push(main)`（`docs/**`, `infra/**`, `config/quartz/**`, `Taskfile.yaml`, workflow変更）
+  - 実行環境: `environment: prod` を必須化し、Environment保護ルールで承認境界を管理する。
+  - 役割: OIDC認証 -> `task docs:deploy`（`docs:guard` + `infra:deploy` + `docs:verify`）
+  - 認証: `aws-actions/configure-aws-credentials@v6` で `AWS_ROLE_ARN` を Assume し、長期キーを使用しない。
+  - 直列化: `concurrency: docs-deploy-prod` を固定し、同時配備を禁止する。
 
 ## cdk-nag品質ゲート
 - `infra` のCDK合成時に `AwsSolutionsChecks` を適用し、未承認の警告/エラーを残したまま配備しない。
@@ -110,6 +113,9 @@ flowchart TD
 
 ## 配信実装（infra）
 - `QuartzSiteStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。
+- `QuartzSiteStack` は GitHub OIDC Provider（`token.actions.githubusercontent.com`）と `GithubActionsDeployRole` を同一スタックで構築する。
+- `GithubActionsDeployRole` のTrust条件は `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` を必須にする。
+- Assume先ロールARNは `GithubActionsDeployRoleArn` Output で公開し、GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
 - `BucketDeployment` で `siteAssetPath` を S3 の `obsidian/` プレフィックスへ配置する。
 - CloudFront Distribution は S3 Origin + OAC 構成で、S3 バケットは公開禁止（`BLOCK_ALL`）とする。
 - デプロイ時に `distributionPaths: ["/*"]` を指定し、CloudFront のキャッシュを無効化する。
@@ -122,9 +128,11 @@ flowchart TD
 ## 失敗時の確認観点
 - Quartz build 失敗時: `docs/` の Markdown 記法とリンク不整合を確認し、再度 `task quartz:build` を実行する。
 - CDK deploy 失敗時: AWS 認証情報（`CDK_DEFAULT_ACCOUNT`/`CDK_DEFAULT_REGION`）と `siteAssetPath` の解決パスを確認する。
+- OIDC Assume失敗時: `AWS_ROLE_ARN` の値、Trust Policyの `aud/sub`、GitHub Environment名（`prod`）の一致を確認する。
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-21: `docs-deploy.yml` を `push(main)` + `environment: prod` + OIDC AssumeRole運用で実装し、初回ローカル配備後にGitHubへ移行する手順を追加 [[BD-SYS-ADR-038]]
 - 2026-02-21: `docs-pdf` のArtifact名を `.zip` とし、Release配布は `.pdf` を維持する運用へ更新 [[BD-SYS-ADR-037]]
 - 2026-02-21: `docs-pdf` / `release-docs-pdf` の配布経路と `diopside-docs-{branch}-{shortsha}.pdf` 命名規則を追加 [[BD-SYS-ADR-037]]
 - 2026-02-20: 章再編に合わせてCI/CD必須設計項目を追加 [[BD-SYS-ADR-036]]

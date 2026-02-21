@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -13,6 +13,7 @@ up:
 - '[[BD-SYS-ADR-013]]'
 - '[[BD-SYS-ADR-016]]'
 - '[[BD-SYS-ADR-037]]'
+- '[[BD-SYS-ADR-038]]'
 related:
 - '[[RQ-FR-024]]'
 - '[[RQ-RDR-029]]'
@@ -64,9 +65,17 @@ tags:
   - 配布名は `diopside-docs-{branch}-{shortsha}.pdf` とし、`branch` は `github.event.release.target_commitish` を同一規則で正規化する。
   - `gh release upload ... --clobber` で同名Assetを上書きする。
 - `docs-deploy.yml`
-  - `workflow_dispatch` を標準起動とし、必要に応じてmain反映時に起動する。
-  - 実行順: `task docs:guard` -> `task docs:deploy`
-  - AWS認証はOIDCロール引受で実施する。
+  - `workflow_dispatch` と `push(main)` で起動し、変更パスは `docs/**`, `infra/**`, `config/quartz/**`, `Taskfile.yaml`, workflow自身に限定する。
+  - `environment: prod` で実行し、`concurrency: docs-deploy-prod` で直列化する。
+  - `permissions` は `id-token: write` / `contents: read` を最小構成で付与する。
+  - `aws-actions/configure-aws-credentials@v6` を使用し、`AWS_ROLE_ARN` + `AWS_REGION` で OIDC Assume を実行する。
+  - Assume直後に `aws sts get-caller-identity` を実行し、誤アカウント配備を検知する。
+  - 実行順: `task docs:deploy`（`docs:guard` -> `infra:deploy` -> `docs:verify`）
+
+## 初回導入手順
+- 初回はローカルの管理者権限で `task infra:deploy` を実行し、`GithubOidcProvider` と `GithubActionsDeployRole` を作成する。
+- 初回配備後、`GithubActionsDeployRoleArn` Output を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
+- 2回目以降の配備は GitHub Actions から OIDC で実行する。
 
 ## テスト方針（CDK）
 - Fine-grained assertions: CloudFormationテンプレートの主要プロパティ（behavior順序、認証設定、OAC設定）を個別検証する。
@@ -101,21 +110,25 @@ tags:
 - 入力:
   - `docs/` 配下Markdown
   - `siteAssetPath` context（明示または既定値）
-  - AWS認証情報（`CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）
+  - AWS認証情報（初回ローカル: `CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）
+  - GitHub Environment変数（`AWS_ROLE_ARN`, `AWS_REGION`, 任意で `DOCS_SITE_URL`）
 - 出力:
   - `quartz/public` の静的サイト成果物
   - `diopside-docs-{branch}-{shortsha}.pdf`（Release配布用PDF）
   - `diopside-docs-{branch}-{shortsha}.zip`（Actions Artifact名）
   - S3配置済みアセット（`obsidian/`）
   - CloudFront invalidation結果
+  - `GithubActionsDeployRoleArn` / `GithubOidcProviderArn`（初回構築時のStack Output）
 
 ## 障害ハンドリング
 - Quartz build失敗: Markdown構文・リンク不整合を修正し、`task quartz:build` で再試行する。
 - CDK deploy失敗: AWS認証情報と `siteAssetPath` 解決結果を確認し、`task infra:deploy` を再実行する。
+- OIDC Assume失敗: `AWS_ROLE_ARN`、Trust Policy の `aud/sub`、`environment: prod` の一致を確認する。
 - 反映遅延: invalidation完了状態を確認し、必要時に再デプロイする。
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-21: `docs-deploy.yml` を追加し、初回ローカル配備 -> GitHub OIDC配備へ移行する実行手順を確定 [[BD-SYS-ADR-038]]
 - 2026-02-21: `docs-pdf.yml` のArtifact名を `.zip` とし、PDF本体との役割を分離 [[BD-SYS-ADR-037]]
 - 2026-02-21: `docs-pdf.yml` / `release-docs-pdf.yml` のPDF配布仕様（命名規則・正規化・Asset上書き）を追加 [[BD-SYS-ADR-037]]
 - 2026-02-21: CloudFront/S3設定値の正本をサービス別詳細へ分離し、本書を配備フロー正本として明確化 [[BD-SYS-ADR-036]]
