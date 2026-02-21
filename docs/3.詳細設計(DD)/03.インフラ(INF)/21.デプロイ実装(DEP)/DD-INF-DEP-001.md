@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.10
+version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -21,6 +21,7 @@ related:
 - '[[AT-RUN-001]]'
 - '[[DD-INF-CF-001]]'
 - '[[DD-INF-S3-001]]'
+- '[[DD-INF-SEC-002]]'
 tags:
 - diopside
 - DD
@@ -71,6 +72,35 @@ tags:
   - `aws-actions/configure-aws-credentials@v6` を使用し、`AWS_ROLE_ARN` + `AWS_REGION` で OIDC Assume を実行する。
   - Assume直後に `aws sts get-caller-identity` を実行し、誤アカウント配備を検知する。
   - 実行順: `task docs:deploy`（`docs:guard` -> `infra:deploy` -> `docs:verify`）
+
+## GitHub Actions パラメータ・設定値（`docs-deploy.yml`）
+| 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
+|---|---|---|---|---|---|
+| Trigger | `on.workflow_dispatch` | 有効 | Yes | workflow定義 | 手動配備を許可するため。 |
+| Trigger | `on.push.branches` | `main` | Yes | workflow定義 | 本番配備ブランチを固定するため。 |
+| Trigger | `on.push.paths` | `docs/**`, `infra/**`, `config/quartz/**`, `Taskfile.yaml`, `.github/workflows/docs-deploy.yml` | Yes | workflow定義 | 不要な起動を防ぐため。 |
+| Job | `runs-on` | `ubuntu-latest` | Yes | workflow定義 | 実行環境を統一するため。 |
+| Job | `timeout-minutes` | `45` | Yes | workflow定義 | ハング時の長時間実行を防ぐため。 |
+| Job | `environment` | `prod` | Yes | workflow定義 | Environment保護ルールを適用するため。 |
+| Control | `concurrency.group` | `docs-deploy-prod` | Yes | workflow定義 | 同時配備を禁止するため。 |
+| Permission | `permissions.id-token` | `write` | Yes | workflow定義 | OIDCでトークン発行するため。 |
+| Permission | `permissions.contents` | `read` | Yes | workflow定義 | リポジトリ読取を許可するため。 |
+| Env var | `AWS_ROLE_ARN` | ARN文字列（例: `arn:aws:iam::<account-id>:role/GithubActionsDeployRole`） | Yes | GitHub Environment `prod` variables | Assume先ロールを指定するため。 |
+| Env var | `AWS_REGION` | `ap-northeast-1`（運用標準） | Yes | GitHub Environment `prod` variables | AWS API実行リージョンを固定するため。 |
+| Env var | `DOCS_SITE_URL` | `https://<docs-domain>` | No | GitHub Environment `prod` variables | `task docs:verify` のHTTP確認先を指定するため。 |
+| Step | `actions/checkout` | `@v4` (`fetch-depth: 0`) | Yes | workflow定義 | 差分判定に必要な履歴を取得するため。 |
+| Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task docs:deploy` 実行のため。 |
+| Step | `actions/setup-python` | `@v5` (`python-version: 3.11`) | Yes | workflow定義 | docs検証スクリプトの実行環境を固定するため。 |
+| Step | `actions/setup-node` | `@v4` (`node-version: 20`) | Yes | workflow定義 | Quartz/CDK実行環境を固定するため。 |
+| Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ vars.AWS_ROLE_ARN }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
+| Verify | `aws sts get-caller-identity` | 0終了コード | Yes | workflow定義 | 誤アカウント配備を検知するため。 |
+| Deploy | 実行コマンド | `task docs:deploy` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
+
+## OIDC信頼条件（固定値）
+- Provider URL: `https://token.actions.githubusercontent.com`
+- Audience: `sts.amazonaws.com`
+- Subject: `repo:tsuji-tomonori/diopside-v3:environment:prod`
+- Assume先ロール: `GithubActionsDeployRole`（Stack Output `GithubActionsDeployRoleArn` から取得し、`AWS_ROLE_ARN` へ設定）
 
 ## 初回導入手順
 - 初回はローカルの管理者権限で `task infra:deploy` を実行し、`GithubOidcProvider` と `GithubActionsDeployRole` を作成する。
@@ -128,6 +158,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-21: `docs-deploy.yml` のパラメータ/設定値一覧と OIDC信頼条件の固定値を追加
 - 2026-02-21: `docs-deploy.yml` を追加し、初回ローカル配備 -> GitHub OIDC配備へ移行する実行手順を確定 [[BD-SYS-ADR-038]]
 - 2026-02-21: `docs-pdf.yml` のArtifact名を `.zip` とし、PDF本体との役割を分離 [[BD-SYS-ADR-037]]
 - 2026-02-21: `docs-pdf.yml` / `release-docs-pdf.yml` のPDF配布仕様（命名規則・正規化・Asset上書き）を追加 [[BD-SYS-ADR-037]]

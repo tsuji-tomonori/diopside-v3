@@ -3,7 +3,7 @@ id: DD-INF-SEC-002
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -16,6 +16,7 @@ related:
 - '[[AT-OPS-INF-001]]'
 - '[[DD-INF-CFG-001]]'
 - '[[BD-SYS-ADR-038]]'
+- '[[RQ-RDR-049]]'
 tags:
 - diopside
 - DD
@@ -38,6 +39,7 @@ tags:
 - 全ロールに permission boundary を適用し、`iam:*`, `kms:ScheduleKeyDeletion`, `s3:DeleteBucket` をデフォルト拒否する。
 - wildcard権限（`*`）は `Action`/`Resource` ともに原則禁止し、`github-actions-docs-deploy-role` の初期導入例外はADRで根拠と縮退計画を管理する。
 - クロスアカウント許可は `Principal` 固定 + `ExternalId` 必須 + `Condition` でIP/時間帯制約を設定する。
+- 作成時タグ条件では `aws:RequestTag/Description` を必須とし、説明欠落の作成APIを拒否する。
 
 ## OIDC信頼条件
 - OIDC Provider は `https://token.actions.githubusercontent.com` を使用し、Audience は `sts.amazonaws.com` のみに固定する。
@@ -57,6 +59,7 @@ tags:
 - 主要操作は監査ログへ `actor`, `role`, `resource`, `result` を記録する。
 
 ## 変更履歴
+- 2026-02-21: `Description` タグの作成時必須条件を権限境界へ追加
 - 2026-02-21: GitHub OIDC AssumeRole（`github-actions-docs-deploy-role`）の信頼条件と初期導入例外の管理方針を追加 [[BD-SYS-ADR-038]]
 - 2026-02-21: DD-INF章再編に合わせて `70.統制と監査(GOV)` へ移設し、Config統制文書との関連を追加 [[BD-SYS-ADR-036]]
 - 2026-02-13: `infra-deploy-role` の主権限をCDK標準操作（synth/diff/deploy）へ更新

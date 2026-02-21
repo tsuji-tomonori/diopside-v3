@@ -8,6 +8,7 @@ const fixtureSitePath = path.join(__dirname, "fixtures/site");
 
 const REQUIRED_TAG_KEYS = [
   "CostCenter",
+  "Description",
   "Environment",
   "Owner",
   "Project",
@@ -169,7 +170,23 @@ describe("QuartzSiteStack", () => {
 
     template.hasResourceProperties("AWS::CloudFront::Function", {
       FunctionCode: Match.stringLikeRegexp("/docs/"),
+      FunctionConfig: {
+        Comment: "Rewrite extensionless docs paths to static HTML",
+      },
     });
+
+    template.hasResourceProperties("AWS::CloudFront::Distribution", {
+      DistributionConfig: {
+        Comment: "CloudFront distribution for diopside docs delivery",
+      },
+    });
+
+    const outputs = template.toJSON().Outputs as Record<string, unknown>;
+    expect(outputs.CloudFrontDomainName).toEqual(
+      expect.objectContaining({
+        Description: "CloudFront domain name for public docs endpoint",
+      }),
+    );
   });
 
   test("does not create unintended resource types", () => {

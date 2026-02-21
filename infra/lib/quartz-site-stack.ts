@@ -27,6 +27,9 @@ export class QuartzSiteStack extends cdk.Stack {
       CostCenter:
         (this.node.tryGetContext("tagCostCenter") as string | undefined) ??
         "CC0000",
+      Description:
+        (this.node.tryGetContext("tagDescription") as string | undefined) ??
+        "diopside-docs-delivery-stack",
       Environment: environmentTag,
       Owner:
         (this.node.tryGetContext("tagOwner") as string | undefined) ??
@@ -181,6 +184,7 @@ export class QuartzSiteStack extends cdk.Stack {
     });
 
     const rewriteFn = new cloudfront.Function(this, "PrettyUrlRewriteFn", {
+      comment: "Rewrite extensionless docs paths to static HTML",
       runtime: cloudfront.FunctionRuntime.JS_2_0,
       code: cloudfront.FunctionCode.fromFile({
         filePath: path.join(__dirname, "../functions/pretty-url-rewrite.js"),
@@ -188,6 +192,7 @@ export class QuartzSiteStack extends cdk.Stack {
     });
 
     const distribution = new cloudfront.Distribution(this, "Distro", {
+      comment: "CloudFront distribution for diopside docs delivery",
       defaultRootObject: "index.html",
       defaultBehavior: {
         origin,
@@ -212,6 +217,7 @@ export class QuartzSiteStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, "CloudFrontDomainName", {
+      description: "CloudFront domain name for public docs endpoint",
       value: distribution.domainName,
     });
 

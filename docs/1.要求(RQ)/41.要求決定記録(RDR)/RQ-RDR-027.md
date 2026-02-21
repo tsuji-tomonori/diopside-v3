@@ -3,11 +3,11 @@ id: RQ-RDR-027
 title: AWSタグ統制を単一アカウント運用へ適用する決定
 doc_type: 要求決定記録
 phase: RQ
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-14'
+updated: '2026-02-21'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -17,6 +17,7 @@ related:
 - '[[BD-SYS-ADR-015]]'
 - '[[DD-SYS-COST-001]]'
 - '[[AT-OPS-001]]'
+- '[[RQ-RDR-049]]'
 tags:
 - diopside
 - RQ
@@ -25,7 +26,7 @@ tags:
 
 ## 決定事項
 - AWSタグ統制は、単一アカウント運用を前提に要件化する。
-- 必須タグキーを `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` に固定する。
+- 必須タグキーを `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` / `Description` に固定する。
 - タグキーは `UpperCamelCase` を標準とし、`Environment` の許容値は `Production` / `Development` に固定する。
 - タグ値へのPII/秘密情報格納を禁止し、`aws:` プレフィックスを利用しない。
 
@@ -41,5 +42,6 @@ tags:
 - 運用記録: タグ欠落・禁止情報混入の是正記録を [[AT-OPS-001]] へ集約する。
 
 ## 変更履歴
+- 2026-02-21: `Description` を必須タグキーへ追加し、関連決定 [[RQ-RDR-049]] へ連携
 - 2026-02-14: `Environment` 許容値を `Production` / `Development` へ変更
 - 2026-02-11: 新規作成

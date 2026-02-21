@@ -3,11 +3,11 @@ id: DD-INF-IAC-002
 title: IaCモジュール設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-21'
 up:
 - '[[BD-INF-IAC-001]]'
 related:
@@ -15,6 +15,7 @@ related:
 - '[[UT-IAC-001]]'
 - '[[UT-POL-001]]'
 - '[[RQ-DEV-001]]'
+- '[[RQ-RDR-049]]'
 tags:
 - diopside
 - DD
@@ -24,6 +25,7 @@ tags:
 ## 詳細仕様
 - IaCは環境共通モジュールと環境別スタックに分離する。
 - モジュールI/Oは型定義し、暗黙依存を禁止する。
+- 説明設定可能なリソースは `description/comment` をモジュール入力または定数として必須化し、空欄を禁止する。
 
 ## 章構成
 1. モジュール分割
@@ -49,8 +51,10 @@ tags:
 - `iam-stack`: `Action`/`Resource` の wildcard混入を拒否する。
 - `observability-stack`: CRITICAL閾値や通知先変更は運用承認を必須化する。
 - `cicd-stack`: 承認者分離（承認者と実行者の兼任禁止）を維持する。
+- 全モジュール共通: 説明設定可能なリソースで `description/comment` 欠落差分を拒否する。
 
 ## 変更履歴
+- 2026-02-21: `description/comment` 必須化ルールと差分レビュー観点を追加
 - 2026-02-13: リソース別設定責務（network/iam/observability/cicd）と差分レビュー観点を追加
 - 2026-02-13: CDKオンリー方針と `cdk diff` 証跡ルールを追加
 - 2026-02-13: 設計別RTMの根拠追跡を補強するため、[[RQ-DEV-001]] を関連へ追加 [[BD-SYS-ADR-028]]

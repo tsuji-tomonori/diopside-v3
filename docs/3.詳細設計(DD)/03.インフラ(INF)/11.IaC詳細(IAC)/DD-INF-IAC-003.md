@@ -3,17 +3,18 @@ id: DD-INF-IAC-003
 title: IaC状態管理とドリフト検知
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-21'
 up:
 - '[[DD-INF-IAC-002]]'
 - '[[RQ-DEV-001]]'
 related:
 - '[[IT-INF-ROLL-001]]'
 - '[[DD-INF-IAC-001]]'
+- '[[RQ-RDR-049]]'
 tags:
 - diopside
 - DD
@@ -36,6 +37,7 @@ tags:
 | IAM/Boundary | CloudFormation + `cdk.out` | ロール、境界、条件句 | 権限逸脱を差分で即時検知するため。 |
 | Alarm/Notification | CloudFormation + `cdk.out` | 閾値、通知先、通知条件 | SLO判定と通知遅延の回帰を防止するため。 |
 | Pipeline | CloudFormation + `cdk.out` | 承認条件、artifact固定化条件 | 承認済み差分以外の反映を防止するため。 |
+| 説明プロパティ | CloudFormation + `cdk.out` | `Description` タグ、`description/comment` | 後追い調査時の識別性を維持するため。 |
 
 ## 2. ドリフト判定
 - 生成管理: `cdk synth` で生成したテンプレートとcontext（`cdk.context.json`）を差分管理する。
@@ -47,7 +49,7 @@ tags:
 |---|---|---|
 | P1 | 認証境界/公開設定のドリフト | 2時間以内に是正 |
 | P2 | 監視/通知設定のドリフト | 当日中に是正 |
-| P3 | タグ/説明情報のみのドリフト | 3営業日以内に是正 |
+| P3 | タグ/説明情報（`Description`・`description/comment`）のみのドリフト | 3営業日以内に是正 |
 
 ## 3. 是正フロー
 - P1/P2ドリフトは是正完了まで `cdk deploy` を禁止し、`cdk synth` / `cdk diff` のみ許可する。
@@ -61,6 +63,7 @@ tags:
 - 手動変更検知時は即時是正またはIaC取り込みを実施する。
 
 ## 変更履歴
+- 2026-02-21: `Description` タグと `description/comment` のドリフト検知対象を追加
 - 2026-02-13: 状態管理対象をリソース別に追加し、是正フローをP1/P2/P3で章分割
 - 2026-02-13: CDK状態管理（synth/diff/deploy証跡）へ更新し、`cdk deploy` 制御条件を追加
 - 2026-02-13: state backend構成、lock運用、ドリフト対応SLAを追加

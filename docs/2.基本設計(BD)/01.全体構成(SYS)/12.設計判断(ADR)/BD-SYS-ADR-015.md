@@ -3,13 +3,14 @@ id: BD-SYS-ADR-015
 title: 単一アカウントでAWSタグ統制をIAMとConfigで実施する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-21'
 up:
 - '[[RQ-RDR-027]]'
+- '[[RQ-RDR-049]]'
 related:
 - '[[RQ-COST-001]]'
 - '[[RQ-SEC-001]]'
@@ -26,7 +27,8 @@ tags:
   - IaC: 必須タグキーと列挙値を標準入力として固定する。
   - IAM: `aws:RequestTag/<key>` と `aws:TagKeys` で作成時タグ条件を強制する。
   - AWS Config: `required-tags` によりタグ欠落を検知し、是正運用へ接続する。
-- 必須タグは `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` とする。
+- 必須タグは `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` / `Description` とする。
+- 説明を設定できるインフラ構成要素は `description` または `comment` を必須とし、用途を1文で判別できる記述を保持する。
 - タグ値へのPII/秘密情報格納を禁止し、違反検知時は当日是正とする。
 
 ## 理由
@@ -45,4 +47,5 @@ tags:
 - タグ自由入力を許可する案: 表記ゆれと配賦不能コストが増えるため不採用。
 
 ## 変更履歴
+- 2026-02-21: `Description` タグ追加と説明フィールド必須化を反映
 - 2026-02-11: 新規作成

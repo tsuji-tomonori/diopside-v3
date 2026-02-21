@@ -3,11 +3,11 @@ id: DD-SYS-COST-001
 title: コスト運用詳細
 doc_type: コスト運用詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-21'
 up:
 - '[[BD-SYS-ADR-015]]'
 related:
@@ -17,6 +17,7 @@ related:
 - '[[AT-OPS-001]]'
 - '[[DD-SYS-AV-001]]'
 - '[[BD-INF-MON-001]]'
+- '[[RQ-RDR-049]]'
 tags:
 - diopside
 - DD
@@ -37,6 +38,7 @@ tags:
 | `Owner` | 必須 | 問い合わせ先 | チーム識別子（例: `platform-team`） | 個人名を避ける |
 | `Project` | 必須 | プロダクト集約 | `diopside` | プロダクト単位 |
 | `ManagedBy` | 必須 | 管理方式 | `CDK` / `Manual` | 変更統制 |
+| `Description` | 必須 | 一覧上の用途判別 | 10-120文字の説明文 | 曖昧語のみの記載を禁止 |
 
 ## 強制レイヤ
 - IaC:
@@ -46,11 +48,13 @@ tags:
   - `aws:TagKeys` で許可キーを制限し、表記ゆれキーを拒否する。
   - `aws:RequestTag/Environment` で許容値以外を拒否する。
   - `aws:RequestTag/CostCenter` など必須キー欠落の作成リクエストを拒否する。
+  - `aws:RequestTag/Description` の欠落を拒否し、説明未設定リソースの作成を禁止する。
 
 ## 検知と是正
 - AWS Config `required-tags` で必須タグ欠落を日次検知する。
 - 日次監査レポートで「必須タグ付与率」「未タグリソース数」「是正完了時間」を記録する。
 - 欠落検知時は24時間以内に補完し、補完完了までは当該リソースの追加変更を凍結する。
+- `description/comment` を持つリソースは、欠落をP3ドリフトとして3営業日以内に是正する。
 
 ## Billing運用
 - `CostCenter` / `Environment` / `Project` をコスト配分タグとして有効化する。
@@ -120,6 +124,7 @@ flowchart TD
   - 月次コスト配賦レポートと是正記録（[[AT-OPS-001]]）
 
 ## 変更履歴
+- 2026-02-21: `Description` を必須タグへ追加し、説明フィールド欠落の検知・是正条件を追加
 - 2026-02-14: `Environment` 許容値を `Production` / `Development` へ更新し、抑制施策の環境表記を2環境運用へ整合
 - 2026-02-13: `ManagedBy` の許容値をCDKオンリー方針へ更新（`CDK`/`Manual`）
 - 2026-02-13: コスト超過検知アルゴリズム（検知閾値/予測算出/抑制施策優先順位/アラートレベル）を追加

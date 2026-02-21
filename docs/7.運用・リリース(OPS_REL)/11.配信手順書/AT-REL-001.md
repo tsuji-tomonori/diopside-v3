@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -15,6 +15,7 @@ related:
 - '[[AT-GO-001]]'
 - '[[BD-INF-DEP-003]]'
 - '[[BD-INF-DEP-004]]'
+- '[[DD-INF-DEP-001]]'
 - '[[AT-RUN-001]]'
 tags:
 - diopside
@@ -32,15 +33,31 @@ tags:
 - `docs/` 更新内容がコミット可能状態である。
 - `quartz/` と `infra/` が同一リポジトリ配下に存在する。
 
+## GitHub Environment `prod` 設定手順
+1. GitHubリポジトリの `Settings -> Environments` で `prod` を作成する。
+2. `prod` の Variables へ `AWS_REGION=ap-northeast-1` を追加する。
+3. 初回の `task infra:deploy` 完了後、Stack Output `GithubActionsDeployRoleArn` を取得し、`prod` の Variables へ `AWS_ROLE_ARN=<Output値>` を追加する。
+4. 公開サイトURLが確定している場合は `DOCS_SITE_URL=https://<docs-domain>` を追加する（未設定時はHTTP確認をスキップ）。
+5. `prod` の保護ルールで `main` ブランチのみ実行対象にする（必要時は承認者を設定する）。
+6. `Actions -> Docs Deploy` を `workflow_dispatch` で1回実行し、`Validate required variables` と `Verify assumed identity` が成功することを確認する。
+
 ## 配信手順
-1. 初回導入時のみローカルで `task infra:deploy` を実行し、Stack Output の `GithubActionsDeployRoleArn` を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
-2. 通常運用では `main` へのpushまたは `docs-deploy` の手動起動で GitHub Actions 配備を実行する。
-3. workflow が OIDC で `AWS_ROLE_ARN` を引受し、`aws sts get-caller-identity` が成功することを確認する。
-4. `task docs:deploy` 実行ログで `task quartz:build` が `quartz/public` を生成することを確認する。
-5. `task infra:deploy` が `siteAssetPath=quartz/public` を参照してCDKデプロイし、S3配置とCloudFront invalidationが完了することを確認する。
-6. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
-7. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
-8. Phase 2適用後は [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
+1. 初回導入時のみローカルで `task infra:deploy` を実行し、OIDC Provider/Assume先ロールを作成する。
+2. Stack Output `GithubActionsDeployRoleArn` を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
+3. GitHub Actions `Docs Deploy` を `workflow_dispatch` で実行し、`Validate required variables` の成功を確認する。
+4. `Configure AWS credentials (OIDC)` と `aws sts get-caller-identity` が成功することを確認する。
+5. `task docs:deploy` 実行ログで `docs:guard -> infra:deploy -> docs:verify` が完了することを確認する。
+6. `task quartz:build` が `quartz/public` を生成し、`task infra:deploy` が `siteAssetPath=quartz/public` を参照してS3配置とCloudFront invalidationを完了することを確認する。
+7. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
+8. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
+9. 通常運用では `main` へのpushまたは `workflow_dispatch` で同手順を反復する。
+10. Phase 2適用後は [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
+
+## 設定不備時の確認手順
+1. `Missing variable: AWS_ROLE_ARN` が出る場合は Environment `prod` の Variables 名/値を再確認する。
+2. `Missing variable: AWS_REGION` が出る場合は `AWS_REGION=ap-northeast-1` を設定する。
+3. OIDC Assume失敗時は `AWS_ROLE_ARN`、Trust条件（`aud=sts.amazonaws.com`, `sub=repo:tsuji-tomonori/diopside-v3:environment:prod`）、Jobの `environment: prod` の一致を確認する。
+4. `docs:verify` 失敗時は `DOCS_SITE_URL` の値と公開URLの到達性を確認する。
 
 ## 判定基準
 - 公開手順が単一コマンドで完了し、配信サイトに更新内容が反映される。
@@ -55,6 +72,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-21: GitHub Actions の Environment variables 設定手順と設定不備時の確認手順を追加
 - 2026-02-21: 初回ローカル配備後に GitHub OIDC AssumeRole へ移行する運用手順と判定基準を追加
 - 2026-02-20: テスト章再編に合わせて「7.運用・リリース(OPS_REL)」へ移設し、AT判定からの参照位置づけを明記
 - 2026-02-11: 公開トップ参照を [[RQ-HM-001]] から [[index]] へ変更

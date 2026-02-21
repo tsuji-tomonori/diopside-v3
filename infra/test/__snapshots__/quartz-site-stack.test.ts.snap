@@ -26,6 +26,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
   },
   "Outputs": {
     "CloudFrontDomainName": {
+      "Description": "CloudFront domain name for public docs endpoint",
       "Value": {
         "Fn::GetAtt": [
           "Distro87EBE6BA",
@@ -161,6 +162,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
             "Value": "CC0000",
           },
           {
+            "Key": "Description",
+            "Value": "diopside-docs-delivery-stack",
+          },
+          {
             "Key": "Environment",
             "Value": "Development",
           },
@@ -217,6 +222,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           {
             "Key": "CostCenter",
             "Value": "CC0000",
+          },
+          {
+            "Key": "Description",
+            "Value": "diopside-docs-delivery-stack",
           },
           {
             "Key": "Environment",
@@ -415,6 +424,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
       },
       "Properties": {
         "DistributionConfig": {
+          "Comment": "CloudFront distribution for diopside docs delivery",
           "DefaultCacheBehavior": {
             "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
             "Compress": true,
@@ -462,6 +472,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           {
             "Key": "CostCenter",
             "Value": "CC0000",
+          },
+          {
+            "Key": "Description",
+            "Value": "diopside-docs-delivery-stack",
           },
           {
             "Key": "Environment",
@@ -632,6 +646,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
             "Value": "CC0000",
           },
           {
+            "Key": "Description",
+            "Value": "diopside-docs-delivery-stack",
+          },
+          {
             "Key": "Environment",
             "Value": "Development",
           },
@@ -712,17 +730,7 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
 }
 ",
         "FunctionConfig": {
-          "Comment": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Ref": "AWS::Region",
-                },
-                "QuartzSiteStackTettyUrlRewriteFn18CEAC8D",
-              ],
-            ],
-          },
+          "Comment": "Rewrite extensionless docs paths to static HTML",
           "Runtime": "cloudfront-js-2.0",
         },
         "Name": {
@@ -775,6 +783,10 @@ exports[`QuartzSiteStack matches CloudFormation snapshot 1`] = `
           {
             "Key": "CostCenter",
             "Value": "CC0000",
+          },
+          {
+            "Key": "Description",
+            "Value": "diopside-docs-delivery-stack",
           },
           {
             "Key": "Environment",

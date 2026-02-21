@@ -68,3 +68,34 @@
 ## 検証（docs-deploy OIDC自動配備）
 - `npm --prefix infra run test` でCDKテンプレート変更とcdk-nag検査の回帰確認を実施する。
 - `task docs:guard` で文書リンク/Frontmatter整合を確認する。
+
+## 実施内容（インフラ説明情報の必須化）
+- 対象: `infra/lib/quartz-site-stack.ts`, `infra/test/quartz-site-stack.test.ts`, `RQ-COST-001`, `RQ-RDR-049`, `BD-SYS-ADR-015`, `DD-SYS-COST-001`, `DD-INF-CFG-001`, `DD-INF-IAC-002`, `DD-INF-IAC-003`, `DD-INF-SEC-002`。
+- 変更内容:
+  - タグ統制の必須キーへ `Description` を追加し、6キー（`CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` / `Description`）を正本化。
+  - 説明設定可能なインフラ構成要素へ `description/comment` を必須化する要件と設計判断を追加。
+  - CDK実装で CloudFront Distribution/Function と CloudFormation Output に説明文を追加。
+  - インフラ単体テストを更新し、必須タグセットと説明プロパティを検証対象へ追加。
+
+## 影響確認（インフラ説明情報の必須化）
+- タグ一覧表示と詳細画面の両方で用途を即時判別できるため、運用時の調査時間短縮が見込める。
+- 既存の required-tags 検知フローへ `Description` を追加するだけで運用可能であり、監査運用の追加コストは限定的。
+- 説明欠落はP3ドリフトとして既存SLA（3営業日以内是正）に統合できる。
+
+## 検証（インフラ説明情報の必須化）
+- `npm --prefix infra run test` でテンプレートとタグ/説明検証の回帰確認を実施する。
+- `task docs:guard` でFrontmatter/リンク/文書整合を確認する。
+
+## 実施内容（GitHub Actions 設定値の文書化）
+- 対象: `DD-INF-DEP-001`, `AT-REL-001`。
+- 変更内容:
+  - `DD-INF-DEP-001` に `docs-deploy.yml` のパラメータ/設定値一覧（trigger, permissions, concurrency, environment variables, action versions, 実行コマンド）を追加。
+  - OIDC信頼条件（Provider URL / `aud` / `sub` / Assume先ロール取得元）を固定値として明記。
+  - `AT-REL-001` に GitHub Environment `prod` の設定手順（`AWS_ROLE_ARN`, `AWS_REGION`, 任意 `DOCS_SITE_URL`）と設定不備時の確認手順を追加。
+
+## 影響確認（GitHub Actions 設定値の文書化）
+- 詳細設計と運用手順書で同一パラメータ名・設定値を参照できるため、設定漏れと名称誤りを削減できる。
+- 初回導入（ローカル配備）から通常運用（GitHub OIDC配備）までの移行手順が連続した手順として参照可能になった。
+
+## 検証（GitHub Actions 設定値の文書化）
+- `task docs:guard` でFrontmatter/リンク整合を確認する。

@@ -3,7 +3,7 @@ id: RQ-COST-001
 title: コスト要件
 doc_type: 非機能要求
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -13,6 +13,7 @@ up:
 related:
 - '[[RQ-RDR-017]]'
 - '[[RQ-RDR-027]]'
+- '[[RQ-RDR-049]]'
 - '[[RQ-PC-006]]'
 - '[[BD-SYS-ADR-015]]'
 - '[[BD-INF-DEP-001]]'
@@ -34,7 +35,8 @@ tags:
 - 受入基準:
   - AWS月額実績コストは 3,000円以下を維持できる。
   - 月中時点で予測コストが 2,700円（上限の90%）を超えた場合、48時間以内に抑制施策を適用できる。
-  - 全対象リソースに `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` の必須タグが付与され、日次監査で付与率 100% を維持できる。
+  - 全対象リソースに `CostCenter` / `Environment` / `Owner` / `Project` / `ManagedBy` / `Description` の必須タグが付与され、日次監査で付与率 100% を維持できる。
+  - 説明を設定できるインフラ構成要素（例: CloudFront Distribution/Function、CloudFormation Output、IAM Role）には `description` または `comment` を必須設定し、用途を画面上で即時判別できる。
   - `Environment` は `Production` / `Development` の列挙値のみを許可し、表記ゆれ（例: `production`）を許容しない運用ができる。
   - コスト配分に使用するタグキーは請求コンソールで有効化し、有効化遅延（最大48時間）を考慮した月次集計手順を維持できる。
   - 抑制施策（収集頻度低減、キャッシュ期間延長、保持期間短縮）の適用記録を残せる運用ができる。
@@ -51,6 +53,7 @@ tags:
   - [[DD-SYS-COST-001]]
 
 ## 変更履歴
+- 2026-02-21: 説明可能な構成要素への `description/comment` 必須化と `Description` タグ必須化を受入基準へ追加 [[RQ-RDR-049]]
 - 2026-02-21: 非機能要求の記載を「〜できる」基調へ統一し、受入基準と例外条件を1項目1判定で読める構成へ更新 [[RQ-RDR-048]]
 - 2026-02-14: 環境運用を `dev/prod` へ統一した方針に合わせ、`Environment` 列挙値を2値へ更新 [[RQ-RDR-027]]
 - 2026-02-11: AWSタグ統制（必須タグ/列挙値/有効化遅延考慮）を受入基準へ追加 [[RQ-RDR-027]]
