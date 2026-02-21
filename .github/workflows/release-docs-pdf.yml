@@ -1,0 +1,76 @@
+name: Release Docs PDF
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  attach-docs-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Task
+        uses: go-task/setup-task@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache npm + Puppeteer (Chromium)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/puppeteer
+          key: ${{ runner.os }}-release-docs-pdf-${{ hashFiles('scripts/docs_pdf/**', 'docs/**/*.md', 'Taskfile.yaml') }}
+
+      - name: Install system dependencies (Pandoc + XeLaTeX + fonts)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-noto-cjk \
+            fonts-noto-cjk-extra
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "PyYAML>=6,<7"
+
+      - name: Install obsidian-export
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/zoni/obsidian-export/releases/download/v25.3.0/obsidian-export-installer.sh | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          obsidian-export --version
+
+      - name: Install Mermaid CLI
+        run: |
+          npm install -g @mermaid-js/mermaid-cli@11.12.0
+
+      - name: Build PDF
+        run: |
+          task docs:pdf
+
+      - name: Upload PDF to release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" reports/diopside-docs.pdf --clobber
