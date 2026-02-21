@@ -27,13 +27,29 @@ from typing import Any, Dict, List
 
 def _run(cmd: List[str]) -> None:
     try:
-        subprocess.run(cmd, check=True)
+        completed = subprocess.run(
+            cmd,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        # Keep linter/type-checkers happy about an otherwise unused local.
+        _ = completed
     except FileNotFoundError:
         raise RuntimeError(
             f"Mermaid CLI not found: {cmd[0]!r}. "
             "Install it (e.g. `npm i -g @mermaid-js/mermaid-cli`) "
             "or set MMDC to a runnable command."
         )
+    except subprocess.CalledProcessError as e:
+        stderr = (e.stderr or "").strip()
+        if len(stderr) > 1200:
+            stderr = stderr[-1200:]
+        msg = f"Mermaid rendering failed (exit={e.returncode})."
+        if stderr:
+            msg += f"\n{stderr}"
+        raise RuntimeError(msg)
 
 
 def _has_puppeteer_config_arg(cmd: List[str]) -> bool:
