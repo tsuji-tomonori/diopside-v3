@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -12,6 +12,7 @@ up:
 - '[[BD-INF-DEP-003]]'
 - '[[BD-SYS-ADR-013]]'
 - '[[BD-SYS-ADR-016]]'
+- '[[BD-SYS-ADR-037]]'
 related:
 - '[[RQ-FR-024]]'
 - '[[RQ-RDR-029]]'
@@ -54,6 +55,14 @@ tags:
 ## Workflow定義（設計）
 - `docs-link-check.yml`
   - docs変更時に `auto_link_glossary --check` と `validate_vault --targets` を実行する。
+- `docs-pdf.yml`
+  - docs markdown / `scripts/docs_pdf/**` / `Taskfile.yaml` / workflow変更時に起動する。
+  - `task docs:pdf` 実行後、`diopside-docs-{branch}-{shortsha}.pdf` を生成し、Artifact名 `diopside-docs-{branch}-{shortsha}.zip` としてアップロードする。
+  - `branch` は `github.ref_name` を使用し、`/` と空白を `-` へ置換して `A-Za-z0-9._-` のみ許可する。
+- `release-docs-pdf.yml`
+  - Release `published` で起動し、`task docs:pdf` 後にRelease AssetへPDFを添付する。
+  - 配布名は `diopside-docs-{branch}-{shortsha}.pdf` とし、`branch` は `github.event.release.target_commitish` を同一規則で正規化する。
+  - `gh release upload ... --clobber` で同名Assetを上書きする。
 - `docs-deploy.yml`
   - `workflow_dispatch` を標準起動とし、必要に応じてmain反映時に起動する。
   - 実行順: `task docs:guard` -> `task docs:deploy`
@@ -95,6 +104,8 @@ tags:
   - AWS認証情報（`CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）
 - 出力:
   - `quartz/public` の静的サイト成果物
+  - `diopside-docs-{branch}-{shortsha}.pdf`（Release配布用PDF）
+  - `diopside-docs-{branch}-{shortsha}.zip`（Actions Artifact名）
   - S3配置済みアセット（`obsidian/`）
   - CloudFront invalidation結果
 
@@ -105,6 +116,8 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-21: `docs-pdf.yml` のArtifact名を `.zip` とし、PDF本体との役割を分離 [[BD-SYS-ADR-037]]
+- 2026-02-21: `docs-pdf.yml` / `release-docs-pdf.yml` のPDF配布仕様（命名規則・正規化・Asset上書き）を追加 [[BD-SYS-ADR-037]]
 - 2026-02-21: CloudFront/S3設定値の正本をサービス別詳細へ分離し、本書を配備フロー正本として明確化 [[BD-SYS-ADR-036]]
 - 2026-02-11: CDK決定性運用（副作用ゼロ、context差分管理、stateful分離）とCDKテスト方針を追加
 - 2026-02-11: 公開トップの解決先を `index.html` に統一し、`/docs/` の同値到達を明記

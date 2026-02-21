@@ -3,17 +3,18 @@ id: BD-INF-DEP-003
 title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-20'
+updated: '2026-02-21'
 up:
 - '[[RQ-FR-024]]'
 - '[[BD-SYS-ADR-013]]'
 related:
 - '[[BD-INF-DEP-001]]'
 - '[[BD-SYS-ADR-016]]'
+- '[[BD-SYS-ADR-037]]'
 - '[[AT-REL-001]]'
 - '[[DD-INF-DEP-001]]'
 tags:
@@ -74,6 +75,15 @@ flowchart TD
 - `docs-link-check`:
   - 対象: docs markdown変更
   - 役割: 用語リンク補正チェックと整合検証（`auto_link_glossary --check`、`validate_vault --targets`）
+- `docs-pdf`:
+  - 起動: docs markdown / `scripts/docs_pdf/**` / `Taskfile.yaml` / workflow変更時
+  - 役割: `task docs:pdf` で単一PDFを生成し、Actions Artifactとして配布する。
+  - Artifact名: `diopside-docs-{branch}-{shortsha}.zip`（中身は `diopside-docs-{branch}-{shortsha}.pdf`）
+- `release-docs-pdf`:
+  - 起動: GitHub Release `published`
+  - 役割: `task docs:pdf` の成果物をRelease Assetsへ添付し、Release画面から直接ダウンロード可能にする。
+  - 配布名: `diopside-docs-{branch}-{shortsha}.pdf`（branchは `github.event.release.target_commitish` を同一規則で正規化）
+  - 上書き方針: 同名Assetは `--clobber` で置換する。
 - `docs-deploy`:
   - 起動: `workflow_dispatch`（手動）を標準、必要に応じてmain反映時
   - 役割: `task docs:guard` -> `lint` / `test` / `cdk synth` / `cdk-nag` -> `task docs:deploy` -> 公開URL検証
@@ -115,6 +125,8 @@ flowchart TD
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 変更履歴
+- 2026-02-21: `docs-pdf` のArtifact名を `.zip` とし、Release配布は `.pdf` を維持する運用へ更新 [[BD-SYS-ADR-037]]
+- 2026-02-21: `docs-pdf` / `release-docs-pdf` の配布経路と `diopside-docs-{branch}-{shortsha}.pdf` 命名規則を追加 [[BD-SYS-ADR-037]]
 - 2026-02-20: 章再編に合わせてCI/CD必須設計項目を追加 [[BD-SYS-ADR-036]]
 - 2026-02-11: CDK決定性方針（副作用ゼロ、context固定、props注入、論理IDレビュー）を追加
 - 2026-02-11: 公開トップのリライト先を `RQ-HM-001.html` から `index.html` へ変更

@@ -31,3 +31,21 @@
 - 閾値・判定条件・例外境界は維持し、文体と判定粒度のみ変更したため、AT判定観点の意味変更は発生しない。
 - 変更履歴は全対象NFRで `[[RQ-RDR-048]]` へ接続し、記載方式変更の判断根拠を追跡できる。
 - NFR記載ルールをスキルへ同期し、以後の文書改修で同一スタイルへ収束できる。
+
+## 実施内容（docs PDF配布仕様）
+- 対象: `docs-pdf.yml` / `release-docs-pdf.yml` と、関連する設計正本 `BD-INF-DEP-003` / `DD-INF-DEP-001`。
+- 変更内容:
+  - PDF配布経路を「Actions Artifact（CI）」と「Release Assets（Release公開時）」へ二系統化。
+  - Release配布名を `diopside-docs-{branch}-{shortsha}.pdf` へ統一。
+  - Actions Artifact名を `diopside-docs-{branch}-{shortsha}.zip` とし、中身に同名PDFを格納。
+  - `branch` はファイル名安全化のため `/` と空白を `-` へ置換し、`A-Za-z0-9._-` のみ許可。
+  - Release添付は `--clobber` で同名Assetを置換。
+- ADR: `[[BD-SYS-ADR-037]]` を新規追加し、判断根拠と却下案を記録。
+
+## 影響確認（docs PDF配布仕様）
+- PDFビルド実体（`reports/diopside-docs.pdf`）は維持し、配布前コピーで命名規則を適用するため生成処理互換性は維持される。
+- Actions Artifact名を `.zip` とすることで、ダウンロード後のファイル形式誤認（ZIPをPDFとして開く事象）を回避できる。
+- Release画面からは `.pdf` を直接DL可能なため、配布導線としての利用性を維持できる。
+
+## 検証（docs PDF配布仕様）
+- `task docs:guard` で文書リンク/Frontmatter整合を確認する。
