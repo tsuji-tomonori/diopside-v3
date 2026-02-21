@@ -69,8 +69,18 @@ jobs:
         run: |
           task docs:pdf
 
+      - name: Prepare release PDF filename
+        id: pdf_meta
+        run: |
+          branch="${{ github.event.release.target_commitish }}"
+          safe_branch="$(printf '%s' "$branch" | tr '/[:space:]' '-' | tr -cd 'A-Za-z0-9._-')"
+          short_sha="$(git rev-parse --short HEAD)"
+          pdf_name="diopside-docs-${safe_branch}-${short_sha}.pdf"
+          cp reports/diopside-docs.pdf "reports/${pdf_name}"
+          echo "pdf_name=${pdf_name}" >> "$GITHUB_OUTPUT"
+
       - name: Upload PDF to release assets
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" reports/diopside-docs.pdf --clobber
+          gh release upload "${{ github.event.release.tag_name }}" "reports/${{ steps.pdf_meta.outputs.pdf_name }}" --clobber

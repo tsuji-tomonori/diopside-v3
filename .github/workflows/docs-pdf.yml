@@ -71,8 +71,18 @@ jobs:
         run: |
           task docs:pdf
 
+      - name: Prepare artifact PDF filename
+        id: pdf_meta
+        run: |
+          branch="${{ github.ref_name }}"
+          safe_branch="$(printf '%s' "$branch" | tr '/[:space:]' '-' | tr -cd 'A-Za-z0-9._-')"
+          short_sha="$(git rev-parse --short HEAD)"
+          pdf_name="diopside-docs-${safe_branch}-${short_sha}.pdf"
+          cp reports/diopside-docs.pdf "reports/${pdf_name}"
+          echo "pdf_name=${pdf_name}" >> "$GITHUB_OUTPUT"
+
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: diopside-docs-pdf
-          path: reports/diopside-docs.pdf
+          name: ${{ steps.pdf_meta.outputs.pdf_name }}
+          path: reports/${{ steps.pdf_meta.outputs.pdf_name }}
