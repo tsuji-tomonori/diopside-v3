@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.11
+version: 1.0.12
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -45,13 +45,15 @@ tags:
 1. 初回導入時のみローカルで `task infra:deploy` を実行し、OIDC Provider/Assume先ロールを作成する。
 2. Stack Output `GithubActionsDeployRoleArn` を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
 3. GitHub Actions `Docs Deploy` を `workflow_dispatch` で実行し、`Validate required variables` の成功を確認する。
-4. `Configure AWS credentials (OIDC)` と `aws sts get-caller-identity` が成功することを確認する。
-5. `task docs:deploy:ci` 実行ログで `docs:guard -> infra:deploy:ci -> docs:verify` が完了することを確認する。
-6. `task quartz:build` が `quartz/public` を生成し、`task infra:deploy` が `siteAssetPath=quartz/public` を参照してS3配置とCloudFront invalidationを完了することを確認する。
-7. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
-8. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
-9. 通常運用では `main` へのpushまたは `workflow_dispatch` で同手順を反復する。
-10. Phase 2適用後は [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
+4. `Setup Node` が `22` で実行され、`Reset Quartz workspace` が成功することを確認する。
+5. `Configure AWS credentials (OIDC)` と `aws sts get-caller-identity` が成功することを確認する。
+6. `task docs:deploy:ci` 実行ログで `docs:guard -> infra:deploy:ci -> docs:verify` が完了することを確認する。
+7. `task quartz:prepare` が不整合ディレクトリを検知した場合に再cloneし、`task quartz:build:ci` が `quartz/public` を生成することを確認する。
+8. `task infra:deploy` が `siteAssetPath=quartz/public` を参照してS3配置とCloudFront invalidationを完了することを確認する。
+9. `'/'` と `'/docs/'` へアクセスし、同一の公開トップ（[[index]]）へ到達することを確認する。
+10. 更新差分（変更した文書）が公開サイトに反映されていることを確認する。
+11. 通常運用では `main` へのpushまたは `workflow_dispatch` で同手順を反復する。
+12. Phase 2適用後は [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
 
 ## 設定不備時の確認手順
 1. `Missing variable: AWS_ROLE_ARN` が出る場合は Environment `prod` の Variables 名/値を再確認する。
@@ -72,6 +74,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-21: Node 22固定とQuartzワークスペース初期化/自己修復をCI手順へ追加
 - 2026-02-21: GitHub Actions 実行を `task docs:deploy:ci`（直列実行）へ更新し、CI向け手順を明確化
 - 2026-02-21: GitHub Actions の Environment variables 設定手順と設定不備時の確認手順を追加
 - 2026-02-21: 初回ローカル配備後に GitHub OIDC AssumeRole へ移行する運用手順と判定基準を追加

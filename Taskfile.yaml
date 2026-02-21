@@ -209,6 +209,10 @@ tasks:
       - |
         bash -lc 'if [ ! -d "{{.QUARTZ_DIR}}" ]; then
           git clone https://github.com/jackyzha0/quartz.git "{{.QUARTZ_DIR}}"
+        elif [ ! -d "{{.QUARTZ_DIR}}/.git" ] || [ ! -f "{{.QUARTZ_DIR}}/package-lock.json" ] || [ ! -d "{{.QUARTZ_DIR}}/quartz/styles" ]; then
+          echo "Quartz directory is incomplete. Re-cloning..."
+          rm -rf "{{.QUARTZ_DIR}}"
+          git clone https://github.com/jackyzha0/quartz.git "{{.QUARTZ_DIR}}"
         else
           echo "Quartz already exists at {{.QUARTZ_DIR}}"
         fi'
@@ -243,7 +247,12 @@ tasks:
     dir: '{{.QUARTZ_DIR}}'
     cmds:
       - task quartz:prepare
-      - npm ci
+      - |
+        bash -lc 'if [ -f "package-lock.json" ]; then
+          npm ci
+        else
+          npm install
+        fi'
       - cp "{{.QUARTZ_CONFIG_SOURCE}}" "{{.QUARTZ_DIR}}/quartz.config.ts"
       - cp "{{.QUARTZ_CUSTOM_STYLE_SOURCE}}" "{{.QUARTZ_DIR}}/quartz/styles/custom.scss"
       - npx quartz build -d ../docs

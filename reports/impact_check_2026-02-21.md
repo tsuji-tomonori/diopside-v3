@@ -113,3 +113,18 @@
 
 ## 検証（CI向けdocs配備の直列化）
 - `task docs:guard` でFrontmatter/リンク整合を確認する。
+
+## 実施内容（CIのQuartz復旧性強化）
+- 対象: `Taskfile.yaml`, `.github/workflows/docs-deploy.yml`, `DD-INF-DEP-001`, `AT-REL-001`。
+- 変更内容:
+  - `quartz:prepare` に不整合ディレクトリ検知（`.git` / `package-lock.json` / `quartz/styles`）を追加し、検知時は削除再cloneする自己修復を実装。
+  - `quartz:build:ci` は lockfile 有無で `npm ci` / `npm install` を切替えるフォールバックを追加。
+  - `docs-deploy.yml` の Node を `22` へ更新し、実行前に `rm -rf quartz` を追加。
+  - 詳細設計/手順書へ Node 22固定とQuartz初期化・自己修復フローを追記。
+
+## 影響確認（CIのQuartz復旧性強化）
+- 過去失敗で残った壊れたQuartzディレクトリがあっても、次回実行で自動復旧できる。
+- Quartzのengine要件未達による実行失敗を回避し、CI再現性を向上できる。
+
+## 検証（CIのQuartz復旧性強化）
+- `task docs:guard` でFrontmatter/リンク整合を確認する。

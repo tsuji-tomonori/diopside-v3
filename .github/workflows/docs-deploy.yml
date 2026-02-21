@@ -60,7 +60,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
+
+      - name: Reset Quartz workspace
+        run: rm -rf quartz
 
       - name: Install Python dependencies
         run: |

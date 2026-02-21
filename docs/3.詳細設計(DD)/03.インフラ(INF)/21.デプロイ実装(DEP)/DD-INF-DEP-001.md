@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.12
+version: 1.0.13
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -52,7 +52,7 @@ tags:
   - 実行: `npx quartz build -d ../docs`
 - `quartz:build:ci`
   - 役割: CIでのQuartz直列ビルド
-  - 実行: `task quartz:prepare` -> `npm ci` -> `quartz:sync-config` 相当コピー -> `npx quartz build -d ../docs`
+  - 実行: `task quartz:prepare` -> `npm ci`（lock未検出時は `npm install`）-> `quartz:sync-config` 相当コピー -> `npx quartz build -d ../docs`
 - `infra:deploy`
   - 役割: CDK配備とinvalidation
   - 実行: `npm run deploy -- --context siteAssetPath=<repo>/quartz/public`
@@ -100,7 +100,8 @@ tags:
 | Step | `actions/checkout` | `@v4` (`fetch-depth: 0`) | Yes | workflow定義 | 差分判定に必要な履歴を取得するため。 |
 | Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task docs:deploy:ci` 実行のため。 |
 | Step | `actions/setup-python` | `@v5` (`python-version: 3.11`) | Yes | workflow定義 | docs検証スクリプトの実行環境を固定するため。 |
-| Step | `actions/setup-node` | `@v4` (`node-version: 20`) | Yes | workflow定義 | Quartz/CDK実行環境を固定するため。 |
+| Step | `actions/setup-node` | `@v4` (`node-version: 22`) | Yes | workflow定義 | Quartzのengine要件を満たした実行環境を固定するため。 |
+| Step | `Reset Quartz workspace` | `rm -rf quartz` | Yes | workflow定義 | 途中失敗で残った不整合作業ツリーを除去するため。 |
 | Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ vars.AWS_ROLE_ARN }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
 | Verify | `aws sts get-caller-identity` | 0終了コード | Yes | workflow定義 | 誤アカウント配備を検知するため。 |
 | Deploy | 実行コマンド | `task docs:deploy:ci` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
@@ -167,6 +168,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-21: Quartz不整合ディレクトリの自己修復、Node 22固定、CI実行前のQuartzワークスペース初期化を追加
 - 2026-02-21: CI競合回避のため `docs:deploy:ci` / `infra:deploy:ci` / `quartz:build:ci` を追加し、workflow実行コマンドを直列タスクへ更新
 - 2026-02-21: `docs-deploy.yml` のパラメータ/設定値一覧と OIDC信頼条件の固定値を追加
 - 2026-02-21: `docs-deploy.yml` を追加し、初回ローカル配備 -> GitHub OIDC配備へ移行する実行手順を確定 [[BD-SYS-ADR-038]]
