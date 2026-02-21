@@ -11,7 +11,7 @@ updated: '2026-02-21'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
-- '[[RQ-DEV-001]]'
+- '[[RQ-DEV-001-01]]'
 related:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-SYS-ADR-001]]'
@@ -24,10 +24,10 @@ related:
 - '[[BD-INF-DEP-004]]'
 - '[[BD-APP-API-004]]'
 - '[[DD-DEV-CODE-001]]'
-- '[[RQ-DEV-005]]'
-- '[[RQ-DEV-006]]'
-- '[[RQ-DEV-007]]'
-- '[[RQ-SEC-005]]'
+- '[[RQ-DEV-005-01]]'
+- '[[RQ-DEV-006-01]]'
+- '[[RQ-DEV-007-01]]'
+- '[[RQ-SEC-005-01]]'
 - '[[BD-SYS-ADR-039]]'
 tags:
 - diopside
@@ -85,7 +85,7 @@ tags:
 - `@next/bundle-analyzer` による依存肥大検知を定期実行し、主要導線の Core Web Vitals は `useReportWebVitals` で収集する。
 - [[BD-DEV-ENV-001|開発環境]]では Turbopack 前提を維持し、巨大barrel importや過剰な再エクスポートによる開発遅延を品質レビュー対象にする。
 
-### アクセシビリティCIゲート（[[RQ-UX-021]]）
+### アクセシビリティCIゲート（[[RQ-UX-021-01]]）
 - Pull Requestごとにアクセシビリティ自動検査を必須実行し、`npm --prefix web run test:a11y` を共通入口とする。
 - 重大度判定は `Critical/High` をリリースブロッカーとし、1件以上でCIジョブを失敗させる。
 - `Moderate/Low` は警告として記録するが、同一指摘が3回連続で残存した場合は改善計画未記載で受入不可とする。
@@ -129,7 +129,7 @@ tags:
 
 ## 変更履歴
 - 2026-02-21: GitHub Actions採用に伴う実装補足（必須チェック名、paths、concurrency、Environment承認、Artifacts命名）を追加 [[BD-SYS-ADR-039]]
-- 2026-02-13: [[RQ-UX-021]] 対応としてアクセシビリティCIゲート（重大度閾値、期限付き例外、90日保持、手動補助ゲート）を追加 [[BD-SYS-ADR-024]]
+- 2026-02-13: [[RQ-UX-021-01]] 対応としてアクセシビリティCIゲート（重大度閾値、期限付き例外、90日保持、手動補助ゲート）を追加 [[BD-SYS-ADR-024]]
 - 2026-02-11: Next.js App Router向け品質ゲート（build/start、Dynamic API、fetch再検証、画像/Script、Web Vitals）を追加 [[BD-SYS-ADR-024]]
 - 2026-02-11: 防御的型付けゲート（Brand、境界decode、センチネル禁止、NonEmpty、資源解放）を追加 [[BD-SYS-ADR-022]]
 - 2026-02-11: デプロイ単位（docs/web/api/infra）別のビルド方針と単位固有ゲートを追加 [[BD-SYS-ADR-019]]

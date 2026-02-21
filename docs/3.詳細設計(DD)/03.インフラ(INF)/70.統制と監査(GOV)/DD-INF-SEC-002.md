@@ -10,7 +10,7 @@ created: 2026-02-13
 updated: '2026-02-21'
 up:
 - '[[BD-INF-SEC-001]]'
-- '[[RQ-SEC-001]]'
+- '[[RQ-SEC-001-01]]'
 related:
 - '[[UT-POL-001]]'
 - '[[AT-OPS-INF-001]]'

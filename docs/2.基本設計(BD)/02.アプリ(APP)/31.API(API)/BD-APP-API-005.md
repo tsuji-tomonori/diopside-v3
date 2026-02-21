@@ -9,10 +9,10 @@ owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-13'
 up:
-- '[[RQ-INT-001]]'
-- '[[RQ-SEC-001]]'
-- '[[RQ-OBY-001]]'
-- '[[RQ-DEV-001]]'
+- '[[RQ-INT-001-01]]'
+- '[[RQ-SEC-001-01]]'
+- '[[RQ-OBY-001-01]]'
+- '[[RQ-DEV-001-01]]'
 related:
 - '[[BD-SYS-ADR-023]]'
 - '[[BD-SYS-ADR-025]]'

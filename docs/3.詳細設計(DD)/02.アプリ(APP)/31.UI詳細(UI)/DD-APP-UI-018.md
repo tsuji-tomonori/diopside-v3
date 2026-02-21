@@ -16,7 +16,7 @@ up:
 - '[[DD-APP-UI-011]]'
 related:
 - '[[RQ-FR-016]]'
-- '[[RQ-UX-017]]'
+- '[[RQ-UX-017-01]]'
 - '[[DD-APP-MOD-001]]'
 - '[[UT-PLAN-001]]'
 tags:

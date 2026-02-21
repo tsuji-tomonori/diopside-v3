@@ -14,8 +14,8 @@ up:
 - '[[BD-APP-API-003]]'
 - '[[BD-APP-API-005]]'
 related:
-- '[[RQ-SEC-001]]'
-- '[[RQ-OBY-001]]'
+- '[[RQ-SEC-001-01]]'
+- '[[RQ-OBY-001-01]]'
 - '[[BD-SYS-ADR-031]]'
 - '[[DD-APP-LOG-001]]'
 - '[[DD-APP-API-001]]'

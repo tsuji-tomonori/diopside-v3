@@ -10,7 +10,7 @@ created: 2026-02-13
 updated: '2026-02-13'
 up:
 - '[[BD-INF-MON-004]]'
-- '[[RQ-OBY-001]]'
+- '[[RQ-OBY-001-01]]'
 related:
 - '[[BD-INF-MON-001]]'
 - '[[IT-INF-OBS-001]]'

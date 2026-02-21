@@ -10,7 +10,7 @@ created: 2026-02-11
 updated: '2026-02-11'
 up:
 - '[[RQ-FR-025]]'
-- '[[RQ-INT-001]]'
+- '[[RQ-INT-001-01]]'
 related:
 - '[[BD-SYS-ADR-014]]'
 - '[[BD-SYS-ADR-023]]'

@@ -12,8 +12,8 @@ up:
 - '[[BD-APP-DATA-001]]'
 - '[[BD-INF-DEP-003]]'
 related:
-- '[[RQ-DATA-001]]'
-- '[[RQ-DEV-001]]'
+- '[[RQ-DATA-001-01]]'
+- '[[RQ-DEV-001-01]]'
 - '[[DD-APP-DB-002]]'
 - '[[DD-APP-DB-001]]'
 - '[[IT-CASE-001]]'

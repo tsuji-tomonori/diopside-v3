@@ -14,7 +14,7 @@ up:
 related:
 - '[[RQ-FR-006]]'
 - '[[RQ-FR-015]]'
-- '[[RQ-UX-001]]'
+- '[[RQ-UX-001-01]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside

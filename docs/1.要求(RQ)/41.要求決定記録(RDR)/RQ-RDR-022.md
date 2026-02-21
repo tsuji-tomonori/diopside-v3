@@ -16,7 +16,7 @@ related:
 - '[[RQ-FR-022]]'
 - '[[RQ-FR-023]]'
 - '[[RQ-FR-004]]'
-- '[[RQ-PRC-001]]'
+- '[[RQ-PRC-001-01]]'
 - '[[RQ-PC-003]]'
 tags:
 - diopside

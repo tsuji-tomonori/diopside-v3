@@ -12,7 +12,7 @@ up:
 - '[[UT-PLAN-001]]'
 - '[[DD-INF-SEC-002]]'
 related:
-- '[[RQ-SEC-001]]'
+- '[[RQ-SEC-001-01]]'
 tags:
 - diopside
 - UT

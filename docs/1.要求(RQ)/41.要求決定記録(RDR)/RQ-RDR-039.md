@@ -11,9 +11,9 @@ updated: '2026-02-13'
 up:
 - '[[RQ-SC-001]]'
 related:
-- '[[RQ-DEV-001]]'
-- '[[RQ-SEC-001]]'
-- '[[RQ-OBY-001]]'
+- '[[RQ-DEV-001-01]]'
+- '[[RQ-SEC-001-01]]'
+- '[[RQ-OBY-001-01]]'
 - '[[RQ-RTM-001]]'
 - '[[BD-INF-PLAT-001]]'
 - '[[BD-SYS-ADR-028]]'

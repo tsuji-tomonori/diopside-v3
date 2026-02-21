@@ -13,8 +13,8 @@ up:
 - '[[DD-APP-MOD-003]]'
 related:
 - '[[RQ-FR-021]]'
-- '[[RQ-UX-002]]'
-- '[[RQ-UX-017]]'
+- '[[RQ-UX-002-01]]'
+- '[[RQ-UX-017-01]]'
 - '[[UT-PLAN-001]]'
 tags:
 - diopside

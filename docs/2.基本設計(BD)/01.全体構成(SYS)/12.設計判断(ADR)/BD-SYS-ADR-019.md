@@ -11,7 +11,7 @@ updated: '2026-02-11'
 up:
 - '[[RQ-RDR-025]]'
 related:
-- '[[RQ-DEV-001]]'
+- '[[RQ-DEV-001-01]]'
 - '[[BD-DEV-PIPE-001]]'
 - '[[BD-INF-DEP-003]]'
 - '[[BD-INF-DEP-004]]'

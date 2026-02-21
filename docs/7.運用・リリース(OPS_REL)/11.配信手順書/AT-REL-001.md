@@ -17,7 +17,7 @@ related:
 - '[[BD-INF-DEP-004]]'
 - '[[DD-INF-DEP-001]]'
 - '[[AT-RUN-001]]'
-- '[[RQ-DEV-006]]'
+- '[[RQ-DEV-006-01]]'
 - '[[RQ-RDR-050]]'
 - '[[BD-SYS-ADR-039]]'
 tags:

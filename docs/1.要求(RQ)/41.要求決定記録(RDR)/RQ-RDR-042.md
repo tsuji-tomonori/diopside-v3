@@ -22,7 +22,7 @@ related:
   - '[[RQ-FR-009]]'
   - '[[RQ-FR-019]]'
   - '[[RQ-FR-025]]'
-  - '[[RQ-INT-001]]'
+  - '[[RQ-INT-001-01]]'
 tags:
   - diopside
   - RQ

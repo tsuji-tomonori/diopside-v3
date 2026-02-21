@@ -10,7 +10,7 @@ created: 2026-02-21
 updated: '2026-02-21'
 up:
 - '[[BD-INF-DEP-006]]'
-- '[[RQ-AV-001]]'
+- '[[RQ-AV-001-01]]'
 related:
 - '[[DD-APP-DB-002]]'
 - '[[DD-INF-SEC-001]]'

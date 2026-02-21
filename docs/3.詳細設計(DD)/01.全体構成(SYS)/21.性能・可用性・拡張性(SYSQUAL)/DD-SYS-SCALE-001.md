@@ -14,10 +14,10 @@ up:
 - '[[BD-SYS-QUAL-001]]'
 - '[[BD-SYS-ARCH-004]]'
 related:
-- '[[RQ-PS-001]]'
-- '[[RQ-AV-001]]'
+- '[[RQ-PS-001-01]]'
+- '[[RQ-AV-001-01]]'
 - '[[RQ-PC-006]]'
-- '[[RQ-DATA-001]]'
+- '[[RQ-DATA-001-01]]'
 - '[[DD-SYS-PERF-001]]'
 - '[[DD-SYS-AV-001]]'
 - '[[AT-OPS-001]]'

@@ -9,9 +9,9 @@ owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-20'
 up:
-  - '[[RQ-OBY-001]]'
-  - '[[RQ-AV-001]]'
-  - '[[RQ-PS-001]]'
+  - '[[RQ-OBY-001-01]]'
+  - '[[RQ-AV-001-01]]'
+  - '[[RQ-PS-001-01]]'
 related:
   - '[[BD-SYS-ADR-006]]'
   - '[[BD-SYS-ADR-014]]'

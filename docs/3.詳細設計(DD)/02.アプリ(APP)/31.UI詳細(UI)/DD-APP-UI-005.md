@@ -14,7 +14,7 @@ up:
 related:
 - '[[RQ-FR-006]]'
 - '[[RQ-FR-007]]'
-- '[[RQ-UX-003]]'
+- '[[RQ-UX-003-01]]'
 - '[[DD-APP-ALG-001]]'
 - '[[DD-APP-UI-003]]'
 - '[[DD-APP-UI-012]]'

@@ -10,7 +10,7 @@ created: 2026-02-13
 updated: '2026-02-21'
 up:
 - '[[DD-INF-IAC-002]]'
-- '[[RQ-DEV-001]]'
+- '[[RQ-DEV-001-01]]'
 related:
 - '[[IT-INF-ROLL-001]]'
 - '[[DD-INF-IAC-001]]'

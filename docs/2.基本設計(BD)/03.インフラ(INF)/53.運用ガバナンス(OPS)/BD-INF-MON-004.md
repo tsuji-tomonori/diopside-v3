@@ -11,7 +11,7 @@ updated: '2026-02-20'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
-- '[[RQ-OBY-001]]'
+- '[[RQ-OBY-001-01]]'
 - '[[BD-INF-MON-001]]'
 - '[[DD-INF-MON-001]]'
 - '[[AT-SLO-001]]'

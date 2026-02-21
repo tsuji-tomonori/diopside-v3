@@ -12,7 +12,7 @@ up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-DATA-001]]'
 related:
-- '[[RQ-DATA-001]]'
+- '[[RQ-DATA-001-01]]'
 - '[[DD-APP-DB-002]]'
 - '[[DD-APP-DB-003]]'
 - '[[UT-PLAN-001]]'

@@ -11,8 +11,8 @@ updated: '2026-02-20'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
-- '[[RQ-DEV-001]]'
-- '[[RQ-COST-001]]'
+- '[[RQ-DEV-001-01]]'
+- '[[RQ-COST-001-01]]'
 - '[[BD-INF-MON-004]]'
 - '[[BD-INF-IAC-001]]'
 - '[[AT-OPS-001]]'

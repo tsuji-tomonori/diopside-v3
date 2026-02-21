@@ -13,7 +13,7 @@ up:
 - '[[BD-APP-DATA-001]]'
 - '[[BD-APP-DATA-002]]'
 related:
-- '[[RQ-DATA-001]]'
+- '[[RQ-DATA-001-01]]'
 - '[[DD-APP-DB-003]]'
 - '[[DD-APP-DB-001]]'
 - '[[UT-PLAN-001]]'

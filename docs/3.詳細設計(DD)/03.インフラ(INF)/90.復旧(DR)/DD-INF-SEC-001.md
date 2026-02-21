@@ -10,7 +10,7 @@ created: 2026-02-13
 updated: '2026-02-21'
 up:
 - '[[BD-INF-PLAT-002]]'
-- '[[RQ-AV-001]]'
+- '[[RQ-AV-001-01]]'
 related:
 - '[[AT-DR-001]]'
 - '[[AT-RUN-001]]'

@@ -9,9 +9,9 @@ owner: RQ-SH-001
 created: 2026-02-11
 updated: '2026-02-11'
 up:
-  - '[[RQ-SEC-001]]'
-  - '[[RQ-INT-001]]'
-  - '[[RQ-DEV-001]]'
+  - '[[RQ-SEC-001-01]]'
+  - '[[RQ-INT-001-01]]'
+  - '[[RQ-DEV-001-01]]'
 related:
   - '[[BD-APP-API-005]]'
   - '[[BD-APP-API-002]]'

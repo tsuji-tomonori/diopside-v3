@@ -11,7 +11,7 @@ updated: '2026-02-21'
 up:
 - '[[RQ-SC-001]]'
 related:
-- '[[RQ-DEV-005]]'
+- '[[RQ-DEV-005-01]]'
 - '[[BD-DEV-PIPE-001]]'
 - '[[RQ-RDR-050]]'
 bounded_context: Administration

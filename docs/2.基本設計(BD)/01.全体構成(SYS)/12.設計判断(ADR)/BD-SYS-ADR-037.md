@@ -9,7 +9,7 @@ owner: RQ-SH-001
 created: 2026-02-21
 updated: '2026-02-21'
 up:
-- '[[RQ-DEV-001]]'
+- '[[RQ-DEV-001-01]]'
 - '[[RQ-FR-024]]'
 related:
 - '[[BD-INF-DEP-003]]'

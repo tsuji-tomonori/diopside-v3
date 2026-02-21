@@ -11,9 +11,9 @@ updated: '2026-02-20'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
-- '[[RQ-SEC-001]]'
-- '[[RQ-DEV-001]]'
-- '[[RQ-UX-022]]'
+- '[[RQ-SEC-001-01]]'
+- '[[RQ-DEV-001-01]]'
+- '[[RQ-UX-022-01]]'
 - '[[DD-INF-SEC-002]]'
 - '[[DD-SYS-SEC-001]]'
 - '[[AT-OPS-INF-001]]'

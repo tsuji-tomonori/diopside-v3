@@ -14,7 +14,7 @@ up:
 related:
 - '[[RQ-FR-006]]'
 - '[[RQ-FR-008]]'
-- '[[RQ-UX-012]]'
+- '[[RQ-UX-012-01]]'
 - '[[DD-APP-ALG-001]]'
 - '[[UT-PLAN-001]]'
 tags:
