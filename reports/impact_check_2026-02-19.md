@@ -14,14 +14,14 @@
   - `DD-APP-API-001` / `DD-APP-API-002` / `DD-APP-DB-010` / `DD-INF-DEP-003` を正本語彙へ整合。
   - `BD-INF-DEP-005` / `DD-INF-SEC-001` / `IT-INF-NET-001` / `IT-INF-SMK-001` のヘルス確認経路を統一。
   - `index.md` に推奨読書順（RQ -> BD -> DD）を追加。
-  - `BD-SYS-ADR-035` を新規追加し、Web実行基盤（Vite+React SPA / Next.js App Router）採否の議論要件とスコープを固定。
+  - `BD-SYS-ADR-035` を改訂し、Web実行基盤（Vite+React SPA / Next.js App Router）採否の議論要件を測定可能化（品質判定は `RQ-PS-001` の `p95` を正本、CWV 75パーセンタイルは参考指標）し、`Next.js App Router + output: 'export'` を基準ケースとして明記。
 
 ## 影響確認
 - データ正本: RQ/BD/DDでRDB前提へ統一し、DynamoDB単独前提の読解分岐を解消。
 - API契約: `snake_case` と `run_kind` 3値の正本を固定し、BD/DDで一致。
 - 運用経路: ヘルスチェックの参照経路を `/api/v1/ops/diagnostics/health` に一本化。
 - 読解導線: `index.md` と `BD-SYS-ARCH-001` で論理設計/物理配置設計への到達順を明示。
-- 意思決定統制: Web実行基盤の採否ADRで必要な比較要件（実装整合/運用実現/コスト/可逆性/追跡性）を `BD-SYS-ADR-035` に固定。
+- 意思決定統制: Web実行基盤の採否ADRで必要な比較要件（実装整合/運用実現/コスト/品質適合/可逆性/追跡性）と必須提出物（PoC/配信成立性/計測結果/見積/影響文書）を `BD-SYS-ADR-035` に固定。
 
 ## 検証
 - `task docs:trace` を実行し、静的RTMビューを再生成する。
