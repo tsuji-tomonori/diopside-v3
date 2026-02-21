@@ -42,8 +42,8 @@ tags:
 
 ## 影響
 - 基本設計: [[BD-APP-API-005]] に Hono + Zod の実装規約を追加する。
-- 収集API設計: [[BD-APP-API-002]] に更新系APIの入力検証/エラー処理の準拠先を明記する。
-- エラーモデル: [[BD-APP-API-003]] に Zod エラー詳細の返却方針を追加する。
+- [[BD-APP-API-002|収集API設計]]: [[BD-APP-API-002]] に更新系APIの入力検証/エラー処理の準拠先を明記する。
+- [[BD-APP-API-003|エラーモデル]]: [[BD-APP-API-003]] に Zod エラー詳細の返却方針を追加する。
 - 詳細設計: [[DD-APP-API-001]] と [[DD-APP-ERR-001]] で `HTTPException`/`onError` の実装マッピングを具体化する。
 - スキル運用: `doc-bd-api` / `doc-dd-api` のチェック項目へ `@hono/zod-openapi` 観点を同期する。
 

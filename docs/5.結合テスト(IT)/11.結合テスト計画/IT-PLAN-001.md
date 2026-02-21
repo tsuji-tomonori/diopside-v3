@@ -40,11 +40,11 @@ tags:
 - [[IT-CASE-003]]: [[DD-APP-API-004]]（アーカイブ一覧配信契約）
 - [[IT-CASE-004]]: [[DD-APP-API-005]]（[[RQ-GL-005|タグ辞書]]配信契約）
 - [[IT-CASE-005]]: [[DD-APP-API-006]]（検索契約）
-- [[IT-CASE-006]]: [[DD-APP-API-007]]（動画詳細API）
+- [[IT-CASE-006]]: [[DD-APP-API-007]]（[[DD-APP-API-007|動画詳細API]]）
 - [[IT-CASE-007]]: [[DD-APP-API-008]]（[[RQ-GL-011|再収集]]API）
-- [[IT-CASE-008]]: [[DD-APP-API-009]]（運用診断API）
-- [[IT-CASE-009]]: [[DD-APP-API-011]]（収集結果明細API）
-- [[IT-CASE-010]]: [[DD-APP-API-012]]（配信前後再確認API）
+- [[IT-CASE-008]]: [[DD-APP-API-009]]（[[DD-APP-API-009|運用診断API]]）
+- [[IT-CASE-009]]: [[DD-APP-API-011]]（[[DD-APP-API-011|収集結果明細API]]）
+- [[IT-CASE-010]]: [[DD-APP-API-012]]（[[DD-APP-API-012|配信前後再確認API]]）
 - [[IT-CASE-011]]: [[DD-APP-API-013]], [[DD-APP-API-014]], [[DD-APP-API-015]]（タグ管理/公開実行/公開状態）
 - [[IT-CASE-012]]: [[DD-APP-API-008]], [[DD-APP-API-009]]（障害復旧・[[RQ-GL-011|再収集]]導線）
 - [[IT-CASE-013]]: [[DD-APP-API-013]]（タグ管理と公開反映整合）

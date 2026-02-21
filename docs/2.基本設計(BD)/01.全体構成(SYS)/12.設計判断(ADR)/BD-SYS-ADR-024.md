@@ -41,7 +41,7 @@ tags:
 - アーキテクチャ概要: [[BD-SYS-ARCH-001]] で Server/Client 境界、Dynamic API利用位置、並列取得とSuspense運用を明記する。
 - ビルド設計: [[BD-DEV-PIPE-001]] で Next.js 本番品質ゲート（build/start、Web Vitals、bundle分析、画像/Script最適化）を受入基準へ追加する。
 - セキュリティ設計: [[BD-SYS-SEC-001]] で Server Actions 認可、機密境界、CSP、環境変数運用を具体化する。
-- 品質特性: [[BD-SYS-QUAL-001]] でキャッシュ設計、再検証戦略、体感性能指標を品質特性に接続する。
+- [[BD-SYS-QUAL-001|品質特性]]: [[BD-SYS-QUAL-001]] でキャッシュ設計、再検証戦略、体感性能指標を[[BD-SYS-QUAL-001|品質特性]]に接続する。
 
 ## 却下した選択肢
 - Pages Router中心で設計する案: App Router の標準機能（RSC/Streaming/Cache制御）を活かせず、将来拡張時の移行コストが高いため不採用。

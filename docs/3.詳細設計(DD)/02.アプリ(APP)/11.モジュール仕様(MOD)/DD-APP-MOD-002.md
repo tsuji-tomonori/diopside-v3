@@ -273,7 +273,7 @@ const HighlightWavePanel = dynamic(
 - [[DD-APP-UI-015]]: HighlightWavePanel
 - [[DD-APP-UI-016]]: WordCloudPanel
 - [[DD-APP-UI-017]]: RunStatusScreen
-- [[DD-DEV-CODE-001]]: コーディング規約
+- [[DD-DEV-CODE-001]]: [[DD-DEV-CODE-001|コーディング規約]]
 
 ## 変更履歴
 - 2026-02-14: 画面コンポーネントの参照リンク（`DD-APP-UI-012`〜`DD-APP-UI-017`）を追加

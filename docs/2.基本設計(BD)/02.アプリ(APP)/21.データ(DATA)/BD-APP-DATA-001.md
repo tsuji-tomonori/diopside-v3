@@ -40,7 +40,7 @@ tags:
 | DB正本層 | 更新系の唯一正本 | `run_id`, `video_id`, `source_type`, `update_type`, `validation_status`, `tag_id`, `is_active`, `updated_at` |
 | 取込検証層 | LLM出力JSONの検証・適用判定 | `import_run_id`, `payload_hash`, `schema_version`, `validated_count`, `applied_count`, `rejected_count`, `requested_by` |
 | 配信生成層 | 正本から配信形式へ変換 | `publish_run_id`, `artifact_type`, `artifact_path`, `checksum`, `generated_at` |
-| 配信公開層 | 利用者向け参照データ配布 | 公開JSON/静的画像/文書・テスト結果 |
+| 配信公開層 | [[RQ-SH-002|利用者]]向け参照データ配布 | 公開JSON/静的画像/文書・テスト結果 |
 
 ## スキーマ境界
 - **必須属性**: `video_id`, `title`, `published_at`, `channel_type`。
@@ -56,7 +56,7 @@ tags:
 3. 配信前後再確認は `recheck_runs`/`recheck_items` へ差分単位で記録する。
 4. 更新イベントまたは定期実行で配信生成層の成果物を再生成する。
 5. 品質検証を通過した成果物のみ配信公開層へ切り替える。
-6. 利用者向け参照は配信公開層からのみ提供し、検索時のDB直接参照を行わない。
+6. [[RQ-SH-002|利用者]]向け参照は配信公開層からのみ提供し、検索時のDB直接参照を行わない。
 7. LLM支援でタグ更新を反映した場合は `tag_master` と `archive_index` を同一 `publish_run_id` で再生成する。
 
 ## [[RQ-GL-005|タグ辞書]]同期フロー

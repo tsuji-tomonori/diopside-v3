@@ -30,7 +30,7 @@ tags:
 
 ## 前提
 - git操作、Quartzビルド、CDKデプロイはモック化する。
-- publish_runsテーブルはテストデータで初期化する。
+- [[DD-APP-DB-015|publish_runsテーブル]]はテストデータで初期化する。
 
 ## 手順（POST /api/v1/admin/docs/publish）
 1. 有効な `targetRef`（mainブランチ）で公開を起動する。

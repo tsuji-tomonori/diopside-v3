@@ -26,7 +26,7 @@ tags:
 
 
 ## 詳細仕様
-- 本文書は公開UI（検索/一覧/詳細モーダル）の端末別詳細仕様を定義する。
+- 本文書は公開UI（検索/一覧/[[DD-APP-UI-004|詳細モーダル]]）の端末別詳細仕様を定義する。
 - 実装はモバイルファースト（スマートフォン優先、次にタブレット、最後にPC）を前提とする。
 
 ## 端末別レイアウト
@@ -46,7 +46,7 @@ tags:
 - 初期表示: `bootstrap` 読込成功で一覧描画、続けて `tag_master` と `archive_index` を非同期取得する。
 - 条件変更: [[DD-APP-UI-012|SearchConditionPanel]] の変更イベントで一覧再評価し、件数表示とカード先頭を再計算する。
 - 詳細表示: カード選択で [[DD-APP-UI-014|ArchiveDetailModal]] を開き、[[DD-APP-UI-015|HighlightWavePanel]] と [[DD-APP-UI-016|WordCloudPanel]] を並行取得する。
-- 障害復帰: 補助情報取得失敗時は詳細モーダルを閉じず、再試行ボタンで再取得する。
+- 障害復帰: 補助情報取得失敗時は[[DD-APP-UI-004|詳細モーダル]]を閉じず、再試行ボタンで再取得する。
 - 復帰保持: モーダルを閉じた際は一覧の[[RQ-GL-014|検索条件]]、スクロール位置、表示件数を維持する。
 
 ## 操作制約
@@ -56,8 +56,8 @@ tags:
 - 補助情報の失敗は主要操作を無効化しない。
 
 ## I/Oまたは責務
-- 入力: `bootstrap.json`、`tag_master.json`、`archive_index.pN.json`、`highlights/{videoId}.json`、`wordcloud/{videoId}.png`、[[RQ-GL-014|検索条件]]、利用者操作。
-- 出力: 一覧結果、詳細モーダル表示、YouTube遷移、エラー/再試行状態、操作継続性。
+- 入力: `bootstrap.json`、`tag_master.json`、`archive_index.pN.json`、`highlights/{videoId}.json`、`wordcloud/{videoId}.png`、[[RQ-GL-014|検索条件]]、[[RQ-SH-002|利用者]]操作。
+- 出力: 一覧結果、[[DD-APP-UI-004|詳細モーダル]]表示、YouTube遷移、エラー/再試行状態、操作継続性。
 
 ## 変更履歴
 - 2026-02-14: 画面コンポーネント責務を `DD-APP-UI-012`〜`DD-APP-UI-016` へ分割しリンクを追加

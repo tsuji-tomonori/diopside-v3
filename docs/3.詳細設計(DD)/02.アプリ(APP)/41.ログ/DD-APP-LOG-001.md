@@ -78,7 +78,7 @@ tags:
 | `ingestion.run_started` | operational | INFO | [[RQ-GL-002|収集実行]]開始 |
 | `ingestion.run_completed` | operational | INFO | 収集完了（件数付き） |
 | `ingestion.run_failed` | operational | ERROR | 収集失敗 |
-| `search.request_completed` | operational | INFO | 検索API正常応答 |
+| `search.request_completed` | operational | INFO | [[DD-APP-API-006|検索API]]正常応答 |
 | `delivery.edge_error` | operational | ERROR | 配信経路エラー |
 | `authn.failed` | security | WARN | 認証失敗 |
 | `authz.denied` | security | WARN | 認可拒否 |
@@ -89,7 +89,7 @@ tags:
 | `log.pipeline_drop_detected` | operational | CRITICAL | ログ欠測異常 |
 
 ## ログレベル運用
-- `DEBUG`: 開発環境のみ。production常時有効化は禁止。
+- `DEBUG`: [[BD-DEV-ENV-001|開発環境]]のみ。production常時有効化は禁止。
 - `INFO`: 状態遷移、正常完了、監査対象の成功操作。
 - `WARN`: 継続可能な異常、認証失敗、入力不備。
 - `ERROR`: 処理失敗、外部依存失敗、管理操作失敗。
@@ -98,7 +98,7 @@ tags:
 ## セキュリティ/プライバシー制約
 - ログにパスワード、アクセストークン、セッションID、秘密鍵、接続文字列、PIIを平文で記録しない。
 - 受信入力文字列はログ注入対策として改行と制御文字を無害化して記録する。
-- エラーメッセージは利用者入力をそのまま連結せず、`error.code` と要約メッセージを使用する。
+- エラーメッセージは[[RQ-SH-002|利用者]]入力をそのまま連結せず、`error.code` と要約メッセージを使用する。
 
 ## 出力・収集方式
 - LambdaはJSON文字列を `stdout` へ出力し、CloudWatch Logsに自動収集する。

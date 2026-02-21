@@ -48,7 +48,7 @@ tags:
 1. 認証と権限を検証する。
 2. 文字種・長さ・禁止語を検証する。
 3. slug重複をチェックし、重複時は拒否する。
-4. tagsテーブルへINSERTし、監査ログへ記録する。
+4. [[DD-APP-DB-008|tagsテーブル]]へINSERTし、監査ログへ記録する。
 
 ### `PATCH /api/v1/admin/tags/{tagId}`
 1. `tagId` 存在と状態を確認する。
@@ -105,7 +105,7 @@ tags:
 | `INVALID_IMPORT_PAYLOAD` | 400 | 取込リクエスト全体の構造が契約に一致しない。 |
 | `INVALID_IMPORT_ITEM` | 400 | `items[]` の個別要素が必須キー・型・重複制約を満たさない。 |
 | `UNAUTHORIZED` | 401 | JWTが未指定または無効で管理APIを実行できない。 |
-| `FORBIDDEN` | 403 | 認証は成立したが管理者権限が不足している。 |
+| `FORBIDDEN` | 403 | 認証は成立したが[[RQ-SH-001|管理者]]権限が不足している。 |
 | `TAG_NOT_FOUND` | 404 | 指定 `tagId` が存在せず更新対象を解決できない。 |
 | `VIDEO_NOT_FOUND` | 404 | 指定 `videoId` が存在せず手動タグ付け対象を解決できない。 |
 | `TAG_SLUG_CONFLICT` | 409 | 正規化後slugが既存タグと衝突した。 |
@@ -117,7 +117,7 @@ tags:
 ## 受入観点
 - タグ作成/更新/無効化がDB正本へ反映されること。
 - [[DD-APP-UI-009|UI-A04]] からの手動タグ付けが理由付きで記録されること。
-- 提案入力APIで、管理者がそのままコピーできる入力テキストを取得できること。
+- 提案入力APIで、[[RQ-SH-001|管理者]]がそのままコピーできる入力テキストを取得できること。
 - 取込APIで、検証成功レコードのみ反映し失敗レコードは明細で返却されること。
 - 反映後に `nextAction=publish_required` を返し、`tag_master.json` と `archive_index.pN.json` 更新導線へ接続できること。
 

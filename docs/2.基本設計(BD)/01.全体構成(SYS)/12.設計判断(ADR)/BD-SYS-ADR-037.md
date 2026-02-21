@@ -40,7 +40,7 @@ tags:
 
 ## 却下した選択肢
 - 常に固定名 `diopside-docs.pdf` で配布する案: 由来追跡が困難で、複数配布物の識別性が低いため不採用。
-- Artifact配布のみでRelease添付を行わない案: 利用者導線がActions画面依存となり、配布先が分かりづらいため不採用。
+- Artifact配布のみでRelease添付を行わない案: [[RQ-SH-002|利用者]]導線がActions画面依存となり、配布先が分かりづらいため不採用。
 
 ## 変更履歴
 - 2026-02-21: Actions Artifact名を `.zip` へ変更し、Release配布PDFとの識別性を向上 [[BD-SYS-ADR-037]]

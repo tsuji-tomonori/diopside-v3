@@ -32,14 +32,14 @@ tags:
 
 ## 詳細仕様
 - 本システムのAPI境界は「配信用データ契約」と「運用用制御API」で構成する。
-- MVPの利用者向け機能は静的JSON契約を主APIとして扱い、Webはこの契約に依存して動作する。
-- 運用用制御APIは `/api/v1/ops/*` を正本経路とし、一般利用者UIとは分離する。
+- MVPの[[RQ-SH-002|利用者]]向け機能は静的JSON契約を主APIとして扱い、Webはこの契約に依存して動作する。
+- 運用用制御APIは `/api/v1/ops/*` を正本経路とし、一般[[RQ-SH-002|利用者]]UIとは分離する。
 - 更新系データの正本はDBとし、配信契約は生成済み成果物を参照する。
 - 収集/再確認/公開反映のrun実行は単一のBackend API（Hono）内で完結し、別デプロイのworker/batchサービスは持たない。
 - `scheduled` 実行は外部スケジューラが同一運用APIを呼び出して開始し、処理は同一Backend API内ジョブ実行として扱う。
 - 将来の高度検索は `API検索エンドポイント` を追加予定とし、本書では予約境界のみ定義する。
 
-## MVP対象API一覧
+## MVP対象[[BD-APP-API-001|API一覧]]
 | 区分 | API/契約 | 詳細設計 |
 |---|---|---|
 | 配信契約 | `bootstrap.json` / `archive_index.p{page}.json` | [[DD-APP-API-004]] |
@@ -109,10 +109,10 @@ tags:
 - 監査記録: 管理操作は `operator`, `request_id`, `trace_id`, `target_id` を監査ログへ記録する。
 
 ## 将来予約境界（MVP非対象）
-- [[DD-APP-API-006]] 検索API（サーバ検索）は予約のみ。MVPではクライアント検索を維持する。
-- [[DD-APP-API-007]] 動画詳細API（サーバ詳細取得）は予約のみ。MVPでは静的配信から組み立てる。
+- [[DD-APP-API-006]] [[DD-APP-API-006|検索API]]（サーバ検索）は予約のみ。MVPではクライアント検索を維持する。
+- [[DD-APP-API-007]] [[DD-APP-API-007|動画詳細API]]（サーバ詳細取得）は予約のみ。MVPでは静的配信から組み立てる。
 
-## 共通エラーモデル
+## 共通[[BD-APP-API-003|エラーモデル]]
 - HTTP APIエラーは Problem Details（`application/problem+json`）を標準とする。
 - DD層のエラー契約正本は本書とし、互換参照は `[[DD-APP-ERR-001]]` を使用する。
 - 必須メンバー: `type`, `title`, `status`, `detail`, `instance`。
@@ -124,7 +124,7 @@ tags:
 - 配信契約は `schemaVersion` で互換性管理する。
 - 破壊的変更はメジャー更新し、旧版の併存期間を設ける。
 - 運用契約は `/api/v1/ops` 配下でURL互換性を維持し、追加中心で拡張する。
-- 将来の検索APIは `/api/v2/search/*` を候補とし、確定までは互換要件のみ維持する。
+- 将来の[[DD-APP-API-006|検索API]]は `/api/v2/search/*` を候補とし、確定までは互換要件のみ維持する。
 
 ## 図
 ```mermaid
@@ -161,8 +161,8 @@ sequenceDiagram
 - 2026-02-11: 配信契約の JSON Schema 正本（Draft 2020-12）参照と必須項目の実データ整合を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: run実行境界を単一Backend API（Hono）モノリスへ統一し、`scheduled` の起動方式を追記 [[BD-SYS-ADR-021]]
 - 2026-02-11: Problem Details 正本化と `trace_id` への統一、`BD-APP-API-003/005` と `BD-SYS-ARCH-002/003/004` 参照を追加
-- 2026-02-11: MVP対象API一覧、共通処理ロジック規約、`/api/v1` 正本経路を追加 [[BD-SYS-ADR-021]]
-- 2026-02-11: DB正本前提と将来検索API予約境界を追記 [[BD-SYS-ADR-021]]
+- 2026-02-11: MVP対象[[BD-APP-API-001|API一覧]]、共通処理ロジック規約、`/api/v1` 正本経路を追加 [[BD-SYS-ADR-021]]
+- 2026-02-11: DB正本前提と将来[[DD-APP-API-006|検索API]]予約境界を追記 [[BD-SYS-ADR-021]]
 - 2026-02-11: `archive_index.p{page}.json` の用語表現を [[RQ-GL-009]] へ統一
 - 2026-02-10: 新規作成
-- 2026-02-10: 配信契約/運用契約、エラーモデル、バージョニング方針を追加
+- 2026-02-10: 配信契約/運用契約、[[BD-APP-API-003|エラーモデル]]、バージョニング方針を追加

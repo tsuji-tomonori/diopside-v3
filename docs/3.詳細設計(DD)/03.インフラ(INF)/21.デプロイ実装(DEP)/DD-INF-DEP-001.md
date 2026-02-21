@@ -113,7 +113,7 @@ tags:
 - Assume先ロール: `GithubActionsDeployRole`（Stack Output `GithubActionsDeployRoleArn` から取得し、`AWS_ROLE_ARN` へ設定）
 
 ## 初回導入手順
-- 初回はローカルの管理者権限で `task infra:deploy` を実行し、`GithubOidcProvider` と `GithubActionsDeployRole` を作成する。
+- 初回はローカルの[[RQ-SH-001|管理者]]権限で `task infra:deploy` を実行し、`GithubOidcProvider` と `GithubActionsDeployRole` を作成する。
 - 初回配備後、`GithubActionsDeployRoleArn` Output を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
 - 2回目以降の配備は GitHub Actions から OIDC で実行する。
 

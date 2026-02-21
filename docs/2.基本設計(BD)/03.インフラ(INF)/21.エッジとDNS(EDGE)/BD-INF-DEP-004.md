@@ -62,7 +62,7 @@ tags:
 
 ## デプロイ方針
 - 静的成果物はプレフィックス分離で配置する（例: `web/`, `docs/`, `openapi/`）。
-- 利用者向け静的JSON（`bootstrap`, `tag_master`, `archive_index`）は `/web/*` 配下の配信領域で提供し、DB正本は公開しない。
+- [[RQ-SH-002|利用者]]向け静的JSON（`bootstrap`, `tag_master`, `archive_index`）は `/web/*` 配下の配信領域で提供し、DB正本は公開しない。
 - ドキュメントとテスト結果は `/docs/*` 経路で公開し、業務API経路へ混在させない。
 - invalidationは経路別に実行する（`/web/*`, `/docs/*`, `/openapi/*`）。
 - `/*` 全体invalidationは緊急時のみ許可する。

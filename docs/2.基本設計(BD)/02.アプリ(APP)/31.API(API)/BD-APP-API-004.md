@@ -47,7 +47,7 @@ tags:
 ## 廃止運用
 - 廃止対象のAPI/スキーマは OpenAPI へ `deprecated: true` を明記する。
 - 廃止時は移行先、移行手順、サンセット日を仕様へ記載する。
-- 可能な範囲で `Deprecation` と `Sunset` ヘッダを返し、利用者が検知可能な状態を維持する。
+- 可能な範囲で `Deprecation` と `Sunset` ヘッダを返し、[[RQ-SH-002|利用者]]が検知可能な状態を維持する。
 
 ## 認証境界
 - `/openapi/*` と `/api/*` は Cognito JWT を必須とする。

@@ -78,7 +78,7 @@ tags:
 - `fetch` は `cache` / `next.revalidate` / `next.tags` を意図的に指定し、再検証は `revalidatePath` / `revalidateTag` のどちらを使うかを設計に明示する。
 - 画像とスクリプトは `next/image` と `<Script>` を標準利用し、リモート画像の `width/height` 指定漏れを受入不可とする。
 - `@next/bundle-analyzer` による依存肥大検知を定期実行し、主要導線の Core Web Vitals は `useReportWebVitals` で収集する。
-- 開発環境では Turbopack 前提を維持し、巨大barrel importや過剰な再エクスポートによる開発遅延を品質レビュー対象にする。
+- [[BD-DEV-ENV-001|開発環境]]では Turbopack 前提を維持し、巨大barrel importや過剰な再エクスポートによる開発遅延を品質レビュー対象にする。
 
 ### アクセシビリティCIゲート（[[RQ-UX-021]]）
 - Pull Requestごとにアクセシビリティ自動検査を必須実行し、`npm --prefix web run test:a11y` を共通入口とする。

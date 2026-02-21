@@ -31,9 +31,9 @@ tags:
 
 ## 対応DD-API
 - [[DD-APP-API-005]]（[[RQ-GL-005|タグ辞書]]API/公開反映起動）
-- [[DD-APP-API-012]]（配信前後再確認API）
-- [[DD-APP-API-013]]（タグ管理API）
-- [[DD-APP-API-015]]（配信反映ジョブ状態API）
+- [[DD-APP-API-012]]（[[DD-APP-API-012|配信前後再確認API]]）
+- [[DD-APP-API-013]]（[[DD-APP-API-013|タグ管理API]]）
+- [[DD-APP-API-015]]（[[DD-APP-API-015|配信反映ジョブ状態API]]）
 
 ## 前提条件
 - [[RQ-SH-001|管理者]]が管理画面（UI-A04）にアクセスできる。

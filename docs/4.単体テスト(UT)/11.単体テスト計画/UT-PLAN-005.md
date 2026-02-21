@@ -48,14 +48,14 @@ tags:
 - [[UT-CASE-003]]: [[DD-APP-API-004]]（アーカイブ一覧配信契約）
 - [[UT-CASE-004]]: [[DD-APP-API-005]]（[[RQ-GL-005|タグ辞書]]配信契約）
 - [[UT-CASE-005]]: [[DD-APP-API-006]]（検索契約）
-- [[UT-CASE-006]]: [[DD-APP-API-007]]（動画詳細API）
+- [[UT-CASE-006]]: [[DD-APP-API-007]]（[[DD-APP-API-007|動画詳細API]]）
 - [[UT-CASE-007]]: [[DD-APP-API-008]]（[[RQ-GL-011|再収集]]API）
-- [[UT-CASE-008]]: [[DD-APP-API-009]]（運用診断API）
-- [[UT-CASE-009]]: [[DD-APP-API-011]]（収集結果明細API）
-- [[UT-CASE-010]]: [[DD-APP-API-012]]（配信前後再確認API）
-- [[UT-CASE-011]]: [[DD-APP-API-013]]（タグ管理API）
-- [[UT-CASE-012]]: [[DD-APP-API-014]]（ドキュメント公開実行API）
-- [[UT-CASE-013]]: [[DD-APP-API-015]]（配信反映ジョブ状態API）
+- [[UT-CASE-008]]: [[DD-APP-API-009]]（[[DD-APP-API-009|運用診断API]]）
+- [[UT-CASE-009]]: [[DD-APP-API-011]]（[[DD-APP-API-011|収集結果明細API]]）
+- [[UT-CASE-010]]: [[DD-APP-API-012]]（[[DD-APP-API-012|配信前後再確認API]]）
+- [[UT-CASE-011]]: [[DD-APP-API-013]]（[[DD-APP-API-013|タグ管理API]]）
+- [[UT-CASE-012]]: [[DD-APP-API-014]]（[[DD-APP-API-014|ドキュメント公開実行API]]）
+- [[UT-CASE-013]]: [[DD-APP-API-015]]（[[DD-APP-API-015|配信反映ジョブ状態API]]）
 
 ## 実行方針
 - API単位で対象ケースを選択実行し、変更範囲外ケースへの影響を切り分ける。

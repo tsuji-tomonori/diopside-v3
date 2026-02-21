@@ -35,7 +35,7 @@ tags:
 
 ## 影響
 - ビルド設計: [[BD-DEV-PIPE-001]] に型安全設定、禁止事項、受入基準を追加する。
-- コーディング規約: [[DD-DEV-CODE-001]] で `unknown` 境界、`switch` 網羅性、`import type` を明文化する。
+- [[DD-DEV-CODE-001|コーディング規約]]: [[DD-DEV-CODE-001]] で `unknown` 境界、`switch` 網羅性、`import type` を明文化する。
 - 運用/受入: [[RQ-DEV-001]] の `lint` / `test` / `build` 判定に型安全ゲートを含める。
 
 ## 却下した選択肢

@@ -57,7 +57,7 @@ tags:
    - 既存配信実行ログがある場合は `publish_runs`/`publish_steps`/`publish_artifacts` へ移送する。
    - `videos.validation_status` を既存レコードに `valid` で初期化する。
 3. `switch`
-   - 収集結果明細APIは `ingestion_events` 参照を停止し `ingestion_items` 参照へ切替える。
+   - [[DD-APP-API-011|収集結果明細API]]は `ingestion_events` 参照を停止し `ingestion_items` 参照へ切替える。
    - 配信反映状態APIは新設 `publish_*` テーブル参照へ切替える。
 4. `contract`
    - 旧集約経路でのみ使っていた一時列/互換ビューを削除する。

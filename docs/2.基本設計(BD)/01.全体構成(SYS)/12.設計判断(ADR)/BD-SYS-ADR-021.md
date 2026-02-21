@@ -31,15 +31,15 @@ tags:
 
 ## 決定事項
 - 原本データの更新系は `管理画面 -> Backend API -> DB` を唯一経路とし、直接編集を許可しない。
-- 利用者向け参照系は `利用者Web -> S3静的JSON` を当面の正規経路とし、検索時にDBへ直接問い合わせしない。
+- [[RQ-SH-002|利用者]]向け参照系は `利用者Web -> S3静的JSON` を当面の正規経路とし、検索時にDBへ直接問い合わせしない。
 - 収集/再確認/公開反映のrun実行は単一のBackend API（Hono）内で完結させ、別デプロイのworkerサービスを持たない。
 - 手動実行と定期実行は同一の運用API契約を起動入口とし、定期実行は外部スケジューラから運用APIを呼び出して開始する。
 - 高度あいまい検索は将来 `API検索エンドポイント` を追加して段階導入する（本変更では契約詳細を固定しない）。
 - 文書とテスト結果は配信経路を分離して公開し、業務API/運用APIの認証境界を維持する。
-- 外部LLM（ChatGPT）は管理者のタグ判断を補助する外部支援としてのみ扱い、反映経路は `管理画面 -> Backend API -> DB` に固定する。
+- 外部LLM（ChatGPT）は[[RQ-SH-001|管理者]]のタグ判断を補助する外部支援としてのみ扱い、反映経路は `管理画面 -> Backend API -> DB` に固定する。
 - LLM結果はJSON取込時に契約検証を必須とし、検証成功時のみDB正本へ反映する。
 - LLM支援で更新されたタグ反映後は `tag_master.json` と `archive_index.pN.json` を同一公開runで再生成する。
-- 利用者向けの静的配信JSON契約（`bootstrap.json` / `tag_master.json` / `archive_index.p{page}.json`）は JSON Schema（Draft 2020-12）を機械検証可能な正本として管理する。
+- [[RQ-SH-002|利用者]]向けの静的配信JSON契約（`bootstrap.json` / `tag_master.json` / `archive_index.p{page}.json`）は JSON Schema（Draft 2020-12）を機械検証可能な正本として管理する。
 - 配信JSON契約は必須キーを互換境界として固定し、追加キーは将来拡張として許容する。
 
 ## 理由
@@ -51,7 +51,7 @@ tags:
 ## 影響
 - アーキテクチャ概要: [[BD-SYS-ARCH-001]] で更新系/参照系の分離と3層構造を明示する。
 - データ設計: [[BD-APP-DATA-001]] でDB正本、配信用生成、公開切替の責務境界を追加する。
-- API設計: [[BD-APP-API-001]] / [[BD-APP-API-002]] で利用者向け配信契約と管理API契約を分離する。
+- API設計: [[BD-APP-API-001]] / [[BD-APP-API-002]] で[[RQ-SH-002|利用者]]向け配信契約と管理API契約を分離する。
 - デプロイ設計: [[BD-INF-DEP-004]] で配信経路分離（web/docs/openapi/api）と運用証跡配信を整理する。
 - 詳細設計: [[DD-APP-API-001]] / [[DD-APP-API-005]] で境界追従を行う。
 - 契約スキーマ: `contracts/static-json/*.schema.json` を追加し、[[DD-APP-API-001]] / [[DD-APP-API-004]] / [[DD-APP-API-005]] から参照する。

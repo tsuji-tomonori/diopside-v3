@@ -96,7 +96,7 @@ flowchart TD
 - `infra` のCDK合成時に `AwsSolutionsChecks` を適用し、未承認の警告/エラーを残したまま配備しない。
 - 除外（suppressions）は恒久設定ではなく、根拠・適用範囲・将来の解消条件を文書化したもののみ許可する。
 - 現行Phase 1（docs単独公開）で許可する除外は次のとおり。
-  - `AwsSolutions-IAM4` / `AwsSolutions-IAM5` / `AwsSolutions-L1`: `BucketDeployment` が生成するCDK管理カスタムリソース由来（スタック利用者側で直接制御不可）。
+  - `AwsSolutions-IAM4` / `AwsSolutions-IAM5` / `AwsSolutions-L1`: `BucketDeployment` が生成するCDK管理カスタムリソース由来（スタック[[RQ-SH-002|利用者]]側で直接制御不可）。
   - `AwsSolutions-S1`: S3アクセスログはPhase 1では未導入（CloudFront配信を主体とし運用コストを抑制）。
   - `AwsSolutions-CFR1`: 公開文書のグローバル配信要件によりGeo制限を未適用。
   - `AwsSolutions-CFR2`: WAFはPhase 1で未導入（Phase 2の単一CloudFront運用で再評価）。

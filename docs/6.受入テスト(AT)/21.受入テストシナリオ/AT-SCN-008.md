@@ -36,7 +36,7 @@ tags:
 
 ## 対応DD-API
 - [[DD-APP-API-002]]（[[RQ-GL-002|収集実行]]起動API）
-- [[DD-APP-API-011]]（収集結果明細API）
+- [[DD-APP-API-011]]（[[DD-APP-API-011|収集結果明細API]]）
 
 ## 前提条件
 - 受入環境で[[RQ-GL-002|収集実行]]が実行可能。

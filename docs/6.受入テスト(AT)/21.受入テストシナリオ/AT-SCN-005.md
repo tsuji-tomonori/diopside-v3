@@ -28,7 +28,7 @@ tags:
 ## 対応DD-API
 - `DD-APP-API-003`（[[RQ-GL-002|収集実行]]状態API）
 - `DD-APP-API-008`（[[RQ-GL-011|再収集]]API）
-- `DD-APP-API-009`（運用診断API）
+- `DD-APP-API-009`（[[DD-APP-API-009|運用診断API]]）
 
 ## 前提条件
 - 失敗run、または診断APIで`degraded/critical`となる状態を再現済み。

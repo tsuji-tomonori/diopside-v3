@@ -79,7 +79,7 @@ tags:
 | AWS WAF | 0（Phase 1） | Phase 1では未導入とし、単一CloudFront運用の拡張時に再評価するため。 | [[BD-INF-DEP-003]] | Phase 2で評価 |
 
 ※ 本表は運用上意図して管理するAWSサービスのみを対象とし、CDK内部生成リソース（`Custom::CDKBucketDeployment` 由来のLambda/Layerなど）は集計対象外とする。
-※ 個数は本番環境の論理個数を記載。未固定事項は実装詳細（DD/IaC）で確定する。
+※ 個数は[[BD-DEV-ENV-002|本番環境]]の論理個数を記載。未固定事項は実装詳細（DD/IaC）で確定する。
 
 ## ロールバック方針
 - docs/frontは直前の静的成果物へ戻す。

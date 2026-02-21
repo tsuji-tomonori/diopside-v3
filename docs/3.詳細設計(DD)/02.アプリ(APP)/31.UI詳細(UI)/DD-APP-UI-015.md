@@ -37,7 +37,7 @@ tags:
 - 区間項目はキーボードフォーカス可能とし `Enter` で遷移する。
 
 ## I/Oまたは責務
-- 入力: `highlights/{videoId}.json`、利用者操作。
+- 入力: `highlights/{videoId}.json`、[[RQ-SH-002|利用者]]操作。
 - 出力: 区間遷移イベント、失敗通知、再試行要求。
 
 ## 変更履歴
