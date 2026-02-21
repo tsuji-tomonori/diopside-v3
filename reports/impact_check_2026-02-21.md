@@ -20,3 +20,14 @@
 ## 検証
 - `task docs:guard` でfrontmatter/リンク/章再編後の整合を確認する。
 - 必要に応じて `task docs:check` を実行し、Vault全体整合を確認する。
+
+## 実施内容（NFR記載方式統一）
+- 対象: `docs/1.要求(RQ)/61.非機能要求(NFR)` の主要求34文書（`RQ-AV-001`/`RQ-PS-001`/`RQ-SEC-001`/`RQ-PRC-001`/`RQ-OBY-001`/`RQ-INT-001`/`RQ-DATA-001`/`RQ-COST-001`/`RQ-DEV-001`/`RQ-DEV-002`/`RQ-UX-001`〜`RQ-UX-024`）。
+- 変更内容: SnowCardの `要求` / `受入基準` / `例外/エラー` を「〜できる」基調へ統一し、1項目1判定で読める粒度へ再記述。
+- 併せて更新: `[[RQ-RDR-048]]` を新規追加し、`[[RQ-DG-001]]` のRQフロー/受入基準へNFR記載ルールを反映。
+- スキル同期: `docops-orchestrator` / `skill-maintainer` / `obsidian-doc-check` / `obsidian-doc-change` / `doc-rq-av|ps|sec|prc|oby|int|data|cost|dev|ux` を同一方針で更新。
+
+## 影響確認（NFR記載方式統一）
+- 閾値・判定条件・例外境界は維持し、文体と判定粒度のみ変更したため、AT判定観点の意味変更は発生しない。
+- 変更履歴は全対象NFRで `[[RQ-RDR-048]]` へ接続し、記載方式変更の判断根拠を追跡できる。
+- NFR記載ルールをスキルへ同期し、以後の文書改修で同一スタイルへ収束できる。

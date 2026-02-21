@@ -17,6 +17,7 @@ metadata:
 - Obsidian Vault外の成果物（アプリ実装コード、非Markdown資産）の検査をしたいとき。
 
 ## チェック項目
+- NFR（`61.非機能要求(NFR)`）では SnowCard の `要求` / `受入基準` / `例外/エラー` が「〜できる」基調で、1項目1判定の粒度になっている
 - 必須frontmatterキーの存在
 - `filename == id`
 - `up/related` のリンク整合

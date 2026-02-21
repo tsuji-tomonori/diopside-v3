@@ -41,6 +41,7 @@ metadata:
 - `updated` は作業日へ更新する。
 
 ## 品質チェック
+- NFR文書では SnowCard の `要求` / `受入基準` / `例外/エラー` を「〜できる」基調で記述し、1項目1判定に分解する。
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
