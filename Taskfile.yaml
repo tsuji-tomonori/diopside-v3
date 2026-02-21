@@ -232,6 +232,8 @@ tasks:
     cmds:
       - cp "{{.QUARTZ_CONFIG_SOURCE}}" "{{.QUARTZ_DIR}}/quartz.config.ts"
       - cp "{{.QUARTZ_CUSTOM_STYLE_SOURCE}}" "{{.QUARTZ_DIR}}/quartz/styles/custom.scss"
+      - cp "{{.ROOT_DIR}}/config/quartz/quartz.layout.ts" "{{.QUARTZ_DIR}}/quartz.layout.ts"
+      - cp "{{.ROOT_DIR}}/config/quartz/components/BuildInfo.tsx" "{{.QUARTZ_DIR}}/quartz/components/BuildInfo.tsx"
 
   quartz:build:
     desc: Build Quartz public from docs
@@ -240,7 +242,10 @@ tasks:
       - quartz:sync-config
     dir: '{{.QUARTZ_DIR}}'
     cmds:
-      - npx quartz build -d ../docs
+      - |
+        bash -lc 'DIOPSIDE_DOCS_BRANCH="${GITHUB_REF_NAME:-$(git -C "{{.ROOT_DIR}}" rev-parse --abbrev-ref HEAD)}" \
+        DIOPSIDE_DOCS_COMMIT="${GITHUB_SHA:-$(git -C "{{.ROOT_DIR}}" rev-parse HEAD)}" \
+        npx quartz build -d ../docs'
 
   quartz:build:ci:
     desc: Build Quartz public sequentially for CI
@@ -255,7 +260,12 @@ tasks:
         fi'
       - cp "{{.QUARTZ_CONFIG_SOURCE}}" "{{.QUARTZ_DIR}}/quartz.config.ts"
       - cp "{{.QUARTZ_CUSTOM_STYLE_SOURCE}}" "{{.QUARTZ_DIR}}/quartz/styles/custom.scss"
-      - npx quartz build -d ../docs
+      - cp "{{.ROOT_DIR}}/config/quartz/quartz.layout.ts" "{{.QUARTZ_DIR}}/quartz.layout.ts"
+      - cp "{{.ROOT_DIR}}/config/quartz/components/BuildInfo.tsx" "{{.QUARTZ_DIR}}/quartz/components/BuildInfo.tsx"
+      - |
+        bash -lc 'DIOPSIDE_DOCS_BRANCH="${GITHUB_REF_NAME:-$(git -C "{{.ROOT_DIR}}" rev-parse --abbrev-ref HEAD)}" \
+        DIOPSIDE_DOCS_COMMIT="${GITHUB_SHA:-$(git -C "{{.ROOT_DIR}}" rev-parse HEAD)}" \
+        npx quartz build -d ../docs'
 
   infra:install:
     desc: Install CDK dependencies
