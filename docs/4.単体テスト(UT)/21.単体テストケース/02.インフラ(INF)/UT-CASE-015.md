@@ -1,5 +1,5 @@
 ---
-id: UT-CASE-010
+id: UT-CASE-015
 title: 配信経路rewrite 単体テスト
 doc_type: 単体テストケース
 phase: UT
@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[UT-PLAN-003]]'
 - '[[DD-INF-DEP-001]]'

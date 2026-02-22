@@ -7,14 +7,14 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[UT-PLAN-001]]'
 - '[[BD-DEV-TEST-001]]'
 - '[[BD-INF-DEP-003]]'
 - '[[DD-INF-DEP-001]]'
 related:
-- '[[UT-CASE-010]]'
+- '[[UT-CASE-015]]'
 - '[[IT-PLAN-001]]'
 tags:
 - diopside
@@ -37,7 +37,7 @@ tags:
 - 配信設計変更時は `npm --prefix infra run synth` でテンプレート差分の妥当性を確認する。
 
 ## 対象ケース
-- [[UT-CASE-010]]: 配信経路分岐とrewriteルールの単体検証
+- [[UT-CASE-015]]: 配信経路分岐とrewriteルールの単体検証
 
 ## 完了条件
 - `infra` のJestが成功し、rewriteルールの主要経路（`/`, `/docs/*`, `/web/*`, `/api/v1/*`, `/openapi/*`）の期待結果が一致する。

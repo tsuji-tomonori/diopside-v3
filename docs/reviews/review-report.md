@@ -5,9 +5,9 @@ doc_type: レビュー報告
 phase: RQ
 version: 1.0.0
 status: 下書き
-owner: [[RQ-SH-001]]
+owner: RQ-SH-001
 created: 2026-02-15
-updated: '2026-02-15'
+updated: '2026-02-22'
 up:
   - '[[RQ-SC-001]]'
 related:

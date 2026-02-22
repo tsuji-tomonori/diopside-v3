@@ -7,13 +7,13 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[UT-PLAN-001]]'
 - '[[BD-DEV-TEST-001]]'
 - '[[RQ-DG-001]]'
 related:
-- '[[UT-CASE-009]]'
+- '[[UT-CASE-014]]'
 - '[[IT-PLAN-001]]'
 tags:
 - diopside
@@ -35,7 +35,7 @@ tags:
 - 失敗時は対象文書のみ修正し、再度 `task docs:guard` を実行して局所再検証する。
 
 ## 対象ケース
-- [[UT-CASE-009]]: docs運用ガード（リンク/frontmatter/用語補正）
+- [[UT-CASE-014]]: docs運用ガード（リンク/frontmatter/用語補正）
 
 ## 完了条件
 - `task docs:guard` が成功し、`reports/doc_check.md` で `broken_links: 0` を満たす。

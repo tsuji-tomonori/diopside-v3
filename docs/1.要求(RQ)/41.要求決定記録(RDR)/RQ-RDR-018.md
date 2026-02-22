@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -57,4 +57,4 @@ tags:
 - 設計文書: [[BD-APP-UI-002]] / [[BD-SYS-SEC-001]] / [[BD-DEV-PIPE-001]] で実装・運用トレースを維持する。
 
 ## 変更履歴
-- 2026-02-11: 新規作成
+- 2026-02-11: 新規作成 [[RQ-RDR-018]]

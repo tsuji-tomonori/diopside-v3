@@ -1,5 +1,5 @@
 ---
-id: UT-CASE-011
+id: UT-CASE-016
 title: 検索・表示状態遷移 単体テスト
 doc_type: 単体テストケース
 phase: UT
@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[UT-PLAN-004]]'
 - '[[DD-APP-UI-002]]'

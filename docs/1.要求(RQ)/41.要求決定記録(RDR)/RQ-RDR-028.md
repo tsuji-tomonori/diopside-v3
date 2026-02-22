@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -44,4 +44,4 @@ tags:
 - 設計: [[BD-APP-API-002]] と [[BD-APP-DATA-001]] でモード契約とデータ層構成を具体化する。
 
 ## 変更履歴
-- 2026-02-11: 新規作成
+- 2026-02-11: 新規作成 [[RQ-RDR-028]]

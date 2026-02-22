@@ -7,7 +7,7 @@ version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-21'
+updated: '2026-02-22'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -43,5 +43,5 @@ tags:
 
 ## 変更履歴
 - 2026-02-21: `Description` を必須タグキーへ追加し、関連決定 [[RQ-RDR-049]] へ連携
-- 2026-02-14: `Environment` 許容値を `Production` / `Development` へ変更
-- 2026-02-11: 新規作成
+- 2026-02-14: `Environment` 許容値を `Production` / `Development` へ変更 [[RQ-RDR-049]]
+- 2026-02-11: 新規作成 [[RQ-RDR-049]]

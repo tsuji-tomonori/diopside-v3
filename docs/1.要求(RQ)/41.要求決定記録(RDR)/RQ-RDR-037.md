@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -44,4 +44,4 @@ tags:
 - [[BD-DEV-TEST-001]] と [[UT-PLAN-001]] / [[IT-PLAN-001]] / [[AT-PLAN-001]] の責務境界を、トレーサビリティ表で継続的に監視できる。
 
 ## 変更履歴
-- 2026-02-11: 新規作成
+- 2026-02-11: 新規作成 [[RQ-RDR-033]]

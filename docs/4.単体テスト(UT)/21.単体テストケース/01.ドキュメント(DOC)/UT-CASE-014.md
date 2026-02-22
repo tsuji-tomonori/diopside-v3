@@ -1,5 +1,5 @@
 ---
-id: UT-CASE-009
+id: UT-CASE-014
 title: docs運用ガード 単体テスト
 doc_type: 単体テストケース
 phase: UT
@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-22'
 up:
 - '[[UT-PLAN-002]]'
 - '[[RQ-DG-001]]'
