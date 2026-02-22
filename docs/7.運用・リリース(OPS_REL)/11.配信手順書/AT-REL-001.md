@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.13
+version: 1.0.14
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -60,7 +60,7 @@ tags:
 
 ## Issueラベル起動（OpenCode）運用手順
 1. [[RQ-SH-001|管理者]]が対象Issueへ `opencode/run` ラベルを付与する。
-2. `opencode-issue.yml` が `issues:labeled` で起動し、`label一致` と `github.actor allowlist` の二重条件を判定する。
+2. `opencode-codex-issue.yml` が `issues:labeled`（補助で `issues:assigned`）で起動し、`label/assignee一致` と `github.actor allowlist` の二重条件を判定する。
 3. ジョブが OAuthトークンを `~/.opencode/auth/openai.json` へ復元し、OpenCodeを `share=false` で実行する。
 4. 実行ログから `issue_number`、実行者、付与ラベル、作成PR番号を確認し、Issueへ結果コメントを記録する。
 5. 失敗時はラベルを外して再試行し、反復失敗時は [[AT-RUN-001]] に従って自動実行を停止する。
@@ -87,6 +87,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-23: `opencode-codex-issue.yml` へ名称同期し、`issues:assigned` 補助入口を運用手順へ追記 [[RQ-RDR-050]]
 - 2026-02-23: Issueラベル起動の運用手順（allowlist判定、OAuth復元、証跡確認）を追加 [[RQ-RDR-050]]
 - 2026-02-21: GitHub Actions要件追加に合わせ、Environment承認とconcurrency確認を判定基準へ追記 [[RQ-RDR-050]]
 - 2026-02-21: Node 22固定とQuartzワークスペース初期化/自己修復をCI手順へ追加

@@ -24,3 +24,11 @@
 ## 検証
 - `task docs:trace`
 - `task docs:guard`
+
+## 追加同期（workflow実装との差分反映）
+- 対象: `.github/workflows/opencode-codex-issue.yml` と設計本文の整合。
+- 同期内容:
+  - DD/BD/ATの記載を `opencode-issue.yml` から `opencode-codex-issue.yml` へ名称統一。
+  - トリガーを `issues:labeled`（主）+ `issues:assigned`（補助）で明確化。
+  - `plan -> build` 二段階、IssueコメントPATCH更新、workflow改変ブロック（`.github/workflows/` 差分Fail）を設計へ追記。
+  - `OPENCODE_ALLOWED_ACTORS` / `OPENCODE_TRIGGER_LABEL` / `OPENCODE_ASSIGNEE` の変数化運用を設計へ追記。

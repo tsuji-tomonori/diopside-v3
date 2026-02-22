@@ -3,7 +3,7 @@ id: BD-SYS-ADR-039
 title: CI/CDはGitHub Actionsを実装基盤に統一しPRとデプロイを分離運用する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-21
@@ -28,11 +28,14 @@ tags:
 - CI実行は `ci` ワークフローに統一し、PRごとに必須ステータスチェックを実行する。
 - CD実行は `docs-deploy` などのデプロイ専用ワークフローへ分離し、`workflow_dispatch` と main反映で起動できる構成を採用する。
 - Issue起点の自動修正は `issues:labeled` を専用入口とし、許可ラベル + 実行者allowlistの二重条件を満たす場合のみ実行する。
+- 自動修正の入口は `issues:labeled` を基本とし、必要時は `issues:assigned` を補助入口として同一ガード条件で運用する。
 - デプロイジョブは環境単位 `concurrency` を必須化し、同一環境への並列反映を禁止する。
 - 本番反映はGitHub Environment保護ルールと承認ゲートを必須化する。
 - 認証はOIDC AssumeRoleを採用し、長期アクセスキーをSecretsへ保持しない。
 - セキュリティ統制として、Actions参照SHA固定・`GITHUB_TOKEN` 最小権限・利用元制限を実装条件に含める。
 - OpenCode/Codex利用時はAPIキー常設ではなくOAuthトークンの一時復元を採用し、`share=false` を既定にする。
+- OpenCode実行は `plan -> build` の二段階を既定とし、Issueコメントを単一IDへPATCH更新して進捗を追跡する。
+- 自動修正ジョブで `.github/workflows/` 差分を検出した場合はFail停止し、workflow改変を禁止する。
 
 ## 理由
 - PR判定と本番反映を同一ワークフローへ混在させると権限境界が曖昧になり、運用事故時の切り分けも困難になる。
@@ -51,5 +54,6 @@ tags:
 - 長期アクセスキーをGitHub Secretsで運用する案: ローテーションと漏えい時影響の観点で不採用。
 
 ## 変更履歴
+- 2026-02-23: `issues:assigned` 補助入口、`plan->build` 二段階、IssueコメントPATCH更新、workflow改変ブロック方針を追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: Issueラベル起動の実行条件とOAuthトークン一時復元方針を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: 新規作成（GitHub Actions統一運用と権限境界分離を決定） [[BD-SYS-ADR-039]]
