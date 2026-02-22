@@ -3,11 +3,11 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.13
+version: 1.0.14
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-21'
+updated: '2026-02-23'
 up:
 - '[[BD-INF-DEP-003]]'
 - '[[BD-SYS-ADR-013]]'
@@ -22,6 +22,8 @@ related:
 - '[[DD-INF-CF-001]]'
 - '[[DD-INF-S3-001]]'
 - '[[DD-INF-SEC-002]]'
+- '[[RQ-RDR-050]]'
+- '[[BD-SYS-ADR-039]]'
 tags:
 - diopside
 - DD
@@ -81,6 +83,12 @@ tags:
   - `aws-actions/configure-aws-credentials@v6` を使用し、`AWS_ROLE_ARN` + `AWS_REGION` で OIDC Assume を実行する。
   - Assume直後に `aws sts get-caller-identity` を実行し、誤アカウント配備を検知する。
   - 実行順: `task docs:deploy:ci`（`docs:guard` -> `infra:deploy:ci` -> `docs:verify`）
+- `opencode-issue.yml`
+  - `issues:labeled` で起動し、許可ラベル（例: `opencode/run`）と実行者allowlistを `if` 条件で二重判定する。
+  - `concurrency: opencode-issue-${issue_number}` を設定し、同一Issueの多重実行を防止する。
+  - `permissions` は `contents: write` / `pull-requests: write` / `issues: write` の最小構成とする。
+  - 実行前に `OPENCODE_OPENAI_OAUTH_JSON_B64` を `~/.opencode/auth/openai.json` へ復元し、`chmod 600` を適用する。
+  - OpenCode実行は `share: false` を既定とし、Issue本文を未信頼入力として扱うセキュリティプロンプトを必須化する。
 
 ## GitHub Actions パラメータ・設定値（`docs-deploy.yml`）
 | 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
@@ -105,6 +113,21 @@ tags:
 | Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ vars.AWS_ROLE_ARN }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
 | Verify | `aws sts get-caller-identity` | 0終了コード | Yes | workflow定義 | 誤アカウント配備を検知するため。 |
 | Deploy | 実行コマンド | `task docs:deploy:ci` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
+
+## GitHub Actions パラメータ・設定値（`opencode-issue.yml`）
+| 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
+|---|---|---|---|---|---|
+| Trigger | `on.issues.types` | `labeled` | Yes | workflow定義 | Issueラベル起点で自動実行するため。 |
+| Gate | `if.label` | `github.event.label.name == 'opencode/run'` | Yes | workflow定義 | 許可ラベルのみ実行するため。 |
+| Gate | `if.actor` | allowlist（`github.actor`） | Yes | workflow定義 | 許可ユーザー以外の実行を防ぐため。 |
+| Control | `concurrency.group` | `opencode-issue-${{ github.event.issue.number }}` | Yes | workflow定義 | 同一Issueの多重実行を防ぐため。 |
+| Permission | `permissions.contents` | `write` | Yes | workflow定義 | 修正ブランチ反映とPR差分作成のため。 |
+| Permission | `permissions.pull-requests` | `write` | Yes | workflow定義 | PR作成/更新のため。 |
+| Permission | `permissions.issues` | `write` | Yes | workflow定義 | 実行結果コメント/ラベル更新のため。 |
+| Secret | `OPENCODE_OPENAI_OAUTH_JSON_B64` | base64文字列 | Yes | GitHub Secrets | OAuth認証キャッシュをヘッドレス環境で復元するため。 |
+| Step | `Restore OAuth token` | `~/.opencode/auth/openai.json` へ復元 + `chmod 600` | Yes | workflow定義 | 認証情報の権限制御を維持するため。 |
+| OpenCode | `share` | `false` | Yes | workflow定義 | 共有による情報露出を防止するため。 |
+| OpenCode | `prompt security rules` | secrets出力禁止 / workflow改変禁止 | Yes | workflow定義 | Prompt injection耐性を確保するため。 |
 
 ## OIDC信頼条件（固定値）
 - Provider URL: `https://token.actions.githubusercontent.com`
@@ -168,6 +191,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-23: `opencode-issue.yml` の実行仕様（`issues:labeled`、allowlist、OAuth復元、最小権限、`share=false`）を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: Quartz不整合ディレクトリの自己修復、Node 22固定、CI実行前のQuartzワークスペース初期化を追加
 - 2026-02-21: CI競合回避のため `docs:deploy:ci` / `infra:deploy:ci` / `quartz:build:ci` を追加し、workflow実行コマンドを直列タスクへ更新
 - 2026-02-21: `docs-deploy.yml` のパラメータ/設定値一覧と OIDC信頼条件の固定値を追加

@@ -3,11 +3,11 @@ id: DD-INF-SEC-002
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-21'
+updated: '2026-02-23'
 up:
 - '[[BD-INF-SEC-001]]'
 - '[[RQ-SEC-001-01]]'
@@ -50,6 +50,8 @@ tags:
 - 機密値は Secrets Manager 管理とし、参照は `GetSecretValue` のみに限定する。
 - KMSキーは年1回ローテーションを必須化し、鍵ポリシー変更は二重承認とする。
 - 平文シークレットのCIログ出力を禁止し、検出時は当日中に失効・再発行する。
+- OpenCode/Codex OAuthトークンはGitHub Secretsへbase64で保持し、ジョブ実行時のみ `~/.opencode/auth/openai.json` へ復元する。
+- OAuthトークン復元ステップは `chmod 600` を適用し、ジョブログへ内容を出力しない。
 
 ## 昇格条件
 - 特権昇格は障害対応または緊急復旧時のみ許可し、開始時にチケットIDを必須入力する。
@@ -57,8 +59,10 @@ tags:
 
 ## 監査要件
 - 主要操作は監査ログへ `actor`, `role`, `resource`, `result` を記録する。
+- Issueラベル起動の自動実行は `issue_number`, `label`, `actor`, `run_id`, `pull_request` を監査証跡へ残す。
 
 ## 変更履歴
+- 2026-02-23: OpenCode/Codex OAuthトークンの復元運用とIssueラベル実行の監査項目を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: `Description` タグの作成時必須条件を権限境界へ追加
 - 2026-02-21: GitHub OIDC AssumeRole（`github-actions-docs-deploy-role`）の信頼条件と初期導入例外の管理方針を追加 [[BD-SYS-ADR-038]]
 - 2026-02-21: DD-INF章再編に合わせて `70.統制と監査(GOV)` へ移設し、Config統制文書との関連を追加 [[BD-SYS-ADR-036]]

@@ -3,11 +3,11 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.12
+version: 1.0.13
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-21'
+updated: '2026-02-23'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
@@ -58,6 +58,13 @@ tags:
 11. 通常運用では `main` へのpushまたは `workflow_dispatch` で同手順を反復する。
 12. Phase 2適用後は [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]] に従い、`'/web/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路確認を追加する。
 
+## Issueラベル起動（OpenCode）運用手順
+1. [[RQ-SH-001|管理者]]が対象Issueへ `opencode/run` ラベルを付与する。
+2. `opencode-issue.yml` が `issues:labeled` で起動し、`label一致` と `github.actor allowlist` の二重条件を判定する。
+3. ジョブが OAuthトークンを `~/.opencode/auth/openai.json` へ復元し、OpenCodeを `share=false` で実行する。
+4. 実行ログから `issue_number`、実行者、付与ラベル、作成PR番号を確認し、Issueへ結果コメントを記録する。
+5. 失敗時はラベルを外して再試行し、反復失敗時は [[AT-RUN-001]] に従って自動実行を停止する。
+
 ## 設定不備時の確認手順
 1. `Missing variable: AWS_ROLE_ARN` が出る場合は Environment `prod` の Variables 名/値を再確認する。
 2. `Missing variable: AWS_REGION` が出る場合は `AWS_REGION=ap-northeast-1` を設定する。
@@ -72,12 +79,15 @@ tags:
 - Phase 1では `'/'` と `'/docs/*'` の到達性が維持される。
 - Phase 2では `'/web/*'`, `'/docs/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路境界が維持される。
 - 異常時は [[AT-RUN-001]] の切り分け手順で復旧できる。
+- Issueラベル起動時に、許可ユーザー以外のラベル付与ではジョブが実行されない。
+- Issueラベル起動時に、`issue_number`/実行者/ラベル/PR番号の証跡が残る。
 
 ## 章構成上の位置づけ
 - 本書は「7.運用・リリース(OPS_REL)」配下のRunbookとして管理する。
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-23: Issueラベル起動の運用手順（allowlist判定、OAuth復元、証跡確認）を追加 [[RQ-RDR-050]]
 - 2026-02-21: GitHub Actions要件追加に合わせ、Environment承認とconcurrency確認を判定基準へ追記 [[RQ-RDR-050]]
 - 2026-02-21: Node 22固定とQuartzワークスペース初期化/自己修復をCI手順へ追加
 - 2026-02-21: GitHub Actions 実行を `task docs:deploy:ci`（直列実行）へ更新し、CI向け手順を明確化

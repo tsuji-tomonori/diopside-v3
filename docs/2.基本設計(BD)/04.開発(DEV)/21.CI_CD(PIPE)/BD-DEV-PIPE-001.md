@@ -3,11 +3,11 @@ id: BD-DEV-PIPE-001
 title: ビルド方針（デプロイ単位分離）
 doc_type: ビルド設計
 phase: BD
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-21'
+updated: '2026-02-23'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -97,6 +97,10 @@ tags:
 - PR品質ゲートはGitHub Actions `ci` ワークフローで実行し、必須ステータスチェック名は `ci-docs` / `ci-web` / `ci-api` / `ci-infra` を正本とする。
 - 必須ステータスチェック名とjob名は1対1で管理し、別ワークフローで同名jobを作成しない。
 - 単位別ジョブの実行条件は `paths` を基準に制御し、共有設定変更時は影響単位を拡張実行する。
+- Issue起点の自動修正は `issues:labeled` を専用トリガーとし、`opencode/run` などの許可ラベル以外では実行しない。
+- 実行条件は `label一致` + `github.actor allowlist` の二重条件を必須化し、公開Issue本文は未信頼入力として扱う。
+- OpenCode/Codexの認証はOAuthトークンをジョブ内で一時復元して利用し、APIキー常設運用を採用しない。
+- 自動修正ジョブは `share=false` を既定とし、成果物共有は明示許可時のみ有効化する。
 - デプロイ系ワークフローは環境単位 `concurrency` を必須設定とし、同一環境への並列反映を禁止する。
 - 本番デプロイはGitHub Environment `prod` の承認ゲートを必須とし、`workflow_dispatch` 実行時も同じ保護ルールを適用する。
 - Artifacts命名は `<単位>-<branch>-<shortsha>` で統一し、a11y結果を含む判定証跡は90日以上保持する。
@@ -128,6 +132,7 @@ tags:
 - a11y検査結果が90日以上保持され、`AT-RPT-001` と `AT-GO-001` から参照可能である。
 
 ## 変更履歴
+- 2026-02-23: Issueラベル起動の実装補足（許可ラベル、allowlist、OAuth一時復元、`share=false`）を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: GitHub Actions採用に伴う実装補足（必須チェック名、paths、concurrency、Environment承認、Artifacts命名）を追加 [[BD-SYS-ADR-039]]
 - 2026-02-13: [[RQ-UX-021-01]] 対応としてアクセシビリティCIゲート（重大度閾値、期限付き例外、90日保持、手動補助ゲート）を追加 [[BD-SYS-ADR-024]]
 - 2026-02-11: Next.js App Router向け品質ゲート（build/start、Dynamic API、fetch再検証、画像/Script、Web Vitals）を追加 [[BD-SYS-ADR-024]]
