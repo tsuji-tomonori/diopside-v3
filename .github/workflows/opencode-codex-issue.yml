@@ -13,6 +13,7 @@ jobs:
     if: >
       github.event.action == 'labeled' || github.event.action == 'assigned'
     runs-on: ubuntu-latest
+    environment: opencode
     timeout-minutes: 45
     permissions:
       contents: write

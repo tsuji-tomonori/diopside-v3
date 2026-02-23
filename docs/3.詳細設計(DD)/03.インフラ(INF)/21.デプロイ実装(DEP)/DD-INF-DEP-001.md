@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.15
+version: 1.0.16
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -87,7 +87,7 @@ tags:
   - `issues:labeled` / `issues:assigned` で起動し、許可ラベルまたはassignee一致に加えて実行者allowlistを二重判定する。
   - `concurrency: opencode-issue-${issue_number}` を設定し、同一Issueの多重実行を防止する。
   - `permissions` は `contents: write` / `pull-requests: write` / `issues: write` の最小構成とする。
-  - 実行前に `OPENCODE_OPENAI_OAUTH_JSON_B64` を `~/.opencode/auth/openai.json` へ復元し、`chmod 600` を適用する。
+  - `environment: opencode` で実行し、`OPENCODE_OPENAI_OAUTH_JSON_B64` をEnvironment Secretから `~/.opencode/auth/openai.json` へ復元して `chmod 600` を適用する。
   - `OPENCODE_ALLOWED_ACTORS` / `OPENCODE_TRIGGER_LABEL` / `OPENCODE_ASSIGNEE` をrepo variablesで管理し、運用値をworkflowから分離する。
   - OpenCode実行は `share: false` を既定とし、Issue本文を未信頼入力として扱うセキュリティプロンプトを必須化する。
   - 実行フェーズは `plan` -> `build` の二段階を固定し、Issueコメントを同一comment_idへPATCH更新して進捗を追跡する。
@@ -124,13 +124,14 @@ tags:
 | Gate | `if.label` | `label == OPENCODE_TRIGGER_LABEL` | Yes | workflow定義 + repo variables | 許可ラベルのみ実行するため。 |
 | Gate | `if.assignee` | `assignee == OPENCODE_ASSIGNEE` | No | workflow定義 + repo variables | 指定assignee起点の補助実行を許可するため。 |
 | Gate | `if.actor` | `OPENCODE_ALLOWED_ACTORS`（`,user1,user2,` 形式） | Yes | repo variables | 許可ユーザー以外の実行を防ぐため。 |
+| Job | `environment` | `opencode` | Yes | workflow定義 | Environment Secret境界と承認ルールを適用するため。 |
 | Control | `concurrency.group` | `opencode-issue-${{ github.event.issue.number }}` | Yes | workflow定義 | 同一Issueの多重実行を防ぐため。 |
 | Permission | `permissions.contents` | `write` | Yes | workflow定義 | 修正ブランチ反映とPR差分作成のため。 |
 | Permission | `permissions.pull-requests` | `write` | Yes | workflow定義 | PR作成/更新のため。 |
 | Permission | `permissions.issues` | `write` | Yes | workflow定義 | 実行結果コメント/ラベル更新のため。 |
 | OpenCode | `--agent` | `plan` -> `build` | Yes | workflow定義 | 計画確定後に実装へ進むため。 |
 | Issue comment | 更新方式 | `PATCH /issues/comments/{comment_id}` | Yes | workflow定義 | 単一コメントを更新して進捗追跡するため。 |
-| Secret | `OPENCODE_OPENAI_OAUTH_JSON_B64` | base64文字列 | Yes | GitHub Secrets | OAuth認証キャッシュをヘッドレス環境で復元するため。 |
+| Secret | `OPENCODE_OPENAI_OAUTH_JSON_B64` | base64文字列 | Yes | GitHub Environment `opencode` secrets | OAuth認証キャッシュをヘッドレス環境で復元するため。 |
 | Step | `Restore OAuth token` | `~/.opencode/auth/openai.json` へ復元 + `chmod 600` | Yes | workflow定義 | 認証情報の権限制御を維持するため。 |
 | OpenCode | `share` | `false` | Yes | workflow定義 | 共有による情報露出を防止するため。 |
 | OpenCode | `prompt security rules` | secrets出力禁止 / workflow改変禁止 | Yes | workflow定義 | Prompt injection耐性を確保するため。 |
@@ -198,6 +199,7 @@ tags:
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-02-23: OpenCode OAuthトークンをEnvironment `opencode` のSecretで管理する運用へ更新し、`environment` パラメータを追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: `opencode-codex-issue.yml` に合わせ、`issues:assigned` 補助入口、変数化ガード、`plan/build` 二段階、IssueコメントPATCH更新、workflow改変ブロックを追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: `opencode-issue.yml` の実行仕様（`issues:labeled`、allowlist、OAuth復元、最小権限、`share=false`）を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: Quartz不整合ディレクトリの自己修復、Node 22固定、CI実行前のQuartzワークスペース初期化を追加

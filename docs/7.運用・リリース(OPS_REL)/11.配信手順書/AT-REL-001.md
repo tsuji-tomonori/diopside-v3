@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.14
+version: 1.0.15
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -17,6 +17,7 @@ related:
 - '[[BD-INF-DEP-004]]'
 - '[[DD-INF-DEP-001]]'
 - '[[AT-RUN-001]]'
+- '[[AT-REL-002]]'
 - '[[RQ-DEV-006-01]]'
 - '[[RQ-RDR-050]]'
 - '[[BD-SYS-ADR-039]]'
@@ -61,9 +62,10 @@ tags:
 ## Issueラベル起動（OpenCode）運用手順
 1. [[RQ-SH-001|管理者]]が対象Issueへ `opencode/run` ラベルを付与する。
 2. `opencode-codex-issue.yml` が `issues:labeled`（補助で `issues:assigned`）で起動し、`label/assignee一致` と `github.actor allowlist` の二重条件を判定する。
-3. ジョブが OAuthトークンを `~/.opencode/auth/openai.json` へ復元し、OpenCodeを `share=false` で実行する。
-4. 実行ログから `issue_number`、実行者、付与ラベル、作成PR番号を確認し、Issueへ結果コメントを記録する。
-5. 失敗時はラベルを外して再試行し、反復失敗時は [[AT-RUN-001]] に従って自動実行を停止する。
+3. OAuthトークン登録/更新は [[AT-REL-002]] に従い、Environment `opencode` の Secret `OPENCODE_OPENAI_OAUTH_JSON_B64` を正本として管理する。
+4. ジョブが OAuthトークンを `~/.opencode/auth/openai.json` へ復元し、OpenCodeを `share=false` で実行する。
+5. 実行ログから `issue_number`、実行者、付与ラベル、作成PR番号を確認し、Issueへ結果コメントを記録する。
+6. 失敗時はラベルを外して再試行し、反復失敗時は [[AT-RUN-001]] に従って自動実行を停止する。
 
 ## 設定不備時の確認手順
 1. `Missing variable: AWS_ROLE_ARN` が出る場合は Environment `prod` の Variables 名/値を再確認する。
@@ -84,9 +86,11 @@ tags:
 
 ## 章構成上の位置づけ
 - 本書は「7.運用・リリース(OPS_REL)」配下のRunbookとして管理する。
+- OpenCode OAuthシークレットの登録/更新手順は [[AT-REL-002]] を正本とし、本書はIssueラベル起動運用の入口として扱う。
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
+- 2026-02-23: OpenCode OAuthシークレット管理を [[AT-REL-002]] へ分離し、Environment `opencode` を参照する運用へ更新 [[RQ-RDR-050]]
 - 2026-02-23: `opencode-codex-issue.yml` へ名称同期し、`issues:assigned` 補助入口を運用手順へ追記 [[RQ-RDR-050]]
 - 2026-02-23: Issueラベル起動の運用手順（allowlist判定、OAuth復元、証跡確認）を追加 [[RQ-RDR-050]]
 - 2026-02-21: GitHub Actions要件追加に合わせ、Environment承認とconcurrency確認を判定基準へ追記 [[RQ-RDR-050]]
