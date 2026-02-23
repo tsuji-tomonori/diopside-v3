@@ -3,11 +3,11 @@ id: BD-INF-WAF-001
 title: L7防御設計（WAF/Shield）
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-20
-updated: '2026-02-20'
+updated: '2026-02-23'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
@@ -26,11 +26,20 @@ tags:
 - 公開経路は CloudFront を主境界とし、L7防御は WAF を中心に運用する。
 - DDoS対策は Shield Standard を前提とし、Advanced は要件発生時に再評価する。
 
-## 必須設計項目
+## 目的
+- 公開経路のL7防御境界と運用判断（段階導入、例外、切戻し）をBDで固定する。
+- DDで具体ルールを実装するための判断根拠を引き渡す。
+
+## 必須設計項目（BDで必ず決める）
 - WAF適用点（CloudFront/ALB/API Gateway）。
 - ルール運用（Managed Rule、Rate-based、例外ルール）。
 - 誤検知時の切戻し手順（Count -> Block移行、緊急無効化条件）。
 - 監視（ブロック件数、誤検知率、攻撃トレンド）。
+
+## DDへの引渡し（根拠/入力）
+- 適用点一覧（経路、防御対象、責務境界、除外理由）。
+- ルール分類表（必須ルール、段階導入順、誤検知評価観点）。
+- 運用条件（変更承認、検証環境、緊急停止時の証跡要件）。
 
 ## 受入基準
 - 主要公開経路でWAF適用有無を説明できること。
@@ -41,4 +50,5 @@ tags:
 - Shield Advanced契約要否。
 
 ## 変更履歴
+- 2026-02-23: 目的/DD引渡しを追加し、WAF章をBD-DD分離テンプレートへ統一 [[BD-SYS-ADR-036]]
 - 2026-02-20: 新規作成（INF章再編でL7防御章を追加） [[BD-SYS-ADR-036]]

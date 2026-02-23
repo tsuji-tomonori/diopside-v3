@@ -3,11 +3,11 @@ id: BD-INF-DEP-003
 title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-21'
+updated: '2026-02-23'
 up:
 - '[[RQ-FR-024]]'
 - '[[BD-SYS-ADR-013]]'
@@ -27,11 +27,16 @@ tags:
 ## 目的
 - Quartz と infra（AWS CDK）を連携したドキュメント公開フローの実行順序と責務分担を明確化する。
 
-## 必須設計項目
+## 必須設計項目（BDで必ず決める）
 - パイプライン入口（手動/自動）と承認境界。
 - IaC差分確認（`cdk diff`）と配備条件。
 - 成果物境界（docs/openapi/web）と配信経路。
 - 失敗時ロールバック判定と監査記録。
+
+## DDへの引渡し（根拠/入力）
+- 配備境界定義（入口、承認、責務分離、直列化条件）。
+- 成果物境界表（docs/openapi/web、公開経路、禁止混在）。
+- 失敗時判定基準（ロールバック条件、監査記録必須項目）。
 
 ## 前提
 - 将来運用では `quartz/` と `infra/` を同一リポジトリ配下に配置し、`task docs:deploy` を公開標準コマンドとして提供する。
@@ -131,7 +136,16 @@ flowchart TD
 - OIDC Assume失敗時: `AWS_ROLE_ARN` の値、Trust Policyの `aud/sub`、GitHub Environment名（`prod`）の一致を確認する。
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
+## 未指定事項
+- 本番承認ウィンドウと緊急配備時の承認簡略化条件。
+- 配備失敗時に許容する手動介入範囲。
+
+## 受入基準
+- CI/CDの入口・承認境界・成果物境界が競合なく定義されていること。
+- DDで具体ジョブ設定と実行条件を確定する入力が揃っていること。
+
 ## 変更履歴
+- 2026-02-23: 必須設計項目をBD確定観点へ明確化し、DD引渡し/未指定事項/受入基準を追加 [[BD-SYS-ADR-036]]
 - 2026-02-21: `docs-deploy.yml` を `push(main)` + `environment: prod` + OIDC AssumeRole運用で実装し、初回ローカル配備後にGitHubへ移行する手順を追加 [[BD-SYS-ADR-038]]
 - 2026-02-21: `docs-pdf` のArtifact名を `.zip` とし、Release配布は `.pdf` を維持する運用へ更新 [[BD-SYS-ADR-037]]
 - 2026-02-21: `docs-pdf` / `release-docs-pdf` の配布経路と `diopside-docs-{branch}-{shortsha}.pdf` 命名規則を追加 [[BD-SYS-ADR-037]]
