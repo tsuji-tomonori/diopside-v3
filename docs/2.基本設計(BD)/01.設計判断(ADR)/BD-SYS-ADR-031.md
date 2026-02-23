@@ -7,13 +7,14 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-14
-updated: '2026-02-14'
+updated: '2026-02-23'
 up:
   - '[[RQ-RDR-043]]'
 related:
   - '[[BD-INF-DEP-005]]'
   - '[[BD-INF-PLAT-001]]'
-  - '[[BD-SYS-QUAL-001]]'
+  - '[[BD-APP-QUAL-001]]'
+  - '[[BD-INF-QUAL-001]]'
   - '[[DD-INF-SEC-003]]'
   - '[[DD-APP-API-001]]'
   - '[[DD-APP-ERR-001]]'
@@ -39,7 +40,7 @@ tags:
 ## 影響
 - `[[BD-INF-DEP-005]]` に3モード境界と6分類責務を追加する。
 - `[[BD-INF-PLAT-001]]` に監視/イベント責務を追記し、INF全体像の欠落を解消する。
-- `[[BD-SYS-QUAL-001]]` を App/Infra・BE/FE の責務マトリクスへ再編する。
+- `[[BD-APP-QUAL-001]]` / `[[BD-INF-QUAL-001]]` を App/Infra・BE/FE の責務マトリクス正本として再編する。
 - `[[DD-INF-SEC-003]]` を IAMマトリクス正本へ更新する。
 - `[[DD-APP-ERR-001]]`, `[[DD-SYS-SEC-001]]` は廃止して参照互換文書へ更新する。
 
@@ -48,4 +49,5 @@ tags:
 - IAMを責務軸のみで管理する案: 環境境界の誤操作を抑止できないため不採用。
 
 ## 変更履歴
+- 2026-02-23: 品質特性参照先を SYS から APP/INF 分割正本へ更新 [[BD-SYS-ADR-040]]
 - 2026-02-14: 新規作成 [[BD-SYS-ADR-031]]

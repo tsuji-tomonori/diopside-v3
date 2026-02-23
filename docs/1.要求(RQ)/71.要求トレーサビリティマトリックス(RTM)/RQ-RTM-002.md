@@ -141,8 +141,8 @@ tags:
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[RQ-FR-001]] | - | - | - |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[RQ-DEV-002-01]] | [[RQ-RDR-029]] | - | - |
 | [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-040]], [[RQ-RDR-044]] | - | - |
-| [[BD-SYS-QUAL-001]] | 品質特性 | [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-UX-001-01]], [[RQ-UX-023-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
-| [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]], [[RQ-UX-022-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPS-001]] |
+| [[BD-APP-QUAL-001]] | アプリ品質特性 | [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-UX-001-01]], [[RQ-UX-023-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
+| [[BD-INF-QUAL-001]] | インフラ品質特性 | [[RQ-AV-001-01]], [[RQ-DEV-001-01]], [[RQ-OBY-001-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
 | [[DD-APP-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | [[RQ-RDR-047]] | - | [[UT-PLAN-001]] |
 | [[DD-APP-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001-06]] | [[RQ-RDR-034]] | - | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
 | [[DD-APP-API-002]] | [[RQ-GL-002|収集実行]]起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]], [[RQ-RDR-046]] | - | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
@@ -749,8 +749,8 @@ tags:
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[IT-CASE-001]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-SYS-QUAL-001]] | 品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
-| [[BD-SYS-SEC-001]] | セキュリティ設計（統合済み） | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-APP-QUAL-001]] | アプリ品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
+| [[BD-INF-QUAL-001]] | インフラ品質特性 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 
 ### 詳細設計 -> 単体テスト（UT）
 | 設計ID(DD) | タイトル | UTケース(UT-CASE) | 補助UT文書 | 判定 |

@@ -198,7 +198,7 @@ tags:
 
 - アーキテクチャ概要（BD-SYS-ARCH）と個別設計文書の用語・構成が一致
 - データ設計（BD-APP-DATA）と API 設計（BD-APP-API）のエンティティ定義が整合
-- インフラ設計（BD-INF）と[[BD-SYS-QUAL-001|品質特性]]（BD-SYS-QUAL）の SLA 目標が整合
+- インフラ設計（BD-INF）と[[BD-APP-QUAL-001|アプリ品質特性]] / [[BD-INF-QUAL-001|インフラ品質特性]]の SLA 目標が整合
 
 ### 4.2 BD-DD アライメント: **良好**
 

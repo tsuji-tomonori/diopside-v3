@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-23'
 up:
   - '[[RQ-DEV-001-01]]'
   - '[[RQ-PS-001-01]]'
@@ -16,8 +16,9 @@ up:
 related:
   - '[[BD-SYS-ARCH-001]]'
   - '[[BD-DEV-PIPE-001]]'
-  - '[[BD-SYS-SEC-001]]'
-  - '[[BD-SYS-QUAL-001]]'
+  - '[[BD-INF-SEC-001]]'
+  - '[[BD-APP-QUAL-001]]'
+  - '[[BD-INF-QUAL-001]]'
 tags:
   - diopside
   - BD
@@ -40,8 +41,8 @@ tags:
 ## 影響
 - アーキテクチャ概要: [[BD-SYS-ARCH-001]] で Server/Client 境界、Dynamic API利用位置、並列取得とSuspense運用を明記する。
 - ビルド設計: [[BD-DEV-PIPE-001]] で Next.js 本番品質ゲート（build/start、Web Vitals、bundle分析、画像/Script最適化）を受入基準へ追加する。
-- セキュリティ設計: [[BD-SYS-SEC-001]] で Server Actions 認可、機密境界、CSP、環境変数運用を具体化する。
-- [[BD-SYS-QUAL-001|品質特性]]: [[BD-SYS-QUAL-001]] でキャッシュ設計、再検証戦略、体感性能指標を[[BD-SYS-QUAL-001|品質特性]]に接続する。
+- セキュリティ設計: [[BD-INF-SEC-001]] で Server Actions 認可、機密境界、CSP、環境変数運用を具体化する。
+- 品質特性: [[BD-APP-QUAL-001]] と [[BD-INF-QUAL-001]] でキャッシュ設計、再検証戦略、体感性能指標を接続する。
 
 ## 却下した選択肢
 - Pages Router中心で設計する案: App Router の標準機能（RSC/Streaming/Cache制御）を活かせず、将来拡張時の移行コストが高いため不採用。
@@ -49,4 +50,5 @@ tags:
 - キャッシュ戦略を実装裁量に委ねる案: 更新遅延と障害切り分けが困難になるため不採用。
 
 ## 変更履歴
+- 2026-02-23: SYS品質/セキュリティ参照をAPP/INF正本へ更新 [[BD-SYS-ADR-040]]
 - 2026-02-11: 新規作成（Next.js App Router運用指針の標準化） [[BD-SYS-ADR-024]]

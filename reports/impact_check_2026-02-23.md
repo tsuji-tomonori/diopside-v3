@@ -48,3 +48,30 @@
 ## 更新文書（方式A）
 - RQ: `docs/1.要求(RQ)/01.プロジェクトの目的(PP)/RQ-PP-002.md`
 - HM: `docs/index.md`
+
+## 実施内容（OpenCode OAuthシークレット運用分離）
+- 対象: OpenCode Issue Runnerで使用する `~/.opencode/auth/openai.json` の登録運用。
+- 変更内容:
+  - 配信手順書を分離し、Environment `opencode` の Secret `OPENCODE_OPENAI_OAUTH_JSON_B64` 登録/更新手順を新規作成。
+  - 既存の `AT-REL-001` は概要導線へ縮約し、詳細を `AT-REL-002` へ参照委譲。
+  - 詳細設計 `DD-INF-DEP-001` の設定表を Environment Secret運用へ更新。
+  - 実装workflow `opencode-codex-issue.yml` に `environment: opencode` を追加し、文書と実装を同期。
+
+## 更新文書（OpenCode OAuthシークレット運用分離）
+- AT: `AT-REL-001`, `AT-REL-002`
+- DD: `DD-INF-DEP-001`
+- Workflow: `.github/workflows/opencode-codex-issue.yml`
+
+## 実施内容（BD章再編・品質特性分割）
+- 対象: `docs/2.基本設計(BD)` の章構成および SYS/APP/INF の正本配置。
+- 変更内容:
+  - `01.設計判断(ADR)` をトップレベルへ昇格し、`02.全体構成(SYS)` の直下を `11.アーキテクチャ概要(ARCH)` のみに整理。
+  - ドメイン境界 `BD-SYS-DOM-001` を ARCH 配下へ移設し、全体構成直下の `13/21/22` を廃止。
+  - `BD-SYS-QUAL-001` を廃止し、`BD-APP-QUAL-001` / `BD-INF-QUAL-001` を新規作成して品質特性を分割。
+  - 統合済み `BD-SYS-SEC-001` を削除し、参照を `BD-INF-SEC-001` へ統一。
+  - ADR `BD-SYS-ADR-040` を追加し、章再編と正本分割の判断根拠を記録。
+
+## 影響確認（BD章再編・品質特性分割）
+- BDトップレベル章番号を `01:設計判断 / 02:全体構成 / 03:アプリ / 04:インフラ / 05:開発` へ順繰りに再編し、依頼条件を満たす。
+- SYS直下をARCH単独へ整理し、DOMはSYS内（ARCH配下）に維持したため、構成方針の一貫性を確保。
+- RTM/RDR/DD/ADR の旧参照（`BD-SYS-QUAL-001`, `BD-SYS-SEC-001`）を置換し、削除後のリンク切れを回避。
