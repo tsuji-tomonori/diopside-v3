@@ -75,3 +75,16 @@
 - BDトップレベル章番号を `01:設計判断 / 02:全体構成 / 03:アプリ / 04:インフラ / 05:開発` へ順繰りに再編し、依頼条件を満たす。
 - SYS直下をARCH単独へ整理し、DOMはSYS内（ARCH配下）に維持したため、構成方針の一貫性を確保。
 - RTM/RDR/DD/ADR の旧参照（`BD-SYS-QUAL-001`, `BD-SYS-SEC-001`）を置換し、削除後のリンク切れを回避。
+
+## 実施内容（運用信頼性強化: OpenCodeレポート反映）
+- 対象: `AGENTS.md` / `.opencode/agents/*.md` / `.opencode/commands/*.md` / `.github/workflows/opencode-codex-issue.yml`。
+- 変更内容:
+  - `AGENTS.md` に「信頼性運用ルール」を追加し、`apply_patch` / `edit` 前の存在確認、rename/move後の再解決、連続失敗時の復旧手順を明文化。
+  - `orchestrator` / `docops-orchestrator` に 15 分タイムボックスと 30-60 分チェックポイント運用を追加。
+  - `skills-review-fix-batch` / `skills-review-fix-one` にプレフライト確認、失敗時の再実行手順、`--timeout-sec 900` の推奨を追記。
+  - Issue Runner workflow の plan/build で `timeout 15m` を導入し、タイムアウト時の進捗コメントを明確化。
+
+## 影響確認（運用信頼性強化）
+- ファイル操作失敗の主因であるパス不整合に対し、プレフライトと再探索手順を運用ルールに固定できた。
+- サブエージェントとCI実行に同一の時間上限（15分）を導入し、ハング時の待ち時間を抑制できる。
+- タイムアウト/失敗時のコメントが明確になり、運用者が停止理由を追跡しやすくなった。

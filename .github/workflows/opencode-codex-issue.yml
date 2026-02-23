@@ -214,7 +214,20 @@ jobs:
           printf "\nIssue title:\n%s\n\nIssue body:\n%s\n" "${ISSUE_TITLE}" "${ISSUE_BODY}" >> plan_prompt.txt
 
           PROMPT="$(cat plan_prompt.txt)"
-          opencode run --agent plan --model "${MODEL_PLAN}" --share=false "${PROMPT}" > plan.out 2>&1 || true
+          set +e
+          timeout --signal=TERM --kill-after=30s 15m \
+            opencode run --agent plan --model "${MODEL_PLAN}" --share=false "${PROMPT}" > plan.out 2>&1
+          plan_rc=$?
+          set -e
+
+          if [ "${plan_rc}" -eq 124 ]; then
+            /tmp/update_comment.sh "Plan timeout (15m)" "plan.out"
+            exit 1
+          fi
+          if [ "${plan_rc}" -ne 0 ]; then
+            /tmp/update_comment.sh "Plan failed (rc=${plan_rc})" "plan.out"
+            exit "${plan_rc}"
+          fi
           /tmp/update_comment.sh "Plan complete" "plan.out"
 
       - name: Create work branch
@@ -255,7 +268,8 @@ jobs:
           set +e
           PROMPT="$(cat build_prompt.txt)"
           (
-            stdbuf -oL -eL opencode run --agent build --model "${MODEL_BUILD}" --share=false "${PROMPT}" 2>&1 | tee -a opencode.log
+            timeout --signal=TERM --kill-after=30s 15m \
+              stdbuf -oL -eL opencode run --agent build --model "${MODEL_BUILD}" --share=false "${PROMPT}" 2>&1 | tee -a opencode.log
           ) &
           pid=$!
           set -e
@@ -270,7 +284,11 @@ jobs:
           rc=$?
           set -e
 
-          /tmp/update_comment.sh "Implementation finished (rc=${rc})" "plan.out"
+          if [ "${rc}" -eq 124 ]; then
+            /tmp/update_comment.sh "Implementation timeout (15m)" "plan.out"
+          else
+            /tmp/update_comment.sh "Implementation finished (rc=${rc})" "plan.out"
+          fi
           exit "$rc"
 
       - name: Guard workflow file changes

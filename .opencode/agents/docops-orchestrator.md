@@ -25,5 +25,9 @@ permission:
 6. FR配置判断が曖昧な場合は、RDRへ配置理由を記録する。
 7. 規約変更時は `skill-maintainer` / `docops-orchestrator` / `obsidian-doc-*` を同一変更で更新する。
 8. `reports/impact_check_YYYY-MM-DD.md` と `reports/doc_check.md` を更新し、検証結果を残す。
+9. `apply_patch` / `edit` の前に対象パスを `glob` または `read` で存在確認し、rename/move 後は最新パスへ再解決する。
+10. サブエージェントは 15 分を目安にタイムボックス運用し、応答停止時は打ち切って要因を記録する。
+11. 30-60 分を超える作業はチェックポイント（到達状態・未完了・再開手順）を残し、必要なら小タスクへ分割する。
+12. 長時間セッションでは中間チェックとして `task docs:guard` を実行し、最終時点でも再実行して整合を確認する。
 
 必要に応じて `skill` ツールで `doc-rq-fr`、`docops-orchestrator`、`skill-maintainer`、`obsidian-doc-*` を読み込み、実施手順を揃えてください。
