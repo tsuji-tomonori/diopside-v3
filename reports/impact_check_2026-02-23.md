@@ -32,3 +32,19 @@
   - トリガーを `issues:labeled`（主）+ `issues:assigned`（補助）で明確化。
   - `plan -> build` 二段階、IssueコメントPATCH更新、workflow改変ブロック（`.github/workflows/` 差分Fail）を設計へ追記。
   - `OPENCODE_ALLOWED_ACTORS` / `OPENCODE_TRIGGER_LABEL` / `OPENCODE_ASSIGNEE` の変数化運用を設計へ追記。
+
+## 実施内容（方式A: 憲法ページ埋め込み集約）
+- 対象: `docs/index.md` のホーム導線と、既存正本を集約する新規文書 `RQ-PP-002`。
+- 変更内容:
+  - `RQ-PP-002` を新規作成し、`RQ-PP-001` / `RQ-SC-001` / `BD-SYS-ARCH-001` / `AT-GO-001` / `RQ-RTM-001` / `RQ-RTM-002` の見出しを `![[...#...]]` で埋め込み集約。
+  - `docs/index.md` に折りたたみcalloutで `![[RQ-PP-002]]` を配置し、ホームから機械的集約ビューを参照可能化。
+  - `docs/index.md` の `related` / `入口` / `更新日` / `変更履歴` を整合更新。
+
+## 影響確認（方式A）
+- 憲法本文の正本は既存文書側に保持され、ホームは埋め込み参照のみのため重複記述を回避できる。
+- 既存の推奨読書順・入口導線を壊さず、折りたたみ展開で閲覧負荷を抑制できる。
+- RQ文書として新規追加した `RQ-PP-002` は frontmatter 必須キーと変更履歴（RDRリンク付き）を満たす。
+
+## 更新文書（方式A）
+- RQ: `docs/1.要求(RQ)/01.プロジェクトの目的(PP)/RQ-PP-002.md`
+- HM: `docs/index.md`
