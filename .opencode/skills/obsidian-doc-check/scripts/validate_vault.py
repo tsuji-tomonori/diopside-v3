@@ -161,6 +161,47 @@ def find_backticked_concrete_wikilinks(body: str) -> List[Tuple[int, str, str]]:
     return out
 
 
+def find_unresolved_concrete_wikilinks(
+    body: str,
+    id_to_doc: Dict[str, "Doc"],
+) -> List[Tuple[int, str, str]]:
+    """Find unresolved concrete Obsidian links in body text.
+
+    Checks only concrete document IDs (e.g. RQ-FR-001) and ignores template
+    links such as [[ID]] or [[RQ-RDR-*]].
+
+    Returns list of (line_number, target_id, line_text).
+    """
+
+    out: List[Tuple[int, str, str]] = []
+    in_fence = False
+    lines = body.splitlines()
+
+    for line_no, line in enumerate(lines, start=1):
+        stripped = line.strip()
+
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+
+        protected_spans = _merge_spans([m.span() for m in INLINE_CODE_RE.finditer(line)])
+
+        for m in LINK_RE.finditer(line):
+            s, e = m.span()
+            if _in_spans(s, e, protected_spans):
+                continue
+
+            target = normalize_link_id(m.group(1))
+            if not CONCRETE_DOC_ID_RE.fullmatch(target):
+                continue
+            if target not in id_to_doc:
+                out.append((line_no, target, line.rstrip()))
+
+    return out
+
+
 def extract_history_lines(body: str) -> List[Tuple[int, str]]:
     """Extract bullet lines under '## 変更履歴'.
 
@@ -399,6 +440,7 @@ def main() -> int:
     broken_links: List[str] = []
     backlink_issues: List[str] = []
     nonlinked_doc_ids: List[str] = []
+    unresolved_body_links: List[str] = []
 
     # Forbidden files are treated as issues.
     for p in forbidden_files:
@@ -530,6 +572,12 @@ def main() -> int:
             if banned in d.body:
                 issues.append(f"- {d.path}: contains banned section '{banned}' (use frontmatter up/related)")
 
+        # unresolved concrete wiki links in body
+        for line_no, target, line in find_unresolved_concrete_wikilinks(d.body, id_to_doc):
+            unresolved_body_links.append(
+                f"- {d.path}:{line_no}: unresolved wikilink [[{target}]] | {line}"
+            )
+
         # link existence
         for rel_key in ["up", "related"]:
             targets = [normalize_link_id(t) for t in extract_links(d.frontmatter.get(rel_key))]
@@ -588,6 +636,7 @@ def main() -> int:
     lines.append(f"- issues: {len(issues)}")
     lines.append(f"- deprecated_term_issues: {len(deprecated_term_issues)}")
     lines.append(f"- nonlinked_doc_ids: {len(nonlinked_doc_ids)}")
+    lines.append(f"- unresolved_body_links: {len(unresolved_body_links)}")
     lines.append(f"- broken_links: {len(broken_links)}")
     lines.append(f"- backlink_issues: {len(backlink_issues)}")
     if target_paths:
@@ -614,6 +663,11 @@ def main() -> int:
         lines.extend(nonlinked_doc_ids)
         lines.append("")
 
+    if unresolved_body_links:
+        lines.append("## Unresolved wiki links (body)")
+        lines.extend(unresolved_body_links)
+        lines.append("")
+
     if broken_links:
         lines.append("## Broken links (frontmatter)")
         lines.extend(broken_links)
@@ -637,6 +691,7 @@ def main() -> int:
         or issues
         or deprecated_term_issues
         or nonlinked_doc_ids
+        or unresolved_body_links
         or broken_links
         or backlink_issues
     ):

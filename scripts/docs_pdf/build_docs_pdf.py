@@ -218,7 +218,10 @@ def process_markdown_body(
         # Outside code fences: rewrite links and improve wrapping
         line2 = convert_wikilinks(line, id_to_anchor)
         line2 = rewrite_md_links_to_internal(line2, stem_to_anchor)
-        line2 = convert_inline_code_paths(line2)
+        # Do not emit \path{...} in ATX headings. Pandoc renders headings
+        # through moving arguments in LaTeX, where \url/\path are unsafe.
+        if not ATX_HEADING_RE.match(line2):
+            line2 = convert_inline_code_paths(line2)
         line2 = _rewrite_heading_line(line2)
         out.append(line2)
 

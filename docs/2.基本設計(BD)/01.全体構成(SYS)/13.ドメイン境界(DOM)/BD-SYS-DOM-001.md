@@ -7,7 +7,7 @@ version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-15
-updated: '2026-02-15'
+updated: '2026-02-23'
 up:
   - '[[RQ-SC-001]]'
 related:
@@ -103,7 +103,7 @@ BC は Bounded Context（境界づけられたコンテキスト）を指す。
 |---|---|---|---|---|
 | Ingestion | 収集対象解決、正規化、実行状態管理 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-018]] | [[RQ-DM-001]], [[RQ-DM-002]], [[RQ-DM-005]], [[RQ-DM-006]] | [[RQ-GL-002]], [[RQ-GL-003]], [[RQ-GL-004]], [[RQ-GL-011]] |
 | TagManagement | [[RQ-GL-013|タグ種別]]・[[RQ-GL-005|タグ辞書]]管理、タグ割当整合 | [[RQ-FR-005]] | [[RQ-DM-003]], [[RQ-DM-004]] | [[RQ-GL-005]], [[RQ-GL-008]], [[RQ-GL-013]] |
-| Publishing | 配信成果物生成、公開切替、ロールバック | [[RQ-FR-006]], [[RQ-FR-019]], [[RQ-FR-024]] | [[RQ-DM-010]] | [[RQ-GL-006]], [[RQ-GL-007]], [[RQ-GL-009]], [[RQ-GL-018]] |
+| Publishing | 配信成果物生成、公開切替、ロールバック | [[RQ-FR-006]], [[RQ-FR-019]], [[RQ-FR-024]] | - | [[RQ-GL-006]], [[RQ-GL-007]], [[RQ-GL-009]], [[RQ-GL-018]] |
 | Viewing | 検索/絞り込み/一覧/詳細、[[RQ-GL-010|段階ロード]] | [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-020]], [[RQ-FR-021]] | [[RQ-DM-007]], [[RQ-DM-008]], [[RQ-DM-009]] | [[RQ-GL-010]], [[RQ-GL-014]], [[RQ-GL-015]], [[RQ-GL-016]], [[RQ-GL-017]] |
 | Administration | 収集/[[RQ-GL-011|再収集]]/公開運用/配信経路確認の統制 | [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-025]] | - | （対象BC用語を使用） |
 | Analytics | 補助分析データ生成とViewing提供 | [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-DM-008]], [[RQ-DM-009]] | [[RQ-GL-015]], [[RQ-GL-016]], [[RQ-GL-017]] |
