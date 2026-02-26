@@ -14,7 +14,7 @@ related:
 - '[[RQ-OBY-001-01]]'
 - '[[BD-INF-MON-001]]'
 - '[[DD-INF-MON-001]]'
-- '[[AT-SLO-001]]'
+- '[[AT-OPSINF-SLO-001]]'
 - '[[BD-SYS-ADR-028]]'
 - '[[BD-SYS-ADR-036]]'
 tags:

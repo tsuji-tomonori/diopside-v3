@@ -12,7 +12,7 @@
   - `BD-SYS-ARCH-001` に上から読む前提の読解導線を追加。
   - `BD-APP-API-001` / `BD-APP-API-002` に `snake_case` 契約正本と語彙整合を追記。
   - `DD-APP-API-001` / `DD-APP-API-002` / `DD-APP-DB-010` / `DD-INF-DEP-003` を正本語彙へ整合。
-  - `BD-INF-DEP-005` / `DD-INF-SEC-001` / `IT-INF-NET-001` / `IT-INF-SMK-001` のヘルス確認経路を統一。
+  - `BD-INF-DEP-005` / `DD-INF-SEC-001` / `IT-INFIT-NET-001` / `IT-INFIT-SMK-001` のヘルス確認経路を統一。
   - `index.md` に推奨読書順（RQ -> BD -> DD）を追加。
   - `BD-SYS-ADR-035` を改訂し、Web実行基盤（Vite+React SPA / Next.js App Router）採否の議論要件を測定可能化（品質判定は `RQ-PS-001` の `p95` を正本、CWV 75パーセンタイルは参考指標）し、`Next.js App Router + output: 'export'` を基準ケースとして明記。
 

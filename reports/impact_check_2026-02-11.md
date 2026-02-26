@@ -622,16 +622,16 @@
   - 受入整合: DD記載内容から `AT-OPS-001` / `AT-RPT-001` / `AT-RUN-001` への証跡連携を補強。
 
 ## 追記（単体テスト方針の4領域分割とケース再配置）
-- 対象: `UT-PLAN-001`, `UT-PLAN-002`, `UT-PLAN-003`, `UT-PLAN-004`, `UT-PLAN-005`, `UT-CASE-001`〜`UT-CASE-011`, `UT-MOCK-001`, `UT-COV-001`, `UT-STAT-001`, `UT-MET-001`
+- 対象: `UT-PLAN-001`, `UT-PLAN-002`, `UT-PLAN-003`, `UT-PLAN-004`, `UT-PLAN-005`, `UT-CASE-BE-001`〜`UT-CASE-BE-011`, `UT-MOCK-001`, `UT-COV-001`, `UT-STAT-001`, `UT-MET-001`
 - 実施:
   - `UT-PLAN-001` を統括計画へ再編し、領域別計画（DOC/INF/FE/BE）へのハブとして更新。
   - 領域別計画 `UT-PLAN-002`（DOC）、`UT-PLAN-003`（INF）、`UT-PLAN-004`（FE）、`UT-PLAN-005`（BE）を新規追加。
-  - 単体テストケース配下を領域ディレクトリへ再編し、既存 `UT-CASE-001`〜`UT-CASE-008` を `04.バックエンド(BE)` へ移動。
-  - 領域構造を固定するため `UT-CASE-009`（DOC）、`UT-CASE-010`（INF）、`UT-CASE-011`（FE）を新規追加。
+  - 単体テストケース配下を領域ディレクトリへ再編し、既存 `UT-CASE-BE-001`〜`UT-CASE-BE-008` を `04.バックエンド(BE)` へ移動。
+  - 領域構造を固定するため `UT-CASE-BE-009`（DOC）、`UT-CASE-BE-010`（INF）、`UT-CASE-BE-011`（FE）を新規追加。
   - `UT-MOCK-001` / `UT-COV-001` / `UT-STAT-001` / `UT-MET-001` を更新し、4領域別の観点と実行方針を明記。
 - 影響確認:
   - UT整合: 方針（PLAN）と実行単位（CASE）が4領域で対応し、責務境界が明確化。
-  - トレーサビリティ整合: `UT-PLAN-001 -> UT-PLAN-002..005 -> UT-CASE-009..011/001..008` の追跡経路を構築。
+  - トレーサビリティ整合: `UT-PLAN-001 -> UT-PLAN-002..005 -> UT-CASE-BE-009..011/001..008` の追跡経路を構築。
   - 運用整合: docs/infra/front/backendの変更時に、影響領域のみ再実行する方針を文書上で判定可能化。
 
 ## 追記（Quartz前提の静的トレーサビリティ運用へ移行）

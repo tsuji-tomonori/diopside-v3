@@ -12,8 +12,8 @@ up:
 - '[[BD-INF-SEC-001]]'
 - '[[RQ-SEC-001-01]]'
 related:
-- '[[UT-POL-001]]'
-- '[[AT-OPS-INF-001]]'
+- '[[UT-LINT-001]]'
+- '[[AT-OPSINF-001]]'
 - '[[DD-INF-CFG-001]]'
 - '[[BD-SYS-ADR-038]]'
 - '[[RQ-RDR-049]]'

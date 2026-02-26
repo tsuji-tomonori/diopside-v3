@@ -12,7 +12,7 @@ up:
 - '[[DD-INF-IAC-002]]'
 - '[[RQ-DEV-001-01]]'
 related:
-- '[[IT-INF-ROLL-001]]'
+- '[[IT-INFIT-ROLL-001]]'
 - '[[DD-INF-IAC-001]]'
 - '[[RQ-RDR-049]]'
 tags:

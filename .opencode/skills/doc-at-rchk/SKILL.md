@@ -19,7 +19,7 @@ metadata:
 - 実行結果・証跡の記録が主目的の場合（`doc-at-rpt` を使う）。
 
 ## 出力契約
-- 出力先は `docs/6.受入テスト(AT)/51.リリースチェックリスト/AT-RCHK-*.md` とし、1トピック=1ファイルを守る。
+- 出力先は `docs/6.受入テスト(AT)/51.リリースチェックリスト(RCHK)/AT-RCHK-*.md` とし、1トピック=1ファイルを守る。
 - Frontmatter は必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）を満たし、`phase: AT` と `id` の整合を取る。
 - 本文は少なくとも「受入目的」「判定基準」「変更履歴」を含め、判定者がGo/No-Goを判断できる具体性を持たせる。
 

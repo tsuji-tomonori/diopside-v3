@@ -28,13 +28,13 @@
 
 ## 変更ファイル（テスト章再編）
 - 移設:
-  - `docs/7.運用・リリース(OPS_REL)/11.配信手順書/AT-REL-001.md`
-  - `docs/7.運用・リリース(OPS_REL)/21.障害対応手順書/AT-RUN-001.md`
-  - `docs/8.ユーザーガイド(GUIDE)/11.ユーザーガイド/AT-GUIDE-001.md`
+  - `docs/7.運用・リリース(OPSREL)/11.配信手順書(REL)/AT-REL-001.md`
+  - `docs/7.運用・リリース(OPSREL)/21.障害対応手順書(RUN)/AT-RUN-001.md`
+  - `docs/8.ユーザーガイド(GUIDE)/11.ユーザーガイド(GUIDE)/AT-GUIDE-001.md`
 - 更新:
-  - `docs/6.受入テスト(AT)/11.受入テスト計画/AT-PLAN-001.md`
-  - `docs/4.単体テスト(UT)/11.単体テスト計画/UT-PLAN-001.md`
-  - `docs/5.結合テスト(IT)/11.結合テスト計画/IT-PLAN-001.md`
+  - `docs/6.受入テスト(AT)/11.受入テスト計画(PLAN)/AT-PLAN-001.md`
+  - `docs/4.単体テスト(UT)/11.単体テスト計画(PLAN)/UT-PLAN-001.md`
+  - `docs/5.結合テスト(IT)/11.結合テスト計画(PLAN)/IT-PLAN-001.md`
   - `.opencode/skills/obsidian-doc-new/assets/doc_path_map.yaml`
   - `.opencode/skills/doc-at-run/SKILL.md`
   - `.opencode/skills/doc-at-guide/SKILL.md`

@@ -37,9 +37,9 @@ tags:
 - AT（[[AT-PLAN-001]]）: [[RQ-SH-002|利用者]]導線（検索到達性）と運用品質（収集継続性）を最終判定し、リリース可否を決定する。
 
 ## インフラ試験レイヤ
-- UT-INF: IaC lint/policy/security scan（[[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]]）。
-- IT-INF: ephemeral構築、ネットワーク到達性、監視流入、ロールバック（[[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]]）。
-- AT-INF: 運用受入、DR演習、SLO受入（[[AT-OPS-INF-001]], [[AT-DR-001]], [[AT-SLO-001]]）。
+- UT-INF: IaC lint/policy/security scan（[[UT-IAC-001]], [[UT-LINT-001]], [[UT-LINT-002]]）。
+- IT-INF: ephemeral構築、ネットワーク到達性、監視流入、ロールバック（[[IT-INFIT-ENV-001]], [[IT-INFIT-NET-001]], [[IT-INFIT-OBS-001]], [[IT-INFIT-ROLL-001]]）。
+- AT-INF: 運用受入、DR演習、SLO受入（[[AT-OPSINF-001]], [[AT-OPSINF-DR-001]], [[AT-OPSINF-SLO-001]]）。
 
 ## レベル間接続（エントリ/完了条件）
 - UT完了条件: 変更影響範囲のUTがPassし、失敗時の原因が局所化できること。

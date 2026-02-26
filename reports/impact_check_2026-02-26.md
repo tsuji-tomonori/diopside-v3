@@ -19,3 +19,17 @@
 ## 検証
 - `task docs:guard`
 - `task docs:trace`
+
+## 実施内容（UT以降の英略称補完と命名正規化）
+- 対象: `docs/4.単体テスト(UT)` 以降のテスト/運用系文書。
+- 変更内容:
+  - UTケースIDへ配下略称を補完（`UT-CASE-BE-*` / `UT-CASE-DOC-*` / `UT-CASE-INF-*` / `UT-CASE-FE-*`）。
+  - ITインフラ結合テストIDを `IT-INFIT-*` へ統一。
+  - AT運用受入インフラIDを `AT-OPSINF-*` へ統一し、`AT-OPS-INF-001` を `AT-OPSINF-001` へ改名。
+  - 旧 `61.インフラ静的テスト(IACLINT)` を分割し、`61.インフラ静的検証(LINT)` と `62.IaC検証(IAC)` を新設。
+  - 分割に合わせて `UT-POL-001` / `UT-SEC-001` を `UT-LINT-001` / `UT-LINT-002` へ改名、`UT-IAC-001` はIAC配下へ移動。
+  - 参照整合のため、関連するObsidianリンクと本文中ID表記を全体追従。
+
+## 影響確認（UT以降の英略称補完と命名正規化）
+- `docs/**/*.md` 内で旧ID参照（`UT-CASE-00x`、`IT-INF-*`、`AT-OPS-INF-001`、`AT-DR-001`、`AT-SLO-001`）が残っていないことを確認。
+- `OPS_REL` 表記を `OPSREL` に統一し、章名参照の不整合を解消。

@@ -13,8 +13,8 @@ up:
 - '[[RQ-OBY-001-01]]'
 related:
 - '[[BD-INF-MON-001]]'
-- '[[IT-INF-OBS-001]]'
-- '[[AT-SLO-001]]'
+- '[[IT-INFIT-OBS-001]]'
+- '[[AT-OPSINF-SLO-001]]'
 tags:
 - diopside
 - DD
@@ -36,7 +36,7 @@ tags:
 | CloudFront | 5xx率、エッジレイテンシ | 5xx率 WARN 2% / CRITICAL 5% | 公開導線の異常を最短で検知するため。 |
 | Lambda(API) | p95応答時間、エラー率 | p95 WARN 1200ms / CRITICAL 1500ms | API体感性能と失敗率の悪化を同時検知するため。 |
 | CloudWatch Logs | 必須フィールド欠測率 | WARN 0.5% / CRITICAL 1.0% | 監査と障害解析の欠落を防止するため。 |
-| 通知経路 | 通知遅延 | WARN 3分 / CRITICAL 5分 | 運用受入基準（[[AT-SLO-001]]）を満たすため。 |
+| 通知経路 | 通知遅延 | WARN 3分 / CRITICAL 5分 | 運用受入基準（[[AT-OPSINF-SLO-001]]）を満たすため。 |
 
 ## 2. SLI/SLO閾値
 | 分類 | 指標 | WARN | CRITICAL |

@@ -16,7 +16,7 @@ related:
 - '[[RQ-UX-022-01]]'
 - '[[DD-INF-SEC-002]]'
 - '[[DD-SYS-SEC-001]]'
-- '[[AT-OPS-INF-001]]'
+- '[[AT-OPSINF-001]]'
 - '[[BD-SYS-ADR-028]]'
 - '[[BD-SYS-ADR-024]]'
 tags:

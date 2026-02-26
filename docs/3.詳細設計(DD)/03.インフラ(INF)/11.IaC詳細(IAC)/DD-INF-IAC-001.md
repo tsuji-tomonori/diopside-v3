@@ -14,7 +14,7 @@ up:
 related:
 - '[[BD-DEV-PIPE-001]]'
 - '[[DD-INF-IAC-002]]'
-- '[[IT-INF-ROLL-001]]'
+- '[[IT-INFIT-ROLL-001]]'
 tags:
 - diopside
 - DD
@@ -28,7 +28,7 @@ tags:
 ## 破壊的差分の判定
 - `cdk diff` 差分に `replace` / `delete` / `security boundary change` を含む場合は破壊的差分として扱う。
 - 破壊的差分は「設計レビュー承認 + 運用承認」の二重承認を必須とし、承認者は実行者と兼任不可。
-- `prod` 反映では `IT-INF-ROLL-001` の直近成功証跡がない場合、承認不可とする。
+- `prod` 反映では `IT-INFIT-ROLL-001` の直近成功証跡がない場合、承認不可とする。
 
 ## artifact固定化
 - `cdk synth` 生成物と `cdk diff` 出力はハッシュ付きartifactとして保存し、`approve` 後に再計算された差分が一致しない場合は実行を中止する。

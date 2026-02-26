@@ -8,7 +8,7 @@
 - 要求更新: `RQ-COST-001`, `RQ-RDR-027`
 - 基本設計更新: `BD-INF-ENV-001`
 - 詳細設計更新: `DD-INF-NET-001`, `DD-SYS-COST-001`
-- 単体テスト更新: `UT-IAC-001`, `UT-SEC-001`
+- 単体テスト更新: `UT-IAC-001`, `UT-LINT-002`
 
 ## 影響確認
 - 要求整合: `Environment` 列挙値を `Production` / `Development` へ更新し、運用環境方針と一致。
@@ -84,7 +84,7 @@
   - 要求: `RQ-GL-011`, `RQ-UC-001`, `RQ-FR-001`, `RQ-OBY-001`, `RQ-RTM-001`, `RQ-RTM-002`
   - 基本設計: `BD-SYS-ARCH-001`, `BD-APP-API-001`, `BD-APP-API-002`, `BD-APP-UI-001`
   - 詳細設計: `DD-SYS-SCALE-001`, `DD-APP-API-001`, `DD-APP-API-002`, `DD-APP-API-003`, `DD-APP-UI-007`, `DD-APP-LOG-001`
-  - テスト文書: `UT-PLAN-005`, `UT-CASE-001`, `UT-CASE-002`, `IT-PLAN-001`, `IT-CASE-001`, `IT-CASE-002`, `IT-CASE-009`, `AT-SCN-004`, `AT-SCN-005`, `AT-SCN-008`
+  - テスト文書: `UT-PLAN-005`, `UT-CASE-BE-001`, `UT-CASE-BE-002`, `IT-PLAN-001`, `IT-CASE-001`, `IT-CASE-002`, `IT-CASE-009`, `AT-SCN-004`, `AT-SCN-005`, `AT-SCN-008`
   - ドメイン: `DOM-BC-001`
 
 ## 影響確認（追加5）

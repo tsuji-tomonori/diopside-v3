@@ -6,7 +6,7 @@
 
 ## 実施内容
 - 要求/設計の具体化: `RQ-GL-015`, `RQ-UC-002`, `BD-SYS-ARCH-001`, `DD-SYS-AV-001`, `DD-SYS-COST-001`
-- 新規文書追加: `BD-INF-DEP-006`, `DD-APP-MOD-002`, `UT-CASE-009`〜`UT-CASE-013`, `IT-CASE-009`〜`IT-CASE-013`, `AT-SCN-008`, `AT-SCN-009`
+- 新規文書追加: `BD-INF-DEP-006`, `DD-APP-MOD-002`, `UT-CASE-BE-009`〜`UT-CASE-BE-013`, `IT-CASE-009`〜`IT-CASE-013`, `AT-SCN-008`, `AT-SCN-009`
 - 分析レポート更新: `reports/docs-analysis-report.md`, `reports/docs-analysis-report.html`
 - 運用補正: `BD-SYS-ARCH-001` の変更履歴へADRリンクを補記（`[[BD-SYS-ADR-021]]`）
 - 追加実施（2026-02-13）:
@@ -19,7 +19,7 @@
     - RQ/BD決定記録: `RQ-RDR-039`, `BD-SYS-ADR-028`
     - BD-INF: `BD-INF-PLAT-001`〜`BD-INF-IAC-001`
     - DD-INF: `DD-INF-IAC-002`, `DD-INF-IAC-003`, `DD-INF-NET-001`, `DD-INF-SEC-002`, `DD-INF-MON-001`, `DD-INF-SEC-001`, `DD-INF-IAC-001`
-    - UT/IT/AT-INF: `UT-IAC-001`, `UT-POL-001`, `UT-SEC-001`, `IT-INF-ENV-001`, `IT-INF-SMK-001`, `IT-INF-NET-001`, `IT-INF-OBS-001`, `IT-INF-ROLL-001`, `AT-OPS-INF-001`, `AT-DR-001`, `AT-SLO-001`
+    - UT/IT/AT-INF: `UT-IAC-001`, `UT-LINT-001`, `UT-LINT-002`, `IT-INFIT-ENV-001`, `IT-INFIT-SMK-001`, `IT-INFIT-NET-001`, `IT-INFIT-OBS-001`, `IT-INFIT-ROLL-001`, `AT-OPSINF-001`, `AT-OPSINF-DR-001`, `AT-OPSINF-SLO-001`
     - 既存文書接続: `BD-DEV-ENV-001`, `BD-DEV-ENV-002`, `BD-INF-CM-001`, `BD-DEV-TEST-001`, `BD-INF-DEP-001`, `RQ-RTM-001`
   - AWSサービス一覧の明確化（2026-02-13 追補）:
     - 基本設計へ管理対象サービス表を追加: `BD-INF-PLAT-001`
@@ -28,7 +28,7 @@
   - 追加実施（2026-02-13: INF設計具体化）:
     - 正本境界整理: `BD-INF-PLAT-001`, `BD-INF-IAC-001`, `BD-INF-DEP-005`
     - DD具体化: `DD-INF-NET-001`, `DD-INF-SEC-002`, `DD-INF-MON-001`, `DD-INF-SEC-001`, `DD-INF-IAC-003`, `DD-INF-IAC-001`
-    - UT/IT/AT具体化: `UT-IAC-001`, `UT-POL-001`, `UT-SEC-001`, `IT-INF-ENV-001`, `IT-INF-NET-001`, `IT-INF-OBS-001`, `IT-INF-ROLL-001`, `IT-INF-SMK-001`, `AT-OPS-INF-001`, `AT-DR-001`, `AT-SLO-001`
+    - UT/IT/AT具体化: `UT-IAC-001`, `UT-LINT-001`, `UT-LINT-002`, `IT-INFIT-ENV-001`, `IT-INFIT-NET-001`, `IT-INFIT-OBS-001`, `IT-INFIT-ROLL-001`, `IT-INFIT-SMK-001`, `AT-OPSINF-001`, `AT-OPSINF-DR-001`, `AT-OPSINF-SLO-001`
     - 追跡更新: `RQ-RTM-001`, `RQ-RTM-002`
   - 追加実施（2026-02-13: a11y/UI/UX非機能設計レビュー対応）:
     - DD具体化: `DD-APP-UI-003`, `DD-APP-UI-004`, `DD-APP-UI-005`
@@ -51,7 +51,7 @@
   - 追加実施（2026-02-13: CDKオンリー運用への設計再統一）:
     - ADR/BD更新: `BD-SYS-ADR-028`, `BD-INF-PLAT-001`, `BD-INF-IAC-001`, `BD-INF-DEP-005`, `BD-INF-CM-001`
     - DD更新: `DD-INF-IAC-002`, `DD-INF-IAC-003`, `DD-INF-IAC-001`, `DD-INF-SEC-002`, `DD-INF-NET-001`, `DD-SYS-COST-001`
-    - 試験更新: `UT-IAC-001`, `IT-INF-ENV-001`, `IT-INF-SMK-001`
+    - 試験更新: `UT-IAC-001`, `IT-INFIT-ENV-001`, `IT-INFIT-SMK-001`
     - 反映内容: `plan/apply` 語彙を `cdk synth/diff/deploy` へ統一、`ManagedBy` を `CDK/Manual` へ更新
   - 追加実施（2026-02-13: Mermaidエラー修正と自動補正導入）:
     - 図修正: `BD-SYS-ARCH-006` のMermaid経路ノードを `ID["/path/*"]` 形式へ補正

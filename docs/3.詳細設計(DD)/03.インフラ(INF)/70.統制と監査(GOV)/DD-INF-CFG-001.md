@@ -14,7 +14,7 @@ up:
 related:
 - '[[DD-SYS-COST-001]]'
 - '[[DD-INF-SEC-003]]'
-- '[[AT-OPS-INF-001]]'
+- '[[AT-OPSINF-001]]'
 - '[[RQ-RDR-049]]'
 tags:
 - diopside

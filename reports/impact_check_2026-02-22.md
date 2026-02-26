@@ -2,7 +2,7 @@
 - 対象: `AGENTS.md`、`docs/1.要求(RQ)`、`docs/4.単体テスト(UT)`、`docs/reviews/review-report.md`。
 - 変更内容:
   - `AGENTS.md` のBD変更履歴規約を実態に合わせ、ADRリンク形式を `[[BD-*-ADR-xxx]]`（例: `[[BD-SYS-ADR-034]]`）へ統一。
-  - 重複していたUTケースIDを解消するため、DOC/INF/FEの3文書を `UT-CASE-014/015/016` へ再採番し、関連するUT計画リンクを更新。
+  - 重複していたUTケースIDを解消するため、DOC/INF/FEの3文書を `UT-CASE-DOC-014/015/016` へ再採番し、関連するUT計画リンクを更新。
   - RQ文書の `## 変更履歴` でRDRリンク未付与行へ `[[RQ-RDR-xxx]]` を補完。
   - `review-report.md` の `owner` を `RQ-SH-*` 形式へ修正。
 

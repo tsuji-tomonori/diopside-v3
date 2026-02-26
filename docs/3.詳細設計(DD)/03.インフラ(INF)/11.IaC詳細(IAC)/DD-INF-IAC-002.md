@@ -13,7 +13,7 @@ up:
 related:
 - '[[DD-INF-IAC-003]]'
 - '[[UT-IAC-001]]'
-- '[[UT-POL-001]]'
+- '[[UT-LINT-001]]'
 - '[[RQ-DEV-001-01]]'
 - '[[RQ-RDR-049]]'
 tags:
