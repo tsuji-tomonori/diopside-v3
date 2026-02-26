@@ -1,0 +1,44 @@
+---
+id: BD-APP-UI-013
+title: FilterChipとTagButton
+doc_type: UI設計
+phase: BD
+version: 1.0.0
+status: 下書き
+owner: RQ-SH-001
+created: 2026-02-27
+updated: '2026-02-27'
+up:
+- '[[BD-APP-UI-005]]'
+- '[[BD-APP-UI-007]]'
+related:
+- '[[RQ-FR-010]]'
+- '[[RQ-UX-004-01]]'
+- '[[RQ-UX-004-03]]'
+- '[[RQ-UX-013-01]]'
+- '[[BD-SYS-ADR-041]]'
+- '[[BD-APP-UI-016]]'
+tags:
+- diopside
+- BD
+- UI
+---
+
+## 設計方針
+- タグ操作は `FilterChip`（条件一覧側）と `TagButton`（カード側）で役割を分離する。
+- 選択状態は色に加えてテキスト変化と状態属性で伝える。
+
+## 設計要点
+- `FilterChip`
+  - 既に選択されたタグの解除操作に特化。
+  - ラベル末尾に解除記号を表示し、解除意図を明示。
+- `TagButton`
+  - 動画カード内タグの選択/解除操作に特化。
+  - `aria-pressed` または `aria-selected` を付与して支援技術へ通知。
+
+## 受入条件
+- 選択/非選択の差は色のみで表現しない（文言またはアイコンを併用）。
+- クリック/キーボードの両操作で同一結果を返す。
+
+## 変更履歴
+- 2026-02-27: 新規作成（タグ操作プリミティブの役割分離を定義） [[BD-SYS-ADR-041]]

@@ -1,8 +1,8 @@
 # Doc Check Report
 
 - docs_root: `docs`
-- total_markdown: 797
-- id_docs: 797
+- total_markdown: 810
+- id_docs: 810
 - parse_errors: 0
 - issues: 0
 - deprecated_term_issues: 0
@@ -10,4 +10,4 @@
 - unresolved_body_links: 0
 - broken_links: 0
 - backlink_issues: 0
-- target_files: 5
+- target_files: 4

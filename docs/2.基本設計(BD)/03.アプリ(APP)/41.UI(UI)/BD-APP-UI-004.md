@@ -3,11 +3,11 @@ id: BD-APP-UI-004
 title: アクセシビリティ方針
 doc_type: UI設計
 phase: BD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-27'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -17,6 +17,18 @@ related:
 - '[[RQ-FR-020]]'
 - '[[RQ-FR-021]]'
 - '[[RQ-UX-017-01]]'
+- '[[RQ-UX-004-01]]'
+- '[[RQ-UX-004-02]]'
+- '[[RQ-UX-004-03]]'
+- '[[RQ-UX-025-04]]'
+- '[[RQ-UX-025-06]]'
+- '[[RQ-RDR-052]]'
+- '[[BD-SYS-ADR-041]]'
+- '[[BD-APP-UI-012]]'
+- '[[BD-APP-UI-013]]'
+- '[[BD-APP-UI-014]]'
+- '[[BD-APP-UI-015]]'
+- '[[BD-APP-UI-016]]'
 tags:
 - diopside
 - BD
@@ -59,7 +71,15 @@ tags:
 - **表示時間**: 一時通知は3秒未満で自動消去しない。短時間表示する場合は履歴領域から再確認できるようにする。
 - **非ブロッキング**: 通知表示中も一覧復帰・モーダル操作・外部遷移を阻害しない。
 
+## UIプリミティブへの適用
+- `[[BD-APP-UI-012|Button/IconButton]]` は色のみで状態を伝えず、ラベルまたはアイコンを必須とする（[[RQ-UX-004-01]], [[RQ-UX-004-03]]）。
+- `[[BD-APP-UI-013|FilterChip/TagButton]]` は選択状態を `aria-pressed` もしくは `aria-selected` と文言で通知する。
+- `[[BD-APP-UI-014|RangeSlider]]` は現在値を読み上げ可能なテキストで併記し、視覚のみの把握に依存しない。
+- `[[BD-APP-UI-015|StatusToast/StatusBanner]]` は `role="status"` または `aria-live` を必須とし、失敗時に次操作を提示する。
+- `[[BD-APP-UI-016]]` の色設計は前景/背景セット指定を必須とし、通常テキスト4.5:1、非テキストUI3:1を下限とする。
+
 ## 変更履歴
+- 2026-02-27: アクセシビリティ要件をUIプリミティブへ分解し、色・コントラスト要件（RQ-UX-004系/025系）を追加 [[BD-SYS-ADR-041]]
 - 2026-02-14: `UI-U03` と `HighlightWavePanel`/`WordCloudPanel` の詳細設計リンクを追加 [[BD-SYS-ADR-009]]
 - 2026-02-10: 新規作成
 - 2026-02-11: [[RQ-UX-017-01]] 対応として状態通知の読み上げ要件（aria-live/通知文構成/再確認導線）を追加 [[BD-SYS-ADR-010]]

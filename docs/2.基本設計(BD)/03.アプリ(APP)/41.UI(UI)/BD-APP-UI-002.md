@@ -3,11 +3,11 @@ id: BD-APP-UI-002
 title: 検索画面情報設計
 doc_type: UI設計
 phase: BD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-27'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -24,6 +24,22 @@ related:
 - '[[RQ-UX-013-01]]'
 - '[[RQ-UX-015-01]]'
 - '[[RQ-UX-020-01]]'
+- '[[RQ-UX-004-01]]'
+- '[[RQ-UX-004-02]]'
+- '[[RQ-UX-004-03]]'
+- '[[RQ-UX-025-04]]'
+- '[[RQ-UX-025-06]]'
+- '[[BD-SYS-ADR-041]]'
+- '[[BD-APP-UI-005]]'
+- '[[BD-APP-UI-006]]'
+- '[[BD-APP-UI-007]]'
+- '[[BD-APP-UI-008]]'
+- '[[BD-APP-UI-009]]'
+- '[[BD-APP-UI-010]]'
+- '[[BD-APP-UI-012]]'
+- '[[BD-APP-UI-013]]'
+- '[[BD-APP-UI-014]]'
+- '[[BD-APP-UI-016]]'
 tags:
 - diopside
 - BD
@@ -53,6 +69,13 @@ tags:
 - [[RQ-UX-015-01]]: ヘルプ導線は「ヘルプ/お問い合わせ」で名称統一し、[[DD-APP-UI-002|一覧画面]]と[[DD-APP-UI-004|詳細モーダル]]で位置を変えない。
 - [[RQ-UX-020-01]]: 将来拡張でダウンロード資料またはメール通知を導入する場合は、画面側で「同内容のHTML導線」を必須で併設する。
 - [[RQ-UX-003-01]]: 将来拡張で音声/動画説明を導入する場合は、字幕または同等テキストへの導線を同一画面内に提供する。
+
+## コンポーネント設計への分解
+- [[RQ-GL-014|検索条件]]入力は `[[BD-APP-UI-006|SearchConditionPanel]]` と `[[BD-APP-UI-014|SearchInput/SelectField/RangeSlider]]` の責務境界で設計する。
+- 一覧描画と[[RQ-GL-010|段階ロード]]は `[[BD-APP-UI-007|ArchiveList]]` と `[[BD-APP-UI-013|FilterChip/TagButton]]` の責務境界で設計する。
+- 詳細表示と補助情報は `[[BD-APP-UI-008|ArchiveDetailModal]]`, `[[BD-APP-UI-009|HighlightWavePanel]]`, `[[BD-APP-UI-010|WordCloudPanel]]` へ分離する。
+- 主要操作ボタンは `[[BD-APP-UI-012|Button/IconButton/ModalActionBar]]` に集約し、操作順序と活性条件を画面間で統一する。
+- カラー/コントラスト/状態色の判定は `[[BD-APP-UI-016]]` を唯一正本とする。
 
 ## 端末優先レイアウト仕様
 - **スマートフォン（390px基準）**: [[RQ-GL-014|検索条件]]、結果件数、カード一覧、[[DD-APP-UI-004|詳細モーダル]]の順で縦積み表示し、横スクロール依存を作らない。
@@ -86,6 +109,7 @@ tags:
 - **コンポーネント参照**: 実装は [[DD-APP-UI-016|WordCloudPanel]] を正本とする。
 
 ## 変更履歴
+- 2026-02-27: 検索画面設計を画面部品/プリミティブへ分割し、色・コントラスト要件（RQ-UX-004系/025系）を追加 [[BD-SYS-ADR-041]]
 - 2026-02-14: `UI-U01`〜`UI-U03` と `HighlightWavePanel`/`WordCloudPanel` の詳細設計リンクを追加 [[BD-SYS-ADR-018]]
 - 2026-02-10: 新規作成
 - 2026-02-11: UX要件（[[RQ-UX-003-01]]/[[RQ-UX-013-01]]/[[RQ-UX-015-01]]/[[RQ-UX-020-01]]）に対する入力再利用・ヘルプ導線・将来拡張時の代替導線要件を追加 [[BD-SYS-ADR-018]]

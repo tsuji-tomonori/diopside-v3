@@ -3,11 +3,11 @@ id: BD-APP-UI-003
 title: 画面遷移
 doc_type: UI設計
 phase: BD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-14'
+updated: '2026-02-27'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -24,6 +24,18 @@ related:
 - '[[RQ-UC-007]]'
 - '[[RQ-UC-008]]'
 - '[[RQ-UC-009]]'
+- '[[BD-SYS-ADR-041]]'
+- '[[BD-APP-UI-005]]'
+- '[[BD-APP-UI-006]]'
+- '[[BD-APP-UI-007]]'
+- '[[BD-APP-UI-008]]'
+- '[[BD-APP-UI-009]]'
+- '[[BD-APP-UI-010]]'
+- '[[BD-APP-UI-011]]'
+- '[[BD-APP-UI-012]]'
+- '[[BD-APP-UI-013]]'
+- '[[BD-APP-UI-014]]'
+- '[[BD-APP-UI-015]]'
 tags:
 - diopside
 - BD
@@ -106,7 +118,15 @@ flowchart TD
 - 配信反映失敗時は旧公開版維持を前提に、配信前後確認画面へ戻って再試行判断できるようにする。
 - 補助表示の失敗（[[RQ-GL-016|コメント密度波形]]/[[RQ-GL-017|ワードクラウド]]）は主操作を無効化しない。
 
+## 遷移とコンポーネント境界
+- 遷移上の入力確定は `[[BD-APP-UI-006|SearchConditionPanel]]` が唯一の確定入口とし、再入力最小化（[[RQ-UX-013-01]]）を維持する。
+- 遷移上の一覧状態保持は `[[BD-APP-UI-007|ArchiveList]]` を正本として扱い、モーダル往復時の文脈維持を保証する。
+- 遷移上の詳細表示は `[[BD-APP-UI-008|ArchiveDetailModal]]` が主導し、補助導線は `[[BD-APP-UI-009]]` / `[[BD-APP-UI-010]]` へ委譲する。
+- 遷移上の通知は `[[BD-APP-UI-015|StatusToast/StatusBanner]]` を統一利用し、フォーカス移動に依存しない状態通知（[[RQ-UX-017-01]]）を成立させる。
+- 管理導線のrun状態表示は `[[BD-APP-UI-011|RunStatusScreen]]` を正本とする。
+
 ## 変更履歴
+- 2026-02-27: 画面遷移へコンポーネント責務境界を追加し、通知コンポーネントを統一化 [[BD-SYS-ADR-041]]
 - 2026-02-14: 遷移ノードと遷移定義に各画面DD-UIリンク（`DD-APP-UI-002`〜`DD-APP-UI-011`）を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: 配信反映ジョブ導線（UI-A06）と[[RQ-GL-018|配信反映実行]]失敗復帰を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: `publish run` 表記を [[RQ-GL-018|配信反映実行]] に統一 [[BD-SYS-ADR-021]]

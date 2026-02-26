@@ -1,0 +1,41 @@
+---
+id: BD-APP-UI-011
+title: RunStatusScreen
+doc_type: UI設計
+phase: BD
+version: 1.0.0
+status: 下書き
+owner: RQ-SH-001
+created: 2026-02-27
+updated: '2026-02-27'
+up:
+- '[[BD-APP-UI-001]]'
+- '[[BD-APP-UI-003]]'
+related:
+- '[[RQ-FR-017]]'
+- '[[RQ-FR-018]]'
+- '[[RQ-UX-017-01]]'
+- '[[BD-SYS-ADR-041]]'
+- '[[BD-APP-UI-012]]'
+- '[[BD-APP-UI-015]]'
+tags:
+- diopside
+- BD
+- UI
+---
+
+## 設計方針
+- `RunStatusScreen` は管理導線の監視ハブとして run 状態と再試行判断を集約する。
+- 失敗時でも run 単位の追跡可能性を維持し、復帰導線を固定する。
+
+## 設計要点
+- 状態モデルは `queued/running/succeeded/failed` を基本値とする。
+- `running` 中は再実行操作を表示しない。
+- 連続失敗時は `[[BD-APP-UI-015|StatusBanner]]` を固定表示し、次操作を提示する。
+
+## 入出力境界
+- 入力: run一覧、選択run、失敗分類、再試行可否。
+- 出力: `selectRun(runId)`、`retryRun(runId)`、`refresh()`。
+
+## 変更履歴
+- 2026-02-27: 新規作成（管理run監視画面の責務と状態境界を定義） [[BD-SYS-ADR-041]]
