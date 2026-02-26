@@ -56,7 +56,7 @@ tags:
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: DESIGN_VIEW -->
-- generated_at: 2026-02-23
+- generated_at: 2026-02-26
 
 | 設計ID | タイトル | 根拠要件(FR/NFR) | RDR | ADR | 検証(UT/IT/AT) |
 | --- | --- | --- | --- | --- | --- |
@@ -68,13 +68,14 @@ tags:
 | [[BD-APP-DATA-001]] | データアーキテクチャ | [[RQ-DATA-001-01]], [[RQ-FR-001]], [[RQ-FR-004]], [[RQ-FR-009]], [[RQ-PRC-001-01]] | [[RQ-RDR-014]], [[RQ-RDR-017]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-038]] | - | - |
 | [[BD-APP-DATA-002]] | ER図（概要） | [[RQ-FR-001]] | [[RQ-RDR-014]] | - | - |
 | [[BD-APP-DATA-003]] | データ保持・削除方針 | [[RQ-DATA-001-01]], [[RQ-PRC-001-01]] | [[RQ-RDR-034]], [[RQ-RDR-035]] | - | - |
+| [[BD-APP-QUAL-001]] | アプリ品質特性 | [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-UX-001-01]], [[RQ-UX-023-01]] | [[RQ-RDR-017]] | - | [[AT-RPT-001]] |
 | [[BD-APP-UI-001]] | 画面一覧 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-036]], [[RQ-RDR-047]] | - | - |
 | [[BD-APP-UI-002]] | 検索画面情報設計 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-UX-003-01]], [[RQ-UX-013-01]], [[RQ-UX-015-01]], [[RQ-UX-020-01]] | [[RQ-RDR-015]], [[RQ-RDR-018]], [[RQ-RDR-021]], [[RQ-RDR-032]] | - | [[UT-PLAN-004]] |
 | [[BD-APP-UI-003]] | 画面遷移 | [[RQ-FR-001]], [[RQ-FR-005]], [[RQ-FR-014]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-024]], [[RQ-FR-025]] | - | - | - |
 | [[BD-APP-UI-004]] | アクセシビリティ方針 | [[RQ-FR-001]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-UX-017-01]] | [[RQ-RDR-021]] | - | - |
 | [[BD-DEV-ENV-001]] | 開発環境 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | - | - | [[AT-PLAN-001]], [[AT-RPT-001]], [[IT-ENV-001]] |
 | [[BD-DEV-ENV-002]] | 本番環境 | [[RQ-AV-001-01]], [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-SEC-001-01]] | [[RQ-RDR-045]] | - | [[AT-PLAN-001]], [[AT-RPT-001]] |
-| [[BD-DEV-PIPE-001]] | ビルド方針（デプロイ単位分離） | [[RQ-DEV-001-01]], [[RQ-DEV-005-01]], [[RQ-DEV-006-01]], [[RQ-DEV-007-01]], [[RQ-FR-001]], [[RQ-SEC-005-01]], [[RQ-UX-021-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]], [[RQ-RDR-050]] | - | [[AT-GO-001]] |
+| [[BD-DEV-PIPE-001]] | ビルド方針（デプロイ単位分離） | [[RQ-DEV-001-01]], [[RQ-DEV-005-01]], [[RQ-DEV-006-01]], [[RQ-DEV-007-01]], [[RQ-FR-001]], [[RQ-SEC-005-01]], [[RQ-UX-021-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]], [[RQ-RDR-050]] | - | [[AT-GO-001]], [[AT-REL-002]] |
 | [[BD-DEV-TEST-001]] | テスト戦略 | [[RQ-AV-001-01]], [[RQ-FR-001]], [[RQ-OBY-001-01]], [[RQ-PS-001-01]] | [[RQ-RDR-037]], [[RQ-RDR-039]] | - | [[AT-DR-001]], [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]], [[AT-SLO-001]], [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]], [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
 | [[BD-INF-AUD-001]] | 監査証跡基本設計（CloudTrail中心） | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | - | - | - |
 | [[BD-INF-CM-001]] | 構成管理方針 | [[RQ-FR-001]] | [[RQ-RDR-013]], [[RQ-RDR-024]] | - | - |
@@ -95,7 +96,8 @@ tags:
 | [[BD-INF-OPS-001]] | インフラ運用ガバナンス設計 | [[RQ-COST-001-01]], [[RQ-DEV-001-01]] | - | - | [[AT-OPS-001]] |
 | [[BD-INF-PLAT-001]] | インフラ基本設計の章構成と全体構成 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | [[RQ-RDR-039]] | - | - |
 | [[BD-INF-PLAT-002]] | データストア基本設計 | [[RQ-AV-001-01]], [[RQ-PS-001-01]], [[RQ-SEC-001-01]], [[RQ-SEC-003-01]] | - | - | [[AT-DR-001]] |
-| [[BD-INF-SEC-001]] | IAM・セキュリティ境界方針 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]], [[RQ-UX-022-01]] | - | - | [[AT-OPS-INF-001]] |
+| [[BD-INF-QUAL-001]] | インフラ品質特性 | [[RQ-AV-001-01]], [[RQ-DEV-001-01]], [[RQ-OBY-001-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RUN-001]] |
+| [[BD-INF-SEC-001]] | IAM・セキュリティ境界方針 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]], [[RQ-UX-022-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPS-INF-001]] |
 | [[BD-INF-WAF-001]] | L7防御設計（WAF/Shield） | [[RQ-SEC-001-01]] | - | - | - |
 | [[BD-SYS-ADR-001]] | 収集対象を公式+出演にする | - | [[RQ-RDR-001]], [[RQ-RDR-002]], [[RQ-RDR-003]], [[RQ-RDR-004]], [[RQ-RDR-005]], [[RQ-RDR-006]], [[RQ-RDR-007]], [[RQ-RDR-008]], [[RQ-RDR-009]] | - | - |
 | [[BD-SYS-ADR-002]] | [[RQ-GL-010|段階ロード]]JSONを採用する | - | [[RQ-RDR-001]] | - | - |
@@ -135,14 +137,13 @@ tags:
 | [[BD-SYS-ADR-037]] | docs PDF配布をArtifact/Releaseで二系統化し命名規則を統一する | [[RQ-DEV-001-01]], [[RQ-FR-024]] | - | - | [[AT-REL-001]] |
 | [[BD-SYS-ADR-038]] | docs配備は初回ローカル構築後にGitHub OIDC AssumeRoleで自動実行する | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | - | - | [[AT-REL-001]] |
 | [[BD-SYS-ADR-039]] | CI/CDはGitHub Actionsを実装基盤に統一しPRとデプロイを分離運用する | [[RQ-DEV-005-01]], [[RQ-DEV-006-01]], [[RQ-DEV-007-01]], [[RQ-SEC-005-01]] | [[RQ-RDR-050]] | - | [[AT-GO-001]], [[AT-REL-001]] |
+| [[BD-SYS-ADR-040]] | BD章構成を再編し品質特性をAPP/INF正本へ分割する | [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-SEC-001-01]] | - | - | - |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[RQ-FR-001]] | [[RQ-RDR-011]], [[RQ-RDR-028]], [[RQ-RDR-034]], [[RQ-RDR-038]], [[RQ-RDR-040]] | - | [[AT-GO-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[RQ-FR-001]] | [[RQ-RDR-034]] | - | - |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[RQ-DEV-001-01]], [[RQ-FR-001]], [[RQ-OBY-001-01]], [[RQ-SEC-001-01]] | - | - | - |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[RQ-FR-001]] | - | - | - |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[RQ-DEV-002-01]] | [[RQ-RDR-029]] | - | - |
 | [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[RQ-FR-001]], [[RQ-FR-002]], [[RQ-FR-003]], [[RQ-FR-004]], [[RQ-FR-005]], [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]], [[RQ-FR-009]], [[RQ-FR-010]], [[RQ-FR-011]], [[RQ-FR-012]], [[RQ-FR-013]], [[RQ-FR-014]], [[RQ-FR-015]], [[RQ-FR-016]], [[RQ-FR-017]], [[RQ-FR-018]], [[RQ-FR-019]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]], [[RQ-FR-023]], [[RQ-FR-024]], [[RQ-FR-025]] | [[RQ-RDR-040]], [[RQ-RDR-044]] | - | - |
-| [[BD-APP-QUAL-001]] | アプリ品質特性 | [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-UX-001-01]], [[RQ-UX-023-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
-| [[BD-INF-QUAL-001]] | インフラ品質特性 | [[RQ-AV-001-01]], [[RQ-DEV-001-01]], [[RQ-OBY-001-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]] |
 | [[DD-APP-ALG-001]] | 検索アルゴリズム | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-008]] | [[RQ-RDR-047]] | - | [[UT-PLAN-001]] |
 | [[DD-APP-API-001]] | API詳細総論 | [[RQ-FR-001]], [[RQ-INT-001-06]] | [[RQ-RDR-034]] | - | [[UT-COV-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
 | [[DD-APP-API-002]] | [[RQ-GL-002|収集実行]]起動API | [[RQ-FR-001]], [[RQ-FR-022]], [[RQ-FR-023]] | [[RQ-RDR-034]], [[RQ-RDR-046]] | - | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-PLAN-001]], [[UT-CASE-001]], [[UT-PLAN-001]], [[UT-PLAN-005]] |
@@ -206,7 +207,7 @@ tags:
 | [[DD-INF-CFG-001]] | AWS Config詳細（required-tags） | - | [[RQ-RDR-049]] | - | [[AT-OPS-INF-001]] |
 | [[DD-INF-COG-001]] | Cognito詳細設計 | - | - | - | - |
 | [[DD-INF-DB-001]] | DBインフラ詳細設計 | [[RQ-AV-001-01]] | - | - | [[AT-RUN-001]] |
-| [[DD-INF-DEP-001]] | デプロイ詳細 | [[RQ-FR-024]] | [[RQ-RDR-025]], [[RQ-RDR-029]], [[RQ-RDR-050]] | - | [[AT-REL-001]], [[AT-RUN-001]], [[UT-CASE-015]], [[UT-PLAN-003]] |
+| [[DD-INF-DEP-001]] | デプロイ詳細 | [[RQ-FR-024]] | [[RQ-RDR-025]], [[RQ-RDR-029]], [[RQ-RDR-050]] | - | [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]], [[UT-CASE-015]], [[UT-PLAN-003]] |
 | [[DD-INF-DEP-002]] | CloudFrontパス分岐詳細（デプロイ適用条件） | [[RQ-FR-025]] | [[RQ-RDR-026]] | - | [[AT-REL-001]], [[AT-SCN-006]] |
 | [[DD-INF-DEP-003]] | インフラデプロイ詳細（領域分割） | - | [[RQ-RDR-046]] | - | [[AT-REL-001]], [[AT-RUN-001]] |
 | [[DD-INF-IAC-001]] | インフラCI/CD詳細 | [[RQ-DEV-001-01]] | - | - | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] |
@@ -219,7 +220,7 @@ tags:
 | [[DD-INF-OVR-001]] | インフラ詳細設計総論 | - | - | - | - |
 | [[DD-INF-S3-001]] | S3詳細設計 | - | - | - | - |
 | [[DD-INF-SEC-001]] | DR復旧手順詳細 | [[RQ-AV-001-01]] | - | - | [[AT-DR-001]], [[AT-GO-001]], [[AT-RUN-001]] |
-| [[DD-INF-SEC-002]] | IAM詳細設計 | [[RQ-SEC-001-01]] | [[RQ-RDR-049]] | - | [[AT-OPS-INF-001]], [[UT-POL-001]], [[UT-SEC-001]] |
+| [[DD-INF-SEC-002]] | IAM詳細設計 | [[RQ-SEC-001-01]] | [[RQ-RDR-049]] | - | [[AT-OPS-INF-001]], [[AT-REL-002]], [[UT-POL-001]], [[UT-SEC-001]] |
 | [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[RQ-SEC-001-01]] | - | - | [[AT-OPS-001]] |
 | [[DD-SYS-AV-001]] | 可用性詳細 | [[RQ-AV-001-01]], [[RQ-OBY-001-01]] | - | - | [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-SYS-AV-002]] | インフラ可用性詳細 | [[RQ-AV-001-01]] | - | - | [[AT-OPS-001]], [[AT-RPT-001]] |
@@ -233,7 +234,7 @@ tags:
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: TEST_LAYER_TRACE -->
-- generated_at: 2026-02-23
+- generated_at: 2026-02-26
 - judgment: 経路判定（max_depth=4、frontmatter+本文リンク）
 
 ### 要求 -> 受入テスト（AT）
@@ -324,7 +325,7 @@ tags:
 | [[RQ-DATA-003-05]] | メタデータ辞書に記載のないフィールドが配信JSONに0件であるできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DATA-003-06]] | JSONスキーマとメタデータ辞書の不整合を検知した場合は、次回デプロイまでに是正できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DATA-003-07]] | 過渡期で非推奨フィールドが残存する場合は、メタデータ辞書に廃止予定日を明記できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-001-01]] | 小差分リリースを前提に、検証自動化とロールバック可能性を維持した運用を行える | [[AT-SCN-006]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-001-01]] | 小差分リリースを前提に、検証自動化とロールバック可能性を維持した運用を行える | [[AT-SCN-006]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-02]] | すべてのリリース候補に対して、最低限 `lint` / `test` / `build` の3系統チェックを実行し成功率100%にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-03]] | AIエージェント運用を含む変更では、[[RQ-DEV-002-01]] の受入基準（役割分離・最小権限・実行上限）を満たせる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-04]] | 文書運用規約を変更したリリース候補では、対象 `doc-*` スキルと `skill-maintainer` / `docops-orchestrator` の同期更新を同一変更で実施できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -342,7 +343,7 @@ tags:
 | [[RQ-DEV-001-16]] | 手動承認を伴うリリース判定記録（[[AT-GO-001]]）を毎回残せる運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]] | PASS |
 | [[RQ-DEV-001-17]] | チェック未実施または失敗時はリリース禁止とし、例外承認を認めない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-18]] | ロールバック不能な変更が発生した場合は、次回以降の変更を凍結して原因是正を優先できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-002-01]] | AIエージェント運用で役割分離・最小権限・実行上限を標準化し、安全な実行と再現可能な判断を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-002-01]] | AIエージェント運用で役割分離・最小権限・実行上限を標準化し、安全な実行と再現可能な判断を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-002-02]] | 変更計画と実装を分離し、Primary運用は「分析・方針確定」と「実装・検証」で役割を分けて実施できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-002-03]] | レビュー専用/監査専用のエージェントは `edit` を禁止し、差分確認に必要な読み取り操作のみ許可できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-002-04]] | 危険度の高い操作（例: 外部公開、破壊的削除、権限昇格）はデフォルトで `ask` または `deny` とし、常時許可しない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -365,7 +366,7 @@ tags:
 | [[RQ-DEV-004-05]] | ADR未作成の該当変更がリリース候補に含まれる場合、レビューチェックリストで検知できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-004-06]] | 緊急障害対応で事前ADR作成が困難な場合は、復旧後7日以内に事後ADRを作成できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-004-07]] | 軽微な設定変更（閾値調整、タグ値変更等）はADR対象外とし、変更履歴への記録で代替できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-005-01]] | Pull RequestごとにGitHub Actionsで品質ゲートを自動実行し、必須チェック合格前のマージを防止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-005-01]] | Pull RequestごとにGitHub Actionsで品質ゲートを自動実行し、必須チェック合格前のマージを防止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-02]] | PR更新ごとに `lint` / `test` / `build` を必須ステータスチェックとして実行できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-03]] | `docs` / `web` / `api` / `infra` のデプロイ単位ごとに失敗ジョブを判別できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-04]] | 必須チェック未達時に保護ブランチへマージできない状態を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -386,7 +387,10 @@ tags:
 | [[RQ-DEV-007-05]] | 単位別CI結果とデプロイ結果を同一実行IDで突合できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-007-06]] | Artifacts保持期限を超過した場合は、判定文書側へ期限超過を記録し再実行で証跡を再取得できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-007-07]] | 証跡欠落が判明したリリース候補はNo-Goとして扱い、証跡再取得まで公開しない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-001]] | 管理画面から公開動画収集を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-DR-001]], [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SLO-001]] | PASS |
+| [[RQ-DEV-008-01]] | DADSコンテンツ利用時に出典と加工有無を明記できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-008-02]] | DADSのデザインデータおよびコードスニペットのライセンス条件を遵守できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-008-03]] | DADSを踏まえたサービス固有のスタイルガイドを作成・維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-001]] | 管理画面から公開動画収集を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-DR-001]], [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SLO-001]] | PASS |
 | [[RQ-FR-002]] | 管理画面で公式投稿の公開動画をチャンネルID一致で取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-003]] | 管理画面で出演条件一致の公開動画を判定して取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-004]] | 管理画面の収集結果として動画メタデータを正規化できる | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
@@ -525,14 +529,14 @@ tags:
 | [[RQ-SEC-004-08]] | デプロイ後の応答ヘッダー検査で上記5種のヘッダーが全件存在できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-004-09]] | CSPポリシーにより正当なリソース読み込みが阻害された場合は、最小限のCSP緩和をADRに記録して適用できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-004-10]] | サードパーティ埋め込みが必要になった場合は、`X-Frame-Options` を `SAMEORIGIN` へ変更しADRに記録できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-SEC-005-01]] | GitHub Actions運用におけるワークフロー改ざんと資格情報漏えいを防止する統制を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-SEC-005-01]] | GitHub Actions運用におけるワークフロー改ざんと資格情報漏えいを防止する統制を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-005-02]] | サードパーティActions参照はフル長SHAで固定できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-SEC-005-03]] | `GITHUB_TOKEN` は最小権限を既定値にし、ジョブ単位でのみ必要権限へ昇格できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-SEC-005-03]] | `GITHUB_TOKEN` は最小権限を既定値にし、ジョブ単位でのみ必要権限へ昇格できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-005-04]] | Actions利用元は許可リストで制限できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-005-05]] | クラウド認証はOIDC AssumeRoleを使用し、長期アクセスキーをSecretsへ保持しない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-SEC-005-06]] | fork由来PRではSecrets非提供を前提に、PRワークフローをSecrets非依存で実行できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-SEC-005-06]] | fork由来PRではSecrets非提供を前提に、PRワークフローをSecrets非依存で実行できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-REL-002]] | PASS |
 | [[RQ-SEC-005-07]] | セキュリティ是正の緊急対応で一時的な例外設定を行う場合は、有効期限と復旧計画を同一変更へ記録できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-SEC-005-08]] | ワークフロー改ざんが疑われる場合はデプロイを停止し、復旧完了まで `workflow_dispatch` 実行を禁止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-SEC-005-08]] | ワークフロー改ざんが疑われる場合はデプロイを停止し、復旧完了まで `workflow_dispatch` 実行を禁止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
 | [[RQ-SUS-001-01]] | 全インフラは、Lambda・CloudFront・S3・RDB等のマネージドサービスで構成し、EC2・ECS等の常時稼働インスタンスを使用しないことできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SUS-001-02]] | 全コンピューティングリソースがLambdaまたはCloudFront Functionsで実行されるできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SUS-001-03]] | EC2インスタンス、ECSタスク、EKSクラスタの利用が0件であるできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -548,7 +552,7 @@ tags:
 | [[RQ-SUS-002-06]] | 転送量の急増（前月比200%超）を検知した場合はアラートを発報できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SUS-002-07]] | キャッシュ無効化（invalidation）が必要なデプロイ時は一時的に転送量が増加するが、通常運用の範囲として許容できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SUS-002-08]] | 障害復旧のためにデータの一時的な冗長コピーが必要な場合は、復旧完了後に削除できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-001-01]] | [[RQ-SH-002\|利用者]]が目的動画へ短手数で到達できる検索体験を提供できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-006]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-001-01]] | [[RQ-SH-002\|利用者]]が目的動画へ短手数で到達できる検索体験を提供できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-006]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-001-02]] | 代表タスク（キーワード+タグ+期間条件で目的動画を発見）成功率を 90%以上にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-001-03]] | 代表タスク完了までの操作ステップ中央値が 6ステップ以下にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-001-04]] | [[RQ-GL-014\|検索条件]]変更から結果理解（件数/並び順確認）までの主観評価が 5段階中 4.0以上にできる | [[AT-SCN-002]] | [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -579,14 +583,14 @@ tags:
 | [[RQ-UX-005-07]] | 外部埋め込み要素で向き固定が必要な場合は代替遷移手段を提示できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-006-01]] | 主要機能をキーボードのみで操作できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-006-02]] | 一覧、検索、フィルタ、ソート、詳細表示がTab/Enter/Escapeで完結できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-006-03]] | フォーカス順序を視覚順と機能順に整合させ、逆行や飛びを発生させずに済むできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-006-03]] | フォーカス順序を視覚順と機能順に整合させ、順序変更目的でtabindex属性に1以上を使用しない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-006-04]] | カスタムUI部品で標準キー操作と異なる場合は、画面内に操作説明を表示できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-007-01]] | キーボードフォーカスを常時視認可能にできる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-007-02]] | すべての操作可能要素でフォーカスインジケータが視認できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-007-03]] | フォーカス対象がヘッダや固定フッタの裏に隠れない状態を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-007-04]] | ブラウザ既定表示を使用する場合でも、背景との識別ができない場合は独自スタイルで補強できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-008-01]] | ポインター操作対象のタップ領域を十分なサイズで提供できる | [[AT-SCN-002]] | [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-008-02]] | 主要操作ボタン/リンクのターゲットサイズを最小24x24 CSS px以上にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-008-02]] | ターゲット領域はボタン44x44、ボタン以外のリンク要素24x24 CSS px以上を確保できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-008-03]] | 隣接ターゲット間は誤タップ防止のため十分な間隔を確保できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-008-04]] | テキスト内インラインリンクを例外扱いする場合でも、拡大時に選択可能な状態を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-009-01]] | ドラッグ必須操作にクリック/キーボード等の代替手段を提供できる | [[AT-SCN-002]] | [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
@@ -643,17 +647,17 @@ tags:
 | [[RQ-UX-020-03]] | ダウンロード資料を提供する場合は、見出し構造、代替テキスト、言語指定を保持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-020-04]] | メール通知を提供する場合は、件名、本文構造、リンク目的を明確にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-020-05]] | 外部ツール生成物で構造保持が困難な場合は、同内容のHTMLページ導線を提供できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-021-01]] | CI/CDでアクセシビリティ検査を自動実行し、重大違反をリリースゲートで遮断できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-021-01]] | CI/CDでアクセシビリティ検査を自動実行し、重大違反をリリースゲートで遮断できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-021-02]] | Pull Requestごとに自動アクセシビリティ検査を実行できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-021-03]] | 重大違反（Critical/High）が1件以上の場合はマージ不可にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-021-04]] | 検査結果を履歴として90日以上保持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-021-05]] | 誤検知を一時除外する場合は、有効期限付き例外設定と改善チケットを必須化できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-022-01]] | サードパーティ/クラウドサービス利用時にアクセシビリティ影響を評価し、代替手段を確保できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-022-01]] | サードパーティ/クラウドサービス利用時にアクセシビリティ影響を評価し、代替手段を確保できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPS-INF-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-02]] | MVP範囲で新規導入するサードパーティ/クラウドサービスを評価対象とし、導入時にアクセシビリティ適合状況（VPAT等）の確認記録を残せる運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-03]] | 重大なアクセシビリティ欠陥が判明した場合は代替導線または代替サービスを提供できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-04]] | 定期再評価は重大変更時または年1回のいずれか早い方で実施できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-05]] | 短期利用で代替困難な場合は、影響範囲と利用制限を明示できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-023-01]] | アクセシビリティ不具合の受付窓口と優先度付き是正プロセスを維持できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-023-01]] | アクセシビリティ不具合の受付窓口と優先度付き是正プロセスを維持できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-023-02]] | 不具合報告の受付導線を公開し、受付確認を3営業日以内に返すことができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-023-03]] | 重大度High以上は次リリースまでに修正方針を確定できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-023-04]] | 対応状況（受付、調査、対応、完了）を追跡可能にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -664,6 +668,13 @@ tags:
 | [[RQ-UX-024-03]] | 別言語語句が継続して現れる部分に部分言語指定を行えるができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-024-04]] | 主要画面で言語指定不備の検査結果を0件にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-024-05]] | 固有名詞や短い外来語は部分言語指定を省略可能だが、可読性に支障を出さない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-01]] | デジタル庁デザインシステム（DADS）のアクセシビリティガイドラインに準拠できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-02]] | 重要なコンテンツを隠さず、最初から表示できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-03]] | カルーセルを使用する場合はDADS準拠で実装し、スライド数とテキスト量を制限できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-04]] | アウトラインボタンのアウトラインは背景色およびボタン背景色の双方に対してコントラスト比3:1以上を確保できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-05]] | 無効（disabled）ボタンの使用を避け、使用時は無効理由と有効化条件を近傍に提示できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-06]] | テキストの前景色を指定する場合は背景色も併せて指定できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-025-07]] | ロゴタイプ等の必要不可欠な場合を除き、文字画像を使用しない | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 
 ### 基本設計 -> 結合テスト（IT）
 | 設計ID(BD) | タイトル | ITケース(IT-CASE) | 補助IT文書 | 判定 |
@@ -676,6 +687,7 @@ tags:
 | [[BD-APP-DATA-001]] | データアーキテクチャ | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-DATA-002]] | ER図（概要） | [[IT-CASE-001]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-DATA-003]] | データ保持・削除方針 | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
+| [[BD-APP-QUAL-001]] | アプリ品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-UI-001]] | 画面一覧 | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-APP-UI-002]] | 検索画面情報設計 | [[IT-CASE-004]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-APP-UI-003]] | 画面遷移 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
@@ -690,7 +702,7 @@ tags:
 | [[BD-INF-DEP-002]] | デプロイ運用ルール | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-DEP-003]] | CI/CD基本設計（Quartz + CDK） | [[IT-CASE-001]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-INF-DEP-004]] | エッジ・DNS・証明書設計 | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-006]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
-| [[BD-INF-DEP-005]] | コンピュートと配備設計 | [[IT-CASE-001]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
+| [[BD-INF-DEP-005]] | コンピュートと配備設計 | [[IT-CASE-001]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
 | [[BD-INF-DEP-006]] | バックアップ・DR設計 | [[IT-CASE-007]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-ENV-001]] | アカウント・環境分割方針 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-INF-ENV-001]] | PASS |
 | [[BD-INF-IAC-001]] | インフラ変更フロー | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
@@ -703,6 +715,7 @@ tags:
 | [[BD-INF-OPS-001]] | インフラ運用ガバナンス設計 | [[IT-CASE-001]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]] | PASS |
 | [[BD-INF-PLAT-001]] | インフラ基本設計の章構成と全体構成 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-INF-PLAT-002]] | データストア基本設計 | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-INF-QUAL-001]] | インフラ品質特性 | [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-INF-SEC-001]] | IAM・セキュリティ境界方針 | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-INF-WAF-001]] | L7防御設計（WAF/Shield） | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-001]] | 収集対象を公式+出演にする | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
@@ -743,14 +756,13 @@ tags:
 | [[BD-SYS-ADR-037]] | docs PDF配布をArtifact/Releaseで二系統化し命名規則を統一する | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-038]] | docs配備は初回ローカル構築後にGitHub OIDC AssumeRoleで自動実行する | [[IT-CASE-001]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ADR-039]] | CI/CDはGitHub Actionsを実装基盤に統一しPRとデプロイを分離運用する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
+| [[BD-SYS-ADR-040]] | BD章構成を再編し品質特性をAPP/INF正本へ分割する | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-001]] | システムコンテキスト | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-002]] | 論理構成 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INF-ENV-001]], [[IT-INF-NET-001]], [[IT-INF-OBS-001]], [[IT-INF-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
 | [[BD-SYS-ARCH-003]] | クラウド配置構成 | [[IT-CASE-001]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-004]] | 主要データフロー | [[IT-CASE-001]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-ARCH-005]] | AIエージェント運用アーキテクチャ | [[IT-CASE-007]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-ROLL-001]], [[IT-INF-SMK-001]], [[IT-PLAN-001]] | PASS |
 | [[BD-SYS-DOM-001]] | ドメイン境界定義 | [[IT-CASE-001]], [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]] | PASS |
-| [[BD-APP-QUAL-001]] | アプリ品質特性 | [[IT-CASE-003]], [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]] | [[IT-ENV-001]], [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
-| [[BD-INF-QUAL-001]] | インフラ品質特性 | [[IT-CASE-009]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-012]], [[IT-CASE-013]] | [[IT-INF-OBS-001]], [[IT-PLAN-001]] | PASS |
 
 ### 詳細設計 -> 単体テスト（UT）
 | 設計ID(DD) | タイトル | UTケース(UT-CASE) | 補助UT文書 | 判定 |
@@ -825,14 +837,14 @@ tags:
 | [[DD-INF-IAC-002]] | IaCモジュール設計 | [[UT-CASE-012]], [[UT-CASE-013]], [[UT-CASE-015]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-INF-IAC-003]] | IaC状態管理とドリフト検知 | [[UT-CASE-012]], [[UT-CASE-013]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-INF-LMB-001]] | Lambda詳細設計 | [[UT-CASE-015]] | [[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
-| [[DD-INF-MON-001]] | インフラ監視詳細設計 | [[UT-CASE-003]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]], [[UT-CASE-015]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
+| [[DD-INF-MON-001]] | インフラ監視詳細設計 | [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-012]], [[UT-CASE-013]], [[UT-CASE-015]] | [[UT-IAC-001]], [[UT-POL-001]] | PASS |
 | [[DD-INF-MON-002]] | インフラ監視ログ詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]], [[UT-CASE-015]], [[UT-CASE-016]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-INF-NET-001]] | ネットワーク詳細設計 | [[UT-CASE-015]] | [[UT-IAC-001]], [[UT-POL-001]], [[UT-SEC-001]] | PASS |
 | [[DD-INF-OVR-001]] | インフラ詳細設計総論 | [[UT-CASE-015]] | [[UT-PLAN-003]] | PASS |
 | [[DD-INF-S3-001]] | S3詳細設計 | [[UT-CASE-015]] | [[UT-PLAN-003]] | PASS |
 | [[DD-INF-SEC-001]] | DR復旧手順詳細 | [[UT-CASE-001]], [[UT-CASE-002]], [[UT-CASE-004]], [[UT-CASE-005]], [[UT-CASE-006]], [[UT-CASE-008]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]], [[UT-CASE-015]], [[UT-CASE-016]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-INF-SEC-002]] | IAM詳細設計 | [[UT-CASE-015]] | [[UT-POL-001]], [[UT-SEC-001]] | PASS |
-| [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-015]] | [[UT-PLAN-001]], [[UT-SEC-001]] | PASS |
+| [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[UT-CASE-001]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-015]] | [[UT-PLAN-001]], [[UT-SEC-001]] | PASS |
 | [[DD-SYS-AV-001]] | 可用性詳細 | [[UT-CASE-001]], [[UT-CASE-003]], [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-007]], [[UT-CASE-009]], [[UT-CASE-010]], [[UT-CASE-011]], [[UT-CASE-012]], [[UT-CASE-013]], [[UT-CASE-016]] | [[UT-PLAN-001]] | PASS |
 | [[DD-SYS-AV-002]] | インフラ可用性詳細 | [[UT-CASE-007]], [[UT-CASE-009]] | [[UT-COV-001]], [[UT-IAC-001]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-POL-001]], [[UT-RPT-001]], [[UT-SEC-001]], [[UT-STAT-001]], [[UT-TDAT-001]] | PASS |
 | [[DD-SYS-COST-001]] | コスト運用詳細 | [[UT-CASE-004]], [[UT-CASE-006]], [[UT-CASE-011]] | [[UT-PLAN-001]], [[UT-PLAN-005]], [[UT-SEC-001]] | PASS |
