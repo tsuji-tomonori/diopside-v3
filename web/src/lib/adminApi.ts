@@ -92,9 +92,9 @@ function mapRun(api: IngestionRunApi): IngestionRunSummary {
     succeededCount: api.success_count ?? 0,
     failedCount: api.failed_count ?? 0,
     startedAt: api.accepted_at,
-    finishedAt: api.finished_at ?? undefined,
+    ...(api.finished_at != null ? { finishedAt: api.finished_at } : {}),
     retryable: api.status === 'failed' || api.status === 'partial',
-    errorSummary: api.error_summary ?? undefined,
+    ...(api.error_summary != null ? { errorSummary: api.error_summary } : {}),
   };
 }
 
@@ -161,7 +161,7 @@ export const adminApi = {
     return res.items.map((it) => ({
       videoId: it.video_id,
       status: it.status,
-      failureReasonCode: it.error_code ?? undefined,
+      ...(it.error_code != null ? { failureReasonCode: it.error_code } : {}),
     }));
   },
 
@@ -304,10 +304,10 @@ export const adminApi = {
       publishType: res.publish_type,
       status: res.status,
       startedAt: res.started_at,
-      finishedAt: res.finished_at ?? undefined,
+      ...(res.finished_at != null ? { finishedAt: res.finished_at } : {}),
       retryable: res.retryable,
-      errorCode: res.error_code ?? undefined,
-      errorMessage: res.error_message ?? undefined,
+      ...(res.error_code != null ? { errorCode: res.error_code } : {}),
+      ...(res.error_message != null ? { errorMessage: res.error_message } : {}),
     };
   },
 };

@@ -27,6 +27,8 @@ export class ProblemError extends Error {
     this.status = params.status;
     this.code = params.code;
     this.retryable = params.retryable ?? false;
-    this.errors = params.errors;
+    if (params.errors !== undefined) {
+      this.errors = params.errors;
+    }
   }
 }

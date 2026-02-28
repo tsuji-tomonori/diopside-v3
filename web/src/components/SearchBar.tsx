@@ -114,7 +114,7 @@ export function SearchBar({
               setActiveIndex((i) => Math.max(i - 1, -1));
             } else if (e.key === 'Enter' && activeIndex >= 0) {
               e.preventDefault();
-              selectSuggestion(suggestions[activeIndex]);
+              selectSuggestion(suggestions[activeIndex]!);
             } else if (e.key === 'Escape') {
               close();
             }

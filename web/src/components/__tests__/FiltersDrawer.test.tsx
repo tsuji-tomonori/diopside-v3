@@ -59,7 +59,7 @@ describe('FiltersDrawer', () => {
     const { onApply, onClose } = renderDrawer();
 
     await user.click(screen.getByRole('option', { name: '企画 10' }));
-    const [tagModeSelect] = screen.getAllByRole('combobox');
+    const tagModeSelect = screen.getAllByRole('combobox')[0]!;
     await user.selectOptions(tagModeSelect, 'OR');
     await user.click(screen.getByRole('button', { name: '適用' }));
 

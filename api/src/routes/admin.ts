@@ -14,7 +14,7 @@ const postTagRoute = createRoute({
         "application/json": {
           schema: z.object({
             tag_name: z.string().min(1),
-            tag_type_id: z.number().int().positive(),
+            tag_type_id: z.string().min(1),
             synonyms: z.array(z.string()).default([]),
             is_active: z.boolean().default(true),
           }),
@@ -244,6 +244,28 @@ const postTagMasterPublishRoute = createRoute({
   },
 });
 
+const postPublishRunsRoute = createRoute({
+  method: "post",
+  path: "/api/v1/admin/publish/runs",
+  operationId: "createPublishRun",
+  tags: ["admin"],
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({ scope: z.enum(["tag_master", "archive", "all"]).default("all") }).optional(),
+        },
+      },
+    },
+  },
+  responses: {
+    202: {
+      description: "Accepted",
+      content: { "application/json": { schema: z.object({ publish_run_id: z.string().uuid(), status: runStatusSchema }) } },
+    },
+  },
+});
+
 const getPublishRoute = createRoute({
   method: "get",
   path: "/api/v1/admin/publish/{publishRunId}",
@@ -334,6 +356,12 @@ export const registerAdminRoutes = (app: OpenAPIHono<any>) => {
   }) as any);
 
   app.openapi(postTagMasterPublishRoute, (async (c: any) => {
+    const body = c.req.valid("json");
+    const run = await store.createPublishRun(body?.scope ?? "all", "admin");
+    return c.json({ publish_run_id: run.publish_run_id, status: run.status === "rolled_back" ? "failed" : run.status }, 202);
+  }) as any);
+
+  app.openapi(postPublishRunsRoute, (async (c: any) => {
     const body = c.req.valid("json");
     const run = await store.createPublishRun(body?.scope ?? "all", "admin");
     return c.json({ publish_run_id: run.publish_run_id, status: run.status === "rolled_back" ? "failed" : run.status }, 202);

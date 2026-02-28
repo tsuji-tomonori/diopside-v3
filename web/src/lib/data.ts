@@ -188,7 +188,7 @@ export function buildTagPreviewMap(preview: TagPreviewTuple[]): Map<number, stri
 export function buildTagMasterMap(tags: TagMasterJson['tags']): Map<number, string> {
   const map = new Map<number, string>();
   for (let i = 0; i < tags.length; i++) {
-    const entry = tags[i];
+    const entry = tags[i]!;
     const tagName = entry[1];
     map.set(i, tagName);
   }

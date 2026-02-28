@@ -66,7 +66,7 @@ function A01IngestionStart({ toast }: { toast: (msg: string) => void }) {
         target_types: [targetOfficial ? 'official' : null, targetAppearance ? 'appearance' : null].filter(
           (v): v is 'official' | 'appearance' => v != null,
         ),
-        from_published_at: fromPublishedAt ? new Date(fromPublishedAt).toISOString() : undefined,
+        ...(fromPublishedAt ? { from_published_at: new Date(fromPublishedAt).toISOString() } : {}),
       });
       setResult(res);
       toast(`収集実行を受け付けました: ${res.run_id}`);
@@ -149,7 +149,7 @@ function A02RunStatus({ toast }: { toast: (msg: string) => void }) {
     try {
       const rs = await adminApi.listRuns();
       setRuns(rs);
-      if (!selectedRunId && rs.length > 0) setSelectedRunId(rs[0].runId);
+      if (!selectedRunId && rs.length > 0) setSelectedRunId(rs[0]!.runId);
     } catch (e) {
       toast(`run一覧取得失敗: ${e instanceof Error ? e.message : String(e)}`);
     } finally {

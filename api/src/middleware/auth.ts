@@ -66,7 +66,7 @@ export const authRequired: MiddlewareHandler = async (c, next) => {
   try {
     const { payload } = await jwtVerify(token, getJwks(), {
       issuer,
-      audience,
+      ...(audience !== undefined ? { audience } : {}),
       clockTolerance: 5,
     });
 

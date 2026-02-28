@@ -80,7 +80,7 @@ export function FiltersDrawer({
     }
     for (const r of tagRows) {
       if (!g[r.groupId]) g[r.groupId] = [];
-      g[r.groupId].push(r);
+      g[r.groupId]!.push(r);
     }
     return g;
   }, [tagRows, uiGroups]);

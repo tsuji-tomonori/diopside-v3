@@ -47,7 +47,7 @@ function buildTagGroupMapFromMaster(tagMaster: TagMasterJson): TagGroupMap {
 
   const tags: Record<string, TagGroupMap['tags'][string]> = {};
   for (let i = 0; i < tagMaster.tags.length; i++) {
-    const entry = tagMaster.tags[i];
+    const entry = tagMaster.tags[i]!;
     const [tagTypeId, tagName] = entry;
     const tagType = tagMaster.tagTypes.find((tt) => tt.id === tagTypeId);
     const tagTypeKey = tagType?.key ?? 'その他';

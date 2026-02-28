@@ -137,7 +137,7 @@ describe('VideoGrid', () => {
       />
     );
 
-    const tagButton = screen.getAllByRole('button', { name: '企画' })[0];
+    const tagButton = screen.getAllByRole('button', { name: '企画' })[0]!;
     await user.click(tagButton);
 
     expect(toggled).toEqual(['企画']);

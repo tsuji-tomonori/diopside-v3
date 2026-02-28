@@ -76,12 +76,12 @@ describe('[UT-CASE-FE-016] parseBootstrapItems', () => {
     const items = parseBootstrapItems(mockBootstrap);
 
     expect(items).toHaveLength(2);
-    expect(items[0].videoId).toBe('abc123xyz');
-    expect(items[0].title).toBe('テスト動画1');
-    expect(items[0].durationSec).toBe(3600);
-    expect(items[0].tags).toContain('ゲーム');
-    expect(items[0].tags).toContain('マインクラフト');
-    expect(items[0].ymd).toBe('2024-01-01');
+    expect(items[0]!.videoId).toBe('abc123xyz');
+    expect(items[0]!.title).toBe('テスト動画1');
+    expect(items[0]!.durationSec).toBe(3600);
+    expect(items[0]!.tags).toContain('ゲーム');
+    expect(items[0]!.tags).toContain('マインクラフト');
+    expect(items[0]!.ymd).toBe('2024-01-01');
   });
 
   it('handles items with unknown tag IDs gracefully', () => {
@@ -93,7 +93,7 @@ describe('[UT-CASE-FE-016] parseBootstrapItems', () => {
     const items = parseBootstrapItems(bootstrap);
     expect(items).toHaveLength(1);
     // Unknown tag ID should result in fallback name
-    expect(items[0].tags.some((t) => t.includes('tag_99'))).toBe(true);
+    expect(items[0]!.tags.some((t) => t.includes('tag_99'))).toBe(true);
   });
 });
 
@@ -121,9 +121,9 @@ describe('[UT-CASE-FE-016] parseArchivePageItems', () => {
     const items = parseArchivePageItems(page, tagLookup);
 
     expect(items).toHaveLength(2);
-    expect(items[0].videoId).toBe('video1');
-    expect(items[0].tags).toContain('ゲーム');
-    expect(items[1].tags).toContain('雑談');
+    expect(items[0]!.videoId).toBe('video1');
+    expect(items[0]!.tags).toContain('ゲーム');
+    expect(items[1]!.tags).toContain('雑談');
   });
 });
 

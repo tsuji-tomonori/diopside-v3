@@ -961,7 +961,7 @@ export class InMemoryStore {
       started_at: row.started_at ? row.started_at.toISOString() : nowIso(),
       finished_at: row.finished_at ? new Date(row.finished_at).toISOString() : null,
       triggered_by: row.triggered_by ?? "admin",
-      rollback: { executed: row.rollback_executed, rollback_to_version: row.rollback_to_version ?? undefined },
+      rollback: { executed: row.rollback_executed, ...(row.rollback_to_version != null ? { rollback_to_version: row.rollback_to_version } : {}) },
       error_code: row.error_code,
       error_message: row.error_message,
       retryable: row.retryable,

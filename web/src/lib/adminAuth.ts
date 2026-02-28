@@ -36,7 +36,7 @@ function randomString(size: number): string {
   crypto.getRandomValues(arr);
   let out = '';
   for (let i = 0; i < arr.length; i += 1) {
-    out += alphabet[arr[i] % alphabet.length];
+    out += alphabet[arr[i]! % alphabet.length];
   }
   return out;
 }
@@ -45,7 +45,7 @@ function base64Url(data: ArrayBuffer): string {
   const bytes = new Uint8Array(data);
   let str = '';
   for (let i = 0; i < bytes.length; i += 1) {
-    str += String.fromCharCode(bytes[i]);
+    str += String.fromCharCode(bytes[i]!);
   }
   return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
@@ -107,7 +107,7 @@ async function exchangeCode(code: string, verifier: string): Promise<AdminSessio
 
   return {
     accessToken: token.access_token,
-    idToken: token.id_token,
+    ...(token.id_token != null ? { idToken: token.id_token } : {}),
     tokenType: token.token_type ?? 'Bearer',
     expiresAtMs: Date.now() + Math.max(60, token.expires_in ?? 3600) * 1000,
   };
@@ -133,7 +133,8 @@ export function parseAdminClaims(): { sub: string | null; scopes: string[]; grou
   if (!token) return { sub: null, scopes: [], groups: [] };
 
   try {
-    const [, payload] = token.split('.');
+    const payload = token.split('.')[1];
+    if (!payload) return { sub: null, scopes: [], groups: [] };
     const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
     const pad = normalized.length % 4;
     const padded = normalized + (pad === 0 ? '' : '='.repeat(4 - pad));
