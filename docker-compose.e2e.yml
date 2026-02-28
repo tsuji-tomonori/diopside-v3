@@ -1,8 +1,11 @@
 services:
   api:
     environment:
-      E2E_MOCK: "1"
-      JWT_DEV_BYPASS: "1"
+      E2E_TEST_MODE: "1"
+      E2E_TEST_SECRET: "e2e-secret"
+      JWT_ISSUER: "http://api:3000/e2e-issuer"
+      JWT_JWKS_URL: "http://api:3000/e2e-issuer/.well-known/jwks.json"
+      COGNITO_AUDIENCE: "diopside-e2e"
 
   web:
     build:

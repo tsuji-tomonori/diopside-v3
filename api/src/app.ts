@@ -2,16 +2,19 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { authRequired } from "./middleware/auth.js";
 import { onError } from "./middleware/error.js";
 import { registerMockE2ERoutes } from "./mock-e2e.js";
+import { e2eJwks } from "./e2e/jwks.js";
 import { notFound } from "./middleware/not-found.js";
 import { traceMiddleware } from "./middleware/trace.js";
 import { store } from "./repositories/store.js";
 import { registerAdminRoutes } from "./routes/admin.js";
 import { registerOpsRoutes } from "./routes/ops.js";
 import { registerPublicRoutes } from "./routes/public.js";
+import { registerTestSupportRoutes } from "./routes/test-support.js";
 
 export const buildApp = () => {
   const app = new OpenAPIHono();
   const useMock = process.env.E2E_MOCK === "1";
+  const e2eTestMode = process.env.E2E_TEST_MODE === "1";
 
   app.use("*", traceMiddleware);
   if (!useMock) {
@@ -25,6 +28,13 @@ export const buildApp = () => {
     registerOpsRoutes(app);
     registerAdminRoutes(app);
     registerPublicRoutes(app);
+    if (e2eTestMode) {
+      registerTestSupportRoutes(app);
+    }
+  }
+
+  if (e2eTestMode) {
+    app.get("/e2e-issuer/.well-known/jwks.json", (c) => c.json(e2eJwks));
   }
 
   app.doc("/openapi/v1/openapi.json", {

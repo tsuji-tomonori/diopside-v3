@@ -6,13 +6,19 @@ let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;
 
 const getJwks = () => {
   if (jwks) return jwks;
+  const explicitJwksUrl = process.env.JWT_JWKS_URL;
+  if (explicitJwksUrl) {
+    jwks = createRemoteJWKSet(new URL(explicitJwksUrl));
+    return jwks;
+  }
+
   const region = process.env.COGNITO_REGION;
   const userPoolId = process.env.COGNITO_USER_POOL_ID;
   if (!region || !userPoolId) {
     throw new ProblemError({
       status: 500,
       code: "AUTH_CONFIG_ERROR",
-      message: "COGNITO_REGION and COGNITO_USER_POOL_ID are required",
+      message: "JWT_JWKS_URL or COGNITO_REGION/COGNITO_USER_POOL_ID is required",
     });
   }
   const jwksUrl = `https://cognito-idp.${region}.amazonaws.com/${userPoolId}/.well-known/jwks.json`;

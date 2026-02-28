@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import type {
   IngestionItem,
   IngestionRun,
+  PublishStatus,
   PublishRun,
   RecheckRun,
   RunKind,
@@ -31,6 +32,13 @@ type VideoRecord = {
 
 export class InMemoryStore {
   private prisma: PrismaClient | null;
+  private testFaults = {
+    ingestion_fail: false,
+    archive_missing: false,
+    tag_master_inconsistent: false,
+    distribution_down: false,
+    publish_fail: false,
+  };
   ingestionRuns = new Map<string, IngestionRun>();
   ingestionItems = new Map<string, IngestionItem[]>();
   recheckRuns = new Map<string, RecheckRun>();
@@ -41,6 +49,10 @@ export class InMemoryStore {
 
   constructor() {
     this.prisma = process.env.DATABASE_URL ? new PrismaClient() : null;
+    this.seedDefaults();
+  }
+
+  private seedDefaults() {
     const now = nowIso();
     this.tags.set("tag-game", {
       tag_id: "tag-game",
@@ -100,6 +112,114 @@ export class InMemoryStore {
         error_message: null,
       },
     ]);
+  }
+
+  resetForTest() {
+    this.ingestionRuns.clear();
+    this.ingestionItems.clear();
+    this.recheckRuns.clear();
+    this.tags.clear();
+    this.videos.clear();
+    this.publishRuns.clear();
+    this.idempotency.clear();
+    this.testFaults = {
+      ingestion_fail: false,
+      archive_missing: false,
+      tag_master_inconsistent: false,
+      distribution_down: false,
+      publish_fail: false,
+    };
+    this.seedDefaults();
+  }
+
+  setTestFaults(input: Partial<typeof this.testFaults>) {
+    this.testFaults = { ...this.testFaults, ...input };
+    return this.testFaults;
+  }
+
+  getTestFaults() {
+    return this.testFaults;
+  }
+
+  async setRunStatusForTest(
+    runId: string,
+    input: {
+      status: RunStatus;
+      processed_count?: number;
+      success_count?: number;
+      failed_count?: number;
+      error_summary?: string | null;
+      finished?: boolean;
+      item_status?: "succeeded" | "failed";
+    },
+  ): Promise<IngestionRun> {
+    const run = await this.getIngestionRun(runId);
+    run.status = input.status;
+    if (input.processed_count !== undefined) run.processed_count = input.processed_count;
+    if (input.success_count !== undefined) run.success_count = input.success_count;
+    if (input.failed_count !== undefined) run.failed_count = input.failed_count;
+    if (input.error_summary !== undefined) run.error_summary = input.error_summary;
+    if (run.started_at === null) run.started_at = nowIso();
+    if (input.finished || input.status === "succeeded" || input.status === "failed" || input.status === "partial" || input.status === "cancelled") {
+      run.finished_at = nowIso();
+    }
+
+    if (this.ingestionItems.get(runId)?.length === 0) {
+      const sourceType: TargetType = run.target_types.includes("appearance") ? "appearance" : "official";
+      const itemStatus = input.item_status ?? (input.status === "failed" ? "failed" : "succeeded");
+      this.ingestionItems.set(runId, [
+        {
+          run_id: runId,
+          video_id: "video-001",
+          source_type: sourceType,
+          update_type: run.run_kind === "incremental_update" ? "existing" : "new",
+          status: itemStatus,
+          error_code: itemStatus === "failed" ? "NORMALIZE_FAILED" : null,
+          error_message: itemStatus === "failed" ? "simulated ingestion failure" : null,
+        },
+      ]);
+    }
+
+    this.ingestionRuns.set(runId, run);
+    await this.persist(
+      "UPDATE ingestion_runs SET started_at=$2, finished_at=$3, status=$4, processed_count=$5, success_count=$6, failed_count=$7, error_summary=$8 WHERE run_id=$1",
+      [run.run_id, run.started_at, run.finished_at, run.status, run.processed_count, run.success_count, run.failed_count, run.error_summary],
+    );
+    return run;
+  }
+
+  async setPublishStatusForTest(
+    runId: string,
+    input: {
+      status: PublishStatus;
+      finished?: boolean;
+      error_code?: string | null;
+      error_message?: string | null;
+      retryable?: boolean;
+    },
+  ): Promise<PublishRun> {
+    const run = await this.getPublishRun(runId);
+    run.status = input.status;
+    if (input.error_code !== undefined) run.error_code = input.error_code;
+    if (input.error_message !== undefined) run.error_message = input.error_message;
+    if (input.retryable !== undefined) run.retryable = input.retryable;
+    if (input.finished || input.status === "succeeded" || input.status === "failed" || input.status === "partial" || input.status === "cancelled" || input.status === "rolled_back") {
+      run.finished_at = nowIso();
+    }
+    run.steps = run.steps.map((step) => ({ ...step, status: input.status }));
+
+    if (run.status === "succeeded") {
+      for (const tag of this.tags.values()) {
+        tag.propagation_state = "published";
+      }
+    }
+
+    this.publishRuns.set(runId, run);
+    await this.persist(
+      "UPDATE publish_runs SET status=$2, finished_at=$3, error_code=$4, error_message=$5, retryable=$6 WHERE publish_run_id=$1",
+      [run.publish_run_id, run.status, run.finished_at, run.error_code, run.error_message, run.retryable],
+    );
+    return run;
   }
 
   private async persist(sql: string, params: unknown[]): Promise<void> {
@@ -341,6 +461,18 @@ export class InMemoryStore {
   }
 
   async diagnosticsHealth() {
+    if (this.testFaults.archive_missing || this.testFaults.tag_master_inconsistent || this.testFaults.distribution_down) {
+      return {
+        status: "critical" as const,
+        checks: {
+          data_freshness: "ok",
+          tag_master_consistency: this.testFaults.tag_master_inconsistent ? "critical" : "ok",
+          archive_page_completeness: this.testFaults.archive_missing ? "critical" : "ok",
+          distribution_availability: this.testFaults.distribution_down ? "critical" : "ok",
+        },
+      };
+    }
+
     const latest = await this.latestIngestionSummary();
     const status: "ok" | "degraded" | "critical" = latest.warnings.length > 0 ? "degraded" : "ok";
     return {
