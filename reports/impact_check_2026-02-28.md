@@ -40,3 +40,21 @@
   - `task docs:ut:pairwise:check` で生成差分漏れなしを確認。
 - 文書整合:
   - `task docs:guard` 実行結果で `issues: 0`, `broken_links: 0` を維持。
+
+## 追加実施（UT 41以降の分割と品質集約自動生成）
+- 対象: `docs/4.単体テスト(UT)/41.*`、`42.*`、`43.*`、`scripts/ut_quality`、`Taskfile.yaml`。
+- 変更内容:
+  - `UT-COV` を領域別へ分割（`UT-COV-002`〜`UT-COV-005`: DOC/INF/FE/BE）。
+  - `UT-STAT` をツール別へ分割（`UT-STAT-002`〜`UT-STAT-008`）し、設定/対象/コマンド/失敗条件を明文化。
+  - `UT-STAT-001`、`UT-COV-001`、`UT-MET-001` を集約ファイルとして自動生成化。
+  - 新規 `scripts/ut_quality/generate_quality_md.py` を追加し、`UT-STAT-00x` / `UT-COV-00x` から表を生成。
+  - `Taskfile.yaml` に `docs:ut:quality:generate` / `docs:ut:quality:check` を追加。
+  - `UT-PLAN-001` に品質集約生成タスク運用を追記。
+
+## 追加影響確認（UT品質集約）
+- トレーサビリティ:
+  - `UT-MET-001` は `UT-STAT-00x` と `UT-COV-00x` を入力とする集約文書に変更。
+  - 領域別（DOC/INF/FE/BE）で静的解析とカバレッジ指標を追跡可能。
+- 運用影響:
+  - 閾値や対象変更はソース文書（`UT-STAT-00x` / `UT-COV-00x`）のみ更新すれば反映可能。
+  - 集約文書の手編集は禁止し、`task docs:ut:quality:check` で更新漏れを検知可能。

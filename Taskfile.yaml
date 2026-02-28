@@ -196,6 +196,16 @@ tasks:
     cmds:
       - python3 scripts/pairwise/generate_pairwise_md.py --strict --check
 
+  docs:ut:quality:generate:
+    desc: Generate UT quality aggregate docs from UT-STAT/COV
+    cmds:
+      - python3 scripts/ut_quality/generate_quality_md.py
+
+  docs:ut:quality:check:
+    desc: Check generated UT quality aggregate docs are up to date
+    cmds:
+      - python3 scripts/ut_quality/generate_quality_md.py --check
+
   docs:pdf:
     desc: Build a single PDF from docs (Mermaid rendered, links preserved)
     cmds:

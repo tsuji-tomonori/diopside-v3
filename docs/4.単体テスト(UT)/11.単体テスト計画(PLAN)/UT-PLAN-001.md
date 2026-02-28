@@ -3,7 +3,7 @@ id: UT-PLAN-001
 title: 単体テスト統括計画 001
 doc_type: 単体テスト計画
 phase: UT
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -51,6 +51,7 @@ tags:
 - インフラは `npm --prefix infra run test` を最小単位として、必要時に `npm --prefix infra run build` を追従実行する。
 - フロントエンドは `npm --prefix web run test` を基本とし、検索/表示ロジック変更時は `npm --prefix web run build` まで確認する。
 - バックエンドは [[UT-PLAN-005]] のAPI契約ケースを基準に、変更APIのみ再実行できる構成を維持する。
+- 品質集約文書（[[UT-STAT-001]] / [[UT-COV-001]] / [[UT-MET-001]]）は `task docs:ut:quality:generate` で再生成し、差分検知は `task docs:ut:quality:check` を利用する。
 
 ## 完了条件
 - 4領域のUT計画が存在し、各計画が少なくとも1件以上のUTケースまたは対象範囲定義へ接続している。
@@ -58,6 +59,7 @@ tags:
 - 設計変更時は、影響領域のUT計画/UTケースを同一変更で更新する。
 
 ## 変更履歴
+- 2026-02-28: 41以降分割方針に合わせ、品質集約文書の生成タスク（`docs:ut:quality:*`）を追加
 - 2026-02-28: ペアワイズ（UT-PW）を単体テスト技法へ追加し、関連文書リンクを更新
 - 2026-02-20: テスト章再編に合わせ、UTの設計観点・技法・UTで停止すべき失敗境界を追記
 - 2026-02-11: 領域分割（DOC/INF/FE/BE）の統括計画へ再編し、[[UT-PLAN-002]]〜[[UT-PLAN-005]]を追加
