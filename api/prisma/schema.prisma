@@ -293,3 +293,19 @@ model PublishArtifact {
   @@index([generated_at(sort: Desc)], map: "idx_publish_artifacts_generated_at")
   @@map("publish_artifacts")
 }
+
+model IdempotencyKey {
+  id          String   @id @db.Uuid
+  idem_key    String   @db.VarChar(255)
+  operator    String   @db.VarChar(64)
+  endpoint    String   @db.VarChar(255)
+  payload_hash String  @db.VarChar(255)
+  run_id      String   @db.Uuid
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  expires_at  DateTime @db.Timestamptz(6)
+
+  @@unique([idem_key, operator, endpoint, payload_hash], map: "uq_idempotency_keys_scope")
+  @@index([run_id], map: "idx_idempotency_keys_run_id")
+  @@index([expires_at], map: "idx_idempotency_keys_expires_at")
+  @@map("idempotency_keys")
+}

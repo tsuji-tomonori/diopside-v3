@@ -181,10 +181,7 @@ export class InMemoryStore {
     }
 
     this.ingestionRuns.set(runId, run);
-    await this.persist(
-      "UPDATE ingestion_runs SET started_at=$2, finished_at=$3, status=$4, processed_count=$5, success_count=$6, failed_count=$7, error_summary=$8 WHERE run_id=$1",
-      [run.run_id, run.started_at, run.finished_at, run.status, run.processed_count, run.success_count, run.failed_count, run.error_summary],
-    );
+    await this.upsertIngestionRunToDb(run);
     return run;
   }
 
@@ -215,25 +212,230 @@ export class InMemoryStore {
     }
 
     this.publishRuns.set(runId, run);
-    await this.persist(
-      "UPDATE publish_runs SET status=$2, finished_at=$3, error_code=$4, error_message=$5, retryable=$6 WHERE publish_run_id=$1",
-      [run.publish_run_id, run.status, run.finished_at, run.error_code, run.error_message, run.retryable],
-    );
+    await this.upsertPublishRunToDb(run);
     return run;
   }
 
-  private async persist(sql: string, params: unknown[]): Promise<void> {
+  private async dbWrite(operation: () => Promise<void>): Promise<void> {
     if (!this.prisma) return;
-    await this.prisma.$executeRawUnsafe(sql, ...params);
+    try {
+      await operation();
+    } catch {
+      if (process.env.E2E_TEST_MODE === "1") return;
+      throw new ProblemError({ status: 500, code: "DB_WRITE_FAILED", message: "Database write failed" });
+    }
   }
 
-  private async query<T>(sql: string, params: unknown[]): Promise<T[]> {
-    if (!this.prisma) return [];
-    return this.prisma.$queryRawUnsafe<T[]>(sql, ...params);
+  private async dbRead<T>(operation: () => Promise<T>, fallback: T): Promise<T> {
+    if (!this.prisma) return fallback;
+    try {
+      return await operation();
+    } catch {
+      if (process.env.E2E_TEST_MODE === "1") return fallback;
+      throw new ProblemError({ status: 500, code: "DB_READ_FAILED", message: "Database read failed" });
+    }
+  }
+
+  async dbMetricsForTest() {
+    if (!this.prisma) {
+      return {
+        connected: false,
+        ingestion_runs: 0,
+        publish_runs: 0,
+        recheck_runs: 0,
+      };
+    }
+
+    try {
+      const [ingestionRuns, publishRuns, recheckRuns] = await Promise.all([
+        this.prisma.ingestionRun.count(),
+        this.prisma.publishRun.count(),
+        this.prisma.recheckRun.count(),
+      ]);
+      return {
+        connected: true,
+        ingestion_runs: ingestionRuns,
+        publish_runs: publishRuns,
+        recheck_runs: recheckRuns,
+      };
+    } catch {
+      return {
+        connected: false,
+        ingestion_runs: 0,
+        publish_runs: 0,
+        recheck_runs: 0,
+      };
+    }
+  }
+
+  private async upsertIngestionRunToDb(run: IngestionRun, requestedBy: string | null = null) {
+    if (!this.prisma) return;
+    await this.prisma.ingestionRun.upsert({
+      where: { run_id: run.run_id },
+      create: {
+        run_id: run.run_id,
+        run_kind: run.run_kind,
+        mode: run.trigger_mode,
+        status: run.status,
+        target_types: run.target_types,
+        parent_run_id: run.parent_run_id,
+        requested_by: requestedBy,
+        started_at: run.started_at ? new Date(run.started_at) : null,
+        finished_at: run.finished_at ? new Date(run.finished_at) : null,
+        target_count: run.processed_count,
+        processed_count: run.processed_count,
+        success_count: run.success_count,
+        failed_count: run.failed_count,
+        unprocessed_count: 0,
+        trace_id: `trace-${run.run_id.slice(0, 12)}`,
+      },
+      update: {
+        status: run.status,
+        parent_run_id: run.parent_run_id,
+        started_at: run.started_at ? new Date(run.started_at) : null,
+        finished_at: run.finished_at ? new Date(run.finished_at) : null,
+        target_count: run.processed_count,
+        processed_count: run.processed_count,
+        success_count: run.success_count,
+        failed_count: run.failed_count,
+        requested_by: requestedBy,
+      },
+    });
+  }
+
+  private mapDbIngestionRun(row: {
+    run_id: string;
+    created_at: Date;
+    started_at: Date | null;
+    finished_at: Date | null;
+    mode: string;
+    run_kind: string;
+    target_types: string[];
+    status: string;
+    parent_run_id: string | null;
+    processed_count: number;
+    success_count: number;
+    failed_count: number;
+  }): IngestionRun {
+    return {
+      run_id: row.run_id,
+      accepted_at: row.created_at.toISOString(),
+      started_at: row.started_at ? row.started_at.toISOString() : null,
+      finished_at: row.finished_at ? row.finished_at.toISOString() : null,
+      trigger_mode: row.mode as TriggerMode,
+      run_kind: row.run_kind as RunKind,
+      target_types: row.target_types as TargetType[],
+      status: row.status as RunStatus,
+      parent_run_id: row.parent_run_id,
+      processed_count: row.processed_count,
+      success_count: row.success_count,
+      failed_count: row.failed_count,
+      error_summary: null,
+    };
+  }
+
+  private async upsertPublishRunToDb(run: PublishRun) {
+    if (!this.prisma) return;
+    await this.prisma.publishRun.upsert({
+      where: { publish_run_id: run.publish_run_id },
+      create: {
+        publish_run_id: run.publish_run_id,
+        source_run_id: null,
+        publish_type: run.publish_type,
+        trigger_type: "manual",
+        status: run.status,
+        triggered_by: run.triggered_by,
+        started_at: run.started_at ? new Date(run.started_at) : null,
+        finished_at: run.finished_at ? new Date(run.finished_at) : null,
+        published_at: null,
+        rollback_executed: run.rollback.executed,
+        rollback_to_version: run.rollback.rollback_to_version ?? null,
+        error_code: run.error_code,
+        error_message: run.error_message,
+        retryable: run.retryable,
+        trace_id: `trace-${run.publish_run_id.slice(0, 12)}`,
+      },
+      update: {
+        status: run.status,
+        triggered_by: run.triggered_by,
+        started_at: run.started_at ? new Date(run.started_at) : null,
+        finished_at: run.finished_at ? new Date(run.finished_at) : null,
+        rollback_executed: run.rollback.executed,
+        rollback_to_version: run.rollback.rollback_to_version ?? null,
+        error_code: run.error_code,
+        error_message: run.error_message,
+        retryable: run.retryable,
+      },
+    });
+  }
+
+  private async upsertRecheckRunToDb(run: RecheckRun) {
+    if (!this.prisma) return;
+    await this.prisma.recheckRun.upsert({
+      where: { recheck_run_id: run.recheck_run_id },
+      create: {
+        recheck_run_id: run.recheck_run_id,
+        base_run_id: run.run_id,
+        mode: "before_delivery",
+        status: run.status,
+        requested_by: "admin",
+        total_count: run.diff_summary.changed_count + run.diff_summary.unchanged_count,
+        changed_count: run.diff_summary.changed_count,
+        unchanged_count: run.diff_summary.unchanged_count,
+        failed_count: 0,
+        started_at: run.started_at ? new Date(run.started_at) : null,
+        finished_at: run.finished_at ? new Date(run.finished_at) : null,
+        trace_id: `trace-${run.recheck_run_id.slice(0, 12)}`,
+      },
+      update: {
+        status: run.status,
+        total_count: run.diff_summary.changed_count + run.diff_summary.unchanged_count,
+        changed_count: run.diff_summary.changed_count,
+        unchanged_count: run.diff_summary.unchanged_count,
+        started_at: run.started_at ? new Date(run.started_at) : null,
+        finished_at: run.finished_at ? new Date(run.finished_at) : null,
+      },
+    });
   }
 
   private hashPayload(payload: unknown): string {
     return JSON.stringify(payload);
+  }
+
+  private async upsertIdempotencyKeyToDb(input: {
+    idem_key: string;
+    operator: string;
+    endpoint: string;
+    payload_hash: string;
+    run_id: string;
+    created_at: string;
+  }) {
+    await this.dbWrite(async () => {
+      await this.prisma!.idempotencyKey.upsert({
+        where: {
+          idem_key_operator_endpoint_payload_hash: {
+            idem_key: input.idem_key,
+            operator: input.operator,
+            endpoint: input.endpoint,
+            payload_hash: input.payload_hash,
+          },
+        },
+        create: {
+          id: newId(),
+          idem_key: input.idem_key,
+          operator: input.operator,
+          endpoint: input.endpoint,
+          payload_hash: input.payload_hash,
+          run_id: input.run_id,
+          created_at: new Date(input.created_at),
+          expires_at: new Date(Date.now() + 24 * 3600 * 1000),
+        },
+        update: {
+          run_id: input.run_id,
+          expires_at: new Date(Date.now() + 24 * 3600 * 1000),
+        },
+      });
+    });
   }
 
   private ensureNoActiveRun(runKind: RunKind): void {
@@ -297,14 +499,15 @@ export class InMemoryStore {
       created_at: now,
     });
 
-    await this.persist(
-      "INSERT INTO ingestion_runs (run_id, accepted_at, trigger_mode, run_kind, target_types, status, parent_run_id, processed_count, success_count, failed_count, error_summary) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (run_id) DO NOTHING",
-      [run.run_id, run.accepted_at, run.trigger_mode, run.run_kind, run.target_types, run.status, run.parent_run_id, run.processed_count, run.success_count, run.failed_count, run.error_summary],
-    );
-    await this.persist(
-      "INSERT INTO idempotency_keys (id, idem_key, operator, endpoint, payload_hash, run_id, created_at, expires_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (idem_key, operator, endpoint, payload_hash) DO NOTHING",
-      [newId(), input.idempotency_key, input.operator, input.endpoint, payloadHash, run.run_id, now, new Date(Date.now() + 24 * 3600 * 1000).toISOString()],
-    );
+    await this.upsertIngestionRunToDb(run, input.operator);
+    await this.upsertIdempotencyKeyToDb({
+      idem_key: input.idempotency_key,
+      operator: input.operator,
+      endpoint: input.endpoint,
+      payload_hash: payloadHash,
+      run_id: run.run_id,
+      created_at: now,
+    });
     return run;
   }
 
@@ -314,30 +517,34 @@ export class InMemoryStore {
       return run;
     }
 
-    const rows = await this.query<Array<any>>(
-      "SELECT run_id, accepted_at, started_at, finished_at, trigger_mode, run_kind, target_types, status, parent_run_id, processed_count, success_count, failed_count, error_summary FROM ingestion_runs WHERE run_id = $1 LIMIT 1",
-      [runId],
-    );
-    const row = rows[0] as any;
+    const row = this.prisma
+      ? await this.dbRead(
+          () =>
+            this.prisma!.ingestionRun.findUnique({
+              where: { run_id: runId },
+              select: {
+                run_id: true,
+                created_at: true,
+                started_at: true,
+                finished_at: true,
+                mode: true,
+                run_kind: true,
+                target_types: true,
+                status: true,
+                parent_run_id: true,
+                processed_count: true,
+                success_count: true,
+                failed_count: true,
+              },
+            }),
+          null,
+        )
+      : null;
     if (!row) {
       throw new ProblemError({ status: 404, code: "RUN_NOT_FOUND", message: "Run not found" });
     }
 
-    const loaded: IngestionRun = {
-      run_id: row.run_id,
-      accepted_at: new Date(row.accepted_at).toISOString(),
-      started_at: row.started_at ? new Date(row.started_at).toISOString() : null,
-      finished_at: row.finished_at ? new Date(row.finished_at).toISOString() : null,
-      trigger_mode: row.trigger_mode,
-      run_kind: row.run_kind,
-      target_types: row.target_types,
-      status: row.status,
-      parent_run_id: row.parent_run_id,
-      processed_count: row.processed_count,
-      success_count: row.success_count,
-      failed_count: row.failed_count,
-      error_summary: row.error_summary,
-    };
+    const loaded = this.mapDbIngestionRun(row);
     this.ingestionRuns.set(loaded.run_id, loaded);
     return loaded;
   }
@@ -347,19 +554,32 @@ export class InMemoryStore {
     const local = this.ingestionItems.get(runId);
     if (local) return local;
 
-    const rows = await this.query<Array<any>>(
-      "SELECT run_id, video_id, source_type, update_type, status, error_code, error_message FROM ingestion_items WHERE run_id = $1",
-      [runId],
-    );
+    const rows = this.prisma
+      ? await this.dbRead(
+          () =>
+            this.prisma!.ingestionItem.findMany({
+              where: { run_id: runId },
+              select: {
+                run_id: true,
+                video_id: true,
+                source_type: true,
+                update_type: true,
+                status: true,
+                failure_reason_code: true,
+              },
+            }),
+          [],
+        )
+      : [];
 
-    return rows.map((row: any) => ({
+    return rows.map((row) => ({
       run_id: row.run_id,
       video_id: row.video_id,
-      source_type: row.source_type,
-      update_type: row.update_type,
-      status: row.status,
-      error_code: row.error_code,
-      error_message: row.error_message,
+      source_type: row.source_type as TargetType,
+      update_type: row.update_type === "supplement" ? "backfill" : (row.update_type as IngestionItem["update_type"]),
+      status: (row.status === "failed" ? "failed" : "succeeded") as IngestionItem["status"],
+      error_code: row.failure_reason_code,
+      error_message: null,
     }));
   }
 
@@ -402,10 +622,15 @@ export class InMemoryStore {
       payload_hash: payloadHash,
       created_at: now,
     });
-    await this.persist(
-      "INSERT INTO ingestion_runs (run_id, accepted_at, trigger_mode, run_kind, target_types, status, parent_run_id, processed_count, success_count, failed_count, error_summary) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (run_id) DO NOTHING",
-      [retry.run_id, retry.accepted_at, retry.trigger_mode, retry.run_kind, retry.target_types, retry.status, retry.parent_run_id, retry.processed_count, retry.success_count, retry.failed_count, retry.error_summary],
-    );
+    await this.upsertIngestionRunToDb(retry, operator);
+    await this.upsertIdempotencyKeyToDb({
+      idem_key: idempotencyKey,
+      operator,
+      endpoint,
+      payload_hash: payloadHash,
+      run_id: retry.run_id,
+      created_at: now,
+    });
     return retry;
   }
 
@@ -415,11 +640,21 @@ export class InMemoryStore {
       .find((v) => v.status === "succeeded");
 
     if (!latest && this.prisma) {
-      const rows = await this.query<Array<any>>(
-        "SELECT run_id, finished_at, target_types, success_count, failed_count FROM ingestion_runs WHERE status = 'succeeded' ORDER BY accepted_at DESC LIMIT 1",
-        [],
+      const row = await this.dbRead(
+        () =>
+          this.prisma!.ingestionRun.findFirst({
+            where: { status: "succeeded" },
+            orderBy: { created_at: "desc" },
+            select: {
+              run_id: true,
+              finished_at: true,
+              target_types: true,
+              success_count: true,
+              failed_count: true,
+            },
+          }),
+        null,
       );
-      const row = rows[0] as any;
       if (row) {
         const official = row.target_types.includes("official") ? row.success_count : 0;
         const appearance = row.target_types.includes("appearance") ? row.success_count : 0;
@@ -497,10 +732,7 @@ export class InMemoryStore {
       diff_summary: { changed_count: 0, unchanged_count: 0 },
     };
     this.recheckRuns.set(recheck.recheck_run_id, recheck);
-    await this.persist(
-      "INSERT INTO recheck_runs (recheck_run_id, run_id, status, started_at, finished_at, changed_count, unchanged_count) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (recheck_run_id) DO NOTHING",
-      [recheck.recheck_run_id, recheck.run_id, recheck.status, recheck.started_at, recheck.finished_at, recheck.diff_summary.changed_count, recheck.diff_summary.unchanged_count],
-    );
+    await this.upsertRecheckRunToDb(recheck);
     return recheck;
   }
 
@@ -508,20 +740,33 @@ export class InMemoryStore {
     const run = this.recheckRuns.get(recheckRunId);
     if (run) return run;
 
-    const rows = await this.query<Array<any>>(
-      "SELECT recheck_run_id, run_id, status, started_at, finished_at, changed_count, unchanged_count FROM recheck_runs WHERE recheck_run_id = $1 LIMIT 1",
-      [recheckRunId],
-    );
-    const row = rows[0] as any;
+    const row = this.prisma
+      ? await this.dbRead(
+          () =>
+            this.prisma!.recheckRun.findUnique({
+              where: { recheck_run_id: recheckRunId },
+              select: {
+                recheck_run_id: true,
+                base_run_id: true,
+                status: true,
+                started_at: true,
+                finished_at: true,
+                changed_count: true,
+                unchanged_count: true,
+              },
+            }),
+          null,
+        )
+      : null;
     if (!row) {
       throw new ProblemError({ status: 404, code: "RECHECK_RUN_NOT_FOUND", message: "Recheck run not found" });
     }
 
     return {
       recheck_run_id: row.recheck_run_id,
-      run_id: row.run_id,
-      status: row.status,
-      started_at: new Date(row.started_at).toISOString(),
+      run_id: row.base_run_id ?? "",
+      status: row.status as RunStatus,
+      started_at: row.started_at ? row.started_at.toISOString() : nowIso(),
       finished_at: row.finished_at ? new Date(row.finished_at).toISOString() : null,
       diff_summary: { changed_count: row.changed_count, unchanged_count: row.unchanged_count },
     };
@@ -546,10 +791,26 @@ export class InMemoryStore {
       updated_at: nowIso(),
     };
     this.tags.set(tag.tag_id, tag);
-    await this.persist(
-      "INSERT INTO tags (tag_id, tag_name, tag_type_id, synonyms, is_active, slug, propagation_state, updated_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (tag_id) DO NOTHING",
-      [tag.tag_id, tag.tag_name, tag.tag_type_id, tag.synonyms, tag.is_active, tag.slug, tag.propagation_state, tag.updated_at],
-    );
+    await this.dbWrite(async () => {
+      await this.prisma!.tag.upsert({
+        where: { tag_id: tag.tag_id },
+        create: {
+          tag_id: tag.tag_id,
+          tag_type_id: String(tag.tag_type_id),
+          tag_name: tag.tag_name,
+          tag_slug: tag.slug,
+          synonyms: tag.synonyms,
+          sort_order: 0,
+          is_active: tag.is_active,
+        },
+        update: {
+          tag_name: tag.tag_name,
+          tag_slug: tag.slug,
+          synonyms: tag.synonyms,
+          is_active: tag.is_active,
+        },
+      });
+    });
     return tag;
   }
 
@@ -571,10 +832,17 @@ export class InMemoryStore {
     tag.propagation_state = "pending_publish";
     tag.updated_at = nowIso();
     this.tags.set(tagId, tag);
-    await this.persist(
-      "UPDATE tags SET tag_name = $2, synonyms = $3, is_active = $4, slug = $5, propagation_state = $6, updated_at = $7 WHERE tag_id = $1",
-      [tagId, tag.tag_name, tag.synonyms, tag.is_active, tag.slug, tag.propagation_state, tag.updated_at],
-    );
+    await this.dbWrite(async () => {
+      await this.prisma!.tag.updateMany({
+        where: { tag_id: tagId },
+        data: {
+          tag_name: tag.tag_name,
+          tag_slug: tag.slug,
+          synonyms: tag.synonyms,
+          is_active: tag.is_active,
+        },
+      });
+    });
     return tag;
   }
 
@@ -604,7 +872,31 @@ export class InMemoryStore {
       tag_ids: video.tag_ids,
       updated_at: nowIso(),
     };
-    await this.persist("UPDATE videos SET tag_ids = $2 WHERE video_id = $1", [videoId, video.tag_ids]);
+    await this.dbWrite(async () => {
+      const now = new Date();
+      await Promise.all(
+        setIds.map((tagId) =>
+          this.prisma!.videoTag.upsert({
+            where: { video_id_tag_id: { video_id: videoId, tag_id: tagId } },
+            create: {
+              video_id: videoId,
+              tag_id: tagId,
+              applied_by: "operator",
+              applied_at: now,
+              removed_at: null,
+            },
+            update: { removed_at: null, applied_at: now, applied_by: "operator" },
+          }),
+        ),
+      );
+
+      if (unsetIds.length > 0) {
+        await this.prisma!.videoTag.updateMany({
+          where: { video_id: videoId, tag_id: { in: unsetIds } },
+          data: { removed_at: now },
+        });
+      }
+    });
     return response;
   }
 
@@ -628,10 +920,7 @@ export class InMemoryStore {
       ],
     };
     this.publishRuns.set(run.publish_run_id, run);
-    await this.persist(
-      "INSERT INTO publish_runs (publish_run_id, publish_type, status, started_at, finished_at, triggered_by, rollback_executed, rollback_to_version, error_code, error_message, retryable) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (publish_run_id) DO NOTHING",
-      [run.publish_run_id, run.publish_type, run.status, run.started_at, run.finished_at, run.triggered_by, run.rollback.executed, run.rollback.rollback_to_version ?? null, run.error_code, run.error_message, run.retryable],
-    );
+    await this.upsertPublishRunToDb(run);
     return run;
   }
 
@@ -639,22 +928,39 @@ export class InMemoryStore {
     const run = this.publishRuns.get(runId);
     if (run) return run;
 
-    const rows = await this.query<Array<any>>(
-      "SELECT publish_run_id, publish_type, status, started_at, finished_at, triggered_by, rollback_executed, rollback_to_version, error_code, error_message, retryable FROM publish_runs WHERE publish_run_id = $1 LIMIT 1",
-      [runId],
-    );
-    const row = rows[0] as any;
+    const row = this.prisma
+      ? await this.dbRead(
+          () =>
+            this.prisma!.publishRun.findUnique({
+              where: { publish_run_id: runId },
+              select: {
+                publish_run_id: true,
+                publish_type: true,
+                status: true,
+                started_at: true,
+                finished_at: true,
+                triggered_by: true,
+                rollback_executed: true,
+                rollback_to_version: true,
+                error_code: true,
+                error_message: true,
+                retryable: true,
+              },
+            }),
+          null,
+        )
+      : null;
     if (!row) {
       throw new ProblemError({ status: 404, code: "PUBLISH_RUN_NOT_FOUND", message: "Publish run not found" });
     }
 
     return {
       publish_run_id: row.publish_run_id,
-      publish_type: row.publish_type,
-      status: row.status,
-      started_at: new Date(row.started_at).toISOString(),
+      publish_type: row.publish_type as PublishRun["publish_type"],
+      status: row.status as PublishStatus,
+      started_at: row.started_at ? row.started_at.toISOString() : nowIso(),
       finished_at: row.finished_at ? new Date(row.finished_at).toISOString() : null,
-      triggered_by: row.triggered_by,
+      triggered_by: row.triggered_by ?? "admin",
       rollback: { executed: row.rollback_executed, rollback_to_version: row.rollback_to_version ?? undefined },
       error_code: row.error_code,
       error_message: row.error_message,
@@ -669,16 +975,31 @@ export class InMemoryStore {
     if (local.length > 0) {
       return local.filter((v) => v.title.toLowerCase().includes(q));
     }
-    const rows = await this.query<Array<any>>(
-      "SELECT video_id, title, published_at, duration_sec, tag_ids FROM videos WHERE lower(title) LIKE $1",
-      [`%${q}%`],
-    );
-    return rows.map((v: any) => ({
+    const rows = this.prisma
+      ? await this.dbRead(
+          () =>
+            this.prisma!.video.findMany({
+              where: { title: { contains: q, mode: "insensitive" } },
+              select: {
+                video_id: true,
+                title: true,
+                published_at: true,
+                duration_sec: true,
+                video_tags: {
+                  where: { removed_at: null },
+                  select: { tag_id: true },
+                },
+              },
+            }),
+          [],
+        )
+      : [];
+    return rows.map((v) => ({
       video_id: v.video_id,
       title: v.title,
       published_at: new Date(v.published_at).toISOString(),
       duration_sec: v.duration_sec,
-      tag_ids: v.tag_ids,
+      tag_ids: v.video_tags.map((tag) => tag.tag_id),
     }));
   }
 
@@ -687,11 +1008,25 @@ export class InMemoryStore {
     if (video) {
       return video;
     }
-    const rows = await this.query<Array<any>>(
-      "SELECT video_id, title, published_at, duration_sec, tag_ids FROM videos WHERE video_id = $1 LIMIT 1",
-      [videoId],
-    );
-    const row = rows[0] as any;
+    const row = this.prisma
+      ? await this.dbRead(
+          () =>
+            this.prisma!.video.findUnique({
+              where: { video_id: videoId },
+              select: {
+                video_id: true,
+                title: true,
+                published_at: true,
+                duration_sec: true,
+                video_tags: {
+                  where: { removed_at: null },
+                  select: { tag_id: true },
+                },
+              },
+            }),
+          null,
+        )
+      : null;
     if (!row) {
       throw new ProblemError({ status: 404, code: "VIDEO_NOT_FOUND", message: "Video not found" });
     }
@@ -700,7 +1035,7 @@ export class InMemoryStore {
       title: row.title,
       published_at: new Date(row.published_at).toISOString(),
       duration_sec: row.duration_sec,
-      tag_ids: row.tag_ids,
+      tag_ids: row.video_tags.map((tag) => tag.tag_id),
     };
   }
 
