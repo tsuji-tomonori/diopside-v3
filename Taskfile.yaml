@@ -186,6 +186,16 @@ tasks:
       - task docs:autolink:changed
       - task docs:check:changed
 
+  docs:ut:pairwise:generate:
+    desc: Generate UT pairwise markdown cases from UT-PW models
+    cmds:
+      - python3 scripts/pairwise/generate_pairwise_md.py --strict
+
+  docs:ut:pairwise:check:
+    desc: Check generated UT pairwise markdown cases are up to date
+    cmds:
+      - python3 scripts/pairwise/generate_pairwise_md.py --strict --check
+
   docs:pdf:
     desc: Build a single PDF from docs (Mermaid rendered, links preserved)
     cmds:
