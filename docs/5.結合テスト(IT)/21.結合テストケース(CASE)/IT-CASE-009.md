@@ -3,11 +3,11 @@ id: IT-CASE-009
 title: E2E基本フロー 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-14'
+updated: '2026-02-28'
 up:
 - '[[IT-PLAN-001]]'
 - '[[BD-SYS-ARCH-001]]'
@@ -18,6 +18,8 @@ related:
 - '[[DD-APP-API-002]]'
 - '[[DD-APP-API-004]]'
 - '[[DD-APP-API-005]]'
+- '[[RQ-UC-002]]'
+- '[[IT-PW-UC-002]]'
 tags:
 - diopside
 - IT
@@ -28,6 +30,30 @@ tags:
 
 ## テスト目的
 - 収集run開始から配信データ生成、Web[[RQ-GL-010|段階ロード]]完了までのE2Eフローを結合環境で検証する。
+
+## 対象UC
+- [[RQ-UC-002]]（利用者が一覧から動画を閲覧する）
+
+## 対象契約
+- `POST /api/v1/ops/ingestion/runs`（[[DD-APP-API-002]]）
+- `GET /api/v1/ops/ingestion/runs/{runId}`（[[DD-APP-API-003]]）
+- `GET /bootstrap.json` / `GET /archive_index.p{page}.json`（[[DD-APP-API-004]]）
+- `GET /tag_master.json`（[[DD-APP-API-005]]）
+
+## 生成元PWモデル
+- [[IT-PW-UC-002]]
+
+## 契約化した受入条件
+- run起動から配信成果物反映まで一連の契約が破綻しない。
+- Web側の[[RQ-GL-010|段階ロード]]が契約順序どおり実行される。
+- 表示件数と配信件数が一致する。
+
+## 因子（機能要件ベース）
+| 因子 | 関連要求 | 水準 |
+| --- | --- | --- |
+| [[RQ-GL-002|収集実行]]結果 | [[RQ-FR-001]] | 成功, 失敗 |
+| 配信成果物更新 | [[RQ-FR-006]] | 更新あり, 更新なし |
+| [[RQ-GL-010|段階ロード]] | [[RQ-FR-007]] | 成功, 途中失敗 |
 
 ## 対応フロー
 - [[BD-SYS-ARCH-001]] の「更新系フロー」→「配信生成フロー」→「参照系フロー」の一連の流れ
@@ -66,5 +92,6 @@ tags:
 - [[AT-SCN-004]] の[[AT-SCN-004|収集運用シナリオ]]の事前検証になる。
 
 ## 変更履歴
+- 2026-02-28: UC基準フォーマットへ再編し、E2E契約のFR因子を追加
 - 2026-02-13: DD-APP-API-011への直接トレース（upリンク）を追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）

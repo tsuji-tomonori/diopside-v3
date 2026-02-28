@@ -54,7 +54,7 @@ tags:
 - `task docs:trace` で自動更新する。
 
 <!-- BEGIN AUTO-GENERATED: REQUIREMENT_VIEW -->
-- generated_at: 2026-02-26
+- generated_at: 2026-02-28
 
 | 要求ID(FR/NFR) | タイトル | RDR | ADR | 設計(BD/DD) | 検証(UT/IT/AT) |
 | --- | --- | --- | --- | --- | --- |
@@ -133,7 +133,7 @@ tags:
 | [[RQ-DATA-002-02]] | videoIdを自然冪等キーとして使用し、upsertセマンティクスで書き込むできる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-DATA-002-03]] | 同一収集バッチを連続2回実行した場合、2回目の実行でデータ件数の変動が0件であるできる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-DATA-002-04]] | 部分失敗からの再実行時、成功済みアイテムの再処理がスキップまたはupsertで安全に処理されるできる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-DATA-002-05]] | 冪等性の検証をcontract testまたは結合テストに含めるできる | [[RQ-RDR-049]] | - | - | - |
+| [[RQ-DATA-002-05]] | 冪等性の検証をcontract testまたは結合テストに含めるできる | [[RQ-RDR-049]] | - | - | [[IT-CASE-001]] |
 | [[RQ-DATA-002-06]] | YouTube API側でvideoIdが再採番された場合（極めて稀）は、手動確認のうえ重複排除を実施できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-DATA-002-07]] | 部分失敗時の再開ポイントが特定できない場合は、全件[[RQ-GL-011\|再収集]]をupsertで安全に実行できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-DATA-003-01]] | 配信JSON（`bootstrap`/`archive_index`/`tag_master`）の全フィールド定義・型・許容値をメタデータ辞書として管理し、JSONスキーマと連動させることできる | [[RQ-RDR-045]], [[RQ-RDR-049]] | - | - | - |
@@ -208,30 +208,30 @@ tags:
 | [[RQ-DEV-008-01]] | DADSコンテンツ利用時に出典と加工有無を明記できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
 | [[RQ-DEV-008-02]] | DADSのデザインデータおよびコードスニペットのライセンス条件を遵守できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
 | [[RQ-DEV-008-03]] | DADSを踏まえたサービス固有のスタイルガイドを作成・維持できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
-| [[RQ-FR-001]] | 管理画面から公開動画収集を実行できる | [[RQ-RDR-001]], [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-028]], [[RQ-RDR-030]], [[RQ-RDR-037]], [[RQ-RDR-038]], [[RQ-RDR-041]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-API-003]], [[BD-APP-DATA-001]], [[BD-APP-DATA-002]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-APP-UI-003]], [[BD-APP-UI-004]], [[BD-DEV-PIPE-001]], [[BD-DEV-TEST-001]], [[BD-INF-CM-001]], [[BD-INF-DEP-001]], [[BD-INF-DEP-002]], [[BD-SYS-ADR-026]], [[BD-SYS-ADR-027]], [[BD-SYS-ARCH-001]], [[BD-SYS-ARCH-002]], [[BD-SYS-ARCH-003]], [[BD-SYS-ARCH-004]], [[BD-SYS-DOM-001]], [[DD-APP-API-001]], [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-API-004]], [[DD-APP-API-005]], [[DD-APP-API-006]], [[DD-APP-API-007]], [[DD-APP-API-008]], [[DD-APP-API-009]], [[DD-APP-DB-010]], [[DD-APP-UI-002]], [[DD-APP-UI-007]] | [[AT-SCN-004]], [[AT-SCN-008]] |
+| [[RQ-FR-001]] | 管理画面から公開動画収集を実行できる | [[RQ-RDR-001]], [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-028]], [[RQ-RDR-030]], [[RQ-RDR-037]], [[RQ-RDR-038]], [[RQ-RDR-041]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-API-003]], [[BD-APP-DATA-001]], [[BD-APP-DATA-002]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-APP-UI-003]], [[BD-APP-UI-004]], [[BD-DEV-PIPE-001]], [[BD-DEV-TEST-001]], [[BD-INF-CM-001]], [[BD-INF-DEP-001]], [[BD-INF-DEP-002]], [[BD-SYS-ADR-026]], [[BD-SYS-ADR-027]], [[BD-SYS-ARCH-001]], [[BD-SYS-ARCH-002]], [[BD-SYS-ARCH-003]], [[BD-SYS-ARCH-004]], [[BD-SYS-DOM-001]], [[DD-APP-API-001]], [[DD-APP-API-002]], [[DD-APP-API-003]], [[DD-APP-API-004]], [[DD-APP-API-005]], [[DD-APP-API-006]], [[DD-APP-API-007]], [[DD-APP-API-008]], [[DD-APP-API-009]], [[DD-APP-DB-010]], [[DD-APP-UI-002]], [[DD-APP-UI-007]] | [[AT-SCN-004]], [[AT-SCN-008]], [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-009]], [[IT-CASE-010]] |
 | [[RQ-FR-002]] | 管理画面で公式投稿の公開動画をチャンネルID一致で取り込める | [[RQ-RDR-002]], [[RQ-RDR-007]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-030]], [[RQ-RDR-037]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-UI-007]] | [[AT-SCN-008]] |
 | [[RQ-FR-003]] | 管理画面で出演条件一致の公開動画を判定して取り込める | [[RQ-RDR-001]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-028]], [[RQ-RDR-030]], [[RQ-RDR-037]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-UI-007]] | [[AT-SCN-008]] |
 | [[RQ-FR-004]] | 管理画面の収集結果として動画メタデータを正規化できる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-022]], [[RQ-RDR-028]], [[RQ-RDR-030]], [[RQ-RDR-037]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-DATA-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-UI-007]] | [[AT-SCN-008]] |
-| [[RQ-FR-005]] | [[RQ-GL-005|タグ辞書]]を更新できる | [[RQ-RDR-003]], [[RQ-RDR-005]], [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-041]], [[RQ-RDR-042]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-SYS-ADR-021]], [[BD-SYS-DOM-001]], [[DD-APP-API-013]], [[DD-APP-API-015]], [[DD-APP-DB-008]], [[DD-APP-DB-009]], [[DD-APP-DB-015]], [[DD-APP-UI-009]], [[DD-APP-UI-010]] | [[AT-SCN-009]], [[UT-CASE-BE-011]], [[UT-CASE-BE-013]] |
-| [[RQ-FR-006]] | ページング済み索引を生成できる | [[RQ-RDR-005]], [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-ALG-001]], [[DD-APP-MOD-001]], [[DD-APP-MOD-003]], [[DD-APP-UI-003]], [[DD-APP-UI-005]], [[DD-APP-UI-012]], [[DD-APP-UI-013]] | [[AT-SCN-007]] |
-| [[RQ-FR-007]] | アーカイブ一覧を表示できる | [[RQ-RDR-007]], [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-ALG-001]], [[DD-APP-UI-002]], [[DD-APP-UI-005]] | [[AT-SCN-002]] |
-| [[RQ-FR-008]] | キーワード検索できる | [[RQ-RDR-004]], [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-ALG-001]], [[DD-APP-UI-003]], [[DD-APP-UI-012]] | [[AT-SCN-002]] |
-| [[RQ-FR-009]] | タグ条件で絞り込みできる | [[RQ-RDR-003]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-034]], [[RQ-RDR-042]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-DATA-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-DB-007]], [[DD-APP-DB-008]], [[DD-APP-UI-009]] | [[AT-SCN-009]] |
-| [[RQ-FR-010]] | 日付範囲で絞り込みできる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]] | [[AT-SCN-002]] |
-| [[RQ-FR-011]] | 再生時間で絞り込みできる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]] | [[AT-SCN-002]] |
-| [[RQ-FR-012]] | 並び順を切り替えできる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]] | [[AT-SCN-002]] |
-| [[RQ-FR-013]] | 動画詳細モーダルを表示できる | [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-020]], [[RQ-RDR-021]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-MOD-001]], [[DD-APP-MOD-003]], [[DD-APP-UI-004]], [[DD-APP-UI-014]] | [[AT-SCN-003]] |
-| [[RQ-FR-014]] | YouTube視聴ページへ遷移できる | [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-020]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-SYS-DOM-001]], [[DD-APP-UI-004]], [[DD-APP-UI-014]] | [[AT-SCN-003]] |
-| [[RQ-FR-015]] | 初回読み込みを高速化する[[RQ-GL-010|段階ロード]]で漸進表示できる | [[RQ-RDR-002]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-UI-013]] | [[AT-SCN-002]], [[AT-SCN-008]] |
-| [[RQ-FR-016]] | 管理画面で読み込み失敗を通知できる | [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-030]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-UI-006]], [[DD-APP-UI-018]] | [[AT-SCN-002]], [[AT-SCN-007]] |
-| [[RQ-FR-017]] | 管理画面で[[RQ-GL-002|収集実行]]結果を確認できる | [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-030]], [[RQ-RDR-037]], [[RQ-RDR-038]], [[RQ-RDR-041]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-API-011]], [[DD-APP-DB-012]], [[DD-APP-MOD-001]], [[DD-APP-MOD-003]], [[DD-APP-UI-006]], [[DD-APP-UI-017]] | [[AT-SCN-005]], [[AT-SCN-007]], [[AT-SCN-008]] |
-| [[RQ-FR-018]] | 管理画面で手動[[RQ-GL-011|再収集]]を実行できる | [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-030]], [[RQ-RDR-034]], [[RQ-RDR-037]], [[RQ-RDR-038]], [[RQ-RDR-041]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-DB-012]], [[DD-APP-UI-006]], [[DD-APP-UI-008]], [[DD-APP-UI-017]] | [[AT-SCN-005]], [[AT-SCN-007]] |
-| [[RQ-FR-019]] | 管理画面で配信前後のメタデータ再取得と差分確認を運用できる | [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-028]], [[RQ-RDR-030]], [[RQ-RDR-036]], [[RQ-RDR-041]], [[RQ-RDR-042]], [[RQ-RDR-047]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-SYS-ADR-021]], [[BD-SYS-DOM-001]], [[DD-APP-API-012]], [[DD-APP-API-013]], [[DD-APP-DB-013]], [[DD-APP-DB-014]], [[DD-APP-UI-009]] | [[AT-PLAN-001]], [[AT-SCN-007]], [[UT-CASE-BE-010]], [[UT-CASE-BE-011]] |
-| [[RQ-FR-020]] | 詳細画面で[[RQ-GL-016|コメント密度波形]]を表示し[[RQ-GL-015|盛り上がり区間]]へ遷移できる | [[RQ-RDR-010]], [[RQ-RDR-020]], [[RQ-RDR-022]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-APP-UI-003]], [[BD-APP-UI-004]], [[BD-SYS-ADR-010]], [[BD-SYS-DOM-001]], [[DD-APP-UI-002]], [[DD-APP-UI-004]], [[DD-APP-UI-015]] | [[AT-PLAN-001]], [[AT-SCN-003]] |
-| [[RQ-FR-021]] | 動画詳細で[[RQ-GL-017|ワードクラウド]]を表示できる | [[RQ-RDR-010]], [[RQ-RDR-021]], [[RQ-RDR-022]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-SYS-ADR-009]], [[BD-SYS-DOM-001]], [[DD-APP-UI-002]], [[DD-APP-UI-004]], [[DD-APP-UI-016]] | [[AT-PLAN-001]], [[AT-SCN-003]] |
+| [[RQ-FR-005]] | [[RQ-GL-005|タグ辞書]]を更新できる | [[RQ-RDR-003]], [[RQ-RDR-005]], [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-034]], [[RQ-RDR-036]], [[RQ-RDR-041]], [[RQ-RDR-042]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-SYS-ADR-021]], [[BD-SYS-DOM-001]], [[DD-APP-API-013]], [[DD-APP-API-015]], [[DD-APP-DB-008]], [[DD-APP-DB-009]], [[DD-APP-DB-015]], [[DD-APP-UI-009]], [[DD-APP-UI-010]] | [[AT-SCN-009]], [[IT-CASE-004]], [[IT-CASE-011]], [[IT-CASE-013]], [[UT-CASE-BE-011]], [[UT-CASE-BE-013]] |
+| [[RQ-FR-006]] | ページング済み索引を生成できる | [[RQ-RDR-005]], [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-007]], [[BD-SYS-DOM-001]], [[DD-APP-ALG-001]], [[DD-APP-MOD-001]], [[DD-APP-MOD-003]], [[DD-APP-UI-003]], [[DD-APP-UI-005]], [[DD-APP-UI-012]], [[DD-APP-UI-013]] | [[AT-SCN-007]], [[IT-CASE-003]], [[IT-CASE-009]] |
+| [[RQ-FR-007]] | アーカイブ一覧を表示できる | [[RQ-RDR-007]], [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-ALG-001]], [[DD-APP-UI-002]], [[DD-APP-UI-005]] | [[AT-SCN-002]], [[IT-CASE-003]], [[IT-CASE-009]] |
+| [[RQ-FR-008]] | キーワード検索できる | [[RQ-RDR-004]], [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-006]], [[BD-APP-UI-014]], [[BD-SYS-DOM-001]], [[DD-APP-ALG-001]], [[DD-APP-UI-003]], [[DD-APP-UI-012]] | [[AT-SCN-002]], [[IT-CASE-004]], [[IT-CASE-005]] |
+| [[RQ-FR-009]] | タグ条件で絞り込みできる | [[RQ-RDR-003]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-034]], [[RQ-RDR-042]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-DATA-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-DB-007]], [[DD-APP-DB-008]], [[DD-APP-UI-009]] | [[AT-SCN-009]], [[IT-CASE-004]] |
+| [[RQ-FR-010]] | 日付範囲で絞り込みできる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-006]], [[BD-APP-UI-013]], [[BD-SYS-DOM-001]] | [[AT-SCN-002]], [[IT-CASE-005]] |
+| [[RQ-FR-011]] | 再生時間で絞り込みできる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-006]], [[BD-APP-UI-014]], [[BD-SYS-DOM-001]] | [[AT-SCN-002]], [[IT-CASE-005]] |
+| [[RQ-FR-012]] | 並び順を切り替えできる | [[RQ-RDR-004]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-006]], [[BD-APP-UI-014]], [[BD-SYS-DOM-001]] | [[AT-SCN-002]], [[IT-CASE-005]] |
+| [[RQ-FR-013]] | 動画詳細モーダルを表示できる | [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-020]], [[RQ-RDR-021]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-008]], [[BD-SYS-DOM-001]], [[DD-APP-MOD-001]], [[DD-APP-MOD-003]], [[DD-APP-UI-004]], [[DD-APP-UI-014]] | [[AT-SCN-003]], [[IT-CASE-006]] |
+| [[RQ-FR-014]] | YouTube視聴ページへ遷移できる | [[RQ-RDR-008]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-020]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-APP-UI-008]], [[BD-SYS-DOM-001]], [[DD-APP-UI-004]], [[DD-APP-UI-014]] | [[AT-SCN-003]], [[IT-CASE-006]] |
+| [[RQ-FR-015]] | 初回読み込みを高速化する[[RQ-GL-010|段階ロード]]で漸進表示できる | [[RQ-RDR-002]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-007]], [[BD-SYS-DOM-001]], [[DD-APP-UI-013]] | [[AT-SCN-002]], [[AT-SCN-008]], [[IT-CASE-003]] |
+| [[RQ-FR-016]] | 管理画面で読み込み失敗を通知できる | [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-030]], [[RQ-RDR-037]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-SYS-DOM-001]], [[DD-APP-UI-006]], [[DD-APP-UI-018]] | [[AT-SCN-002]], [[AT-SCN-007]], [[IT-CASE-007]], [[IT-CASE-012]] |
+| [[RQ-FR-017]] | 管理画面で[[RQ-GL-002|収集実行]]結果を確認できる | [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-030]], [[RQ-RDR-037]], [[RQ-RDR-038]], [[RQ-RDR-041]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-APP-UI-011]], [[BD-SYS-DOM-001]], [[DD-APP-API-011]], [[DD-APP-DB-012]], [[DD-APP-MOD-001]], [[DD-APP-MOD-003]], [[DD-APP-UI-006]], [[DD-APP-UI-017]] | [[AT-SCN-005]], [[AT-SCN-007]], [[AT-SCN-008]], [[IT-CASE-008]], [[IT-CASE-010]] |
+| [[RQ-FR-018]] | 管理画面で手動[[RQ-GL-011|再収集]]を実行できる | [[RQ-RDR-006]], [[RQ-RDR-009]], [[RQ-RDR-010]], [[RQ-RDR-030]], [[RQ-RDR-034]], [[RQ-RDR-037]], [[RQ-RDR-038]], [[RQ-RDR-041]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-011]], [[BD-SYS-DOM-001]], [[DD-APP-DB-012]], [[DD-APP-UI-006]], [[DD-APP-UI-008]], [[DD-APP-UI-017]] | [[AT-SCN-005]], [[AT-SCN-007]], [[IT-CASE-008]], [[IT-CASE-012]] |
+| [[RQ-FR-019]] | 管理画面で配信前後のメタデータ再取得と差分確認を運用できる | [[RQ-RDR-010]], [[RQ-RDR-019]], [[RQ-RDR-028]], [[RQ-RDR-030]], [[RQ-RDR-036]], [[RQ-RDR-041]], [[RQ-RDR-042]], [[RQ-RDR-047]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-SYS-ADR-021]], [[BD-SYS-DOM-001]], [[DD-APP-API-012]], [[DD-APP-API-013]], [[DD-APP-DB-013]], [[DD-APP-DB-014]], [[DD-APP-UI-009]] | [[AT-PLAN-001]], [[AT-SCN-007]], [[IT-CASE-010]], [[IT-CASE-011]], [[IT-CASE-013]], [[UT-CASE-BE-010]], [[UT-CASE-BE-011]] |
+| [[RQ-FR-020]] | 詳細画面で[[RQ-GL-016|コメント密度波形]]を表示し[[RQ-GL-015|盛り上がり区間]]へ遷移できる | [[RQ-RDR-010]], [[RQ-RDR-020]], [[RQ-RDR-022]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-APP-UI-003]], [[BD-APP-UI-004]], [[BD-APP-UI-009]], [[BD-SYS-ADR-010]], [[BD-SYS-DOM-001]], [[DD-APP-UI-002]], [[DD-APP-UI-004]], [[DD-APP-UI-015]] | [[AT-PLAN-001]], [[AT-SCN-003]], [[IT-CASE-006]] |
+| [[RQ-FR-021]] | 動画詳細で[[RQ-GL-017|ワードクラウド]]を表示できる | [[RQ-RDR-010]], [[RQ-RDR-021]], [[RQ-RDR-022]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-APP-UI-010]], [[BD-SYS-ADR-009]], [[BD-SYS-DOM-001]], [[DD-APP-UI-002]], [[DD-APP-UI-004]], [[DD-APP-UI-016]] | [[AT-PLAN-001]], [[AT-SCN-003]], [[IT-CASE-006]] |
 | [[RQ-FR-022]] | [[RQ-GL-016|コメント密度波形]]表示用データを生成できる | [[RQ-RDR-010]], [[RQ-RDR-022]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-001]], [[BD-APP-UI-002]], [[BD-SYS-ADR-010]], [[BD-SYS-ADR-027]], [[BD-SYS-ADR-032]], [[BD-SYS-DOM-001]], [[DD-APP-API-002]], [[DD-APP-UI-004]] | [[AT-SCN-003]] |
 | [[RQ-FR-023]] | [[RQ-GL-017|ワードクラウド]]表示用画像を生成できる | [[RQ-RDR-010]], [[RQ-RDR-021]], [[RQ-RDR-022]], [[RQ-RDR-038]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-UI-002]], [[BD-SYS-ADR-027]], [[BD-SYS-ADR-032]], [[BD-SYS-DOM-001]], [[DD-APP-API-002]], [[DD-APP-UI-004]] | [[AT-SCN-003]] |
-| [[RQ-FR-024]] | 管理画面でドキュメント公開を一括実行できる | [[RQ-RDR-010]], [[RQ-RDR-025]], [[RQ-RDR-030]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-INF-DEP-003]], [[BD-SYS-ADR-013]], [[BD-SYS-ADR-037]], [[BD-SYS-DOM-001]], [[DD-APP-API-014]], [[DD-APP-API-015]], [[DD-APP-DB-015]], [[DD-APP-DB-016]], [[DD-APP-UI-010]], [[DD-APP-UI-011]], [[DD-INF-DEP-001]] | [[AT-PLAN-001]], [[AT-REL-001]], [[UT-CASE-BE-012]], [[UT-CASE-BE-013]] |
+| [[RQ-FR-024]] | 管理画面でドキュメント公開を一括実行できる | [[RQ-RDR-010]], [[RQ-RDR-025]], [[RQ-RDR-030]] | - | [[BD-APP-API-001]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-INF-DEP-003]], [[BD-SYS-ADR-013]], [[BD-SYS-ADR-037]], [[BD-SYS-DOM-001]], [[DD-APP-API-014]], [[DD-APP-API-015]], [[DD-APP-DB-015]], [[DD-APP-DB-016]], [[DD-APP-UI-010]], [[DD-APP-UI-011]], [[DD-INF-DEP-001]] | [[AT-PLAN-001]], [[AT-REL-001]], [[IT-CASE-011]], [[IT-CASE-013]], [[UT-CASE-BE-012]], [[UT-CASE-BE-013]] |
 | [[RQ-FR-025]] | 管理画面運用の前提として単一CloudFrontで配信経路をパス分岐できる | [[RQ-RDR-010]], [[RQ-RDR-026]], [[RQ-RDR-030]], [[RQ-RDR-034]], [[RQ-RDR-042]] | - | [[BD-APP-API-001]], [[BD-APP-API-002]], [[BD-APP-API-004]], [[BD-APP-UI-001]], [[BD-APP-UI-003]], [[BD-INF-DEP-004]], [[BD-INF-DEP-005]], [[BD-SYS-ADR-014]], [[BD-SYS-ADR-021]], [[BD-SYS-DOM-001]], [[DD-APP-API-010]], [[DD-APP-DB-015]], [[DD-APP-DB-016]], [[DD-APP-UI-010]], [[DD-APP-UI-011]], [[DD-INF-DEP-002]] | [[AT-SCN-006]] |
 | [[RQ-INT-001-01]] | 外部連携を前提としたデータ契約（JSON構造、ID形式、日時形式）の互換性を維持できる | [[RQ-RDR-017]], [[RQ-RDR-023]], [[RQ-RDR-026]], [[RQ-RDR-034]], [[RQ-RDR-042]], [[RQ-RDR-045]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-API-004]], [[BD-APP-API-005]], [[BD-SYS-ADR-021]], [[BD-SYS-ADR-023]], [[BD-SYS-ADR-025]], [[DD-APP-DB-017]] | - |
 | [[RQ-INT-001-02]] | 配信JSON（`bootstrap/tag_master/archive_index`）の必須キー欠落率を 0% にできる | [[RQ-RDR-049]] | - | - | - |
@@ -370,7 +370,7 @@ tags:
 | [[RQ-SUS-002-06]] | 転送量の急増（前月比200%超）を検知した場合はアラートを発報できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-SUS-002-07]] | キャッシュ無効化（invalidation）が必要なデプロイ時は一時的に転送量が増加するが、通常運用の範囲として許容できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-SUS-002-08]] | 障害復旧のためにデータの一時的な冗長コピーが必要な場合は、復旧完了後に削除できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-001-01]] | [[RQ-SH-002\|利用者]]が目的動画へ短手数で到達できる検索体験を提供できる | [[RQ-RDR-017]], [[RQ-RDR-018]], [[RQ-RDR-032]], [[RQ-RDR-045]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-QUAL-001]], [[BD-SYS-ADR-017]], [[BD-SYS-ADR-018]], [[BD-SYS-ADR-024]], [[DD-APP-MOD-002]], [[DD-APP-UI-001]], [[DD-APP-UI-002]], [[DD-APP-UI-013]] | - |
+| [[RQ-UX-001-01]] | [[RQ-SH-002\|利用者]]が目的動画へ短手数で到達できる検索体験を提供できる | [[RQ-RDR-017]], [[RQ-RDR-018]], [[RQ-RDR-032]], [[RQ-RDR-045]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-QUAL-001]], [[BD-APP-UI-005]], [[BD-APP-UI-007]], [[BD-SYS-ADR-017]], [[BD-SYS-ADR-018]], [[BD-SYS-ADR-024]], [[BD-SYS-ADR-041]], [[DD-APP-MOD-002]], [[DD-APP-UI-001]], [[DD-APP-UI-002]], [[DD-APP-UI-013]] | - |
 | [[RQ-UX-001-02]] | 代表タスク（キーワード+タグ+期間条件で目的動画を発見）成功率を 90%以上にできる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-001-03]] | 代表タスク完了までの操作ステップ中央値が 6ステップ以下にできる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-001-04]] | [[RQ-GL-014\|検索条件]]変更から結果理解（件数/並び順確認）までの主観評価が 5段階中 4.0以上にできる | [[RQ-RDR-049]] | - | - | - |
@@ -388,18 +388,18 @@ tags:
 | [[RQ-UX-003-03]] | 将来拡張でサービス内に動画/音声説明を独自提供する場合は、字幕または同等テキストを100%提供できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-003-04]] | 説明文や通知文を音声に依存して伝える機能を実装しない運用ができる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-003-05]] | YouTube本体機能に依存する字幕の欠落は外部要因として記録し、代替説明導線を提示できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-004-01]] | 情報伝達を色のみに依存させない表現にできる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
-| [[RQ-UX-004-02]] | 通常テキストのコントラスト比は4.5:1以上、UIコンポーネント境界は3:1以上にできる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
-| [[RQ-UX-004-03]] | エラー・状態表示は色に加えてアイコンまたは文言で区別できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
+| [[RQ-UX-004-01]] | 情報伝達を色のみに依存させない表現にできる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]], [[RQ-RDR-052]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-APP-UI-012]], [[BD-APP-UI-013]], [[BD-APP-UI-016]], [[BD-SYS-ADR-041]] | - |
+| [[RQ-UX-004-02]] | 通常テキストのコントラスト比は4.5:1以上、UIコンポーネント境界は3:1以上にできる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-APP-UI-012]], [[BD-APP-UI-016]], [[BD-SYS-ADR-041]] | - |
+| [[RQ-UX-004-03]] | エラー・状態表示は色に加えてアイコンまたは文言で区別できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-APP-UI-012]], [[BD-APP-UI-013]], [[BD-APP-UI-015]], [[BD-APP-UI-016]], [[BD-SYS-ADR-041]] | - |
 | [[RQ-UX-004-04]] | サムネイル画像そのものの色設計は対象外だが、補助ラベルで意味を補完できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-005-01]] | 拡大表示・リフロー・縦横切替でも主要操作を維持できる | [[RQ-RDR-018]], [[RQ-RDR-032]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-SYS-ADR-017]], [[BD-SYS-ADR-018]], [[DD-APP-UI-001]], [[DD-APP-UI-002]], [[DD-APP-UI-003]] | - |
+| [[RQ-UX-005-01]] | 拡大表示・リフロー・縦横切替でも主要操作を維持できる | [[RQ-RDR-018]], [[RQ-RDR-032]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-007]], [[BD-SYS-ADR-017]], [[BD-SYS-ADR-018]], [[DD-APP-UI-001]], [[DD-APP-UI-002]], [[DD-APP-UI-003]] | - |
 | [[RQ-UX-005-02]] | 400%拡大時に主要操作面で横スクロール必須領域を発生させずに済むできる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-005-03]] | 390px幅で検索、絞り込み、詳細遷移が完了できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-005-04]] | 768px幅で検索、絞り込み、詳細遷移が完了できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-005-05]] | 1280px幅で検索、絞り込み、詳細遷移が完了できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-005-06]] | 画面向き固定を要求しない運用ができる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-005-07]] | 外部埋め込み要素で向き固定が必要な場合は代替遷移手段を提示できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-006-01]] | 主要機能をキーボードのみで操作できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[DD-APP-UI-014]] | [[AT-SCN-002]] |
+| [[RQ-UX-006-01]] | 主要機能をキーボードのみで操作できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-008]], [[DD-APP-UI-014]] | [[AT-SCN-002]] |
 | [[RQ-UX-006-02]] | 一覧、検索、フィルタ、ソート、詳細表示がTab/Enter/Escapeで完結できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-006-03]] | フォーカス順序を視覚順と機能順に整合させ、順序変更目的でtabindex属性に1以上を使用しない運用ができる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
 | [[RQ-UX-006-04]] | カスタムUI部品で標準キー操作と異なる場合は、画面内に操作説明を表示できる | [[RQ-RDR-049]] | - | - | - |
@@ -429,7 +429,7 @@ tags:
 | [[RQ-UX-012-03]] | エラー発生時は項目特定、原因、修正方法を文言で表示できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-012-04]] | 必須/任意、入力形式、制約条件を事前提示できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-012-05]] | サーバー側エラーのみの場合でも、再試行手順と問い合わせ導線を表示できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-013-01]] | 同一手続き内の再入力を最小化できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-002]] | - |
+| [[RQ-UX-013-01]] | 同一手続き内の再入力を最小化できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-003]], [[BD-APP-UI-005]], [[BD-APP-UI-006]], [[BD-APP-UI-013]], [[BD-APP-UI-014]], [[BD-SYS-ADR-041]] | - |
 | [[RQ-UX-013-02]] | 同一セッション内で確定済みの入力値は再利用し、不要な再入力要求をしない運用ができる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-013-03]] | 再入力が必要な場合は、理由を明示し最小項目に限定できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-013-04]] | セキュリティ上再入力が必要な項目は、対象を限定し理由を提示できる | [[RQ-RDR-049]] | - | - | - |
@@ -439,7 +439,7 @@ tags:
 | [[RQ-UX-014-04]] | 認証情報入力時に貼り付け・パスワード管理ツール利用を不必要に禁止しない運用ができる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-014-05]] | 認証失敗時は原因分類と再試行手順を表示できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-014-06]] | 不正アクセス対策で追加認証が必要な場合は、代替手段を最低1つ提供できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-015-01]] | 問い合わせ先・ヘルプ導線を画面間で一貫した位置と表現で提供できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-002]] | - |
+| [[RQ-UX-015-01]] | 問い合わせ先・ヘルプ導線を画面間で一貫した位置と表現で提供できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-006]], [[BD-APP-UI-014]], [[BD-SYS-ADR-041]] | - |
 | [[RQ-UX-015-02]] | ヘルプリンクまたは問い合わせ導線を主要画面で同一位置に表示できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-015-03]] | 表示名称と遷移先を一貫させ、画面ごとの意味差分を作らない状態を維持できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-015-04]] | メンテナンス等でヘルプ導線を一時変更する場合は、全画面で同時反映できる | [[RQ-RDR-049]] | - | - | - |
@@ -448,7 +448,7 @@ tags:
 | [[RQ-UX-016-03]] | [[RQ-SH-001\|管理者]]向けセッションにタイムアウトを設定する場合、少なくとも60秒前に警告を表示できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-016-04]] | [[RQ-SH-001\|管理者]]向けセッションには延長または中断後再開の手段を提供できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-016-05]] | セキュリティ上延長不可の場合は、保存済み情報を保持し再入力を最小化できる | [[RQ-RDR-049]] | - | - | - |
-| [[RQ-UX-017-01]] | 処理結果や状態変化を、フォーカス移動に依存せず支援技術へ通知できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-004]], [[DD-APP-UI-015]], [[DD-APP-UI-016]], [[DD-APP-UI-017]], [[DD-APP-UI-018]] | [[AT-SCN-002]] |
+| [[RQ-UX-017-01]] | 処理結果や状態変化を、フォーカス移動に依存せず支援技術へ通知できる | [[RQ-RDR-018]], [[RQ-RDR-048]], [[RQ-RDR-049]] | - | [[BD-APP-UI-003]], [[BD-APP-UI-004]], [[BD-APP-UI-005]], [[BD-APP-UI-008]], [[BD-APP-UI-009]], [[BD-APP-UI-010]], [[BD-APP-UI-011]], [[BD-APP-UI-014]], [[BD-APP-UI-015]], [[BD-SYS-ADR-041]], [[DD-APP-UI-015]], [[DD-APP-UI-016]], [[DD-APP-UI-017]], [[DD-APP-UI-018]] | [[AT-SCN-002]] |
 | [[RQ-UX-017-02]] | 成功/失敗/進行中の通知はARIA live等で読み上げ可能にできる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-017-03]] | 通知文に原因と次行動を含め、3秒未満で消失させない形で提供できる | [[RQ-RDR-049]] | - | - | - |
 | [[RQ-UX-017-04]] | 一時通知が非表示になる場合でも履歴または再確認手段を提供できる | [[RQ-RDR-049]] | - | - | - |
@@ -489,9 +489,9 @@ tags:
 | [[RQ-UX-025-01]] | デジタル庁デザインシステム（DADS）のアクセシビリティガイドラインに準拠できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
 | [[RQ-UX-025-02]] | 重要なコンテンツを隠さず、最初から表示できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
 | [[RQ-UX-025-03]] | カルーセルを使用する場合はDADS準拠で実装し、スライド数とテキスト量を制限できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
-| [[RQ-UX-025-04]] | アウトラインボタンのアウトラインは背景色およびボタン背景色の双方に対してコントラスト比3:1以上を確保できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
+| [[RQ-UX-025-04]] | アウトラインボタンのアウトラインは背景色およびボタン背景色の双方に対してコントラスト比3:1以上を確保できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-APP-UI-012]], [[BD-APP-UI-016]], [[BD-SYS-ADR-041]] | - |
 | [[RQ-UX-025-05]] | 無効（disabled）ボタンの使用を避け、使用時は無効理由と有効化条件を近傍に提示できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
-| [[RQ-UX-025-06]] | テキストの前景色を指定する場合は背景色も併せて指定できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
+| [[RQ-UX-025-06]] | テキストの前景色を指定する場合は背景色も併せて指定できる | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | [[BD-APP-UI-002]], [[BD-APP-UI-004]], [[BD-APP-UI-016]], [[BD-SYS-ADR-041]] | - |
 | [[RQ-UX-025-07]] | ロゴタイプ等の必要不可欠な場合を除き、文字画像を使用しない | [[RQ-RDR-049]], [[RQ-RDR-052]] | - | - | - |
 <!-- END AUTO-GENERATED: REQUIREMENT_VIEW -->
 

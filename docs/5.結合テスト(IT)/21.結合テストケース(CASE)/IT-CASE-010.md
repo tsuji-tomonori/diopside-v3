@@ -3,11 +3,11 @@ id: IT-CASE-010
 title: 差分更新フロー 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-13'
+updated: '2026-02-28'
 up:
 - '[[IT-PLAN-001]]'
 - '[[BD-SYS-ARCH-001]]'
@@ -16,6 +16,8 @@ related:
 - '[[AT-SCN-004]]'
 - '[[DD-APP-API-002]]'
 - '[[DD-APP-API-011]]'
+- '[[RQ-UC-009]]'
+- '[[IT-PW-UC-009]]'
 tags:
 - diopside
 - IT
@@ -25,6 +27,30 @@ tags:
 
 ## テスト目的
 - 前回配信データがある状態から、差分収集→配信更新→公開完了までの差分パスを検証する。
+
+## 対象UC
+- [[RQ-UC-009]]（管理者がタグ付けを実施する）
+
+## 対象契約
+- `POST /api/v1/ops/ingestion/runs`（[[DD-APP-API-002]]）
+- `GET /api/v1/ops/ingestion/runs/{runId}`（[[DD-APP-API-003]]）
+- `GET /api/v1/ops/ingestion/runs/{runId}/items`（[[DD-APP-API-011]]）
+- `GET /api/v1/admin/publish/{publishRunId}`（[[DD-APP-API-012]]）
+
+## 生成元PWモデル
+- [[IT-PW-UC-009]]
+
+## 契約化した受入条件
+- 差分収集時に `new/updated/unchanged` が識別可能である。
+- 配信更新後の `archiveVersion` が新runへ更新される。
+- 更新後も件数整合と非破壊更新が維持される。
+
+## 因子（機能要件ベース）
+| 因子 | 関連要求 | 水準 |
+| --- | --- | --- |
+| 収集モード | [[RQ-FR-001]] | 差分更新, 通常更新 |
+| 差分内容 | [[RQ-FR-017]] | `new` のみ, `updated` 含む |
+| 配信反映結果 | [[RQ-FR-019]] | 成功, 一部失敗 |
 
 ## 対応フロー
 - [[BD-SYS-ARCH-001]] の「差分更新」シナリオ
@@ -57,5 +83,6 @@ tags:
 - [[AT-SCN-004]] の差分収集検証の事前検証になる。
 
 ## 変更履歴
+- 2026-02-28: UC基準フォーマットへ再編し、差分更新契約のFR因子を追加
 - 2026-02-13: DD-APP-API-012への直接トレース（upリンク）を追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）

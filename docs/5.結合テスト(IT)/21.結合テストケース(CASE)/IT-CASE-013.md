@@ -3,11 +3,11 @@ id: IT-CASE-013
 title: データ不整合復旧 結合テスト
 doc_type: 結合テストケース
 phase: IT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-12
-updated: '2026-02-12'
+updated: '2026-02-28'
 up:
 - '[[IT-PLAN-001]]'
 - '[[BD-INF-MON-001]]'
@@ -15,6 +15,8 @@ related:
 - '[[AT-SCN-005]]'
 - '[[DD-APP-API-009]]'
 - '[[DD-APP-API-013]]'
+- '[[RQ-UC-009]]'
+- '[[IT-PW-UC-009]]'
 tags:
 - diopside
 - IT
@@ -25,6 +27,28 @@ tags:
 
 ## テスト目的
 - タグ/アーカイブのデータ不整合検知と復旧を結合環境で検証する。
+
+## 対象UC
+- [[RQ-UC-009]]（管理者がタグ付けを実施する）
+
+## 対象契約
+- `GET /api/v1/ops/diagnostics/health`（[[DD-APP-API-009]]）
+- `POST /api/v1/admin/tags` / `PATCH /api/v1/admin/tags/{tagId}`（[[DD-APP-API-013]]）
+
+## 生成元PWモデル
+- [[IT-PW-UC-009]]
+
+## 契約化した受入条件
+- タグ不整合とアーカイブ不整合を `health` で検知できる。
+- 不整合解消後に `tagMasterConsistency` / `archiveConsistency` が `ok` へ遷移する。
+- 再公開後の配信データが整合状態を維持する。
+
+## 因子（機能要件ベース）
+| 因子 | 関連要求 | 水準 |
+| --- | --- | --- |
+| 不整合種別 | [[RQ-FR-005]] | タグ重複, videoId重複 |
+| 解消方式 | [[RQ-FR-019]] | 管理API修正, [[RQ-GL-011|再収集]] |
+| 配信再反映 | [[RQ-FR-024]] | 実施, 未実施 |
 
 ## 前提条件
 - 結合環境に配信データが存在する。
@@ -67,4 +91,5 @@ tags:
 - [[AT-SCN-005]] の[[AT-SCN-005|障害時対応シナリオ]]の事前検証になる。
 
 ## 変更履歴
+- 2026-02-28: UC基準フォーマットへ再編し、不整合復旧契約のFR因子を追加
 - 2026-02-12: 新規作成（分析レポートに基づく追加）

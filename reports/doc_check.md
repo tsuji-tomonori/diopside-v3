@@ -1,8 +1,8 @@
 # Doc Check Report
 
 - docs_root: `docs`
-- total_markdown: 866
-- id_docs: 866
+- total_markdown: 876
+- id_docs: 876
 - parse_errors: 0
 - issues: 0
 - deprecated_term_issues: 0

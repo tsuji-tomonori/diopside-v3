@@ -18,7 +18,7 @@ metadata:
 
 ## 出力契約
 - 出力対象は `docs/5.結合テスト(IT)/21.結合テストケース(CASE)/IT-CASE-*.md` の単一文書とし、`filename == id` を維持する。
-- 本文には少なくとも `対象API` `テスト目的` `手順` `期待結果` を含め、必要に応じて `前提` `受入接続` を追加する。
+- 本文には少なくとも `対象UC` `対象契約` `生成元PWモデル` `テスト目的` `因子（機能要件ベース）` `テストケース一覧` `手順` `受入接続` を含める。
 - `up` には `[[IT-PLAN-*]]` と必要な `[[DD-API-*]]` を設定し、`related` には受入シナリオ（`[[AT-SCN-*]]`）等の接続先を設定する。
 
 ## 何を書くべきか
@@ -41,5 +41,7 @@ metadata:
 ## 品質チェック
 - `filename == id` を維持する。
 - `up/related` のリンク先が存在することを確認する。
+- `対象UC` と `生成元PWモデル` が同一ケース内で矛盾しないことを確認する。
+- `因子（機能要件ベース）` の各行に `RQ-FR-*` など要求IDが明記されていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

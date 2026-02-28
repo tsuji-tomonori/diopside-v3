@@ -58,3 +58,24 @@
 - 運用影響:
   - 閾値や対象変更はソース文書（`UT-STAT-00x` / `UT-COV-00x`）のみ更新すれば反映可能。
   - 集約文書の手編集は禁止し、`task docs:ut:quality:check` で更新漏れを検知可能。
+
+## 追加実施（ITをUC基準へ再編、IT-PWを9本化）
+- 対象: `docs/5.結合テスト(IT)` と `.opencode/skills/doc-it-case`。
+- 変更内容:
+  - `IT-PLAN-001` を更新し、結合テスト仕様を「UC基準 + FR因子化 + PW参照」へ変更。
+  - `IT-CASE-001` から `IT-CASE-013` をUC基準フォーマットへ再編（対象UC、契約化受入条件、FR因子、ケース一覧を追加）。
+  - 新規 `IT-PW-001` と `IT-PW-UC-001` から `IT-PW-UC-009` を追加し、UC001-009を対象にPWモデルを定義。
+  - `RQ-UC-010` から `RQ-UC-013` は IT-PW 対象外として明示（INFIT/AT運用系で扱う）。
+  - `doc-it-case` スキルの `SKILL.md` / `TEMPLATE.md` をUC基準フォーマットへ同期更新。
+
+## 追加影響確認（IT UC基準化）
+- トレーサビリティ:
+  - `IT-PLAN-001` へ UC と IT-CASE の対応表を追加し、`RQ-UC-001` から `RQ-UC-009` の接続を可視化。
+  - 各 `IT-CASE-*` は対応 `IT-PW-UC-*` へのリンクを保持し、因子根拠を明示。
+- 運用影響:
+  - ITケース設計時は API中心ではなく UC中心で設計する運用へ変更。
+  - IT-PWの本数は 9本（UC001-009）を標準とし、CI/CD系UCはIT-PW対象外とする。
+
+## 追加検証
+- `task docs:guard`
+- `task docs:trace`
