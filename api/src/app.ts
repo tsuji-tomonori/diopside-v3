@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { authRequired } from "./middleware/auth.js";
+import { requireAdmin, requireE2ETest } from "./middleware/authorization.js";
 import { onError } from "./middleware/error.js";
 import { registerMockE2ERoutes } from "./mock-e2e.js";
 import { e2eJwks } from "./e2e/jwks.js";
@@ -16,9 +17,21 @@ export const buildApp = () => {
   const useMock = process.env.E2E_MOCK === "1";
   const e2eTestMode = process.env.E2E_TEST_MODE === "1";
 
+  if (e2eTestMode && process.env.NODE_ENV !== "test") {
+    throw new Error("E2E_TEST_MODE is only allowed when NODE_ENV=test");
+  }
+
+  if (e2eTestMode && !process.env.E2E_TEST_SECRET) {
+    throw new Error("E2E_TEST_SECRET is required when E2E_TEST_MODE=1");
+  }
+
   app.use("*", traceMiddleware);
   if (!useMock) {
     app.use("/api/v1/*", authRequired);
+    app.use("/api/v1/admin/*", requireAdmin);
+    if (e2eTestMode) {
+      app.use("/api/v1/test/support/*", requireE2ETest);
+    }
     app.use("/openapi/*", authRequired);
   }
 

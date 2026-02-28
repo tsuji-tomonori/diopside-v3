@@ -1,6 +1,7 @@
 services:
   api:
     environment:
+      NODE_ENV: "test"
       E2E_TEST_MODE: "1"
       E2E_TEST_SECRET: "e2e-secret"
       JWT_ISSUER: "http://api:3000/e2e-issuer"

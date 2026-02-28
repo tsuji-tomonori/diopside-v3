@@ -3,6 +3,10 @@ import { ProblemError } from "../lib/problem.js";
 import type { PublishStatus } from "../domain/types.js";
 import { isRunStatus, store } from "../repositories/store.js";
 
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 20;
+const rateLimitState = new Map<string, { count: number; resetAt: number }>();
+
 const isPublishStatus = (value: string): value is PublishStatus =>
   ["queued", "running", "succeeded", "failed", "partial", "cancelled", "rolled_back"].includes(value);
 
@@ -13,23 +17,50 @@ function assertEnabled() {
 }
 
 function assertSecret(headerValue: string | undefined) {
-  const expected = process.env.E2E_TEST_SECRET ?? "e2e-secret";
+  const expected = process.env.E2E_TEST_SECRET;
+  if (!expected) {
+    throw new ProblemError({ status: 500, code: "AUTH_CONFIG_ERROR", message: "E2E_TEST_SECRET is required" });
+  }
   if (headerValue !== expected) {
     throw new ProblemError({ status: 403, code: "FORBIDDEN", message: "Invalid E2E test secret" });
   }
 }
 
+function assertRateLimit(c: any) {
+  const now = Date.now();
+  const forwardedFor = c.req.header("x-forwarded-for") ?? "";
+  const ip = forwardedFor.split(",")[0]?.trim() || "unknown";
+  const sub = c.get("auth_sub") ?? "anonymous";
+  const key = `${ip}:${sub}`;
+  const current = rateLimitState.get(key);
+
+  if (!current || current.resetAt <= now) {
+    rateLimitState.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return;
+  }
+
+  if (current.count >= RATE_LIMIT_MAX) {
+    throw new ProblemError({ status: 429, code: "TOO_MANY_REQUESTS", message: "Too many requests" });
+  }
+
+  current.count += 1;
+  rateLimitState.set(key, current);
+}
+
 export const registerTestSupportRoutes = (app: OpenAPIHono<any>) => {
-  app.post("/api/v1/test/support/reset", (c) => {
+  app.post("/api/v1/test/support/reset", async (c) => {
     assertEnabled();
     assertSecret(c.req.header("x-e2e-secret"));
+    assertRateLimit(c);
     store.resetForTest();
-    return c.json({ ok: true });
+    const metrics = await store.dbMetricsForTest();
+    return c.json({ ok: true, db: metrics });
   });
 
   app.post("/api/v1/test/support/faults", async (c) => {
     assertEnabled();
     assertSecret(c.req.header("x-e2e-secret"));
+    assertRateLimit(c);
     const body = (await c.req.json().catch(() => ({}))) as Partial<{
       ingestion_fail: boolean;
       archive_missing: boolean;
@@ -77,5 +108,13 @@ export const registerTestSupportRoutes = (app: OpenAPIHono<any>) => {
     }
     const run = await store.setPublishStatusForTest(publishRunId, { ...body, status: body.status });
     return c.json(run);
+  });
+
+  app.get("/api/v1/test/support/db/metrics", async (c) => {
+    assertEnabled();
+    assertSecret(c.req.header("x-e2e-secret"));
+    assertRateLimit(c);
+    const metrics = await store.dbMetricsForTest();
+    return c.json(metrics);
   });
 };

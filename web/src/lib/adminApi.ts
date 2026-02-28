@@ -16,7 +16,17 @@ function readViteEnv(key: string): string | undefined {
 }
 
 const BASE_URL = (readViteEnv('VITE_ADMIN_API_BASE_URL')?.trim() || '').replace(/\/$/, '');
-const AUTH_TOKEN = readViteEnv('VITE_ADMIN_API_TOKEN')?.trim() || 'test-token';
+const STATIC_AUTH_TOKEN = readViteEnv('VITE_ADMIN_API_TOKEN')?.trim() || null;
+
+let authTokenProvider: () => string | null = () => STATIC_AUTH_TOKEN;
+
+export function setAdminAuthTokenProvider(provider: () => string | null) {
+  authTokenProvider = provider;
+}
+
+export function hasStaticAdminToken(): boolean {
+  return STATIC_AUTH_TOKEN != null;
+}
 
 const knownRunIds = new Set<string>();
 
@@ -33,8 +43,13 @@ function newIdempotencyKey(prefix: string): string {
 }
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = authTokenProvider();
+  if (!token) {
+    throw new Error(`API 401 ${path} (ADMIN_AUTH_REQUIRED)`);
+  }
+
   const headers = new Headers(init?.headers ?? {});
-  headers.set('authorization', `Bearer ${AUTH_TOKEN}`);
+  headers.set('authorization', `Bearer ${token}`);
   if (init?.body) {
     headers.set('content-type', 'application/json');
   }

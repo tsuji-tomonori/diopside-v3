@@ -19,6 +19,15 @@ import { VideoModal } from './components/VideoModal';
 import { Toast } from './components/Toast';
 import { useToast } from './hooks/useToast';
 import { AdminPanel } from './components/AdminPanel';
+import {
+  getAdminAccessToken,
+  handleAdminAuthCallback,
+  isAdminAuthConfigured,
+  logoutAdmin,
+  parseAdminClaims,
+  startAdminLogin,
+} from './lib/adminAuth';
+import { hasStaticAdminToken, setAdminAuthTokenProvider } from './lib/adminApi';
 
 type LoadPhase = 'idle' | 'bootstrap' | 'legacy' | 'tag_master' | 'archive' | 'complete';
 
@@ -105,6 +114,83 @@ export function App() {
   const [showTop, setShowTop] = useState<boolean>(false);
 
   const { state: toastState, toast } = useToast(1300);
+  const [adminAuthStatus, setAdminAuthStatus] = useState<'checking' | 'authenticated' | 'unauthenticated' | 'error'>('checking');
+  const [adminAuthMessage, setAdminAuthMessage] = useState<string>('');
+  const [adminClaims, setAdminClaims] = useState<{ sub: string | null; scopes: string[]; groups: string[] }>({
+    sub: null,
+    scopes: [],
+    groups: [],
+  });
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function initializeAdminAuth() {
+      const configured = isAdminAuthConfigured();
+      if (configured) {
+        setAdminAuthTokenProvider(() => getAdminAccessToken());
+      }
+
+      if (!configured) {
+        if (hasStaticAdminToken()) {
+          if (!mounted) return;
+          setAdminAuthStatus('authenticated');
+          setAdminAuthMessage('互換モード: VITE_ADMIN_API_TOKEN を使用中（Cognito移行を推奨）');
+          return;
+        }
+
+        if (!mounted) return;
+        setAdminAuthStatus('error');
+        setAdminAuthMessage('Cognito設定が未完了です。VITE_COGNITO_* を設定してください。');
+        return;
+      }
+
+      const callback = await handleAdminAuthCallback();
+      if (!mounted) return;
+
+      if (callback.status === 'error') {
+        setAdminAuthStatus('error');
+        setAdminAuthMessage(`認証に失敗しました: ${callback.message}`);
+        return;
+      }
+
+      const token = getAdminAccessToken();
+      if (!token) {
+        setAdminAuthStatus('unauthenticated');
+        setAdminAuthMessage('管理UIを利用するには Cognito でログインしてください。');
+        return;
+      }
+
+      const claims = parseAdminClaims();
+      setAdminClaims(claims);
+      setAdminAuthStatus('authenticated');
+      setAdminAuthMessage('');
+      if (callback.status === 'success') {
+        toast('管理者ログインに成功しました。');
+      }
+    }
+
+    initializeAdminAuth();
+    return () => {
+      mounted = false;
+    };
+  }, [toast]);
+
+  const loginAdmin = useCallback(async () => {
+    try {
+      await startAdminLogin();
+    } catch (e) {
+      setAdminAuthStatus('error');
+      setAdminAuthMessage(e instanceof Error ? e.message : String(e));
+    }
+  }, []);
+
+  const logoutAdminUser = useCallback(() => {
+    logoutAdmin();
+    setAdminAuthStatus('unauthenticated');
+    setAdminClaims({ sub: null, scopes: [], groups: [] });
+    setAdminAuthMessage('ログアウトしました。');
+  }, []);
 
   // Load data - supports both new staged format and legacy format
   useEffect(() => {
@@ -368,6 +454,18 @@ export function App() {
               管理UI
             </button>
 
+            {viewMode === 'admin' && (
+              adminAuthStatus === 'authenticated' ? (
+                <button className="btn" type="button" onClick={logoutAdminUser}>
+                  ログアウト
+                </button>
+              ) : (
+                <button className="btn primary" type="button" onClick={loginAdmin}>
+                  Cognitoでログイン
+                </button>
+              )
+            )}
+
             {viewMode === 'public' && (
               <>
                 <button className="btn" type="button" onClick={() => setDrawerOpen(true)} aria-expanded={drawerOpen} aria-controls="filters-drawer">
@@ -411,7 +509,26 @@ export function App() {
           </>
         )}
 
-        {!loading && !error && viewMode === 'admin' && <AdminPanel toast={toast} />}
+        {!loading && !error && viewMode === 'admin' && adminAuthStatus === 'authenticated' && <AdminPanel toast={toast} />}
+
+        {!loading && !error && viewMode === 'admin' && adminAuthStatus !== 'authenticated' && (
+          <section className="adminPanel" aria-label="管理UI認証">
+            <h2>管理UI 認証</h2>
+            <p>{adminAuthStatus === 'checking' ? '認証状態を確認中です...' : adminAuthMessage}</p>
+            <div className="adminRow">
+              <button className="btn primary" type="button" onClick={loginAdmin} disabled={adminAuthStatus === 'checking'}>
+                Cognitoでログイン
+              </button>
+            </div>
+          </section>
+        )}
+
+        {!loading && !error && viewMode === 'admin' && adminAuthStatus === 'authenticated' && (
+          <div className="small" role="status" aria-live="polite">
+            管理者: {adminClaims.sub ?? 'unknown'} / scope: {adminClaims.scopes.join(' ') || '-'} / groups:{' '}
+            {adminClaims.groups.join(',') || '-'}
+          </div>
+        )}
       </main>
 
       <button

@@ -64,11 +64,19 @@ export const authRequired: MiddlewareHandler = async (c, next) => {
   }
 
   try {
-    await jwtVerify(token, getJwks(), {
+    const { payload } = await jwtVerify(token, getJwks(), {
       issuer,
       audience,
       clockTolerance: 5,
     });
+
+    const scopeValue = typeof payload.scope === "string" ? payload.scope : "";
+    const groupsRaw = payload["cognito:groups"];
+    const groups = Array.isArray(groupsRaw) ? groupsRaw.filter((value): value is string => typeof value === "string") : [];
+
+    c.set("auth_sub", typeof payload.sub === "string" ? payload.sub : undefined);
+    c.set("auth_scope", scopeValue.split(/\s+/).filter(Boolean));
+    c.set("auth_groups", groups);
   } catch {
     throw new ProblemError({
       status: 401,

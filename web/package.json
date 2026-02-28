@@ -37,6 +37,7 @@
     "allure-playwright": "^3.5.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jose": "^6.1.2",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3",
     "vite": "^6.0.0"

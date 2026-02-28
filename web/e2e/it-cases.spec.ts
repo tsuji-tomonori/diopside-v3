@@ -1,9 +1,24 @@
 import { expect, test, type APIRequestContext } from '@playwright/test';
+import { getE2EAuthToken } from './auth';
 
 const apiBase = process.env.PW_API_BASE_URL || 'http://127.0.0.1:3001';
+const e2eSecret = process.env.PW_E2E_SECRET;
 
-async function apiGet(request: APIRequestContext, path: string) {
-  return request.get(`${apiBase}${path}`);
+if (!e2eSecret) {
+  throw new Error('PW_E2E_SECRET is required for test-support endpoints');
+}
+
+let bearerToken = '';
+
+function authHeaders(extra?: Record<string, string>) {
+  return {
+    authorization: `Bearer ${bearerToken}`,
+    ...extra,
+  };
+}
+
+async function apiGet(request: APIRequestContext, path: string, headers?: Record<string, string>) {
+  return request.get(`${apiBase}${path}`, { headers: authHeaders(headers) });
 }
 
 async function apiPost(
@@ -12,7 +27,7 @@ async function apiPost(
   data?: unknown,
   headers?: Record<string, string>
 ) {
-  return request.post(`${apiBase}${path}`, { data, headers });
+  return request.post(`${apiBase}${path}`, { data, headers: authHeaders(headers) });
 }
 
 async function apiPatch(
@@ -21,7 +36,63 @@ async function apiPatch(
   data?: unknown,
   headers?: Record<string, string>
 ) {
-  return request.patch(`${apiBase}${path}`, { data, headers });
+  return request.patch(`${apiBase}${path}`, { data, headers: authHeaders(headers) });
+}
+
+async function supportPost(request: APIRequestContext, path: string, data?: unknown) {
+  return apiPost(request, path, data, { 'x-e2e-secret': e2eSecret });
+}
+
+async function supportGet(request: APIRequestContext, path: string) {
+  return apiGet(request, path, { 'x-e2e-secret': e2eSecret });
+}
+
+async function dbMetrics(request: APIRequestContext) {
+  const res = await supportGet(request, '/api/v1/test/support/db/metrics');
+  expect(res.ok()).toBeTruthy();
+  return (await res.json()) as {
+    connected: boolean;
+    ingestion_runs: number;
+    publish_runs: number;
+    recheck_runs: number;
+  };
+}
+
+async function attachDbMetrics(
+  request: APIRequestContext,
+  testInfo: { attach: (name: string, options: { body: string; contentType: string }) => Promise<void> },
+  label: string,
+) {
+  const metrics = await dbMetrics(request);
+  await testInfo.attach(label, {
+    body: JSON.stringify(metrics, null, 2),
+    contentType: 'application/json',
+  });
+}
+
+async function setRunStatus(request: APIRequestContext, runId: string, status: 'queued' | 'running' | 'succeeded' | 'failed') {
+  const update = await supportPost(request, `/api/v1/test/support/runs/${runId}/status`, {
+    status,
+    processed_count: status === 'succeeded' ? 2 : status === 'failed' ? 2 : 0,
+    success_count: status === 'succeeded' ? 2 : 0,
+    failed_count: status === 'failed' ? 2 : 0,
+    error_summary: status === 'failed' ? 'simulated ingestion failure' : null,
+  });
+  expect(update.ok()).toBeTruthy();
+}
+
+async function setPublishStatus(
+  request: APIRequestContext,
+  publishRunId: string,
+  status: 'running' | 'succeeded' | 'failed',
+) {
+  const update = await supportPost(request, `/api/v1/test/support/publish/${publishRunId}/status`, {
+    status,
+    error_code: status === 'failed' ? 'PUBLISH_STEP_FAILED' : null,
+    error_message: status === 'failed' ? 'simulated publish failure' : null,
+    retryable: status !== 'succeeded',
+  });
+  expect(update.ok()).toBeTruthy();
 }
 
 async function pollRun(request: APIRequestContext, runId: string) {
@@ -34,16 +105,20 @@ async function pollRun(request: APIRequestContext, runId: string) {
     if (status === 'succeeded' || status === 'failed' || status === 'partial' || status === 'cancelled') {
       return status;
     }
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
   return status;
 }
 
 async function resetState(request: APIRequestContext) {
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 12; i++) {
     try {
-      const res = await apiPost(request, '/api/v1/test/e2e/reset');
-      if (res.ok()) return;
+      const res = await supportPost(request, '/api/v1/test/support/reset');
+      if (res.ok()) {
+        const body = (await res.json()) as { db?: { connected?: boolean } };
+        expect(body.db?.connected).toBeTruthy();
+        return;
+      }
     } catch {
       // retry until API boot completes
     }
@@ -51,8 +126,17 @@ async function resetState(request: APIRequestContext) {
   }
 }
 
-test.beforeEach(async ({ request }) => {
+test.beforeAll(async () => {
+  bearerToken = await getE2EAuthToken();
+});
+
+test.beforeEach(async ({ request }, testInfo) => {
   await resetState(request);
+  await attachDbMetrics(request, testInfo, 'db-metrics-after-reset');
+});
+
+test.afterEach(async ({ request }, testInfo) => {
+  await attachDbMetrics(request, testInfo, 'db-metrics-after-test');
 });
 
 test('IT-CASE-001 収集実行起動API 結合テスト', async ({ request }) => {
@@ -67,6 +151,8 @@ test('IT-CASE-001 収集実行起動API 結合テスト', async ({ request }) =>
   expect(res1.status()).toBe(202);
   const body1 = (await res1.json()) as { run_id: string };
   expect(body1.run_id).toBeTruthy();
+  const metricsAfterCreate = await dbMetrics(request);
+  expect(metricsAfterCreate.ingestion_runs).toBeGreaterThan(0);
 
   const res2 = await apiPost(request, '/api/v1/ops/ingestion/runs', payload, { 'idempotency-key': key });
   expect(res2.status()).toBe(202);
@@ -108,11 +194,18 @@ test('IT-CASE-002 収集実行状態API 結合テスト', async ({ request }) =>
 
   const queued = await apiGet(request, `/api/v1/ops/ingestion/runs/${run.run_id}`);
   expect(queued.status()).toBe(200);
+  const queuedJson = (await queued.json()) as { status: string };
+  expect(queuedJson.status).toBe('queued');
 
+  await setRunStatus(request, run.run_id, 'running');
+  const running = await apiGet(request, `/api/v1/ops/ingestion/runs/${run.run_id}`);
+  const runningJson = (await running.json()) as { status: string };
+  expect(runningJson.status).toBe('running');
+
+  await setRunStatus(request, run.run_id, 'succeeded');
   const status = await pollRun(request, run.run_id);
-  expect(['running', 'succeeded']).toContain(status);
+  expect(status).toBe('succeeded');
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { ingestion_fail: true });
   const failedStart = await apiPost(
     request,
     '/api/v1/ops/ingestion/runs',
@@ -124,6 +217,7 @@ test('IT-CASE-002 収集実行状態API 結合テスト', async ({ request }) =>
     { 'idempotency-key': 'it-case-002-failed' }
   );
   const failedRun = (await failedStart.json()) as { run_id: string };
+  await setRunStatus(request, failedRun.run_id, 'failed');
   const failedStatus = await pollRun(request, failedRun.run_id);
   expect(failedStatus).toBe('failed');
 
@@ -196,7 +290,6 @@ test('IT-CASE-006 動画詳細表示契約 結合テスト', async ({ page }) =>
 });
 
 test('IT-CASE-007 再収集API 結合テスト', async ({ request }) => {
-  await apiPost(request, '/api/v1/test/e2e/faults', { ingestion_fail: true });
   const failed = await apiPost(
     request,
     '/api/v1/ops/ingestion/runs',
@@ -208,14 +301,17 @@ test('IT-CASE-007 再収集API 結合テスト', async ({ request }) => {
     { 'idempotency-key': 'it-case-007-failed' }
   );
   const failedRun = (await failed.json()) as { run_id: string };
+  await setRunStatus(request, failedRun.run_id, 'failed');
   await pollRun(request, failedRun.run_id);
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { ingestion_fail: false });
-  const retry = await apiPost(request, `/api/v1/ops/ingestion/runs/${failedRun.run_id}/retry`);
+  const retry = await apiPost(request, `/api/v1/ops/ingestion/runs/${failedRun.run_id}/retry`, undefined, {
+    'idempotency-key': 'it-case-007-retry',
+  });
   expect(retry.status()).toBe(202);
   const retryBody = (await retry.json()) as { run_id: string };
   expect(retryBody.run_id).toBeTruthy();
 
+  await setRunStatus(request, retryBody.run_id, 'succeeded');
   const retryStatus = await pollRun(request, retryBody.run_id);
   expect(retryStatus).toBe('succeeded');
 });
@@ -226,12 +322,12 @@ test('IT-CASE-008 運用診断API 結合テスト', async ({ request }) => {
   const okBody = (await ok.json()) as { status: string };
   expect(okBody.status).toBe('ok');
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { archive_missing: true });
+  await supportPost(request, '/api/v1/test/support/faults', { archive_missing: true });
   const critical = await apiGet(request, '/api/v1/ops/diagnostics/health');
   const criticalBody = (await critical.json()) as { status: string };
   expect(criticalBody.status).toBe('critical');
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { archive_missing: false });
+  await supportPost(request, '/api/v1/test/support/faults', { archive_missing: false });
   const recovered = await apiGet(request, '/api/v1/ops/diagnostics/health');
   const recoveredBody = (await recovered.json()) as { status: string };
   expect(recoveredBody.status).toBe('ok');
@@ -249,6 +345,7 @@ test('IT-CASE-009 E2E基本フロー 結合テスト', async ({ request, page })
     { 'idempotency-key': 'it-case-009-start' }
   );
   const run = (await runStart.json()) as { run_id: string };
+  await setRunStatus(request, run.run_id, 'succeeded');
   const status = await pollRun(request, run.run_id);
   expect(status).toBe('succeeded');
 
@@ -273,6 +370,7 @@ test('IT-CASE-010 差分更新フロー 結合テスト', async ({ request }) =>
     { 'idempotency-key': 'it-case-010-start' }
   );
   const run = (await start.json()) as { run_id: string };
+  await setRunStatus(request, run.run_id, 'succeeded');
   const status = await pollRun(request, run.run_id);
   expect(status).toBe('succeeded');
 
@@ -293,9 +391,13 @@ test('IT-CASE-011 配信反映全体フロー 結合テスト', async ({ request
   const patched = (await patch.json()) as { propagation_state: string };
   expect(patched.propagation_state).toBe('pending_publish');
 
-  const publish = await apiPost(request, '/api/v1/admin/publish/tag-master', { scope: 'all' });
+  const publish = await apiPost(request, '/api/v1/admin/publish/runs', { scope: 'all' });
   expect(publish.status()).toBe(202);
   const publishRun = (await publish.json()) as { publish_run_id: string };
+  const publishMetrics = await dbMetrics(request);
+  expect(publishMetrics.publish_runs).toBeGreaterThan(0);
+  await setPublishStatus(request, publishRun.publish_run_id, 'running');
+  await setPublishStatus(request, publishRun.publish_run_id, 'succeeded');
 
   let finalStatus = 'queued';
   for (let i = 0; i < 20; i++) {
@@ -309,13 +411,12 @@ test('IT-CASE-011 配信反映全体フロー 結合テスト', async ({ request
 });
 
 test('IT-CASE-012 障害検知と復旧シナリオ 結合テスト', async ({ request }) => {
-  await apiPost(request, '/api/v1/test/e2e/faults', { archive_missing: true });
+  await supportPost(request, '/api/v1/test/support/faults', { archive_missing: true });
   const degraded = await apiGet(request, '/api/v1/ops/diagnostics/health');
   const degradedBody = (await degraded.json()) as { status: string; checks: { archive_page_completeness: string } };
   expect(degradedBody.status).toBe('critical');
   expect(degradedBody.checks.archive_page_completeness).toBe('critical');
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { ingestion_fail: true });
   const failed = await apiPost(
     request,
     '/api/v1/ops/ingestion/runs',
@@ -327,11 +428,15 @@ test('IT-CASE-012 障害検知と復旧シナリオ 結合テスト', async ({ r
     { 'idempotency-key': 'it-case-012-failed' }
   );
   const failedRun = (await failed.json()) as { run_id: string };
+  await setRunStatus(request, failedRun.run_id, 'failed');
   await pollRun(request, failedRun.run_id);
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { ingestion_fail: false, archive_missing: false });
-  const retry = await apiPost(request, `/api/v1/ops/ingestion/runs/${failedRun.run_id}/retry`);
+  await supportPost(request, '/api/v1/test/support/faults', { archive_missing: false });
+  const retry = await apiPost(request, `/api/v1/ops/ingestion/runs/${failedRun.run_id}/retry`, undefined, {
+    'idempotency-key': 'it-case-012-retry',
+  });
   const retryBody = (await retry.json()) as { run_id: string };
+  await setRunStatus(request, retryBody.run_id, 'succeeded');
   await pollRun(request, retryBody.run_id);
 
   const recovered = await apiGet(request, '/api/v1/ops/diagnostics/health');
@@ -340,7 +445,7 @@ test('IT-CASE-012 障害検知と復旧シナリオ 結合テスト', async ({ r
 });
 
 test('IT-CASE-013 データ不整合復旧 結合テスト', async ({ request }) => {
-  await apiPost(request, '/api/v1/test/e2e/faults', { tag_master_inconsistent: true });
+  await supportPost(request, '/api/v1/test/support/faults', { tag_master_inconsistent: true });
   const bad = await apiGet(request, '/api/v1/ops/diagnostics/health');
   const badBody = (await bad.json()) as { checks: { tag_master_consistency: string } };
   expect(badBody.checks.tag_master_consistency).toBe('critical');
@@ -350,8 +455,10 @@ test('IT-CASE-013 データ不整合復旧 結合テスト', async ({ request })
 
   const publish = await apiPost(request, '/api/v1/admin/publish/tag-master', { scope: 'all' });
   expect(publish.status()).toBe(202);
+  const publishRun = (await publish.json()) as { publish_run_id: string };
+  await setPublishStatus(request, publishRun.publish_run_id, 'succeeded');
 
-  await apiPost(request, '/api/v1/test/e2e/faults', { tag_master_inconsistent: false });
+  await supportPost(request, '/api/v1/test/support/faults', { tag_master_inconsistent: false });
   const ok = await apiGet(request, '/api/v1/ops/diagnostics/health');
   const okBody = (await ok.json()) as { checks: { tag_master_consistency: string } };
   expect(okBody.checks.tag_master_consistency).toBe('ok');
