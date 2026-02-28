@@ -10,4 +10,4 @@
 - unresolved_body_links: 0
 - broken_links: 0
 - backlink_issues: 0
-- target_files: 4
+- target_files: 3

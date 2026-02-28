@@ -256,3 +256,89 @@
   - `task docs:guard` 実行で対象6文書の `issues: 0`, `broken_links: 0` を確認。
 - 運用影響:
   - HTTP API変更時に「実装→OpenAPI生成→DD照合」の順で機械検証でき、手書き契約とのドリフトをCI前段で検出可能。
+
+## 追加実施（全スコープ受入判定チェックリスト整備）
+- 対象: `AT-RCHK-001`, `AT-RPT-001`, `AT-GO-001`。
+- 変更内容:
+  - `AT-RCHK-001` を最小記述から拡張し、`[[RQ-SC-001]]` から `[[RQ-SC-008]]` までのスコープ判定テンプレートを追加。
+  - スコープごとに対応FR、主要受入シナリオ、補助証跡、判定、未達理由/対応を記録できる表を追加。
+  - `AT-RPT-001` に「スコープ判定サマリ（記入テンプレート）」を追加し、実行結果の集約先を明確化。
+  - `AT-GO-001` にスコープ判定入力（`AT-RCHK-001`/`AT-RPT-001`）と最終転記表を追加し、Go/No-Go条件へスコープ判定を組み込み。
+
+## 追加影響確認（全スコープ受入判定）
+- トレーサビリティ:
+  - `RQ-SC`（全体/エピック）→ `AT-RCHK`（チェック）→ `AT-RPT`（結果集約）→ `AT-GO`（最終判定）の導線を確立。
+- 運用影響:
+  - 従来のシナリオ/API中心判定に加えて、スコープ単位の判定漏れを防止可能。
+  - `Conditional` 記録時に未達理由/期限/担当を残す運用を強制し、判定根拠の再現性を向上。
+
+## 追加実施（全スコープ判定の初期記入）
+- 対象: `AT-RCHK-001`, `AT-RPT-001`, `AT-GO-001`。
+- 変更内容:
+  - 現行のシナリオ実施結果（`AT-SCN-001`〜`AT-SCN-009`）を基に、`RQ-SC-001`〜`RQ-SC-008` の初期判定を記入。
+  - `AT-RCHK-001` に初期判定表（Pass/Fail/Conditional + 未達理由）を追加。
+  - `AT-RPT-001` にスコープ判定サマリの初期記入例を追加。
+  - `AT-GO-001` にスコープ最終判定転記の初期値を追加し、現時点のNo-Go根拠を明示。
+
+## 追加影響確認（初期記入結果）
+- 判定結果:
+  - Pass: `[[RQ-SC-006]]`, `[[RQ-SC-008]]`
+  - Conditional: `[[RQ-SC-003]]`, `[[RQ-SC-004]]`, `[[RQ-SC-005]]`
+  - Fail: `[[RQ-SC-001]]`, `[[RQ-SC-002]]`, `[[RQ-SC-007]]`
+- リリース判定影響:
+  - 未受容Fail/Conditionalが残存するため、`AT-GO-001` 初期転記時点ではNo-Go。
+
+## 追加実施（No-Go解除に向けた再実行ゲート整備）
+- 対象: `AT-RCHK-001`, `AT-RPT-001`, `AT-GO-001`。
+- 変更内容:
+  - `AT-RCHK-001` に未達解消チェックリストを追加し、`AT-SCN-005`〜`AT-SCN-009` の必須実施項目と証跡ID記録欄を定義。
+  - `AT-RPT-001` に再実行待ちシナリオ表を追加し、結果反映先（RPT/API判定/GO）を明示。
+  - `AT-GO-001` に再判定ゲートを追加し、No-Go解除条件（受容可否No=0件）を明確化。
+
+## 追加影響確認（再判定運用）
+- 判定運用影響:
+  - 未実施/Failの解消に必要な入力（runId/recheckRunId/publishRunId/ci_run_id）を統一フォーマットで収集可能。
+  - 再判定時の更新順序（RCHK/RPT更新→GO転記）を固定し、判定の不整合を抑止。
+
+## 追加実施（スコープ別テスト実装/実行結果の検証記録）
+- 対象: `reports/scope_test_verification_2026-02-28.md`, `AT-RPT-001`, `AT-GO-001`。
+- 変更内容:
+  - 全スコープ（`[[RQ-SC-001]]`〜`[[RQ-SC-008]]`）に対して、対応テスト実装有無と実行結果を検証したレポートを追加。
+  - API単体（`api`）とWeb単体（`web`）は実行してPassを確認。
+  - IT結合（`web/e2e/it-cases.spec.ts`）は Compose 環境で実行し、`[[IT-CASE-001]]`〜`[[IT-CASE-013]]` が全件Failであることを記録。
+  - Fail要因（Prisma migrate `P3018`, 既存制約重複）を `AT-RPT-001` と `AT-GO-001` の判定入力へ反映。
+
+## 追加影響確認（テスト検証）
+- 実装確認:
+  - 全スコープで対応テスト実装は存在（UT/Web-UT/IT-case）。
+- 実行確認:
+  - API単体: Pass（2/2）、Web単体: Pass（53/53）、IT結合: Fail（13/13）。
+- 判定影響:
+  - 全スコープで「全Pass」は未達のため、No-Go解除条件を満たさない。
+
+## 追加実施（インフラ命名ルールと実装名の整合）
+- 対象: `DD-INF-IAC-002`, `DD-INF-SEC-002`。
+- 変更内容:
+  - `DD-INF-IAC-002` に「物理リソース名は `<domain>-<resource>-<env>`、CloudFormation Stack/Construct ID は PascalCase」を明記し、docs配備スタックID `QuartzSiteStack` を正本化。
+  - `DD-INF-SEC-002` に IAMロール識別子の正本を CloudFormation Logical ID とするルールを追記。
+  - GitHub Actions配備ロール表記を `github-actions-docs-deploy-role` から実装準拠の `GithubActionsDeployRole` へ統一。
+
+## 追加影響確認（命名整合）
+- 設計整合:
+  - `Taskfile.yaml` の `STACK=QuartzSiteStack` と IaC命名規則文書の解釈差分を解消。
+  - `infra/lib/quartz-site-stack.ts` の Logical ID と IAM詳細設計のロール識別子が一致。
+- 運用影響:
+  - 命名整合の文書修正のみで、デプロイ対象リソース名やCloudFormationスタック実体への変更はなし。
+
+## 追加実施（新規スタック作成へ切替）
+- 対象: `infra/bin/quartz-site.ts`, `Taskfile.yaml`, `DD-INF-IAC-002`。
+- 変更内容:
+  - CDKエントリポイントのスタックIDを `QuartzSiteStack` から `DiopsideDeliveryStack` へ変更。
+  - Task標準引数 `STACK` を `DiopsideDeliveryStack` へ更新し、`task infra:deploy` / `task docs:deploy(:ci)` が新規スタックを作成するように変更。
+  - IaC命名規則文書の正本スタックIDを `DiopsideDeliveryStack` へ同期。
+
+## 追加影響確認（新規スタック切替）
+- 配備影響:
+  - 既存 `QuartzSiteStack` は残置したまま、次回デプロイで `DiopsideDeliveryStack` が別スタックとして新規作成される。
+- 運用影響:
+  - `GithubActionsDeployRoleArn` などのOutput参照先は新スタック側へ切り替えが必要。
