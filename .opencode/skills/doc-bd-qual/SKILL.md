@@ -43,7 +43,7 @@ metadata:
 - `up/related` から品質特性に対応する要求（`RQ-*`）と関連設計（`BD-ARCH-*` / `BD-ADR-*` など）を辿れることを確認する。
 - Next.js を扱う場合、性能判定がシミュレーション値のみでなく Web Vitals を含むことを確認する。
 - キャッシュ再検証方針（TTL/オンデマンド/動的化条件）が要求・設計・受入で一貫していることを確認する。
-- `## 変更履歴` 各行に `[[BD-ADR-xxx]]` が含まれていることを確認する。
+- `## 変更履歴` 各行に `[[BD-*-ADR-xxx]]` が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。
 

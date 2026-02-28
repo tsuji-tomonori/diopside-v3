@@ -3,6 +3,7 @@ name: wcag22aa-scope
 description: WCAG 2.2 AA相当のスコープ定義・達成基準マッピング・DoD（受入基準）を作る
 compatibility: opencode
 metadata:
+  short-description: WCAGスコープとDoD定義
   standard: WCAG-2.2
   level: AA
   lang: ja

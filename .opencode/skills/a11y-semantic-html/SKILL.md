@@ -3,6 +3,7 @@ name: a11y-semantic-html
 description: HTMLセマンティクス/ARIA/アクセシブルネームの不備を、画面・コンポーネントの実装/改修時に修正し、WCAG 2.2 AA相当の構造とName/Role/Valueを成立させる
 compatibility: opencode
 metadata:
+  short-description: セマンティクスとARIA改善
   standard: WCAG-2.2
   level: AA
   lang: ja

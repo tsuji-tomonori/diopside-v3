@@ -3,6 +3,7 @@ name: a11y-media-alternatives
 description: 動画/音声コンテンツを公開・配信する際に、字幕・文字起こし・音声解説を整備してWCAG 2.2 A/AA相当のマルチメディア要件を満たす
 compatibility: opencode
 metadata:
+  short-description: メディア代替整備
   standard: WCAG-2.2
   level: AA
   lang: ja

@@ -89,3 +89,24 @@
 ## 追加影響確認（スキル運用）
 - `doc-it-pw` により、`docs/5.結合テスト(IT)/12.ペアワイズ(PW)` の更新手順を独立運用できる。
 - `doc-it-case` / `doc-it-plan` と責務分離され、UC基準IT設計の変更影響を管理しやすくなる。
+
+## 追加実施（skills整合性の横断修正）
+- 対象: `.opencode/skills/**/SKILL.md`。
+- 変更内容:
+  - BD文書の履歴リンク表記を `[[BD-*-ADR-xxx]]` 形式へ統一し、`AGENTS.md` の設計記述規約と同期。
+  - a11y系スキルおよび `wcag22aa-scope` のfrontmatter `metadata.short-description` 欠落を補完し、スキルメタデータ形式を統一。
+
+## 追加影響確認（skills規約同期）
+- 規約整合:
+  - `skill-maintainer` / `docops-orchestrator` / `obsidian-doc-*` / BD系スキルのADRリンク規約が `AGENTS.md` と一致。
+  - 既存の `name == ディレクトリ名`、frontmatter YAML 構文、必須キーは維持。
+- 未解消事項:
+  - 実体ファイルとして存在する `doc-it-pw` / `doc-ut-pw` は、ランタイムの `skill` ローダー公開リストに未登録（リポジトリ外設定由来のため、今回変更対象外）。
+
+## 追加検証（skills）
+- `python3` スクリプトで `.opencode/skills/*/SKILL.md` を横断検査:
+  - frontmatter欠落: 0
+  - frontmatter必須キー欠落: 0
+  - `name` とディレクトリ名不一致: 0
+  - `metadata.short-description` 欠落: 0（補完後）
+  - `[[BD-ADR-xxx]]` / `[[BD-ADR-*]]` 残存: 0（置換後）

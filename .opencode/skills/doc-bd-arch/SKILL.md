@@ -37,6 +37,6 @@ metadata:
 - `up/related` のリンク先が存在することを確認する。
 - Next.js を扱う場合、`cookies()` / `headers()` / `searchParams` の利用位置がRoot Layout全体動的化を引き起こしていないことを確認する。
 - データ取得が Server Components 直結で設計され、Client からの更新系アクセスのみ Route Handlers を利用していることを確認する。
-- `## 変更履歴` 各行に `[[BD-ADR-xxx]]` が含まれていることを確認する。
+- `## 変更履歴` 各行に `[[BD-*-ADR-xxx]]` が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

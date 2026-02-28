@@ -3,6 +3,7 @@ name: a11y-keyboard-focus
 description: キーボード操作性やフォーカス不具合がある画面に対して、フォーカス管理・可視化・Focus Not Obscured(AA)を実装/レビューする
 compatibility: opencode
 metadata:
+  short-description: キーボードフォーカス改善
   standard: WCAG-2.2
   level: AA
   lang: ja

@@ -3,6 +3,7 @@ name: a11y-forms-errors
 description: フォーム入力/送信を伴うUI（登録・認証・決済・設定など）を設計・実装・改修する際に、ラベル/エラー/ステータス通知と冗長入力防止・一貫ヘルプをWCAG 2.2 AA相当で実装する
 compatibility: opencode
 metadata:
+  short-description: フォームエラー対応
   standard: WCAG-2.2
   level: AA
   lang: ja

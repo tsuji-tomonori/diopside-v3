@@ -3,6 +3,7 @@ name: a11y-pointer-targets
 description: ターゲットサイズ(24px)・ドラッグ代替・誤操作防止を、ポインター操作UI（ドラッグ&ドロップ/小型アイコン密集/モバイル操作）を設計・改修するときにWCAG 2.2 AA相当で実装する
 compatibility: opencode
 metadata:
+  short-description: ポインター操作改善
   standard: WCAG-2.2
   level: AA
   lang: ja

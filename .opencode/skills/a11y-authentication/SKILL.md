@@ -3,6 +3,7 @@ name: a11y-authentication
 description: 認証UI（ログイン/MFA/CAPTCHA）を設計・実装・改修するときに、WCAG 2.2 AA相当（3.3.8）を満たしつつパスワードマネージャやコピペの阻害を防ぐ
 compatibility: opencode
 metadata:
+  short-description: 認証UIアクセシビリティ実装
   standard: WCAG-2.2
   level: AA
   lang: ja

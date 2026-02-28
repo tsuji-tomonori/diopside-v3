@@ -3,6 +3,7 @@ name: a11y-testing-manual
 description: WCAG 2.2 AA相当の手動テスト（キーボード/スクリーンリーダー/ズーム/モバイル）を、主要導線の受入・リリース前に実施/標準化する
 compatibility: opencode
 metadata:
+  short-description: a11y手動テスト標準化
   standard: WCAG-2.2
   level: AA
   lang: ja

@@ -42,7 +42,7 @@ metadata:
 ## 出力契約
 - 対象文書は `filename == id` を満たし、Frontmatter必須キーを欠落なく保持する。
 - API仕様の変更理由と影響範囲を `up/related` で追跡可能にし、必要に応じて関連文書へ反映する。
-- 設計変更時は同一変更でADRを更新し、BD文書の `## 変更履歴` 各行に `[[BD-ADR-xxx]]` を付与する。
+- 設計変更時は同一変更でADRを更新し、BD文書の `## 変更履歴` 各行に `[[BD-*-ADR-xxx]]` を付与する。
 - 変更後の整合チェック結果（用語リンク補正と検証）をリポジトリ手順に沿って確認できる状態にする。
 
 ## Frontmatter運用
@@ -66,6 +66,6 @@ metadata:
 - RPC採用時に `AppType` export とメソッドチェーン定義が記載されていることを確認する。
 - OpenAPIを契約正本として、Lint/破壊的変更検知/契約テストの運用が記述されていることを確認する。
 - OpenAPI JSON配布（`/openapi/v1/openapi.json`）と仕様UI配布（`/openapi/`）が記述されていることを確認する。
-- `## 変更履歴` 各行に `[[BD-ADR-xxx]]` が含まれていることを確認する。
+- `## 変更履歴` 各行に `[[BD-*-ADR-xxx]]` が含まれていることを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md` を実行し `reports/doc_check.md` を更新する。

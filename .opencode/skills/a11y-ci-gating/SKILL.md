@@ -3,6 +3,7 @@ name: a11y-ci-gating
 description: CI/CDを運用するWebプロダクトで、アクセシビリティ自動検査とQuality Gateを段階導入し、回帰を防ぎたいときに使う（手動ゲート併用前提）
 compatibility: opencode
 metadata:
+  short-description: a11y CIゲート導入
   standard: WCAG-2.2
   level: AA
   lang: ja

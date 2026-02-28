@@ -3,6 +3,7 @@ name: a11y-reflow-zoom
 description: レイアウト改修や画面監査時に、ズーム/リフロー/画面向き/ホバーUIの要件を満たして320px幅や200%ズームでも破綻しないUIにする
 compatibility: opencode
 metadata:
+  short-description: ズームとリフロー対応
   standard: WCAG-2.2
   level: AA
   lang: ja

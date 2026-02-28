@@ -3,6 +3,7 @@ name: a11y-time-limits
 description: セッションタイムアウト等の時間制限を伴うUIを設計・実装・改修するときに、WCAG 2.2 A/AA相当で延長/通知/救済を実装する
 compatibility: opencode
 metadata:
+  short-description: 時間制限UI救済設計
   standard: WCAG-2.2
   level: AA
   lang: ja

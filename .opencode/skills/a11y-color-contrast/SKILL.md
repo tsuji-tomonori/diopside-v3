@@ -3,6 +3,7 @@ name: a11y-color-contrast
 description: 色やコントラストに関するUI改善時に、色依存の回避とテキスト/非テキストのコントラスト要件をWCAG 2.2 AA相当で満たす
 compatibility: opencode
 metadata:
+  short-description: 色とコントラスト改善
   standard: WCAG-2.2
   level: AA
   lang: ja
