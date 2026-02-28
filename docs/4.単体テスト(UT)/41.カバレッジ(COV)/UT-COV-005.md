@@ -1,9 +1,9 @@
 ---
 id: UT-COV-005
-title: カバレッジ方針 005（バックエンド）
+title: カバレッジ方針 005（API）
 doc_type: カバレッジ方針
 phase: UT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-28
@@ -23,7 +23,7 @@ tags:
 ---
 
 ## テスト目的
-- API契約の正常系/異常系/境界値を定量管理し、バックエンド契約破壊の持ち越しを防止する。
+- API契約の正常系/異常系/境界値を定量管理し、API契約破壊の持ち越しを防止する。
 
 ## 指標定義
 | 指標 | 計測対象 | 閾値 | 算出元 | 未達時対応 |
@@ -39,7 +39,7 @@ metrics:
     name: be_api_case_pass_rate
     target: UT-CASE-BE-001 to UT-CASE-BE-013
     threshold: "=100%"
-    source: backend unit execution report
+    source: api unit execution report
     action: fix API contract regressions
   - id: be_reject_code_match_rate
     name: be_reject_code_match_rate
@@ -56,4 +56,5 @@ metrics:
 ```
 
 ## 変更履歴
+- 2026-02-28: API正本化に合わせて文言をバックエンドからAPIへ統一
 - 2026-02-28: 新規作成

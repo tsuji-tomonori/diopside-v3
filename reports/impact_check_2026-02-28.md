@@ -187,3 +187,19 @@
 - 運用影響:
   - 既存 `docs:guard` と独立して、設計上定義した静的解析セットを定常的に実行可能。
   - ペアワイズ生成物（`*-PW.md`）は `UT-STAT-003` のチェック対象から除外し、生成物と用語自動補正の循環差分を防止。
+
+## 追加実施（api正本化とbackend廃止）
+- 対象: `api/src/**`、`.github/workflows/api-ci.yml`、`backend/**`、`docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md`、`docs/3.詳細設計(DD)/03.インフラ(INF)/21.デプロイ実装(DEP)/DD-INF-DEP-003.md`、`docs/4.単体テスト(UT)/41.カバレッジ(COV)/UT-COV-005.md`。
+- 変更内容:
+  - `api` に運用API実装（`ops/admin/public`）と共通ミドルウェア（trace/auth/error）を移植し、`createServer` を `buildApp` ベースへ統一。
+  - `.github/workflows/backend-ci.yml` を廃止し、`api` 専用の `api-ci` ワークフローを追加。
+  - `backend` ディレクトリを削除し、API実装の正本を `api` へ一本化。
+  - BD/DD/UT文書中の配備手順・実行レポート表記を `backend` から `api` へ更新。
+
+## 追加影響確認（api一本化）
+- 実装影響:
+  - `web/src/lib/adminApi.ts` が利用する `/api/v1/*` 経路の実装主体を `api` へ統合。
+  - API CI の対象ディレクトリが `backend/**` から `api/**` へ移行。
+- 文書影響:
+  - 配備責務マップ（BD）と領域分割配備手順（DD）が実装実態に整合。
+  - BE領域のUTカバレッジソース表記を `api unit execution report` へ更新。

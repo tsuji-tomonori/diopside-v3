@@ -3,11 +3,11 @@ id: BD-INF-DEP-005
 title: コンピュートと配備設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-23'
+updated: '2026-02-28'
 up:
   - '[[RQ-FR-025]]'
   - '[[RQ-DEV-001-01]]'
@@ -49,7 +49,7 @@ tags:
 ## 配備責務マップ
 | 領域 | 主成果物 | 主経路 | 主失敗時の再実行 |
 |---|---|---|---|
-| BE | API実行バイナリ、運用API | `/api/v1/*` | backend build/test -> deploy |
+| BE | API実行バイナリ、運用API | `/api/v1/*` | api build/test -> deploy |
 | FE | SPA静的成果物 | `/web/*` | front build/test -> deploy |
 | Infra | CloudFront/S3/IAM/Config | 全経路 | `cdk diff` -> `cdk deploy` |
 | DB | スキーマ変更、マイグレーション | 非公開経路 | migrate -> verify -> rollback |
@@ -88,7 +88,7 @@ tags:
 
 ## ロールバック方針
 - docs/frontは直前の静的成果物へ戻す。
-- backendは直前の安定版へ戻し、API契約互換を破らない版を選ぶ。
+- apiは直前の安定版へ戻し、API契約互換を破らない版を選ぶ。
 - infra設定変更は差分単位で戻し、CloudFront behavior順序と認証境界を最優先で復旧する。
 
 ## 品質ゲート
@@ -101,6 +101,7 @@ tags:
 - DDで手順や具体コマンドを確定する前提情報が揃っていること。
 
 ## 変更履歴
+- 2026-02-28: API正本化に合わせて配備責務マップとロールバック記述の backend 表記を api へ更新 [[BD-SYS-ADR-036]]
 - 2026-02-23: 必須設計項目をBD確定観点へ明確化し、DD引渡し/受入基準を追加 [[BD-SYS-ADR-036]]
 - 2026-02-20: 章再編に合わせてコンピュート選定・スケーリング必須項目を追加 [[BD-SYS-ADR-036]]
 - 2026-02-19: ヘルスチェック確認経路を `/api/v1/ops/diagnostics/health` へ統一 [[BD-SYS-ADR-034]]

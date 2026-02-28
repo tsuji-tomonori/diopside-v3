@@ -3,7 +3,7 @@ id: UT-STAT-003
 title: '静的解析方針 003（DOC: auto_link_glossary --check）'
 doc_type: 静的解析方針
 phase: UT
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-28
@@ -31,9 +31,14 @@ tags:
 | mode | `--check`（非破壊） |
 | glossary_source | `docs/1.要求(RQ)/21.用語(GL)/RQ-GL-*.md` |
 | protection | 既存wikilink / inline code / code fence を除外 |
+| exclude_targets | `docs/4.単体テスト(UT)/21.単体テストケース(CASE)/**/*-PW.md`（自動生成物） |
 
 ## 対象
 - 変更対象の `docs/**/*.md`（`task docs:guard` の流れで実行）。
+- ただし `docs/4.単体テスト(UT)/21.単体テストケース(CASE)/**/*-PW.md` は除外する。
+
+## 除外理由
+- `*-PW.md` は `task docs:ut:pairwise:generate` の生成物であり、用語自動補正対象に含めると `task docs:ut:pairwise:check` と循環差分が発生するため。
 
 ## 実行コマンド
 - `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py --docs-root docs --check <targets...>`
@@ -52,8 +57,10 @@ settings:
   docs_root: docs
   mode: check
   glossary_source: docs/1.要求(RQ)/21.用語(GL)/RQ-GL-*.md
+  exclude_targets: docs/4.単体テスト(UT)/21.単体テストケース(CASE)/**/*-PW.md
 gate: exit_code == 0 and changed == 0
 ```
 
 ## 変更履歴
+- 2026-02-28: `UT-CASE-*-PW.md`（自動生成物）をチェック対象から除外
 - 2026-02-28: 新規作成

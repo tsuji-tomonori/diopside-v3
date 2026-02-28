@@ -37,7 +37,7 @@ tags:
 | FE | fe_branches_coverage | >=70% | [[UT-COV-004]] / npm --prefix web run test:coverage | threshold check |
 | FE | fe_lines_coverage | >=75% | [[UT-COV-004]] / npm --prefix web run test:coverage | threshold check |
 | FE | fe_state_transition_pass_rate | =100% | [[UT-COV-004]] / UT-CASE-FE-016 execution report | threshold check |
-| BE | be_api_case_pass_rate | =100% | [[UT-COV-005]] / backend unit execution report | threshold check |
+| BE | be_api_case_pass_rate | =100% | [[UT-COV-005]] / api unit execution report | threshold check |
 | BE | be_reject_code_match_rate | =100% | [[UT-COV-005]] / case expected vs actual comparison | threshold check |
 | BE | be_pairwise_coverage_rate | =100% | [[UT-COV-005]] / task docs:ut:pairwise:check | threshold check |
 

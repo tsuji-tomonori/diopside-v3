@@ -2,6 +2,7 @@ services:
   api:
     environment:
       E2E_MOCK: "1"
+      JWT_DEV_BYPASS: "1"
 
   web:
     build:

@@ -40,7 +40,7 @@ tags:
 | [[UT-COV-004]] | FE | fe_branches_coverage | web src branch coverage | >=70% | npm --prefix web run test:coverage | add branch test cases |
 | [[UT-COV-004]] | FE | fe_lines_coverage | web src line coverage | >=75% | npm --prefix web run test:coverage | add tests for uncovered lines |
 | [[UT-COV-004]] | FE | fe_state_transition_pass_rate | loading/success/empty/error transitions | =100% | UT-CASE-FE-016 execution report | fix state transition implementation |
-| [[UT-COV-005]] | BE | be_api_case_pass_rate | UT-CASE-BE-001 to UT-CASE-BE-013 | =100% | backend unit execution report | fix API contract regressions |
+| [[UT-COV-005]] | BE | be_api_case_pass_rate | UT-CASE-BE-001 to UT-CASE-BE-013 | =100% | api unit execution report | fix API contract regressions |
 | [[UT-COV-005]] | BE | be_reject_code_match_rate | reject code mapping accuracy | =100% | case expected vs actual comparison | update error handling and contract mapping |
 | [[UT-COV-005]] | BE | be_pairwise_coverage_rate | UT-PW-BE pairwise coverage | =100% | task docs:ut:pairwise:check | revise factors and excludes |
 

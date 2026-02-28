@@ -1,6 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { authRequired } from "./middleware/auth.js";
 import { onError } from "./middleware/error.js";
+import { registerMockE2ERoutes } from "./mock-e2e.js";
 import { notFound } from "./middleware/not-found.js";
 import { traceMiddleware } from "./middleware/trace.js";
 import { store } from "./repositories/store.js";
@@ -10,14 +11,21 @@ import { registerPublicRoutes } from "./routes/public.js";
 
 export const buildApp = () => {
   const app = new OpenAPIHono();
+  const useMock = process.env.E2E_MOCK === "1";
 
   app.use("*", traceMiddleware);
-  app.use("/api/v1/*", authRequired);
-  app.use("/openapi/*", authRequired);
+  if (!useMock) {
+    app.use("/api/v1/*", authRequired);
+    app.use("/openapi/*", authRequired);
+  }
 
-  registerOpsRoutes(app);
-  registerAdminRoutes(app);
-  registerPublicRoutes(app);
+  if (useMock) {
+    registerMockE2ERoutes(app);
+  } else {
+    registerOpsRoutes(app);
+    registerAdminRoutes(app);
+    registerPublicRoutes(app);
+  }
 
   app.doc("/openapi/v1/openapi.json", {
     openapi: "3.0.0",
