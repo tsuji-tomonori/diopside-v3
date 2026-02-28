@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Channel {
+  channel_id   String    @id @db.VarChar(64)
+  channel_name String    @db.VarChar(255)
+  channel_type String    @db.VarChar(16)
+  is_active    Boolean   @default(true)
+  last_seen_at DateTime? @db.Timestamptz(6)
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  videos Video[]
+
+  @@index([channel_type, is_active], map: "idx_channels_type_active")
+  @@index([last_seen_at(sort: Desc)], map: "idx_channels_last_seen_at")
+  @@map("channels")
+}
+
+model Video {
+  video_id             String    @id @db.VarChar(32)
+  channel_id           String    @db.VarChar(64)
+  title                String    @db.VarChar(255)
+  published_at         DateTime  @db.Timestamptz(6)
+  duration_sec         Int?
+  description          String?
+  thumbnail_url        String?
+  source_type          String    @db.VarChar(16)
+  update_type          String    @db.VarChar(16)
+  validation_status    String    @db.VarChar(16)
+  missing_fields       String[]
+  supplement_required  Boolean   @default(false)
+  normalized_at        DateTime  @db.Timestamptz(6)
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime  @default(now()) @db.Timestamptz(6)
+
+  channel         Channel         @relation(fields: [channel_id], references: [channel_id], onDelete: Restrict, onUpdate: Restrict)
+  ingestion_items IngestionItem[]
+  recheck_items   RecheckItem[]
+  video_tags      VideoTag[]
+
+  @@index([published_at(sort: Desc)], map: "idx_videos_published_at")
+  @@index([channel_id, published_at(sort: Desc)], map: "idx_videos_channel_published")
+  @@index([source_type, update_type], map: "idx_videos_source_update")
+  @@index([validation_status, supplement_required], map: "idx_videos_validation_status")
+  @@map("videos")
+}
+
+model TagType {
+  tag_type_id   String   @id @db.VarChar(32)
+  display_name  String   @db.VarChar(128)
+  description   String?
+  sort_order    Int      @default(0)
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  tags Tag[]
+
+  @@unique([display_name], map: "uq_tag_types_display_name")
+  @@index([is_active, sort_order], map: "idx_tag_types_active_order")
+  @@map("tag_types")
+}
+
+model Tag {
+  tag_id       String   @id @db.VarChar(64)
+  tag_type_id  String   @db.VarChar(32)
+  tag_name     String   @db.VarChar(128)
+  tag_slug     String   @db.VarChar(128)
+  synonyms     String[]
+  sort_order   Int      @default(0)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  tag_type   TagType    @relation(fields: [tag_type_id], references: [tag_type_id], onDelete: Restrict, onUpdate: Restrict)
+  video_tags VideoTag[]
+
+  @@unique([tag_slug], map: "uq_tags_slug")
+  @@index([tag_type_id, is_active, sort_order], map: "idx_tags_type_active_order")
+  @@index([tag_name], map: "idx_tags_name")
+  @@map("tags")
+}
+
+model VideoTag {
+  video_id   String    @db.VarChar(32)
+  tag_id     String    @db.VarChar(64)
+  applied_by String    @db.VarChar(16)
+  confidence Decimal?  @db.Decimal(5, 4)
+  applied_at DateTime  @default(now()) @db.Timestamptz(6)
+  removed_at DateTime? @db.Timestamptz(6)
+
+  video Video @relation(fields: [video_id], references: [video_id], onDelete: Cascade, onUpdate: Restrict)
+  tag   Tag   @relation(fields: [tag_id], references: [tag_id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@id([video_id, tag_id], map: "pk_video_tags")
+  @@index([tag_id], map: "idx_video_tags_tag_id")
+  @@index([applied_at(sort: Desc)], map: "idx_video_tags_applied_at")
+  @@index([video_id, removed_at], map: "idx_video_tags_active")
+  @@map("video_tags")
+}
+
+model IngestionRun {
+  run_id            String    @id @db.Uuid
+  run_kind          String    @db.VarChar(32)
+  mode              String    @db.VarChar(16)
+  status            String    @db.VarChar(16)
+  target_types      String[]
+  parent_run_id     String?   @db.Uuid
+  requested_by      String?   @db.VarChar(64)
+  started_at        DateTime? @db.Timestamptz(6)
+  finished_at       DateTime? @db.Timestamptz(6)
+  target_count      Int       @default(0)
+  processed_count   Int       @default(0)
+  success_count     Int       @default(0)
+  failed_count      Int       @default(0)
+  unprocessed_count Int       @default(0)
+  trace_id          String    @db.VarChar(64)
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+
+  ingestion_events   IngestionEvent[]
+  ingestion_items    IngestionItem[]
+  recheck_runs       RecheckRun[]      @relation("base_run")
+  publish_runs       PublishRun[]      @relation("source_run")
+  parent_ingestion   IngestionRun?     @relation("ingestion_parent", fields: [parent_run_id], references: [run_id], onDelete: SetNull, onUpdate: Restrict)
+  child_ingestions   IngestionRun[]    @relation("ingestion_parent")
+
+  @@index([status, created_at(sort: Desc)], map: "idx_ingestion_runs_status_created")
+  @@index([started_at(sort: Desc)], map: "idx_ingestion_runs_started_at")
+  @@index([trace_id], map: "idx_ingestion_runs_trace_id")
+  @@map("ingestion_runs")
+}
+
+model IngestionEvent {
+  event_id      String   @id @db.Uuid
+  run_id        String   @db.Uuid
+  event_type    String   @db.VarChar(32)
+  event_status  String   @db.VarChar(16)
+  target_id     String?  @db.VarChar(64)
+  error_code    String?  @db.VarChar(64)
+  message       String
+  occurred_at   DateTime @db.Timestamptz(6)
+  trace_id      String   @db.VarChar(64)
+
+  ingestion_run IngestionRun @relation(fields: [run_id], references: [run_id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@index([run_id, occurred_at], map: "idx_ingestion_events_run_time")
+  @@index([event_status, occurred_at(sort: Desc)], map: "idx_ingestion_events_status")
+  @@index([trace_id], map: "idx_ingestion_events_trace_id")
+  @@map("ingestion_events")
+}
+
+model IngestionItem {
+  item_id              String    @id @db.Uuid
+  run_id               String    @db.Uuid
+  video_id             String    @db.VarChar(32)
+  status               String    @db.VarChar(16)
+  failure_reason_code  String?   @db.VarChar(64)
+  failure_scope        String?   @db.VarChar(32)
+  update_type          String    @db.VarChar(16)
+  source_type          String    @db.VarChar(16)
+  processed_at         DateTime? @db.Timestamptz(6)
+  trace_id             String    @db.VarChar(64)
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+
+  ingestion_run IngestionRun @relation(fields: [run_id], references: [run_id], onDelete: Cascade, onUpdate: Restrict)
+  video         Video        @relation(fields: [video_id], references: [video_id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([run_id, video_id], map: "uq_ingestion_items_run_video")
+  @@index([run_id, status], map: "idx_ingestion_items_run_status")
+  @@index([video_id, created_at(sort: Desc)], map: "idx_ingestion_items_video")
+  @@index([trace_id], map: "idx_ingestion_items_trace_id")
+  @@map("ingestion_items")
+}
+
+model RecheckRun {
+  recheck_run_id  String    @id @db.Uuid
+  base_run_id     String?   @db.Uuid
+  mode            String    @db.VarChar(32)
+  status          String    @db.VarChar(16)
+  requested_by    String?   @db.VarChar(64)
+  total_count     Int       @default(0)
+  changed_count   Int       @default(0)
+  unchanged_count Int       @default(0)
+  failed_count    Int       @default(0)
+  started_at      DateTime? @db.Timestamptz(6)
+  finished_at     DateTime? @db.Timestamptz(6)
+  trace_id        String    @db.VarChar(64)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+
+  base_run      IngestionRun?  @relation("base_run", fields: [base_run_id], references: [run_id], onDelete: SetNull, onUpdate: Restrict)
+  recheck_items RecheckItem[]
+
+  @@index([status, created_at(sort: Desc)], map: "idx_recheck_runs_status_created")
+  @@index([mode, created_at(sort: Desc)], map: "idx_recheck_runs_mode_created")
+  @@index([base_run_id], map: "idx_recheck_runs_base_run")
+  @@map("recheck_runs")
+}
+
+model RecheckItem {
+  recheck_item_id String    @id @db.Uuid
+  recheck_run_id  String    @db.Uuid
+  video_id        String    @db.VarChar(32)
+  diff_status     String    @db.VarChar(16)
+  diff_fields     String[]
+  reason          String?
+  compared_at     DateTime? @db.Timestamptz(6)
+  trace_id        String    @db.VarChar(64)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+
+  recheck_run RecheckRun @relation(fields: [recheck_run_id], references: [recheck_run_id], onDelete: Cascade, onUpdate: Restrict)
+  video       Video      @relation(fields: [video_id], references: [video_id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([recheck_run_id, video_id], map: "uq_recheck_items_run_video")
+  @@index([recheck_run_id, diff_status], map: "idx_recheck_items_run_status")
+  @@index([video_id, created_at(sort: Desc)], map: "idx_recheck_items_video")
+  @@index([compared_at(sort: Desc)], map: "idx_recheck_items_compared_at")
+  @@map("recheck_items")
+}
+
+model PublishRun {
+  publish_run_id      String    @id @db.Uuid
+  source_run_id       String?   @db.Uuid
+  publish_type        String    @db.VarChar(16)
+  trigger_type        String    @db.VarChar(16)
+  status              String    @db.VarChar(16)
+  triggered_by        String?   @db.VarChar(64)
+  started_at          DateTime? @db.Timestamptz(6)
+  finished_at         DateTime? @db.Timestamptz(6)
+  published_at        DateTime? @db.Timestamptz(6)
+  rollback_executed   Boolean   @default(false)
+  rollback_to_version String?   @db.VarChar(64)
+  error_code          String?   @db.VarChar(64)
+  error_message       String?
+  retryable           Boolean   @default(false)
+  trace_id            String    @db.VarChar(64)
+  created_at          DateTime  @default(now()) @db.Timestamptz(6)
+
+  source_run        IngestionRun?      @relation("source_run", fields: [source_run_id], references: [run_id], onDelete: SetNull, onUpdate: Restrict)
+  publish_steps     PublishStep[]
+  publish_artifacts PublishArtifact[]
+
+  @@index([status, created_at(sort: Desc)], map: "idx_publish_runs_status_created")
+  @@index([publish_type, created_at(sort: Desc)], map: "idx_publish_runs_type_created")
+  @@index([source_run_id], map: "idx_publish_runs_source_run")
+  @@index([trace_id], map: "idx_publish_runs_trace_id")
+  @@map("publish_runs")
+}
+
+model PublishStep {
+  publish_step_id String    @id @db.Uuid
+  publish_run_id  String    @db.Uuid
+  step_name       String    @db.VarChar(32)
+  status          String    @db.VarChar(16)
+  started_at      DateTime? @db.Timestamptz(6)
+  finished_at     DateTime? @db.Timestamptz(6)
+  error_code      String?   @db.VarChar(64)
+  error_message   String?
+  trace_id        String    @db.VarChar(64)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+
+  publish_run PublishRun @relation(fields: [publish_run_id], references: [publish_run_id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@unique([publish_run_id, step_name], map: "uq_publish_steps_run_name")
+  @@index([publish_run_id, created_at], map: "idx_publish_steps_run_order")
+  @@index([publish_run_id, status], map: "idx_publish_steps_run_status")
+  @@index([step_name, status], map: "idx_publish_steps_name_status")
+  @@map("publish_steps")
+}
+
+model PublishArtifact {
+  artifact_id        String   @id @db.Uuid
+  publish_run_id     String   @db.Uuid
+  artifact_type      String   @db.VarChar(32)
+  artifact_path      String
+  checksum           String   @db.VarChar(128)
+  record_count       Int?
+  generated_at       DateTime @db.Timestamptz(6)
+  validation_status  String   @db.VarChar(16)
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+
+  publish_run PublishRun @relation(fields: [publish_run_id], references: [publish_run_id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@unique([publish_run_id, artifact_type], map: "uq_publish_artifacts_run_type")
+  @@index([publish_run_id, artifact_type], map: "idx_publish_artifacts_run_type")
+  @@index([checksum], map: "idx_publish_artifacts_checksum")
+  @@index([generated_at(sort: Desc)], map: "idx_publish_artifacts_generated_at")
+  @@map("publish_artifacts")
+}
