@@ -3,11 +3,11 @@ id: DD-SYS-COST-001
 title: コスト運用詳細
 doc_type: コスト運用詳細
 phase: DD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-21'
+updated: '2026-02-28'
 up:
 - '[[BD-SYS-ADR-015]]'
 related:
@@ -18,6 +18,7 @@ related:
 - '[[DD-SYS-AV-001]]'
 - '[[BD-INF-MON-001]]'
 - '[[RQ-RDR-049]]'
+- '[[BD-SYS-ADR-043]]'
 tags:
 - diopside
 - DD
@@ -60,6 +61,43 @@ tags:
 - `CostCenter` / `Environment` / `Project` をコスト配分タグとして有効化する。
 - 反映遅延（タグキー表示最大24時間 + 有効化反映最大24時間）を考慮し、月次集計は月初3営業日以内に確定する。
 - 集計結果は [[AT-OPS-001]] へ記録し、[[RQ-COST-001-01]] の閾値（3,000円/2,700円）と照合する。
+
+## 現行構成ベース見積（2026-02）
+
+### 見積前提
+| 項目 | 前提値 | 備考 |
+|---|---|---|
+| リージョン | us-east-1相当 | 単価は代表値を採用 |
+| 為替 | 1 USD = 150 JPY | 月次レビューで更新 |
+| ネットワーク構成 | NATなし、Logs Interface Endpointなし | 固定費抑制方針（[[BD-SYS-ADR-043]]） |
+| 監視構成 | CloudFront 5xxアラーム 1本/環境 | 初期最小構成 |
+| Config運用 | prodのみ有効、devは無効 | 統制コストを環境差分で最適化 |
+
+### シナリオ別月額見積
+| シナリオ | 主な利用量（目安） | 見積USD/月 | 見積JPY/月 | 判定 |
+|---|---|---|---|---|
+| 低負荷 | CF転送30GB、CF 30万req、API 10万req、Lambda 10万inv、Logs 2GB | 5.8 - 8.7 | 870 - 1,305 | 上限内 |
+| 中負荷 | CF転送180GB、CF 150万req、API 50万req、Lambda 50万inv、Logs 8GB | 25.2 - 30.1 | 3,780 - 4,515 | 上限超過見込み |
+| 高負荷 | CF転送600GB、CF 500万req、API 200万req、Lambda 200万inv、Logs 25GB | 80.2 - 93.6 | 12,030 - 14,040 | 上限超過 |
+
+### 構成別内訳（低負荷シナリオ基準）
+| サービス | 見積USD/月 | 見積JPY/月 | 備考 |
+|---|---|---|---|
+| CloudFront（転送+req） | 2.8 - 3.2 | 420 - 480 | 最大支配因子 |
+| CloudWatch Logs | 1.0 - 1.6 | 150 - 240 | 取込量依存 |
+| API Gateway + Lambda | 0.2 - 0.5 | 30 - 75 | 低負荷では軽微 |
+| S3（保存+req） | 0.2 - 0.5 | 30 - 75 | lifecycle前提 |
+| 準固定費（Alarm+Config） | 1.6 - 2.9 | 240 - 435 | prod Configを含む |
+
+### 見積式
+```
+月額見積 = CloudFront(転送GB * 単価 + req/10k * 単価)
+        + API Gateway(req/100万 * 単価)
+        + Lambda(req/100万 * 単価 + GB秒 * 単価)
+        + CloudWatch Logs(取込GB * 単価)
+        + S3(保存GB * 単価 + req単価)
+        + 準固定費(Alarm本数 * 単価 + Config評価/記録単価)
+```
 
 ## コスト超過検知アルゴリズム
 
@@ -124,6 +162,7 @@ flowchart TD
   - 月次コスト配賦レポートと是正記録（[[AT-OPS-001]]）
 
 ## 変更履歴
+- 2026-02-28: NAT/Interface Endpoint非採用後の現行構成を基準に、シナリオ別月額見積と構成別内訳を追加
 - 2026-02-21: `Description` を必須タグへ追加し、説明フィールド欠落の検知・是正条件を追加
 - 2026-02-14: `Environment` 許容値を `Production` / `Development` へ更新し、抑制施策の環境表記を2環境運用へ整合
 - 2026-02-13: `ManagedBy` の許容値をCDKオンリー方針へ更新（`CDK`/`Manual`）

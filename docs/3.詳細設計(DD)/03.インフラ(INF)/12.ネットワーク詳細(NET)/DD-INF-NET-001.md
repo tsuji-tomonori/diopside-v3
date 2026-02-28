@@ -3,7 +3,7 @@ id: DD-INF-NET-001
 title: ネットワーク詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.5
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -42,7 +42,7 @@ tags:
 | リソース | 設定項目 | 設定値 | 根拠 |
 |---|---|---|---|
 | Public route table | デフォルトルート | `0.0.0.0/0 -> Internet Gateway` | 公開経路（`/web`, `/docs`, `/openapi`, `/api/v1`）の受信を成立させるため。 |
-| Private app route table | デフォルトルート | `0.0.0.0/0 -> NAT Gateway` | アプリ面は受信不可を維持しつつ、外向き通信のみ許可するため。 |
+| Private app route table | デフォルトルート | なし（VPC Endpoint経由のみ） | 常設NATを使わず、固定費を抑制しつつ外向き通信を必要最小限へ限定するため。 |
 | Private data route table | デフォルトルート | なし（VPC内部のみ） | データ面の外部到達性を禁止し、誤送信経路を削減するため。 |
 
 ## 3. Security Group/NACL設計
@@ -57,7 +57,7 @@ tags:
 | リソース | 設定項目 | 設定値 | 根拠 |
 |---|---|---|---|
 | Gateway Endpoint (S3) | 接続先 | `com.amazonaws.<region>.s3` | Private subnet からS3へインターネット非経由で到達させるため。 |
-| Interface Endpoint (CloudWatch Logs) | 接続先 | `com.amazonaws.<region>.logs` | 監視ログ送信を私設経路化し、送信制御と可用性を両立するため。 |
+| Interface Endpoint (CloudWatch Logs) | 接続先 | 初期は採用しない（段階導入） | 定額課金抑制を優先し、MVPでは費用対効果評価後に導入判断するため。 |
 
 ## 変更管理
 - ネットワーク変更は `cdk diff` 差分で `route/security-group/nacl/vpc-endpoint` の4点をレビュー必須とする。
@@ -68,6 +68,8 @@ tags:
 - [[IT-INFIT-SMK-001]] で公開経路と監視連携のスモークを実施する。
 
 ## 変更履歴
+- 2026-02-28: CloudWatch Logs Interface Endpointを初期非採用へ変更し、Endpoint方針を段階導入前提へ更新 [[BD-SYS-ADR-043]]
+- 2026-02-28: Private app subnetのデフォルトルートからNAT Gatewayを除外し、Endpoint経由運用へ変更 [[BD-SYS-ADR-042]]
 - 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-14: 環境列を `dev/prod` へ統一し、VPC/サブネット実装値を2環境前提へ更新
 - 2026-02-13: VPC詳細設計として再編し、リソース別設定値と根拠を章分割で追加

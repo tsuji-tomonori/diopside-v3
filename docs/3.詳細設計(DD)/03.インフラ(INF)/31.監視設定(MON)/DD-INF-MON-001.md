@@ -3,7 +3,7 @@ id: DD-INF-MON-001
 title: インフラ監視詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -24,6 +24,7 @@ tags:
 ## 詳細仕様
 - 監視項目: CPU/Memory/Latency/Error/QueueDepth/Quota。
 - アラートは WARN/CRITICAL の2段階とし、通知先を固定する。
+- 初期構成はコスト最小化を優先し、CloudFront 5xxのCRITICAL監視を必須、Lambda詳細監視は段階導入とする。
 
 ## 章構成
 1. リソース別監視設定
@@ -37,6 +38,13 @@ tags:
 | Lambda(API) | p95応答時間、エラー率 | p95 WARN 1200ms / CRITICAL 1500ms | API体感性能と失敗率の悪化を同時検知するため。 |
 | CloudWatch Logs | 必須フィールド欠測率 | WARN 0.5% / CRITICAL 1.0% | 監査と障害解析の欠落を防止するため。 |
 | 通知経路 | 通知遅延 | WARN 3分 / CRITICAL 5分 | 運用受入基準（[[AT-OPS-001]]）を満たすため。 |
+
+## 初期実装（2026-02時点）
+| 項目 | dev | prod | 備考 |
+|---|---|---|---|
+| CloudFront 5xx CRITICAL | 有効 | 有効 | 実装済み |
+| CloudFront 5xx WARN | 無効 | 無効 | 初期は1本運用 |
+| Lambda p95/エラー監視 | 無効 | 無効 | トラフィック増加時に段階導入 |
 
 ## 2. SLI/SLO閾値
 | 分類 | 指標 | WARN | CRITICAL |
@@ -62,6 +70,7 @@ tags:
 - 運用用、リリース判定用、障害解析用の3種類を提供する。
 
 ## 変更履歴
+- 2026-02-28: コスト最小構成に合わせ、初期実装監視（CloudFront 5xx単一）と段階導入方針を追加
 - 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-13: リソース別監視設定（CloudFront/Lambda/Logs/通知遅延）を追加
 - 2026-02-13: SLI/SLO閾値、通知経路、欠測時運用を追加

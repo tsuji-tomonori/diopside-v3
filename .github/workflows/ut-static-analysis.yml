@@ -1,0 +1,63 @@
+name: UT Static Analysis
+
+on:
+  pull_request:
+    paths:
+      - "docs/**/*.md"
+      - "scripts/pairwise/**"
+      - "scripts/ut_quality/**"
+      - ".opencode/skills/obsidian-doc-check/scripts/**"
+      - ".opencode/skills/obsidian-doc-new/scripts/**"
+      - "infra/**"
+      - "web/**"
+      - "Taskfile.yaml"
+      - ".github/workflows/ut-static-analysis.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**/*.md"
+      - "scripts/pairwise/**"
+      - "scripts/ut_quality/**"
+      - ".opencode/skills/obsidian-doc-check/scripts/**"
+      - ".opencode/skills/obsidian-doc-new/scripts/**"
+      - "infra/**"
+      - "web/**"
+      - "Taskfile.yaml"
+      - ".github/workflows/ut-static-analysis.yml"
+
+jobs:
+  ut-static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Task
+        uses: go-task/setup-task@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "PyYAML>=6,<7"
+
+      - name: Install infra dependencies
+        run: npm --prefix infra ci
+
+      - name: Install web dependencies
+        run: npm --prefix web ci
+
+      - name: Run UT static analysis suite
+        run: task docs:ut:stat:check

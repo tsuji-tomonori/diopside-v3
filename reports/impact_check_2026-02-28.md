@@ -127,3 +127,63 @@
   - API逆引きとUT/IT証跡運用を `AT-PLAN-001` / `AT-RPT-001` / `AT-GO-001` で連結。
 - 運用影響:
   - インフラ受入観点はAT本線（OPS/RPT/GO/RUN）へ統合し、別ゲート文書の二重管理を解消。
+
+## 追加実施（NAT常設禁止とネットワーク設計反映）
+- 対象: `infra/lib/quartz-site-stack.ts`、`docs/1.要求(RQ)/12.プロジェクトの制約(PC)/RQ-PC-006.md`、`docs/2.基本設計(BD)/04.インフラ(INF)/13.ネットワーク(NET)/BD-INF-NET-001.md`、`docs/3.詳細設計(DD)/03.インフラ(INF)/12.ネットワーク詳細(NET)/DD-INF-NET-001.md`、`RQ-RDR-053`、`BD-SYS-ADR-042`。
+- 変更内容:
+  - CDK実装から `NatGateway` / `EIP` / Private app subnetのデフォルトルートを削除。
+  - `RQ-PC-006` に「NAT Gateway常設禁止」と例外運用条件（期限・撤去条件必須）を追記。
+  - `BD-INF-NET-001` / `DD-INF-NET-001` のルート設計をNAT非依存へ更新。
+  - 要求判断 `[[RQ-RDR-053]]` と設計判断 `[[BD-SYS-ADR-042]]` を追加。
+
+## 追加影響確認（NAT除去）
+- コスト影響:
+  - 常時課金リソースのうちNAT関連固定費を除去し、[[RQ-PC-006]] の月額上限制約に整合。
+- 通信影響:
+  - Private app subnetはインターネット向けデフォルトルートを持たず、VPC Endpoint経由通信を前提化。
+- 検証影響:
+  - `infra` の `npm run build` / `npm test` / `npm run synth` で差分整合を確認。
+
+## 追加実施（定額課金最小構成の両環境適用）
+- 対象: `infra/lib/quartz-site-stack.ts`、`RQ-PC-006`、`BD-INF-NET-001`、`DD-INF-NET-001`、`RQ-RDR-054`、`BD-SYS-ADR-043`。
+- 変更内容:
+  - `LogsInterfaceEndpoint` を削除し、VPC Endpointは `S3 Gateway` のみを初期採用。
+  - CloudWatchアラームを `CloudFront5xxCriticalAlarm` の1本へ集約。
+  - AWS Config関連リソースを `prod` のみ作成する条件分岐へ変更。
+  - 制約/設計文書へ「定額課金リソース最小構成」方針を反映し、RDR/ADRで判断根拠を追加。
+
+## 追加影響確認（定額課金最小化）
+- コスト影響:
+  - NAT除去に続き、Interface Endpoint常設とアラーム多重化を解消し、固定費を追加削減。
+- 運用影響:
+  - 監視はCloudFront 5xxを基線に維持し、Lambda詳細監視は段階導入へ移行。
+  - 統制（Config）はprod必須、dev任意の環境差分を明確化。
+
+## 追加実施（全体コスト見積のDD反映）
+- 対象: `DD-SYS-COST-001`、`DD-INF-MON-001`、`DD-INF-CFG-001`、`BD-SYS-ADR-043`。
+- 変更内容:
+  - `DD-SYS-COST-001` に現行構成（NATなし、Logs Interface Endpointなし、Configはprodのみ）を前提としたシナリオ別月額見積（低/中/高）を追加。
+  - 見積式、構成別内訳、準固定費（Alarm/Config）を追加し、月次判定入力を定量化。
+  - `DD-INF-MON-001` に初期実装監視（CloudFront 5xx単一）と段階導入方針を追加。
+  - `DD-INF-CFG-001` に環境別適用（dev任意/prod必須）を追加。
+  - `BD-SYS-ADR-043` にDDコスト見積モデル反映を影響範囲として追記。
+
+## 追加影響確認（見積運用）
+- トレーサビリティ:
+  - コスト制約 `RQ-PC-006` から ADR/DD へ見積根拠が連結され、運用判定の説明可能性を強化。
+- 運用影響:
+  - 月次レビューで為替/単価更新を行う前提を明文化し、見積精度の継続改善が可能。
+
+## 追加実施（UT-STAT-002〜008 一括実行導入）
+- 対象: `Taskfile.yaml`、`.github/workflows/ut-static-analysis.yml`、`docs/4.単体テスト(UT)/21.単体テストケース(CASE)`。
+- 変更内容:
+  - `task docs:ut:stat:check` を追加し、UT-STAT-002〜008 の7ツールを単一入口で実行可能化。
+  - PR/push 向けに `.github/workflows/ut-static-analysis.yml` を追加し、Python + Node + Task セットアップ後に上記タスクを実行するCIゲートを導入。
+  - 実行結果に基づき `task docs:ut:pairwise:generate` と `task docs:guard` を適用し、`UT-CASE-FE-UI-U03-PW` / `UT-CASE-BE-DD-APP-API-007-PW` の生成差分・用語リンク差分を解消。
+
+## 追加影響確認（UT静的解析導入）
+- 実行結果:
+  - `task docs:ut:stat:check` 再実行で、UT-STAT-002〜008 がすべて PASS（`issues: 0`, `broken_links: 0`, `changed=0`, `tsc_errors=0`, `generated_diff=0`）を確認。
+- 運用影響:
+  - 既存 `docs:guard` と独立して、設計上定義した静的解析セットを定常的に実行可能。
+  - ペアワイズ生成物（`*-PW.md`）は `UT-STAT-003` のチェック対象から除外し、生成物と用語自動補正の循環差分を防止。

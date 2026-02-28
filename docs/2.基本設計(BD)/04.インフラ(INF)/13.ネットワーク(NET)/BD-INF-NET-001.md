@@ -3,11 +3,11 @@ id: BD-INF-NET-001
 title: ネットワーク境界方針
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.0.3
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-23'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
@@ -15,6 +15,8 @@ related:
 - '[[DD-INF-NET-001]]'
 - '[[IT-INFIT-NET-001]]'
 - '[[BD-SYS-ADR-028]]'
+- '[[BD-SYS-ADR-042]]'
+- '[[BD-SYS-ADR-043]]'
 tags:
 - diopside
 - BD
@@ -31,7 +33,8 @@ tags:
 
 ## 必須設計項目（BDで必ず決める）
 - VPC/CIDR、AZ数、Public/Private/DBサブネットの分割方針。
-- ルートテーブル（IGW/NAT/VPC Endpoint）と関連付け。
+- ルートテーブル（IGW/VPC Endpoint）と関連付け、常設NATを採用しない方針。
+- VPC Endpointは必要最小限を原則とし、初期はS3 Gateway Endpointを必須、Interface Endpointは費用対効果で段階導入とする。
 - SG（ステートフル）を基本とした許可ルール、NACL（ステートレス）採用可否。
 - 重要経路（管理API、デプロイ、Secrets取得）の追跡可能性。
 
@@ -53,10 +56,12 @@ tags:
 - DDでCIDRやSG具体値を確定する際に必要な前提が揃っていること。
 
 ## 未指定事項
-- VPC CIDR、サブネットCIDR、NAT配置数。
+- VPC CIDR、サブネットCIDR。
 - VPC Endpoint採用対象（S3/STS/Secrets Manager等）。
 
 ## 変更履歴
+- 2026-02-28: 定額課金最小化方針に合わせ、Endpoint採用基準（S3必須・Interface段階導入）を追加 [[BD-SYS-ADR-043]]
+- 2026-02-28: コスト制約に合わせて常設NAT非採用方針を明文化し、必須設計項目と未指定事項を更新 [[BD-SYS-ADR-042]]
 - 2026-02-23: 目的/DD引渡し/受入基準を追加し、ネットワーク章のBD入力を明文化 [[BD-SYS-ADR-036]]
 - 2026-02-20: 章再編に合わせてVPC/ルート/SG/NACLの必須項目と未指定項目管理を追加 [[BD-SYS-ADR-036]]
 - 2026-02-13: BDは境界方針のみを保持し、CIDR等の具体値正本を [[DD-INF-NET-001]] へ集約

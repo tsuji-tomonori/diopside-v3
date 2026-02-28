@@ -12,7 +12,10 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:compose:up": "docker compose -f ../docker-compose.yml -f ../docker-compose.e2e.yml up -d --build",
+    "test:e2e:compose:down": "docker compose -f ../docker-compose.yml -f ../docker-compose.e2e.yml down -v",
+    "test:e2e:compose": "bash -lc 'set -euo pipefail; npm run test:e2e:compose:up; trap \"npm run test:e2e:compose:down\" EXIT; PW_USE_COMPOSE=1 PW_BASE_URL=http://127.0.0.1:5173 playwright test'"
   },
   "dependencies": {
     "react": "^19.2.0",

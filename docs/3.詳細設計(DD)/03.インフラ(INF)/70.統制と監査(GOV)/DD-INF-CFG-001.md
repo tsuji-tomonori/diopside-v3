@@ -3,7 +3,7 @@ id: DD-INF-CFG-001
 title: AWS Config詳細（required-tags）
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-21
@@ -33,6 +33,12 @@ tags:
 | 評価頻度 | 日次 | 運用遅延を抑えるため。 |
 | 対象 | 管理対象8サービスに紐づく主要リソース（6必須タグ） | コスト按分と監査追跡を成立させるため。 |
 
+## 環境別適用
+| 環境 | 適用方針 | 根拠 |
+|---|---|---|
+| Development | 標準無効（任意有効） | 固定費抑制を優先し、検証用途の最小構成を維持するため。 |
+| Production | 必須有効 | 監査証跡とタグ統制の継続検知を担保するため。 |
+
 ## 必須タグ
 - `Project`
 - `Environment`
@@ -51,6 +57,7 @@ tags:
 - 本番で未是正違反が継続する場合は、次回 `cdk deploy` の承認条件に反映する。
 
 ## 変更履歴
+- 2026-02-28: 環境別適用（dev任意/prod必須）を追加し、コスト最小構成と統制要件を両立
 - 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-21: `Description` と `ManagedBy` を必須タグへ追加し、required-tags評価対象を6キーへ更新
 - 2026-02-21: 新規作成（Config required-tagsの検出/是正運用を詳細化） [[BD-SYS-ADR-036]]
