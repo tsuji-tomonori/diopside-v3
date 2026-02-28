@@ -79,3 +79,13 @@
 ## 追加検証
 - `task docs:guard`
 - `task docs:trace`
+
+## 追加実施（IT-PW向けスキル追加）
+- 対象: `.opencode/skills/doc-it-pw`。
+- 変更内容:
+  - 新規 `doc-it-pw/SKILL.md` を追加し、IT-PW（UC基準）文書の適用範囲、因子設計ルール、品質チェックを定義。
+  - 新規 `doc-it-pw/TEMPLATE.md` を追加し、UC・ケース・因子・除外条件の必須観点を明示。
+
+## 追加影響確認（スキル運用）
+- `doc-it-pw` により、`docs/5.結合テスト(IT)/12.ペアワイズ(PW)` の更新手順を独立運用できる。
+- `doc-it-case` / `doc-it-plan` と責務分離され、UC基準IT設計の変更影響を管理しやすくなる。
