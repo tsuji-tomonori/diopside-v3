@@ -46,7 +46,7 @@ describe('buildTagMasterMap', () => {
   });
 });
 
-describe('parseBootstrapItems', () => {
+describe('[UT-CASE-FE-016] parseBootstrapItems', () => {
   const mockBootstrap: BootstrapJson = {
     schemaVersion: '1.0.0',
     bootstrapVersion: 'abc123',
@@ -97,7 +97,7 @@ describe('parseBootstrapItems', () => {
   });
 });
 
-describe('parseArchivePageItems', () => {
+describe('[UT-CASE-FE-016] parseArchivePageItems', () => {
   it('converts archive page items using tag lookup', () => {
     const tagLookup = new Map<number, string>([
       [0, 'ゲーム'],
@@ -127,7 +127,7 @@ describe('parseArchivePageItems', () => {
   });
 });
 
-describe('calculateDurationMaxBound', () => {
+describe('[UT-CASE-FE-016] calculateDurationMaxBound', () => {
   it('returns at least 240 minutes', () => {
     const items = [
       { durationSec: 60 }, // 1 minute

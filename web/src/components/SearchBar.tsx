@@ -48,6 +48,7 @@ export function SearchBar({
   const wrapRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [open, setOpen] = useState<boolean>(false);
+  const [isComposing, setIsComposing] = useState<boolean>(false);
 
   const suggestions = useMemo(() => buildSuggestions(query, tagCounts, items), [query, tagCounts, items]);
   const isOpen = open && suggestions.length > 0;
@@ -74,6 +75,9 @@ export function SearchBar({
 
   return (
     <div className="search-wrap" ref={wrapRef}>
+      <label htmlFor="q" className="searchLabel">
+        キーワード検索
+      </label>
       <div className="search">
         <span aria-hidden="true">🔎</span>
         <input
@@ -81,10 +85,13 @@ export function SearchBar({
           type="search"
           placeholder="検索: タイトル / タグ / ID（スペース=AND）"
           autoComplete="off"
+          role="combobox"
           value={query}
           onFocus={() => {
             if (suggestions.length > 0) setOpen(true);
           }}
+          onCompositionStart={() => setIsComposing(true)}
+          onCompositionEnd={() => setIsComposing(false)}
           onChange={(e) => {
             const v = e.target.value;
             onChangeQuery(v);
@@ -96,6 +103,8 @@ export function SearchBar({
               if (e.key === 'Escape') close();
               return;
             }
+
+            if (isComposing) return;
 
             if (e.key === 'ArrowDown') {
               e.preventDefault();
@@ -113,6 +122,7 @@ export function SearchBar({
           aria-autocomplete="list"
           aria-controls="suggestions"
           aria-expanded={isOpen}
+          aria-activedescendant={activeIndex >= 0 ? `suggestion-${activeIndex}` : undefined}
         />
         <span id="pill" className="pill">
           {pillText}
@@ -124,6 +134,7 @@ export function SearchBar({
           suggestions.map((s, idx) => (
             <li
               key={`${s.type}-${s.value}-${idx}`}
+              id={`suggestion-${idx}`}
               role="option"
               aria-selected={idx === activeIndex}
               className={idx === activeIndex ? 'active' : ''}

@@ -34,37 +34,37 @@ describe('filter', () => {
     durationRange: { minMinutes: 0, maxMinutes: 240, maxBoundMinutes: 240 },
   };
 
-  test('query tokens are ANDed', () => {
+  test('[UT-PW-FE-UI-U02-C014] query tokens are ANDed', () => {
     const s: FilterState = { ...baseState, q: 'hello world' };
     const out = applyFilters(items, s);
     expect(out.map((i) => i.videoId)).toEqual(['a']);
   });
 
-  test('tagMode AND requires all tags', () => {
+  test('[UT-PW-FE-UI-U02-C001] tagMode AND requires all tags', () => {
     const s: FilterState = { ...baseState, selectedTags: new Set(['企画', 'トーク']), tagMode: 'AND' };
     const out = applyFilters(items, s);
     expect(out.map((i) => i.videoId)).toEqual(['a']);
   });
 
-  test('tagMode OR requires any tag', () => {
+  test('[UT-PW-FE-UI-U02-C002] tagMode OR requires any tag', () => {
     const s: FilterState = { ...baseState, selectedTags: new Set(['ゲーム', 'トーク']), tagMode: 'OR' };
     const out = applyFilters(items, s);
     expect(out.map((i) => i.videoId).sort()).toEqual(['a', 'b']);
   });
 
-  test('date range excludes items without dates', () => {
+  test('[UT-PW-FE-UI-U02-C008] date range excludes items without dates', () => {
     const s: FilterState = { ...baseState, dateRange: { fromYmd: '2020-01-01', toYmd: '2020-01-01', fromDay: 1, toDay: 1 } };
     const out = applyFilters(items, s);
     expect(out.map((i) => i.videoId)).toEqual(['a']);
   });
 
-  test('duration range works', () => {
+  test('[UT-PW-FE-UI-U02-C005] duration range works', () => {
     const s: FilterState = { ...baseState, durationRange: { minMinutes: 30, maxMinutes: 90, maxBoundMinutes: 240 } };
     const out = applyFilters(items, s);
     expect(out.map((i) => i.videoId)).toEqual(['b']);
   });
 
-  test('sortOrder asc', () => {
+  test('[UT-PW-FE-UI-U02-C010] sortOrder asc', () => {
     const s: FilterState = { ...baseState, sortOrder: 'asc' };
     const out = applyFilters(items, s);
     expect(out.map((i) => i.videoId)).toEqual(['c', 'a', 'b']);

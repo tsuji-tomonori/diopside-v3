@@ -35,7 +35,7 @@ const mockItems: VideoItem[] = [
 ];
 
 describe('VideoGrid', () => {
-  test('renders empty message when no items', () => {
+  test('[UT-PW-FE-UI-U01-C005] renders empty message when no items', () => {
     render(
       <VideoGrid
         items={[]}
@@ -47,7 +47,7 @@ describe('VideoGrid', () => {
       />
     );
 
-    expect(screen.getByText('該当なし')).toBeInTheDocument();
+    expect(screen.getByText('該当なし。条件を調整して再検索してください。')).toBeInTheDocument();
   });
 
   test('renders video cards', () => {
@@ -122,7 +122,7 @@ describe('VideoGrid', () => {
     });
   });
 
-  test('calls onToggleTag when tag is clicked', async () => {
+  test('[UT-PW-FE-UI-U02-C007] calls onToggleTag when tag is clicked', async () => {
     const user = userEvent.setup();
     const toggled: string[] = [];
 
@@ -143,7 +143,7 @@ describe('VideoGrid', () => {
     expect(toggled).toEqual(['企画']);
   });
 
-  test('shows "さらに表示" button when hasMore is true', () => {
+  test('[UT-PW-FE-UI-U01-C002] shows "さらに表示" button when hasMore is true', () => {
     render(
       <VideoGrid
         items={mockItems}

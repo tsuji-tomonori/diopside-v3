@@ -1,7 +1,7 @@
 import { formatDuration, parseIsoDurationToSeconds } from '../duration';
 
 describe('duration', () => {
-  test('parseIsoDurationToSeconds', () => {
+  test('[UT-CASE-FE-016] parseIsoDurationToSeconds', () => {
     expect(parseIsoDurationToSeconds('PT56M33S')).toBe(56 * 60 + 33);
     expect(parseIsoDurationToSeconds('PT1H2M3S')).toBe(1 * 3600 + 2 * 60 + 3);
     expect(parseIsoDurationToSeconds('PT0S')).toBe(0);
@@ -10,7 +10,7 @@ describe('duration', () => {
     expect(parseIsoDurationToSeconds('P1D')).toBeNull();
   });
 
-  test('formatDuration', () => {
+  test('[UT-CASE-FE-016] formatDuration', () => {
     expect(formatDuration(0)).toBe('0:00');
     expect(formatDuration(59)).toBe('0:59');
     expect(formatDuration(60)).toBe('1:00');

@@ -16,12 +16,24 @@ export function VideoGrid({
   onToggleTag: (tag: string) => void;
   selectedTags: Set<string>;
   hasMore: boolean;
-  onLoadMore: () => void;
+  onLoadMore: () => void | Promise<void>;
 }) {
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
+
+  const handleLoadMore = async () => {
+    if (loadingMore) return;
+    setLoadingMore(true);
+    try {
+      await Promise.resolve(onLoadMore());
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
   if (items.length === 0) {
     return (
       <div id="empty" className="empty">
-        該当なし
+        該当なし。条件を調整して再検索してください。
       </div>
     );
   }
@@ -36,8 +48,8 @@ export function VideoGrid({
 
       <div className="moreWrap">
         {hasMore ? (
-          <button id="moreBtn" className="btn" type="button" onClick={onLoadMore}>
-            さらに表示
+          <button id="moreBtn" className="btn" type="button" onClick={handleLoadMore} disabled={loadingMore} aria-busy={loadingMore}>
+            {loadingMore ? '読み込み中...' : 'さらに表示'}
           </button>
         ) : (
           <small>末尾</small>

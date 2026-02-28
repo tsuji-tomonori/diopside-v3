@@ -1,12 +1,12 @@
 import { dowForJstNoon, toYmdJst, ymdToDayNumJst, epochSecToYmdJst, epochSecToIso } from '../date';
 
 describe('date', () => {
-  test('toYmdJst converts to JST date', () => {
+  test('[UT-CASE-FE-016] toYmdJst converts to JST date', () => {
     expect(toYmdJst('2019-11-30T13:33:26Z')).toBe('2019-11-30');
     expect(toYmdJst('2019-11-30T15:30:00Z')).toBe('2019-12-01');
   });
 
-  test('ymdToDayNumJst monotonically increases', () => {
+  test('[UT-CASE-FE-016] ymdToDayNumJst monotonically increases', () => {
     const a = ymdToDayNumJst('2019-11-30');
     const b = ymdToDayNumJst('2019-12-01');
     expect(a).not.toBeNull();
@@ -14,7 +14,7 @@ describe('date', () => {
     expect(b!).toBeGreaterThan(a!);
   });
 
-  test('dowForJstNoon returns valid dow', () => {
+  test('[UT-CASE-FE-016] dowForJstNoon returns valid dow', () => {
     const d = dowForJstNoon('2020-01-01');
     expect(d).toBeGreaterThanOrEqual(0);
     expect(d).toBeLessThanOrEqual(6);

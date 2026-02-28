@@ -18,6 +18,7 @@ import { FiltersDrawer } from './components/FiltersDrawer';
 import { VideoModal } from './components/VideoModal';
 import { Toast } from './components/Toast';
 import { useToast } from './hooks/useToast';
+import { AdminPanel } from './components/AdminPanel';
 
 type LoadPhase = 'idle' | 'bootstrap' | 'legacy' | 'tag_master' | 'archive' | 'complete';
 
@@ -60,6 +61,7 @@ function buildTagGroupMapFromMaster(tagMaster: TagMasterJson): TagGroupMap {
 const DEFAULT_LIMIT = 220;
 
 export function App() {
+  const [viewMode, setViewMode] = useState<'public' | 'admin'>('public');
   const [loading, setLoading] = useState<boolean>(true);
   const [loadPhase, setLoadPhase] = useState<LoadPhase>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -334,87 +336,6 @@ export function App() {
     toast('クリアしました');
   }, [durationMaxBoundMinutes, toast]);
 
-  const clearTags = useCallback(() => {
-    setSelectedTags(new Set());
-  }, []);
-
-  const clearDate = useCallback(() => {
-    setFromYmd(null);
-    setToYmd(null);
-    setSelectedYear(null);
-  }, []);
-
-  const setToday = useCallback(() => {
-    const t = getTodayYmdJst();
-    setFromYmd(t);
-    setToYmd(t);
-    setSelectedYear(null);
-
-    setCursorYear(Number(t.slice(0, 4)));
-    setCursorMonth0(Number(t.slice(5, 7)) - 1);
-  }, []);
-
-  const pickDay = useCallback(
-    (ymd: string) => {
-      setSelectedYear(null);
-      setFromYmd((from) => {
-        // If no start date yet, or range already completed, start a new selection.
-        if (!from || toYmd) {
-          setToYmd(null);
-          return ymd;
-        }
-
-        // Completing range
-        const a = ymd;
-        const b = from;
-        if (a <= b) {
-          setToYmd(b);
-          return a;
-        } else {
-          setToYmd(a);
-          return b;
-        }
-      });
-    },
-    [toYmd],
-  );
-
-  const pickYear = useCallback((year: number) => {
-    setSelectedYear(year);
-    const f = `${year}-01-01`;
-    const t = `${year}-12-31`;
-    setFromYmd(f);
-    setToYmd(t);
-    setCursorYear(year);
-    setCursorMonth0(0);
-  }, []);
-
-  const resetDuration = useCallback(() => {
-    setMinMinutes(0);
-    setMaxMinutes(durationMaxBoundMinutes);
-  }, [durationMaxBoundMinutes]);
-
-  // Duration slider constraints
-  const changeMinMinutes = useCallback(
-    (v: number) => {
-      setMinMinutes((prevMin) => {
-        const nextMin = Math.min(v, maxMinutes);
-        return nextMin;
-      });
-    },
-    [maxMinutes],
-  );
-
-  const changeMaxMinutes = useCallback(
-    (v: number) => {
-      setMaxMinutes((prevMax) => {
-        const nextMax = Math.max(v, minMinutes);
-        return nextMax;
-      });
-    },
-    [minMinutes],
-  );
-
   const selectedTagList = useMemo(() => Array.from(selectedTags).sort((a, b) => a.localeCompare(b, 'ja')), [selectedTags]);
 
   const modalItem = useMemo(() => (modalId ? items.find((it) => it.videoId === modalId) ?? null : null), [modalId, items]);
@@ -431,21 +352,38 @@ export function App() {
             </div>
           </div>
 
-          <SearchBar query={q} onChangeQuery={setQ} pillText={pillText} tagCounts={tagCounts} items={items} onPickTag={pickTag} />
+          {viewMode === 'public' ? (
+            <SearchBar query={q} onChangeQuery={setQ} pillText={pillText} tagCounts={tagCounts} items={items} onPickTag={pickTag} />
+          ) : (
+            <div className="search adminModeInfo" role="status" aria-live="polite">
+              管理UIモード: UI-A01〜A06の運用導線を表示中
+            </div>
+          )}
 
           <div className="actions">
-            <button className="btn" type="button" onClick={() => setDrawerOpen(true)}>
-              Filters
+            <button className={`btn ${viewMode === 'public' ? 'active' : ''}`} type="button" onClick={() => setViewMode('public')}>
+              公開UI
             </button>
-            <button className="btn" type="button" onClick={clearAll}>
-              クリア
+            <button className={`btn ${viewMode === 'admin' ? 'active' : ''}`} type="button" onClick={() => setViewMode('admin')}>
+              管理UI
             </button>
-            <button className={`btn ${sortOrder === 'desc' ? 'active' : ''}`} type="button" onClick={() => setSortOrder('desc')}>
-              ↓ 新しい順
-            </button>
-            <button className={`btn ${sortOrder === 'asc' ? 'active' : ''}`} type="button" onClick={() => setSortOrder('asc')}>
-              ↑ 古い順
-            </button>
+
+            {viewMode === 'public' && (
+              <>
+                <button className="btn" type="button" onClick={() => setDrawerOpen(true)} aria-expanded={drawerOpen} aria-controls="filters-drawer">
+                  Filters
+                </button>
+                <button className="btn" type="button" onClick={clearAll}>
+                  クリア
+                </button>
+                <button className={`btn ${sortOrder === 'desc' ? 'active' : ''}`} type="button" onClick={() => setSortOrder('desc')}>
+                  ↓ 新しい順
+                </button>
+                <button className={`btn ${sortOrder === 'asc' ? 'active' : ''}`} type="button" onClick={() => setSortOrder('asc')}>
+                  ↑ 古い順
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -458,7 +396,7 @@ export function App() {
           </div>
         )}
 
-        {!loading && !error && (
+        {!loading && !error && viewMode === 'public' && (
           <>
             <SelectedTags tags={selectedTagList} onToggle={toggleTag} />
 
@@ -472,6 +410,8 @@ export function App() {
             />
           </>
         )}
+
+        {!loading && !error && viewMode === 'admin' && <AdminPanel toast={toast} />}
       </main>
 
       <button
@@ -485,54 +425,43 @@ export function App() {
       </button>
 
       <FiltersDrawer
-        open={drawerOpen}
+        open={drawerOpen && viewMode === 'public'}
         onClose={() => setDrawerOpen(false)}
         totalCount={items.length}
         filteredCount={filteredItems.length}
         yearCounts={yearCounts}
-        selectedYear={selectedYear}
-        onPickYear={(y) => {
-          pickYear(y);
-          toast(`${y}年に絞り込み`);
-        }}
-        fromYmd={fromYmd}
-        toYmd={toYmd}
-        cursorYear={cursorYear}
-        cursorMonth0={cursorMonth0}
         videoDates={videoDates}
-        onChangeCursor={(y, m0) => {
-          setCursorYear(y);
-          setCursorMonth0(m0);
-        }}
-        onPickDay={(ymd) => {
-          pickDay(ymd);
-          toast(`日付: ${ymd}`);
-        }}
-        onSetToday={setToday}
-        onClearDate={clearDate}
-        minMinutes={minMinutes}
-        maxMinutes={maxMinutes}
         maxBoundMinutes={durationMaxBoundMinutes}
-        onChangeMinMinutes={changeMinMinutes}
-        onChangeMaxMinutes={changeMaxMinutes}
-        onResetDuration={resetDuration}
-        tagMode={tagMode}
-        onChangeTagMode={(v) => {
-          setTagMode(v);
-          toast(`タグ条件: ${v}`);
-        }}
-        sortOrder={sortOrder}
-        onChangeSortOrder={(v) => {
-          setSortOrder(v);
-          toast(`並び: ${v}`);
-        }}
-        selectedTags={selectedTags}
-        onToggleTag={toggleTag}
-        onClearTags={clearTags}
-        tagSearch={tagSearch}
-        onChangeTagSearch={setTagSearch}
         tagCounts={tagCounts}
         tagGroupMap={tagGroupMap}
+        initialDraft={{
+          fromYmd,
+          toYmd,
+          selectedYear,
+          cursorYear,
+          cursorMonth0,
+          minMinutes,
+          maxMinutes,
+          tagMode,
+          sortOrder,
+          selectedTags,
+          tagSearch,
+        }}
+        onApply={(draft) => {
+          setFromYmd(draft.fromYmd);
+          setToYmd(draft.toYmd);
+          setSelectedYear(draft.selectedYear);
+          setCursorYear(draft.cursorYear);
+          setCursorMonth0(draft.cursorMonth0);
+          setMinMinutes(draft.minMinutes);
+          setMaxMinutes(draft.maxMinutes);
+          setTagMode(draft.tagMode);
+          setSortOrder(draft.sortOrder);
+          setSelectedTags(new Set(draft.selectedTags));
+          setTagSearch(draft.tagSearch);
+          toast('フィルタを適用しました');
+        }}
+        onClearAll={clearAll}
       />
 
       <VideoModal

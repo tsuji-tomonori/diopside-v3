@@ -26,16 +26,54 @@ export function VideoModal({
   toast: (msg: string) => void;
 }) {
   const dlgRef = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
+  const trapFocus = (event: KeyboardEvent) => {
+    if (event.key !== 'Tab') return;
+    const dlg = dlgRef.current;
+    if (!dlg || !dlg.open) return;
+
+    const focusables = Array.from(
+      dlg.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter((el) => !el.hasAttribute('disabled'));
+
+    if (focusables.length === 0) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+
+    if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    } else if (event.shiftKey && active === first) {
+      event.preventDefault();
+      last.focus();
+    }
+  };
 
   useEffect(() => {
     const dlg = dlgRef.current;
     if (!dlg) return;
 
     if (item) {
+      returnFocusRef.current = document.activeElement as HTMLElement | null;
       if (!dlg.open) dlg.showModal();
+      queueMicrotask(() => {
+        closeButtonRef.current?.focus();
+      });
+      window.addEventListener('keydown', trapFocus);
     } else {
       if (dlg.open) dlg.close();
+      window.removeEventListener('keydown', trapFocus);
+      returnFocusRef.current?.focus();
     }
+    return () => {
+      window.removeEventListener('keydown', trapFocus);
+    };
   }, [item]);
 
   const watchUrl = useMemo(() => (item ? ytWatchUrl(item.videoId) : ''), [item]);
@@ -55,6 +93,10 @@ export function VideoModal({
     <dialog
       id="dlg"
       ref={dlgRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dlgTitle"
+      aria-describedby="dlgMeta"
       onClose={onClose}
       onCancel={(e) => {
         e.preventDefault();
@@ -96,8 +138,11 @@ export function VideoModal({
 
           <div className="modalRight">
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', alignItems: 'center' }}>
-              <h3 id="dlgTitle">{item.title || item.videoId}</h3>
+              <h3 id="dlgTitle" tabIndex={-1}>
+                {item.title || item.videoId}
+              </h3>
               <button
+                ref={closeButtonRef}
                 className="btn"
                 type="button"
                 onClick={() => {
@@ -110,7 +155,13 @@ export function VideoModal({
 
             <div className="kv">
               <div className="k">Meta</div>
-              <div className="v">{metaText}</div>
+              <div id="dlgMeta" className="v">
+                {metaText}
+              </div>
+            </div>
+
+            <div className="srOnly" role="status" aria-live="polite">
+              モーダルを表示中です。Escで閉じられます。
             </div>
 
             <div className="row" style={{ justifyContent: 'flex-end' }}>

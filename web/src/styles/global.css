@@ -410,6 +410,8 @@
       height: 70px;
     }
     .barItem {
+      all: unset;
+      display: block;
       position: relative;
       border-radius: 10px;
       border: 1px solid rgba(28,28,44,.10);
@@ -622,6 +624,8 @@
     }
     .tagRow {
       padding: 9px 10px;
+      width: 100%;
+      text-align: left;
       border-bottom: 1px solid rgba(28,28,44,.06);
       cursor: pointer;
       user-select: none;
@@ -849,6 +853,12 @@ header{
 .search-wrap{
   position: relative;
 }
+.searchLabel{
+  display: block;
+  font-size: 12px;
+  margin: 0 0 6px;
+  color: var(--muted);
+}
 .search{
   border: 2px solid rgba(17,17,20,.92);
   border-radius: 0;
@@ -941,6 +951,11 @@ header{
   font-size: 11px;
 }
 .btn:hover{ transform: translateY(-1px); }
+.btn:disabled{
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
 .btn.active{
   background: var(--accent);
   color: #fff;
@@ -1105,6 +1120,92 @@ details[open] > summary{ border-bottom-color: rgba(17,17,20,.16); }
   border-width: 1px;
 }
 
+.drawerFooter{
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.adminModeInfo{
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.adminShell{
+  display: grid;
+  gap: 12px;
+}
+
+.adminNav{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adminBody{
+  border: 2px solid rgba(17,17,20,.92);
+  background: rgba(255,255,255,.95);
+  padding: 12px;
+}
+
+.adminPanel{
+  display: grid;
+  gap: 10px;
+}
+
+.adminPanel h2{
+  margin: 0;
+  font-size: 16px;
+}
+
+.adminGrid2{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.adminRow{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.adminRowEnd{
+  align-items: end;
+}
+
+.adminList{
+  border: 1px solid var(--border);
+}
+
+.adminListItem{
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 1.4fr auto 1fr;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.adminListItem:last-child{
+  border-bottom: 0;
+}
+
+.srOnly{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 
 /* Hero panel (reference: outlined landing style) */
 .hero{
@@ -1182,4 +1283,5 @@ details[open] > summary{ border-bottom-color: rgba(17,17,20,.16); }
 @media (max-width: 720px){
   .heroTitle{ font-size: 22px; }
   .hero{ padding: 14px; }
+  .adminGrid2{ grid-template-columns: 1fr; }
 }

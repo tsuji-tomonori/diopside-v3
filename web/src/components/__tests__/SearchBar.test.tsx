@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SearchBar } from '../SearchBar';
 import type { VideoItem } from '../../lib/data';
@@ -32,20 +32,55 @@ function Wrapper({ onPickTag }: { onPickTag: (t: string) => void }) {
 }
 
 describe('SearchBar', () => {
-  test('shows tag suggestions and selects a tag', async () => {
+  test('[UT-PW-FE-UI-U02-C005] combobox aria is synchronized by suggestion open/close', async () => {
+    const user = userEvent.setup();
+    render(<Wrapper onPickTag={() => {}} />);
+
+    const input = screen.getByRole('combobox');
+    expect(input).toHaveAttribute('aria-controls', 'suggestions');
+    expect(input).toHaveAttribute('aria-expanded', 'false');
+
+    await user.type(input, '企');
+    expect(await screen.findByText('企画')).toBeInTheDocument();
+    expect(input).toHaveAttribute('aria-expanded', 'true');
+
+    await user.keyboard('{Escape}');
+    expect(input).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('[UT-PW-FE-UI-U02-C014] keyboard selection sets active descendant and picks tag', async () => {
     const user = userEvent.setup();
     const picked: string[] = [];
     render(<Wrapper onPickTag={(t) => picked.push(t)} />);
 
-    const input = screen.getByPlaceholderText(/検索:/);
+    const input = screen.getByRole('combobox');
     await user.type(input, '企');
+    await screen.findByText('企画');
 
-    expect(await screen.findByText('企画')).toBeInTheDocument();
+    await user.keyboard('{ArrowDown}');
+    expect(input).toHaveAttribute('aria-activedescendant', 'suggestion-0');
 
-    await user.click(screen.getByText('企画'));
+    await user.keyboard('{Enter}');
     expect(picked).toEqual(['企画']);
+    expect(input).toHaveValue('');
+  });
 
-    // query should be cleared
-    expect((input as HTMLInputElement).value).toBe('');
+  test('[UT-PW-FE-UI-U02-C012] IME composition blocks Enter selection', async () => {
+    const user = userEvent.setup();
+    const picked: string[] = [];
+    render(<Wrapper onPickTag={(t) => picked.push(t)} />);
+
+    const input = screen.getByRole('combobox');
+    await user.type(input, '企');
+    await screen.findByText('企画');
+    await user.keyboard('{ArrowDown}');
+
+    fireEvent.compositionStart(input);
+    await user.keyboard('{Enter}');
+    expect(picked).toEqual([]);
+
+    fireEvent.compositionEnd(input);
+    await user.keyboard('{Enter}');
+    expect(picked).toEqual(['企画']);
   });
 });
