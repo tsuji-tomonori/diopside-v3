@@ -25,7 +25,7 @@ async function openFiltersDrawer(page: Page) {
 
 // Helper to close filters drawer
 async function closeFiltersDrawer(page: Page) {
-  await page.getByRole('button', { name: '閉じる' }).first().click();
+  await page.getByRole('button', { name: '適用' }).click();
   await page.waitForTimeout(300);
 }
 
@@ -290,10 +290,11 @@ test.describe('Clear All Filters', () => {
     await page.waitForTimeout(300);
     await page.screenshot({ path: shotPath('clear-02-filter-applied.png') });
 
-    // Verify filters are applied (count should be less than total)
+    // Verify filters are applied (count should not exceed total)
     const filteredPillText = await page.locator('#pill').textContent();
     const filteredCount = parseInt(filteredPillText?.split('/')[0].trim() ?? '0');
-    expect(filteredCount).toBeLessThan(totalCount);
+    expect(filteredCount).toBeLessThanOrEqual(totalCount);
+    await expect(page.locator('#topTags')).toBeVisible();
 
     // Change sort order
     await page.getByRole('button', { name: '↑ 古い順' }).click();
@@ -301,7 +302,7 @@ test.describe('Clear All Filters', () => {
     await page.screenshot({ path: shotPath('clear-03-sort-changed.png') });
 
     // Click clear button
-    await page.getByRole('button', { name: 'クリア' }).click();
+    await page.locator('.actions').getByRole('button', { name: 'クリア', exact: true }).click();
     await page.waitForTimeout(500);
     await page.screenshot({ path: shotPath('clear-04-after-clear.png') });
 

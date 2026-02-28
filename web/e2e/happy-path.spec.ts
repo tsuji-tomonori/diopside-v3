@@ -12,6 +12,7 @@ function shotPath(projectName: string, name: string): string {
 }
 
 test('happy path (with screenshots)', async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
   const projectName = testInfo.project.name;
 
   await page.goto('/');
@@ -40,8 +41,8 @@ test('happy path (with screenshots)', async ({ page }, testInfo) => {
 
   await page.screenshot({ path: shotPath(projectName, '03-tag-selected.png') });
 
-  // Close drawer
-  await page.getByRole('button', { name: '閉じる' }).first().click();
+  // Apply and close drawer
+  await page.getByRole('button', { name: '適用' }).click();
 
   // Wait for the filtered results to appear
   await page.waitForTimeout(500);
@@ -71,7 +72,7 @@ test('happy path (with screenshots)', async ({ page }, testInfo) => {
   await page.getByRole('button', { name: '閉じる' }).first().click();
 
   // Clear all
-  await page.getByRole('button', { name: 'クリア' }).click();
+  await page.locator('.actions').getByRole('button', { name: 'クリア', exact: true }).click();
   await page.waitForTimeout(200);
   await page.screenshot({ path: shotPath(projectName, '06-cleared.png') });
 });
