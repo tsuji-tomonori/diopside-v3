@@ -235,3 +235,24 @@
   - 除外対象は手書き設計文書ではなく自動生成成果物（`*-PW.md`）に限定されている。
   - 生成元（`UT-PW-*`）と主要設計文書（RQ/BD/DD/UT-STAT）は引き続き静的解析対象であり、設計品質ゲートの抜け漏れは生じない。
   - `task docs:ut:quality:check` と `task docs:ut:pairwise:check` で更新漏れなしを確認。
+
+## 追加実施（OpenAPI正本化と設計/スキル同期）
+- 対象: `api/scripts/*`, `api/openapi/*`, `Taskfile.yaml`, `docs/2.*BD-APP-API-004`, `docs/3.*DD-APP-API-001/004/006/007`, `docs/5.*IT-PLAN-001`, `.opencode/skills/*`。
+- 変更内容:
+  - Hono実装から OpenAPI YAML/JSON を生成する `api/scripts/generate-openapi.ts` を追加。
+  - OpenAPI（`/api/v1/*`）と DD API文書のエンドポイント差分を検証する `api/scripts/check-openapi-vs-dd.ts` を追加し、`reports/api_openapi_contract_check.md` を出力。
+  - `api/package.json` に `openapi:generate` / `openapi:check` を追加し、`yaml` 依存を導入。
+  - `Taskfile.yaml` に `api:openapi:generate` / `api:openapi:check` を追加し、`docs:deploy(:ci)` の前段で契約チェックを必須化。
+  - `IT-PLAN-001` の契約正本定義を「HTTP API=OpenAPI正本、静的JSON=JSON Schema正本、DD=フロー/制約/オラクル入力」へ更新。
+  - `BD-APP-API-004` で「HTTP API契約の正本は Hono生成OpenAPI」を明文化。
+  - `DD-APP-API-001/004/006/007` に `/api/v1/public/*`、`/api/v1/search`、`/api/v1/videos/{videoId}` を反映し、実装契約と一致化。
+  - `doc-bd-api` / `doc-dd-api` / `doc-it-plan` / `docops-orchestrator` / `obsidian-doc-check` / `skill-maintainer` のスキル記述を OpenAPI正本運用へ同期。
+
+## 追加影響確認（OpenAPI正本運用）
+- 契約整合:
+  - `npm --prefix api run openapi:generate` 実行で `api/openapi/openapi.v1.generated.yaml/json` を生成。
+  - `npm --prefix api run openapi:check` が PASS し、`reports/api_openapi_contract_check.md` で差分なしを確認。
+- 文書整合:
+  - `task docs:guard` 実行で対象6文書の `issues: 0`, `broken_links: 0` を確認。
+- 運用影響:
+  - HTTP API変更時に「実装→OpenAPI生成→DD照合」の順で機械検証でき、手書き契約とのドリフトをCI前段で検出可能。

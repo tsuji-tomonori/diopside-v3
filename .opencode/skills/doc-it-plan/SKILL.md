@@ -24,6 +24,7 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - 要求または設計の意図、受入条件、関連リンク。
+- HTTP API契約正本（Hono生成OpenAPI）と実装公開OpenAPIの比較ゲート（例: `task api:openapi:check`）を結合テスト計画に含める。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか

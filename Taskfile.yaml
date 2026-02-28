@@ -6,6 +6,7 @@ vars:
   QUARTZ_CONFIG_SOURCE: '{{.ROOT_DIR}}/config/quartz/quartz.config.ts'
   QUARTZ_CUSTOM_STYLE_SOURCE: '{{.ROOT_DIR}}/config/quartz/custom.scss'
   INFRA_DIR: '{{.ROOT_DIR}}/infra'
+  API_DIR: '{{.ROOT_DIR}}/api'
   SITE_ASSET_PATH: '{{.ROOT_DIR}}/quartz/public'
   STACK: 'QuartzSiteStack'
   CDK_ARGS: ''
@@ -394,6 +395,20 @@ tasks:
       - npm run build
       - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
 
+  api:openapi:generate:
+    desc: Generate OpenAPI artifacts from API code
+    dir: '{{.API_DIR}}'
+    cmds:
+      - npm ci
+      - npm run prisma:generate
+      - npm run openapi:generate
+
+  api:openapi:check:
+    desc: Validate DD API docs against generated OpenAPI
+    dir: '{{.API_DIR}}'
+    cmds:
+      - npm run openapi:check
+
   docs:verify:
     desc: Verify deployed docs top page (optional DOCS_SITE_URL)
     cmds:
@@ -410,6 +425,8 @@ tasks:
     desc: Run docs guard + Quartz build + CDK deploy
     cmds:
       - task docs:guard
+      - task api:openapi:generate
+      - task api:openapi:check
       - task infra:deploy
       - task docs:verify
 
@@ -417,5 +434,7 @@ tasks:
     desc: Run docs deploy with serial CI steps
     cmds:
       - task docs:guard
+      - task api:openapi:generate
+      - task api:openapi:check
       - task infra:deploy:ci
       - task docs:verify

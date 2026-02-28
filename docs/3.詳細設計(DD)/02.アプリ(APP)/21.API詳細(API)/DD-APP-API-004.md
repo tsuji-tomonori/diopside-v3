@@ -3,11 +3,11 @@ id: DD-APP-API-004
 title: アーカイブ一覧API
 doc_type: API詳細
 phase: DD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-02-28'
 up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-API-001]]'
@@ -26,6 +26,15 @@ tags:
 ## エンドポイント（静的配信）
 - `GET /bootstrap.json`
 - `GET /archive_index.p{page}.json`
+
+## エンドポイント（HTTP API）
+- `GET /api/v1/public/bootstrap`
+- `GET /api/v1/public/tag-master`
+- `GET /api/v1/public/archive-index`
+
+## 契約正本
+- HTTP API契約は Hono実装から生成する OpenAPI（`/openapi/v1/openapi.json`）を正本とする。
+- 本書は配信契約生成フロー、整合制約、運用オラクルを定義する入力文書として扱う。
 
 ## `bootstrap.json` 契約
 - `schemaVersion`, `bootstrapVersion`, `generatedAt`, `tagMasterVersion`, `archiveVersion`, `tagTypes`, `tagPreview`, `latest`, `next` を必須とする。
@@ -64,6 +73,7 @@ tags:
 - 欠損ページ時は表示継続しつつ警告通知できること。
 
 ## 変更履歴
+- 2026-02-28: `/api/v1/public/*` の公開API経路と OpenAPI正本方針を追記
 - 2026-02-11: `bootstrap/archive_index` 契約の JSON Schema 正本参照と必須項目の実データ整合を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: 配信生成APIの処理ロジックと失敗時挙動を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: `archive_index` 契約の用語参照を [[RQ-GL-009]] へ統一

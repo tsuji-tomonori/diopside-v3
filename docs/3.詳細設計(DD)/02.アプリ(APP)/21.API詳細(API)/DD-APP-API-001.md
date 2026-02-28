@@ -3,7 +3,7 @@ id: DD-APP-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.11
+version: 1.0.12
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -44,6 +44,9 @@ tags:
 |---|---|---|
 | 配信契約 | `bootstrap.json` / `archive_index.p{page}.json` | [[DD-APP-API-004]] |
 | 配信契約 | `tag_master.json` / `highlights/{videoId}.json` / `wordcloud/{videoId}.png` | [[DD-APP-API-005]] |
+| 公開API | `GET /api/v1/public/bootstrap` / `GET /api/v1/public/tag-master` / `GET /api/v1/public/archive-index` | [[DD-APP-API-004]] |
+| 公開API | `GET /api/v1/search` | [[DD-APP-API-006]] |
+| 公開API | `GET /api/v1/videos/{videoId}` | [[DD-APP-API-007]] |
 | 運用API | `POST /api/v1/ops/ingestion/runs` | [[DD-APP-API-002]] |
 | 運用API | `GET /api/v1/ops/ingestion/runs/{runId}` | [[DD-APP-API-003]] |
 | 運用API | `GET /api/v1/ops/ingestion/runs/{runId}/items` | [[DD-APP-API-011]] |
@@ -108,9 +111,9 @@ tags:
 - 失敗時保全: 公開系処理失敗時は直前公開版を維持し、ロールバック可否を応答へ含める。
 - 監査記録: 管理操作は `operator`, `request_id`, `trace_id`, `target_id` を監査ログへ記録する。
 
-## 将来予約境界（MVP非対象）
-- [[DD-APP-API-006]] [[DD-APP-API-006|検索API]]（サーバ検索）は予約のみ。MVPではクライアント検索を維持する。
-- [[DD-APP-API-007]] [[DD-APP-API-007|動画詳細API]]（サーバ詳細取得）は予約のみ。MVPでは静的配信から組み立てる。
+## DD文書の責務
+- HTTP APIの契約正本は Hono実装から生成する OpenAPI（`/openapi/v1/openapi.json`）とし、本書はフロー/制約/オラクルの設計入力を扱う。
+- 配信契約（`bootstrap.json` / `tag_master.json` / `archive_index.p{page}.json`）の機械可読な契約正本は JSON Schema を維持する。
 
 ## 共通[[BD-APP-API-003|エラーモデル]]
 - HTTP APIエラーは Problem Details（`application/problem+json`）を標準とする。
@@ -155,6 +158,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-28: 公開API（`/api/v1/public/*`, `/api/v1/search`, `/api/v1/videos/{videoId}`）をMVP対象へ反映し、DD文書の責務を「フロー/制約/オラクル」へ明確化
 - 2026-02-19: Ops契約の外部入出力キーを `snake_case` へ統一し、契約表記ルールを追加 [[BD-SYS-ADR-034]]
 - 2026-02-14: DDエラー契約正本を本書へ統合し、`[[DD-APP-ERR-001]]` を参照互換文書へ変更 [[BD-SYS-ADR-031]]
 - 2026-02-13: 収集起動応答を `triggerMode/runKind` へ更新し、run状態語彙へ `partial/cancelled` を明記 [[BD-SYS-ADR-027]]

@@ -3,11 +3,11 @@ id: BD-APP-API-004
 title: OpenAPI配布とAPIバージョン境界
 doc_type: API設計
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-28'
 up:
 - '[[RQ-FR-025]]'
 - '[[RQ-INT-001-01]]'
@@ -26,6 +26,8 @@ tags:
 
 ## 設計方針
 - APIの公開経路は `/api/v1/*` に統一し、OpenAPI仕様は `/openapi/v1/openapi.json` で配布する。
+- HTTP API契約の正本は、`@hono/zod-openapi`（`OpenAPIHono` + `createRoute()` + `app.openapi()`）から生成した OpenAPI とする。
+- 設計文書（BD/DD/IT）は実装入力として扱い、機械可読な契約差分判定はOpenAPI生成物で実施する。
 - OpenAPI UIは `/openapi/` 配下に配置し、仕様参照先を `/openapi/v1/openapi.json` に固定する。
 - API版とOpenAPI版は同一バージョンで管理する。
 - バージョン互換性、廃止通知、CI契約検証は [[BD-APP-API-005]] の共通規約に従う。
@@ -55,8 +57,10 @@ tags:
 
 ## 契約検証
 - CIで OpenAPI Lint、破壊的変更検知、コントラクトテストを実行する。
+- CIで `task api:openapi:check` を実行し、OpenAPI生成物とDD API文書の差分を検出する。
 - 破壊的変更が検出された場合は、並行提供計画または新経路版の設計完了まで配信を停止する。
 
 ## 変更履歴
+- 2026-02-28: HTTP API契約の正本を Hono生成OpenAPI へ統一し、文書は実装入力として扱う方針と `api:openapi:check` 運用を追加 [[BD-SYS-ADR-025]]
 - 2026-02-11: バージョニング/廃止/CI契約検証の運用規約を追加 [[BD-SYS-ADR-023]]
 - 2026-02-11: 新規作成 [[BD-SYS-ADR-014]]
