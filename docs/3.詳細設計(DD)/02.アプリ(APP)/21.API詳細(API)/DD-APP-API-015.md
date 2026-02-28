@@ -3,11 +3,11 @@ id: DD-APP-API-015
 title: 配信反映ジョブ状態API
 doc_type: API詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-14'
+updated: '2026-02-28'
 up:
 - '[[BD-APP-API-002]]'
 - '[[RQ-FR-005]]'
@@ -28,7 +28,13 @@ tags:
 - タグ公開反映および公開runの状態を共通形式で照会し、[[DD-APP-UI-010|UI-A06]] で進行監視できるようにする。
 
 ## エンドポイント
+- `POST /api/v1/admin/publish/runs`
+- `POST /api/v1/admin/publish/tag-master`
 - `GET /api/v1/admin/publish/{publishRunId}`
+
+## リクエスト
+- `POST /api/v1/admin/publish/runs`: `scope(tag_master|archive|all)`（省略時 `all`）。
+- `POST /api/v1/admin/publish/tag-master`: `scope(tag_master|archive|all)`（後方互換の起動経路）。
 
 ## レスポンス
 - `publishRunId`, `publishType(tag_master|archive|all|docs)`, `status`
@@ -60,6 +66,7 @@ tags:
 - 失敗時にロールバック有無と再試行可否を確認できること。
 
 ## 変更履歴
+- 2026-02-28: `POST /api/v1/admin/publish/runs` を追加し、`/publish/tag-master` を後方互換経路として併記
 - 2026-02-14: 画面参照 `UI-A06` を [[DD-APP-UI-010]] へリンク化
 - 2026-02-14: エラーマッピングを表形式へ統一し、各エラーコードの意味を明記
 - 2026-02-11: 新規作成 [[BD-SYS-ADR-021]]

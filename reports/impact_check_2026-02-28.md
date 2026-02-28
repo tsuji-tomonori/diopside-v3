@@ -342,3 +342,30 @@
   - 既存 `QuartzSiteStack` は残置したまま、次回デプロイで `DiopsideDeliveryStack` が別スタックとして新規作成される。
 - 運用影響:
   - `GithubActionsDeployRoleArn` などのOutput参照先は新スタック側へ切り替えが必要。
+
+## 追加実施（受入条件の再判定対応）
+- 対象: `api/prisma/migrations/0003_check_constraints/migration.sql`, `api/src/routes/test-support.ts`, `reports/scope_test_verification_2026-02-28.md`, `AT-RCHK-001`, `AT-RPT-001`, `AT-GO-001`。
+- 変更内容:
+  - Prisma migration `0003_check_constraints` を idempotent 化し、`chk_videos_source_type` 重複で `prisma migrate deploy` が失敗しないよう修正。
+  - E2E test-support のレート制限上限を実行件数に合わせて調整し、`/api/v1/test/support/db/metrics` の `429 TOO_MANY_REQUESTS` を解消。
+  - Compose環境で `web/e2e/it-cases.spec.ts`（[[IT-CASE-001]]〜[[IT-CASE-013]]）を再実行し、全件Passを確認。
+  - `AT-RPT-001` / `AT-RCHK-001` / `AT-GO-001` に再実行結果を反映し、スコープ判定と最終判定を更新。
+
+## 追加影響確認（受入条件再判定）
+- テスト影響:
+  - IT結合は `13 passed / 13 total` へ回復し、従来の `Prisma P3018` 起因Failを解消。
+- 受入判定影響:
+  - [[AT-SCN-005]]〜[[AT-SCN-009]] を完了扱いに更新し、`AT-RCHK -> AT-RPT -> AT-GO` の転記整合を確保。
+  - [[RQ-SC-001]]〜[[RQ-SC-008]] の受容可否は全件 `Yes` へ更新。
+
+## 追加実施（OpenAPI契約差分の是正）
+- 対象: `DD-APP-API-001`, `DD-APP-API-015`。
+- 変更内容:
+  - `DD-APP-API-015` に `POST /api/v1/admin/publish/runs` を追加し、`POST /api/v1/admin/publish/tag-master` を後方互換経路として併記。
+  - `DD-APP-API-001` の運用API一覧に `POST /api/v1/admin/publish/runs` を反映し、OpenAPI生成契約と一致化。
+
+## 追加影響確認（OpenAPI契約差分是正）
+- 契約整合:
+  - `Only In OpenAPI` に出ていた `POST /api/v1/admin/publish/runs` の差分を解消。
+- CI影響:
+  - `task api:openapi:check` が期待する `OpenAPI <=/=> DD-APP-API-*` のエンドポイント一致条件を満たす構成へ復帰。

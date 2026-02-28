@@ -3,11 +3,11 @@ id: DD-APP-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.12
+version: 1.0.13
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-19'
+updated: '2026-02-28'
 up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-API-001]]'
@@ -54,7 +54,7 @@ tags:
 | 運用API | `GET /api/v1/ops/ingestion/latest` / `GET /api/v1/ops/diagnostics/health` | [[DD-APP-API-009]] |
 | 運用API | `POST /api/v1/ops/rechecks` / `GET /api/v1/ops/rechecks/{recheckRunId}` | [[DD-APP-API-012]] |
 | 運用API | `POST /api/v1/admin/tags` / `PATCH /api/v1/admin/tags/{tagId}` / `PATCH /api/v1/admin/videos/{videoId}/tags` | [[DD-APP-API-013]] |
-| 運用API | `POST /api/v1/admin/publish/tag-master` / `GET /api/v1/admin/publish/{publishRunId}` | [[DD-APP-API-015]] |
+| 運用API | `POST /api/v1/admin/publish/runs` / `POST /api/v1/admin/publish/tag-master` / `GET /api/v1/admin/publish/{publishRunId}` | [[DD-APP-API-015]] |
 | 運用API | `POST /api/v1/admin/docs/publish` / `GET /api/v1/admin/docs/publish/{docsPublishRunId}` | [[DD-APP-API-014]] |
 
 ## 契約分類
@@ -158,6 +158,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-02-28: 運用API一覧に `POST /api/v1/admin/publish/runs` を追加し、公開run起動契約を実装と一致化
 - 2026-02-28: 公開API（`/api/v1/public/*`, `/api/v1/search`, `/api/v1/videos/{videoId}`）をMVP対象へ反映し、DD文書の責務を「フロー/制約/オラクル」へ明確化
 - 2026-02-19: Ops契約の外部入出力キーを `snake_case` へ統一し、契約表記ルールを追加 [[BD-SYS-ADR-034]]
 - 2026-02-14: DDエラー契約正本を本書へ統合し、`[[DD-APP-ERR-001]]` を参照互換文書へ変更 [[BD-SYS-ADR-031]]
