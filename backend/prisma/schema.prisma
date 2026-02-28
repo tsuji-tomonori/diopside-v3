@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model IngestionRun {
+  runId          String   @id @default(uuid()) @map("run_id")
+  acceptedAt     DateTime @map("accepted_at")
+  startedAt      DateTime? @map("started_at")
+  finishedAt     DateTime? @map("finished_at")
+  triggerMode    String   @map("trigger_mode")
+  runKind        String   @map("run_kind")
+  targetTypes    String[] @map("target_types")
+  status         String
+  parentRunId    String?  @map("parent_run_id")
+  processedCount Int      @default(0) @map("processed_count")
+  successCount   Int      @default(0) @map("success_count")
+  failedCount    Int      @default(0) @map("failed_count")
+  errorSummary   String?  @map("error_summary")
+
+  items IngestionItem[]
+
+  @@index([runKind, status])
+  @@map("ingestion_runs")
+}
+
+model IngestionItem {
+  id           String @id @default(uuid())
+  runId        String @map("run_id")
+  videoId      String @map("video_id")
+  sourceType   String @map("source_type")
+  updateType   String @map("update_type")
+  status       String
+  errorCode    String? @map("error_code")
+  errorMessage String? @map("error_message")
+
+  run IngestionRun @relation(fields: [runId], references: [runId], onDelete: Cascade)
+
+  @@index([runId])
+  @@map("ingestion_items")
+}
+
+model IdempotencyKey {
+  id          String   @id @default(uuid())
+  idemKey     String   @map("idem_key")
+  operator    String
+  endpoint    String
+  payloadHash String   @map("payload_hash")
+  runId       String   @map("run_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  expiresAt   DateTime @map("expires_at")
+
+  @@unique([idemKey, operator, endpoint, payloadHash])
+  @@index([expiresAt])
+  @@map("idempotency_keys")
+}
+
+model Tag {
+  tagId             String   @id @map("tag_id")
+  tagName           String   @map("tag_name")
+  tagTypeId         Int      @map("tag_type_id")
+  synonyms          String[]
+  isActive          Boolean  @default(true) @map("is_active")
+  slug              String   @unique
+  propagationState  String   @map("propagation_state")
+  updatedAt         DateTime @map("updated_at")
+
+  @@map("tags")
+}
+
+model Video {
+  videoId      String   @id @map("video_id")
+  title        String
+  publishedAt  DateTime @map("published_at")
+  durationSec  Int      @map("duration_sec")
+  tagIds       String[] @map("tag_ids")
+
+  @@map("videos")
+}
+
+model RecheckRun {
+  recheckRunId String   @id @default(uuid()) @map("recheck_run_id")
+  runId        String   @map("run_id")
+  status       String
+  startedAt    DateTime @map("started_at")
+  finishedAt   DateTime? @map("finished_at")
+  changedCount Int      @default(0) @map("changed_count")
+  unchangedCount Int    @default(0) @map("unchanged_count")
+
+  @@map("recheck_runs")
+}
+
+model PublishRun {
+  publishRunId   String   @id @default(uuid()) @map("publish_run_id")
+  publishType    String   @map("publish_type")
+  status         String
+  startedAt      DateTime @map("started_at")
+  finishedAt     DateTime? @map("finished_at")
+  triggeredBy    String   @map("triggered_by")
+  rollbackExecuted Boolean @default(false) @map("rollback_executed")
+  rollbackToVersion String? @map("rollback_to_version")
+  errorCode      String?  @map("error_code")
+  errorMessage   String?  @map("error_message")
+  retryable      Boolean  @default(true)
+
+  @@map("publish_runs")
+}
