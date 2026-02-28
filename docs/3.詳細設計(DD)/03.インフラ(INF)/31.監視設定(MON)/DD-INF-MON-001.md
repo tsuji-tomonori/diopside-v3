@@ -3,18 +3,18 @@ id: DD-INF-MON-001
 title: インフラ監視詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-13'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-MON-004]]'
 - '[[RQ-OBY-001-01]]'
 related:
 - '[[BD-INF-MON-001]]'
 - '[[IT-INFIT-OBS-001]]'
-- '[[AT-OPSINF-SLO-001]]'
+- '[[AT-OPS-001]]'
 tags:
 - diopside
 - DD
@@ -36,7 +36,7 @@ tags:
 | CloudFront | 5xx率、エッジレイテンシ | 5xx率 WARN 2% / CRITICAL 5% | 公開導線の異常を最短で検知するため。 |
 | Lambda(API) | p95応答時間、エラー率 | p95 WARN 1200ms / CRITICAL 1500ms | API体感性能と失敗率の悪化を同時検知するため。 |
 | CloudWatch Logs | 必須フィールド欠測率 | WARN 0.5% / CRITICAL 1.0% | 監査と障害解析の欠落を防止するため。 |
-| 通知経路 | 通知遅延 | WARN 3分 / CRITICAL 5分 | 運用受入基準（[[AT-OPSINF-SLO-001]]）を満たすため。 |
+| 通知経路 | 通知遅延 | WARN 3分 / CRITICAL 5分 | 運用受入基準（[[AT-OPS-001]]）を満たすため。 |
 
 ## 2. SLI/SLO閾値
 | 分類 | 指標 | WARN | CRITICAL |
@@ -62,6 +62,7 @@ tags:
 - 運用用、リリース判定用、障害解析用の3種類を提供する。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-13: リソース別監視設定（CloudFront/Lambda/Logs/通知遅延）を追加
 - 2026-02-13: SLI/SLO閾値、通知経路、欠測時運用を追加
 - 2026-02-13: 新規作成

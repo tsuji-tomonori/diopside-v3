@@ -3,11 +3,11 @@ id: BD-INF-SEC-001
 title: IAM・セキュリティ境界方針
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-23'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
@@ -16,7 +16,7 @@ related:
 - '[[RQ-UX-022-01]]'
 - '[[DD-INF-SEC-002]]'
 - '[[DD-SYS-SEC-001]]'
-- '[[AT-OPSINF-001]]'
+- '[[AT-OPS-001]]'
 - '[[BD-SYS-ADR-028]]'
 - '[[BD-SYS-ADR-024]]'
 tags:
@@ -71,6 +71,7 @@ tags:
 - 重大な欠陥が判明した場合は、機能停止/制限の判定基準と代替導線を定義する。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、運用受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-23: 目的/DD引渡し/受入基準を追加し、IAM章のBD-DD受け渡し境界を明確化 [[BD-SYS-ADR-036]]
 - 2026-02-20: 章再編に合わせてIAM必須項目、MFA、未指定事項管理を追加 [[BD-SYS-ADR-036]]
 - 2026-02-19: 管理系操作の `収集実行` 用語を GL 正本リンクへ統一 [[BD-SYS-ADR-034]]

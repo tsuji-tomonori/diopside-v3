@@ -3,7 +3,7 @@ id: RQ-RTM-002
 title: 要求トレーサビリティ（設計別）
 doc_type: 要求トレーサビリティマトリックス
 phase: RQ
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -88,7 +88,7 @@ tags:
 | [[BD-DEV-ENV-001]] | 開発環境 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | - | - | [[AT-PLAN-001]], [[AT-RPT-001]], [[IT-ENV-001]] |
 | [[BD-DEV-ENV-002]] | 本番環境 | [[RQ-AV-001-01]], [[RQ-DEV-001-01]], [[RQ-PS-001-01]], [[RQ-SEC-001-01]] | [[RQ-RDR-045]] | - | [[AT-PLAN-001]], [[AT-RPT-001]] |
 | [[BD-DEV-PIPE-001]] | ビルド方針（デプロイ単位分離） | [[RQ-DEV-001-01]], [[RQ-DEV-005-01]], [[RQ-DEV-006-01]], [[RQ-DEV-007-01]], [[RQ-FR-001]], [[RQ-SEC-005-01]], [[RQ-UX-021-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]], [[RQ-RDR-050]] | - | [[AT-GO-001]], [[AT-REL-002]] |
-| [[BD-DEV-TEST-001]] | テスト戦略 | [[RQ-AV-001-01]], [[RQ-FR-001]], [[RQ-OBY-001-01]], [[RQ-PS-001-01]] | [[RQ-RDR-037]], [[RQ-RDR-039]] | - | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPSINF-001]], [[AT-OPSINF-DR-001]], [[AT-OPSINF-SLO-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]], [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INFIT-ENV-001]], [[IT-INFIT-NET-001]], [[IT-INFIT-OBS-001]], [[IT-INFIT-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]], [[UT-COV-001]], [[UT-IAC-001]], [[UT-LINT-001]], [[UT-LINT-002]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
+| [[BD-DEV-TEST-001]] | テスト戦略 | [[RQ-AV-001-01]], [[RQ-FR-001]], [[RQ-OBY-001-01]], [[RQ-PS-001-01]] | [[RQ-RDR-037]], [[RQ-RDR-039]] | - | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]], [[IT-ENV-001]], [[IT-ENV-002]], [[IT-INC-001]], [[IT-INFIT-ENV-001]], [[IT-INFIT-NET-001]], [[IT-INFIT-OBS-001]], [[IT-INFIT-ROLL-001]], [[IT-PLAN-001]], [[IT-RST-001]], [[IT-TDAT-001]], [[UT-COV-001]], [[UT-IAC-001]], [[UT-LINT-001]], [[UT-LINT-002]], [[UT-MET-001]], [[UT-MOCK-001]], [[UT-PLAN-001]], [[UT-PLAN-002]], [[UT-PLAN-003]], [[UT-PLAN-004]], [[UT-PLAN-005]], [[UT-RPT-001]], [[UT-STAT-001]], [[UT-TDAT-001]] |
 | [[BD-INF-AUD-001]] | 監査証跡基本設計（CloudTrail中心） | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | - | - | - |
 | [[BD-INF-CM-001]] | 構成管理方針 | [[RQ-FR-001]] | [[RQ-RDR-013]], [[RQ-RDR-024]] | - | - |
 | [[BD-INF-DEP-001]] | デプロイ方式 | [[RQ-FR-001]] | - | - | - |
@@ -103,13 +103,13 @@ tags:
 | [[BD-INF-MON-001]] | 監視設計 | [[RQ-AV-001-01]], [[RQ-OBY-001-01]], [[RQ-PS-001-01]] | - | - | [[AT-OPS-001]], [[IT-CASE-012]], [[IT-CASE-013]], [[IT-INFIT-OBS-001]] |
 | [[BD-INF-MON-002]] | SLO運用 | [[RQ-AV-001-01]], [[RQ-OBY-001-01]], [[RQ-PS-001-01]] | [[RQ-RDR-045]] | - | [[AT-GO-001]], [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[BD-INF-MON-003]] | 監査・追跡設計 | [[RQ-AV-001-01]], [[RQ-OBY-001-01]], [[RQ-PS-001-01]] | - | - | [[AT-OPS-001]] |
-| [[BD-INF-MON-004]] | 運用ガバナンス方針 | [[RQ-OBY-001-01]] | - | - | [[AT-OPSINF-SLO-001]] |
+| [[BD-INF-MON-004]] | 運用ガバナンス方針 | [[RQ-OBY-001-01]] | - | - | [[AT-OPS-001]] |
 | [[BD-INF-NET-001]] | ネットワーク境界方針 | [[RQ-SEC-001-01]] | - | - | [[IT-INFIT-NET-001]], [[IT-INFIT-SMK-001]] |
 | [[BD-INF-OPS-001]] | インフラ運用ガバナンス設計 | [[RQ-COST-001-01]], [[RQ-DEV-001-01]] | - | - | [[AT-OPS-001]] |
 | [[BD-INF-PLAT-001]] | インフラ基本設計の章構成と全体構成 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]] | [[RQ-RDR-039]] | - | - |
-| [[BD-INF-PLAT-002]] | データストア基本設計 | [[RQ-AV-001-01]], [[RQ-PS-001-01]], [[RQ-SEC-001-01]], [[RQ-SEC-003-01]] | - | - | [[AT-OPSINF-DR-001]] |
+| [[BD-INF-PLAT-002]] | データストア基本設計 | [[RQ-AV-001-01]], [[RQ-PS-001-01]], [[RQ-SEC-001-01]], [[RQ-SEC-003-01]] | - | - | [[AT-RUN-001]] |
 | [[BD-INF-QUAL-001]] | インフラ品質特性 | [[RQ-AV-001-01]], [[RQ-DEV-001-01]], [[RQ-OBY-001-01]] | [[RQ-RDR-017]] | - | [[AT-OPS-001]], [[AT-RUN-001]] |
-| [[BD-INF-SEC-001]] | IAM・セキュリティ境界方針 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]], [[RQ-UX-022-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPSINF-001]] |
+| [[BD-INF-SEC-001]] | IAM・セキュリティ境界方針 | [[RQ-DEV-001-01]], [[RQ-SEC-001-01]], [[RQ-UX-022-01]] | [[RQ-RDR-017]], [[RQ-RDR-018]] | - | [[AT-OPS-001]] |
 | [[BD-INF-WAF-001]] | L7防御設計（WAF/Shield） | [[RQ-SEC-001-01]] | - | - | - |
 | [[BD-SYS-ADR-001]] | 収集対象を公式+出演にする | - | [[RQ-RDR-001]], [[RQ-RDR-002]], [[RQ-RDR-003]], [[RQ-RDR-004]], [[RQ-RDR-005]], [[RQ-RDR-006]], [[RQ-RDR-007]], [[RQ-RDR-008]], [[RQ-RDR-009]] | - | - |
 | [[BD-SYS-ADR-002]] | [[RQ-GL-010|段階ロード]]JSONを採用する | - | [[RQ-RDR-001]] | - | - |
@@ -217,7 +217,7 @@ tags:
 | [[DD-DEV-REV-001]] | レビュー規約 | [[RQ-DEV-001-01]] | - | - | [[UT-PLAN-001]] |
 | [[DD-INF-CF-001]] | CloudFront詳細設計 | - | - | - | - |
 | [[DD-INF-CF-002]] | CloudFront Function詳細（rewrite） | - | - | - | [[AT-SCN-006]] |
-| [[DD-INF-CFG-001]] | AWS Config詳細（required-tags） | - | [[RQ-RDR-049]] | - | [[AT-OPSINF-001]] |
+| [[DD-INF-CFG-001]] | AWS Config詳細（required-tags） | - | [[RQ-RDR-049]] | - | [[AT-OPS-001]] |
 | [[DD-INF-COG-001]] | Cognito詳細設計 | - | - | - | - |
 | [[DD-INF-DB-001]] | DBインフラ詳細設計 | [[RQ-AV-001-01]] | - | - | [[AT-RUN-001]] |
 | [[DD-INF-DEP-001]] | デプロイ詳細 | [[RQ-FR-024]] | [[RQ-RDR-025]], [[RQ-RDR-029]], [[RQ-RDR-050]] | - | [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]], [[UT-CASE-INF-015]], [[UT-PLAN-003]] |
@@ -227,13 +227,13 @@ tags:
 | [[DD-INF-IAC-002]] | IaCモジュール設計 | [[RQ-DEV-001-01]] | [[RQ-RDR-049]] | - | [[UT-IAC-001]], [[UT-LINT-001]] |
 | [[DD-INF-IAC-003]] | IaC状態管理とドリフト検知 | [[RQ-DEV-001-01]] | [[RQ-RDR-049]] | - | [[IT-INFIT-ENV-001]], [[IT-INFIT-ROLL-001]] |
 | [[DD-INF-LMB-001]] | Lambda詳細設計 | - | - | - | - |
-| [[DD-INF-MON-001]] | インフラ監視詳細設計 | [[RQ-OBY-001-01]] | - | - | [[AT-OPSINF-SLO-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[IT-INFIT-OBS-001]] |
+| [[DD-INF-MON-001]] | インフラ監視詳細設計 | [[RQ-OBY-001-01]] | - | - | [[AT-OPS-001]], [[AT-RPT-001]], [[AT-RUN-001]], [[IT-INFIT-OBS-001]] |
 | [[DD-INF-MON-002]] | インフラ監視ログ詳細 | [[RQ-OBY-001-01]] | - | - | [[AT-OPS-001]], [[AT-RPT-001]] |
-| [[DD-INF-NET-001]] | ネットワーク詳細設計 | [[RQ-SEC-001-01]] | - | - | [[AT-OPSINF-001]], [[IT-INFIT-NET-001]], [[IT-INFIT-SMK-001]] |
+| [[DD-INF-NET-001]] | ネットワーク詳細設計 | [[RQ-SEC-001-01]] | - | - | [[AT-OPS-001]], [[IT-INFIT-NET-001]], [[IT-INFIT-SMK-001]] |
 | [[DD-INF-OVR-001]] | インフラ詳細設計総論 | - | - | - | - |
 | [[DD-INF-S3-001]] | S3詳細設計 | - | - | - | - |
-| [[DD-INF-SEC-001]] | DR復旧手順詳細 | [[RQ-AV-001-01]] | - | - | [[AT-GO-001]], [[AT-OPSINF-DR-001]], [[AT-RUN-001]] |
-| [[DD-INF-SEC-002]] | IAM詳細設計 | [[RQ-SEC-001-01]] | [[RQ-RDR-049]] | - | [[AT-OPSINF-001]], [[AT-REL-002]], [[UT-LINT-001]], [[UT-LINT-002]] |
+| [[DD-INF-SEC-001]] | DR復旧手順詳細 | [[RQ-AV-001-01]] | - | - | [[AT-GO-001]], [[AT-RUN-001]] |
+| [[DD-INF-SEC-002]] | IAM詳細設計 | [[RQ-SEC-001-01]] | [[RQ-RDR-049]] | - | [[AT-OPS-001]], [[AT-REL-002]], [[UT-LINT-001]], [[UT-LINT-002]] |
 | [[DD-INF-SEC-003]] | インフラセキュリティ統制詳細 | [[RQ-SEC-001-01]] | - | - | [[AT-OPS-001]] |
 | [[DD-SYS-AV-001]] | 可用性詳細 | [[RQ-AV-001-01]], [[RQ-OBY-001-01]] | - | - | [[AT-OPS-001]], [[AT-RPT-001]] |
 | [[DD-SYS-AV-002]] | インフラ可用性詳細 | [[RQ-AV-001-01]] | - | - | [[AT-OPS-001]], [[AT-RPT-001]] |
@@ -338,7 +338,7 @@ tags:
 | [[RQ-DATA-003-05]] | メタデータ辞書に記載のないフィールドが配信JSONに0件である | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DATA-003-06]] | JSONスキーマとメタデータ辞書の不整合を検知した場合は、次回デプロイまでに是正できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DATA-003-07]] | 過渡期で非推奨フィールドが残存する場合は、メタデータ辞書に廃止予定日を明記できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-001-01]] | 小差分リリースを前提に、検証自動化とロールバック可能性を維持した運用を行える | [[AT-SCN-006]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-OPSINF-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-001-01]] | 小差分リリースを前提に、検証自動化とロールバック可能性を維持した運用を行える | [[AT-SCN-006]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-02]] | すべてのリリース候補に対して、最低限 `lint` / `test` / `build` の3系統チェックを実行し成功率100%にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-03]] | AIエージェント運用を含む変更では、[[RQ-DEV-002-01]] の受入基準（役割分離・最小権限・実行上限）を満たせる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-04]] | 文書運用規約を変更したリリース候補では、対象 `doc-*` スキルと `skill-maintainer` / `docops-orchestrator` の同期更新を同一変更で実施できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -403,7 +403,7 @@ tags:
 | [[RQ-DEV-008-01]] | DADSコンテンツ利用時に出典と加工有無を明記できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-008-02]] | DADSのデザインデータおよびコードスニペットのライセンス条件を遵守できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-008-03]] | DADSを踏まえたサービス固有のスタイルガイドを作成・維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-FR-001]] | 管理画面から公開動画収集を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-OPSINF-001]], [[AT-OPSINF-DR-001]], [[AT-OPSINF-SLO-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-FR-001]] | 管理画面から公開動画収集を実行できる | [[AT-SCN-004]], [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-002]] | 管理画面で公式投稿の公開動画をチャンネルID一致で取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-003]] | 管理画面で出演条件一致の公開動画を判定して取り込める | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-FR-004]] | 管理画面の収集結果として動画メタデータを正規化できる | [[AT-SCN-008]] | [[AT-GO-001]], [[AT-GUIDE-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RCHK-001]], [[AT-REL-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
@@ -525,7 +525,7 @@ tags:
 | [[RQ-SEC-002-05]] | CDKスタックの合成出力で上記設定が検証可能である | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-002-06]] | ACM証明書の更新失敗を検知した場合は、7日以内に手動更新または原因是正を実施できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-002-07]] | TLS 1.2未満のクライアントからのアクセスは接続拒否として扱い、対応しないできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-SEC-003-01]] | すべての永続化データを保存時暗号化し、平文保存を許容しないことできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-OPSINF-DR-001]], [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-SEC-003-01]] | すべての永続化データを保存時暗号化し、平文保存を許容しないことできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-003-02]] | S3全バケットでSSE-S3（AES-256）によるサーバーサイド暗号化がデフォルト有効である | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-003-03]] | DB正本（RDB）で保存時暗号化が有効である | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-SEC-003-04]] | CDK `cdk synth` の出力で暗号化設定の存在を検証可能である | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -665,7 +665,7 @@ tags:
 | [[RQ-UX-021-03]] | 重大違反（Critical/High）が1件以上の場合はマージ不可にできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-021-04]] | 検査結果を履歴として90日以上保持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-021-05]] | 誤検知を一時除外する場合は、有効期限付き例外設定と改善チケットを必須化できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-UX-022-01]] | サードパーティ/クラウドサービス利用時にアクセシビリティ影響を評価し、代替手段を確保できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPSINF-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-UX-022-01]] | サードパーティ/クラウドサービス利用時にアクセシビリティ影響を評価し、代替手段を確保できる | [[AT-SCN-002]] | [[AT-GO-001]], [[AT-OPS-001]], [[AT-PLAN-001]], [[AT-RPT-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-02]] | MVP範囲で新規導入するサードパーティ/クラウドサービスを評価対象とし、導入時にアクセシビリティ適合状況（VPAT等）の確認記録を残せる運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-03]] | 重大なアクセシビリティ欠陥が判明した場合は代替導線または代替サービスを提供できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-UX-022-04]] | 定期再評価は重大変更時または年1回のいずれか早い方で実施できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -880,6 +880,7 @@ tags:
 <!-- END AUTO-GENERATED: TEST_LAYER_TRACE -->
 
 ## 変更履歴
+- 2026-02-28: AT章のOPSINF廃止に合わせ、設計別トレーサビリティのAT参照を [[AT-OPS-001]] / [[AT-RUN-001]] へ集約 [[RQ-RDR-049]]
 - 2026-02-28: 非機能要求の文言誤り（`設定されているできる`）修正に合わせて設計別トレーサビリティの記述を正規化 [[RQ-RDR-049]]
 - 2026-02-23: Issueラベル起動運用の要求追加に合わせて設計別トレーサビリティを再生成 [[RQ-RDR-050]]
 - 2026-02-13: CDKオンリー運用（`cdk synth/diff/deploy`）へ更新したINF系設計の追跡を反映 [[RQ-RDR-039]]

@@ -3,11 +3,11 @@ id: BD-DEV-TEST-001
 title: テスト戦略
 doc_type: テスト戦略
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-02-28'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -39,7 +39,7 @@ tags:
 ## インフラ試験レイヤ
 - UT-INF: IaC lint/policy/security scan（[[UT-IAC-001]], [[UT-LINT-001]], [[UT-LINT-002]]）。
 - IT-INF: ephemeral構築、ネットワーク到達性、監視流入、ロールバック（[[IT-INFIT-ENV-001]], [[IT-INFIT-NET-001]], [[IT-INFIT-OBS-001]], [[IT-INFIT-ROLL-001]]）。
-- AT-INF: 運用受入、DR演習、SLO受入（[[AT-OPSINF-001]], [[AT-OPSINF-DR-001]], [[AT-OPSINF-SLO-001]]）。
+- AT-INF: 運用受入/DR/SLO判定はAT正本文書（[[AT-OPS-001]], [[AT-RPT-001]], [[AT-GO-001]], [[AT-RUN-001]]）へ集約する。
 
 ## レベル間接続（エントリ/完了条件）
 - UT完了条件: 変更影響範囲のUTがPassし、失敗時の原因が局所化できること。
@@ -68,6 +68,7 @@ tags:
 - 変更影響は `reports/impact_check_YYYY-MM-DD.md` に記録し、判定根拠の追跡性を維持する。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、AT-INF参照先を [[AT-OPS-001]] / [[AT-RPT-001]] / [[AT-GO-001]] / [[AT-RUN-001]] へ集約
 - 2026-02-13: インフラ試験レイヤ（UT-INF/IT-INF/AT-INF）を追加 [[BD-SYS-ADR-028]]
 - 2026-02-11: UT/IT/AT三層の責務境界、品質ゲート、要求保証マトリクスを追加 [[BD-SYS-ADR-026]]
 - 2026-02-10: 新規作成 [[BD-SYS-ADR-001]]

@@ -3,11 +3,11 @@ id: AT-SCN-006
 title: 単一CloudFrontパス分岐シナリオ
 doc_type: 受入テストシナリオ
 phase: AT
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-28'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
@@ -28,9 +28,25 @@ tags:
 ## シナリオ目的
 - 単一CloudFront上で `/web` `/docs` `/openapi` `/api/v1` が競合なく分岐し、認証境界が成立することを確認する。
 
+## 対象範囲
+- 配信経路分岐、公開/保護経路の認証境界、rewrite非干渉、情報漏えい確認。
+- 収集運用やタグ運用フローは本シナリオ対象外とする。
+
 ## 前提条件
 - CloudFront behaviorが [[DD-INF-DEP-002]] の順序で適用されている。
 - OpenAPI仕様は `/openapi/v1/openapi.json` に配置済み。
+
+## 対応DD-API
+- [[DD-APP-API-010]]（API経路バージョニング）
+
+## 対応要求
+- [[RQ-FR-025]]
+- [[RQ-SEC-001-01]]
+- [[RQ-DEV-001-01]]
+
+## テストデータ
+- `/web` 側で参照する `bootstrap.json` / `tag_master.json` / `archive_index.p0.json` を最新化して用意する。
+- 認証あり/なしの2状態で同一経路を検証できるアカウント状態を用意する。
 
 ## 手順
 1. `/` にアクセスし、`/web/` へ誘導されることを確認する。
@@ -49,7 +65,7 @@ tags:
 - 認証必須経路の未認証アクセスが拒否される。
 - OpenAPI版とAPI版が `v1` で一致する。
 
-## 記録項目
+## 記録
 - 確認URL
 - 認証状態
 - HTTPステータス
@@ -57,6 +73,16 @@ tags:
 - 情報漏えい有無（機密情報含有: Yes/No）
 - 判定（Pass/Fail）
 
+## 失敗時の切り分け導線
+- 経路分岐不整合はCloudFront behavior設定と [[DD-INF-DEP-002]] 実装差分を確認する。
+- 認証境界不整合は [[DD-APP-API-010]] とセキュリティ設計（[[DD-SYS-SEC-001]]）へ戻す。
+- 情報漏えい検知時は直ちに [[AT-RUN-001]] へエスカレーションし、公開配信を停止判断する。
+
+## 参照UT/IT（証拠リンク）
+- [[UT-RPT-001]]
+- [[IT-RST-001]]
+
 ## 変更履歴
+- 2026-02-28: 共通テンプレ（対象範囲/対応DD-API/対応要求/テストデータ/記録/切り分け/参照UT-IT）へ章構成を統一
 - 2026-02-11: web/data静的JSON確認と情報漏えい観点を追加 [[BD-SYS-ADR-021]]
 - 2026-02-11: 新規作成

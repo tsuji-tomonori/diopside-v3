@@ -3,11 +3,11 @@ id: AT-GO-001
 title: リリース判定 001
 doc_type: リリース判定
 phase: AT
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-23'
+updated: '2026-02-28'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
@@ -40,6 +40,7 @@ tags:
 - API逆引き結果: [[AT-RPT-001]] の「API単位判定記録（記入例/テンプレート）」
 - 環境別運用値: [[AT-RPT-001]] の「環境別運用値判定記録（記入テンプレート）」
 - 可観測性結果: [[AT-RPT-001]] の「可観測性判定記録（記入テンプレート）」
+- UT/IT証跡: [[AT-RPT-001]] の「UT/IT実施証跡サマリ」
 - 運用チェック結果: [[AT-OPS-001]]
 - GitHub Actions証跡: 必須ステータスチェック結果、Environment承認履歴、Artifacts参照先（a11y含む）
 - Issueラベル起動証跡: `issue_number`、実行者、付与ラベル、作成PR番号、実行結果コメント
@@ -113,6 +114,7 @@ tags:
 | 最終判定 | No-Go |
 
 ## 変更履歴
+- 2026-02-28: 判定入力へUT/IT実施証跡サマリ参照を追加
 - 2026-02-23: Issueラベル起動証跡（issue/actor/label/PR/結果コメント）を判定入力へ追加 [[RQ-RDR-050]]
 - 2026-02-21: GitHub Actions証跡（必須チェック/承認履歴/Artifacts）を判定入力へ追加 [[RQ-RDR-050]]
 - 2026-02-13: Go条件の必須シナリオを [[AT-SCN-009]] まで拡張し、API判定対象を [[DD-APP-API-015]] まで更新

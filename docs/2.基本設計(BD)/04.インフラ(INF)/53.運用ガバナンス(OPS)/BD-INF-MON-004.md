@@ -3,18 +3,18 @@ id: BD-INF-MON-004
 title: 運用ガバナンス方針
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.1.0
+version: 1.1.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-20'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
 - '[[RQ-OBY-001-01]]'
 - '[[BD-INF-MON-001]]'
 - '[[DD-INF-MON-001]]'
-- '[[AT-OPSINF-SLO-001]]'
+- '[[AT-OPS-001]]'
 - '[[BD-SYS-ADR-028]]'
 - '[[BD-SYS-ADR-036]]'
 tags:
@@ -38,5 +38,6 @@ tags:
 - 月次でコスト/障害/変更件数のレビューを実施できること。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-20: 可観測性方針文書を運用ガバナンス方針へ再定義（章再編） [[BD-SYS-ADR-036]]
 - 2026-02-13: 新規作成（インフラ可観測性の基本方針を定義） [[BD-SYS-ADR-028]]

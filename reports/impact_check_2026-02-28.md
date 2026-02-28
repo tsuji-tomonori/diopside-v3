@@ -110,3 +110,20 @@
   - `name` とディレクトリ名不一致: 0
   - `metadata.short-description` 欠落: 0（補完後）
   - `[[BD-ADR-xxx]]` / `[[BD-ADR-*]]` 残存: 0（置換後）
+
+## 追加実施（AT章最終形固定とOPSINF廃止）
+- 対象: `docs/6.受入テスト(AT)`、AT参照を持つ `docs/1.要求(RQ)` / `docs/2.基本設計(BD)` / `docs/3.詳細設計(DD)`。
+- 変更内容:
+  - `AT-PLAN-001` に AT章正本順序（`PLAN -> SCN -> OPS -> RCHK -> RPT -> GO`）と `UT/IT根拠（証拠）運用方針` を追加。
+  - `AT-SCN-001` から `AT-SCN-009` を共通テンプレ（目的/範囲/前提/対応DD-API/対応要求/テストデータ/手順/期待結果/記録/切り分け/参照UT-IT/履歴）へ統一。
+  - `AT-RPT-001` に `UT/IT実施証跡サマリ` を追加し、AT未実施時の代替範囲記録ルールを明文化。
+  - `AT-GO-001` の判定入力に `UT/IT実施証跡サマリ` 参照を追加。
+  - `81.運用受入インフラ(OPSINF)` の `AT-OPSINF-001` / `AT-OPSINF-DR-001` / `AT-OPSINF-SLO-001` を廃止。
+  - OPSINF参照を `AT-OPS-001` / `AT-RPT-001` / `AT-GO-001` / `AT-RUN-001` へ再配線（`RQ-RTM-002`, `BD-DEV-TEST-001`, `BD-INF-SEC-001`, `BD-INF-MON-004`, `DD-INF-CFG-001`, `DD-INF-MON-001`, `DD-INF-NET-001`, `DD-INF-SEC-001`, `DD-INF-SEC-002`）。
+
+## 追加影響確認（AT章固定）
+- トレーサビリティ:
+  - `AT-SCN-001` から `AT-SCN-009` の欠番不可前提を `AT-PLAN-001` と整合。
+  - API逆引きとUT/IT証跡運用を `AT-PLAN-001` / `AT-RPT-001` / `AT-GO-001` で連結。
+- 運用影響:
+  - インフラ受入観点はAT本線（OPS/RPT/GO/RUN）へ統合し、別ゲート文書の二重管理を解消。

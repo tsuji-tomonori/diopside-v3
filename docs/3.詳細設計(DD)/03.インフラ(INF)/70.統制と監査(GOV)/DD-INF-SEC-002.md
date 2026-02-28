@@ -3,17 +3,17 @@ id: DD-INF-SEC-002
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-23'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-SEC-001]]'
 - '[[RQ-SEC-001-01]]'
 related:
 - '[[UT-LINT-001]]'
-- '[[AT-OPSINF-001]]'
+- '[[AT-OPS-001]]'
 - '[[DD-INF-CFG-001]]'
 - '[[BD-SYS-ADR-038]]'
 - '[[RQ-RDR-049]]'
@@ -62,6 +62,7 @@ tags:
 - Issueラベル起動の自動実行は `issue_number`, `label`, `actor`, `run_id`, `pull_request` を監査証跡へ残す。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-23: OpenCode OAuthトークンの保管先をGitHub Environment `opencode` Secretへ更新
 - 2026-02-23: OpenCode/Codex OAuthトークンの復元運用とIssueラベル実行の監査項目を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: `Description` タグの作成時必須条件を権限境界へ追加

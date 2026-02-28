@@ -3,16 +3,16 @@ id: DD-INF-SEC-001
 title: DR復旧手順詳細
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-21'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-PLAT-002]]'
 - '[[RQ-AV-001-01]]'
 related:
-- '[[AT-OPSINF-DR-001]]'
+- '[[AT-RUN-001]]'
 - '[[AT-RUN-001]]'
 tags:
 - diopside
@@ -54,12 +54,13 @@ tags:
 1. 認証基盤の健全性確認
 2. 配信/API経路の復旧
 3. 監視・アラート再有効化
-4. [[AT-GO-001|リリース判定]]文書（[[AT-OPSINF-DR-001]]）更新
+4. [[AT-GO-001|リリース判定]]文書（[[AT-RUN-001]]）更新
 
 ### 演習要件
 - 四半期演習で所要時間を測定し、RTO/RPOとの差分を報告する。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、DR受入参照を [[AT-RUN-001]] へ更新
 - 2026-02-21: DD-INF章再編に合わせて `90.復旧(DR)` へ移設（ID維持） [[BD-SYS-ADR-036]]
 - 2026-02-19: サービス断Runbookのヘルスチェック経路を `/api/v1/ops/diagnostics/health` へ統一 [[BD-SYS-ADR-034]]
 - 2026-02-13: リソース別DR設定（配信/データ/認証/監視）と目標値根拠を追加

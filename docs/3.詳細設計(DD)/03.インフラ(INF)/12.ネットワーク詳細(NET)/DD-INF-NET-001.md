@@ -3,17 +3,17 @@ id: DD-INF-NET-001
 title: ネットワーク詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-14'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-NET-001]]'
 - '[[RQ-SEC-001-01]]'
 related:
 - '[[IT-INFIT-NET-001]]'
-- '[[AT-OPSINF-001]]'
+- '[[AT-OPS-001]]'
 tags:
 - diopside
 - DD
@@ -68,6 +68,7 @@ tags:
 - [[IT-INFIT-SMK-001]] で公開経路と監視連携のスモークを実施する。
 
 ## 変更履歴
+- 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-14: 環境列を `dev/prod` へ統一し、VPC/サブネット実装値を2環境前提へ更新
 - 2026-02-13: VPC詳細設計として再編し、リソース別設定値と根拠を章分割で追加
 - 2026-02-13: ネットワーク変更レビュー基準を `cdk diff` 差分へ統一
