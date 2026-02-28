@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-02-28'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
@@ -41,7 +41,7 @@ tags:
 - 手動タグ付けに利用する提案JSONの入力元（外部LLM）が利用可能である。
 
 ## 手順
-1. 管理画面から `POST /api/v1/ops/rechecks` を実行し、配信後再確認 run を起動する。
+1. 管理画面から `POST /api/v1/ops/rechecks` を実行し、配信後[[RQ-GL-019|再確認実行]]（`recheckRunId`）を起動する。
 2. `GET /api/v1/ops/rechecks/{recheckRunId}` をポーリングし、`diffSummary` と `items[]` の状態を確認する。
 3. 管理画面で `POST /api/v1/admin/tagging/prompts` を実行し、提案入力テキストを取得して外部LLMへ入力する。
 4. 外部LLMの結果JSONを管理画面へアップロードし、`POST /api/v1/admin/tagging/imports` の検証結果を確認する。
@@ -127,4 +127,5 @@ sequenceDiagram
 - 判定（Pass/Fail）
 
 ## 変更履歴
+- 2026-02-28: 手順文の `run` 単独語を[[RQ-GL-019|再確認実行]]（`recheckRunId`）へ統一
 - 2026-02-11: 新規作成

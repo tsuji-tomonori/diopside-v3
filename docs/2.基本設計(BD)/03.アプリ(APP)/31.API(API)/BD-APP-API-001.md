@@ -7,7 +7,7 @@ version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-19'
+updated: '2026-02-28'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -68,19 +68,19 @@ tags:
 | 配信契約 | `bootstrap.json` / `archive_index.p{page}.json` | 初期表示と[[RQ-GL-010|段階ロード]]一覧 | [[RQ-FR-006]], [[RQ-FR-007]], [[RQ-FR-015]] | [[DD-APP-API-004]] |
 | 配信契約 | `tag_master.json` / `highlights/{videoId}.json` / `wordcloud/{videoId}.png` | [[RQ-GL-005|タグ辞書]]と詳細補助表示（波形/[[RQ-GL-017|ワードクラウド]]） | [[RQ-FR-005]], [[RQ-FR-020]], [[RQ-FR-021]], [[RQ-FR-022]] | [[DD-APP-API-005]] |
 | 運用API | `POST /api/v1/ops/ingestion/runs` | [[RQ-GL-002|収集実行]]起動 | [[RQ-FR-001]], [[RQ-FR-003]] | [[DD-APP-API-002]] |
-| 運用API | `GET /api/v1/ops/ingestion/runs/{runId}` | 収集run状態確認 | [[RQ-FR-017]] | [[DD-APP-API-003]] |
+| 運用API | `GET /api/v1/ops/ingestion/runs/{runId}` | [[RQ-GL-002|収集実行]]状態確認 | [[RQ-FR-017]] | [[DD-APP-API-003]] |
 | 運用API | `GET /api/v1/ops/ingestion/runs/{runId}/items` | 収集結果明細確認 | [[RQ-FR-004]], [[RQ-FR-017]] | [[DD-APP-API-011]] |
 | 運用API | `POST /api/v1/ops/ingestion/runs/{runId}/retry` | [[RQ-GL-011|再収集]]実行 | [[RQ-FR-018]] | [[DD-APP-API-008]] |
 | 運用API | `GET /api/v1/ops/ingestion/latest` / `GET /api/v1/ops/diagnostics/health` | 最新結果/運用診断確認 | [[RQ-FR-016]], [[RQ-FR-017]] | [[DD-APP-API-009]] |
 | 運用API | `POST /api/v1/ops/rechecks` / `GET /api/v1/ops/rechecks/{recheckRunId}` | 配信前後再確認 | [[RQ-FR-019]] | [[DD-APP-API-012]] |
 | 運用API | `POST /api/v1/admin/tags` / `PATCH /api/v1/admin/tags/{tagId}` / `PATCH /api/v1/admin/videos/{videoId}/tags` | タグ更新/手動タグ付け | [[RQ-FR-005]], [[RQ-FR-009]], [[RQ-FR-019]] | [[DD-APP-API-013]] |
-| 運用API | `POST /api/v1/admin/publish/tag-master` / `GET /api/v1/admin/publish/{publishRunId}` | 配信反映run監視 | [[RQ-FR-024]], [[RQ-FR-025]] | [[DD-APP-API-015]] |
-| 運用API | `POST /api/v1/admin/docs/publish` / `GET /api/v1/admin/docs/publish/{docsPublishRunId}` | docs公開run監視 | [[RQ-FR-024]] | [[DD-APP-API-014]] |
+| 運用API | `POST /api/v1/admin/publish/tag-master` / `GET /api/v1/admin/publish/{publishRunId}` | [[RQ-GL-018|配信反映実行]]監視 | [[RQ-FR-024]], [[RQ-FR-025]] | [[DD-APP-API-015]] |
+| 運用API | `POST /api/v1/admin/docs/publish` / `GET /api/v1/admin/docs/publish/{docsPublishRunId}` | ドキュメント公開実行監視 | [[RQ-FR-024]] | [[DD-APP-API-014]] |
 
 ## [[RQ-GL-016|コメント密度波形]]静的配信契約
 - **命名規約**: `highlights/{videoId}.json`（`videoId` はYouTube動画ID、拡張子は `json` 固定）。
 - **データ内容**: 動画ID、生成時刻、波形系列（経過秒/密度値）、[[RQ-GL-015|盛り上がり区間]]（開始秒/終了秒/密度指標/コメント件数）を保持する。
-- **生成タイミング**: 収集run完了後にBackend API内バッチで [[RQ-FR-022]] の生成処理を実行し、Web配信領域へ配置する。
+- **生成タイミング**: [[RQ-GL-002|収集実行]]完了後にBackend API内バッチで [[RQ-FR-022]] の生成処理を実行し、Web配信領域へ配置する。
 - **HTTPステータス運用**:
   - `200`: 波形表示と区間クリック遷移を有効化。
   - `404`: 未生成扱いとして「[[RQ-GL-015|盛り上がり区間]]なし」を表示。
@@ -99,6 +99,7 @@ tags:
 - **フォールバック方針**: 画像不正・破損時は表示を中断し、モーダル機能（タグ、遷移、閉じる）を維持する。
 
 ## 変更履歴
+- 2026-02-28: 説明文の `run` 単独語を業務語彙へ統一（[[RQ-GL-002|収集実行]]/[[RQ-GL-018|配信反映実行]]） [[BD-SYS-ADR-041]]
 - 2026-02-19: 運用APIの外部入出力キー（`snake_case`）とヘルスチェック経路の正本を明記 [[BD-SYS-ADR-034]]
 - 2026-02-14: バッチ仕様（一覧/イベント/実行制約/同時実行制御）の正本参照を [[BD-APP-API-002]] へ明記 [[BD-SYS-ADR-027]]
 - 2026-02-13: API一覧正本と個別API正本（[[BD-APP-API-002]]）の責務分離ルールを追加 [[BD-SYS-ADR-027]]
