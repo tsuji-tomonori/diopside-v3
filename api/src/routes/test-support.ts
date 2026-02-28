@@ -4,7 +4,7 @@ import type { PublishStatus } from "../domain/types.js";
 import { isRunStatus, store } from "../repositories/store.js";
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 20;
+const RATE_LIMIT_MAX = 500;
 const rateLimitState = new Map<string, { count: number; resetAt: number }>();
 
 const isPublishStatus = (value: string): value is PublishStatus =>

@@ -319,19 +319,19 @@
 ## 追加実施（インフラ命名ルールと実装名の整合）
 - 対象: `DD-INF-IAC-002`, `DD-INF-SEC-002`。
 - 変更内容:
-  - `DD-INF-IAC-002` に「物理リソース名は `<domain>-<resource>-<env>`、CloudFormation Stack/Construct ID は PascalCase」を明記し、docs配備スタックID `QuartzSiteStack` を正本化。
+  - `DD-INF-IAC-002` に「物理リソース名は `<domain>-<resource>-<env>`、CloudFormation Stack/Construct ID は PascalCase」を明記し、docs配備スタックID `DiopsideDeliveryStack` を正本化。
   - `DD-INF-SEC-002` に IAMロール識別子の正本を CloudFormation Logical ID とするルールを追記。
   - GitHub Actions配備ロール表記を `github-actions-docs-deploy-role` から実装準拠の `GithubActionsDeployRole` へ統一。
 
 ## 追加影響確認（命名整合）
 - 設計整合:
-  - `Taskfile.yaml` の `STACK=QuartzSiteStack` と IaC命名規則文書の解釈差分を解消。
+  - `Taskfile.yaml` の `STACK=DiopsideDeliveryStack` と IaC命名規則文書の解釈差分を解消。
   - `infra/lib/quartz-site-stack.ts` の Logical ID と IAM詳細設計のロール識別子が一致。
 - 運用影響:
   - 命名整合の文書修正のみで、デプロイ対象リソース名やCloudFormationスタック実体への変更はなし。
 
 ## 追加実施（新規スタック作成へ切替）
-- 対象: `infra/bin/quartz-site.ts`, `Taskfile.yaml`, `DD-INF-IAC-002`。
+- 対象: `infra/bin/quartz-site.ts`, `Taskfile.yaml`, `BD-INF-DEP-003`, `BD-SYS-ADR-038`, `DD-INF-IAC-002`。
 - 変更内容:
   - CDKエントリポイントのスタックIDを `QuartzSiteStack` から `DiopsideDeliveryStack` へ変更。
   - Task標準引数 `STACK` を `DiopsideDeliveryStack` へ更新し、`task infra:deploy` / `task docs:deploy(:ci)` が新規スタックを作成するように変更。

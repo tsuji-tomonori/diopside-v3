@@ -3,7 +3,7 @@ id: DD-INF-SEC-002
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
@@ -26,18 +26,19 @@ tags:
 ## 詳細仕様
 - ロール、権限境界、クロスアカウントアクセス条件を定義する。
 - 特権ロールは利用期限と承認者を必須とする。
+- IAMロール識別子は CloudFormation Logical ID（例: `GithubActionsDeployRole`）を正本とし、運用呼称は補助情報として扱う。
 
 ## ロール定義
 | ロール | 主体 | 主権限 | 制約 |
 |---|---|---|---|
 | `infra-deploy-role` | CI/CD | IaC `cdk synth/diff/deploy`、CloudFront invalidation | 初回はローカル実行、以降はGitHub OIDCで引受 |
-| `github-actions-docs-deploy-role` | GitHub Actions (`environment: prod`) | `task docs:deploy` 実行に必要な AWS 操作、CDK [[RQ-GL-007|bootstrap]] role 引受 | Trust条件 `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` |
+| `GithubActionsDeployRole` | GitHub Actions (`environment: prod`) | `task docs:deploy` 実行に必要な AWS 操作、CDK [[RQ-GL-007|bootstrap]] role 引受 | Trust条件 `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` |
 | `infra-readonly-role` | 運用監視 | CloudWatch/Config/CloudTrail参照 | 書き込み権限禁止 |
 | `breakglass-admin-role` | 障害一次対応 | 期間限定の管理操作 | 60分で自動失効、二重承認必須 |
 
 ## 権限境界
 - 全ロールに permission boundary を適用し、`iam:*`, `kms:ScheduleKeyDeletion`, `s3:DeleteBucket` をデフォルト拒否する。
-- wildcard権限（`*`）は `Action`/`Resource` ともに原則禁止し、`github-actions-docs-deploy-role` の初期導入例外はADRで根拠と縮退計画を管理する。
+- wildcard権限（`*`）は `Action`/`Resource` ともに原則禁止し、`GithubActionsDeployRole` の初期導入例外はADRで根拠と縮退計画を管理する。
 - クロスアカウント許可は `Principal` 固定 + `ExternalId` 必須 + `Condition` でIP/時間帯制約を設定する。
 - 作成時タグ条件では `aws:RequestTag/Description` を必須とし、説明欠落の作成APIを拒否する。
 
@@ -62,6 +63,7 @@ tags:
 - Issueラベル起動の自動実行は `issue_number`, `label`, `actor`, `run_id`, `pull_request` を監査証跡へ残す。
 
 ## 変更履歴
+- 2026-02-28: GitHub Actions配備ロールの識別子を実装と同じ `GithubActionsDeployRole` に統一し、Logical ID正本ルールを追記 [[BD-SYS-ADR-038]]
 - 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-23: OpenCode OAuthトークンの保管先をGitHub Environment `opencode` Secretへ更新
 - 2026-02-23: OpenCode/Codex OAuthトークンの復元運用とIssueラベル実行の監査項目を追加 [[BD-SYS-ADR-039]]

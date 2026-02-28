@@ -3,11 +3,11 @@ id: DD-INF-IAC-002
 title: IaCモジュール設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.4
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-21'
+updated: '2026-02-28'
 up:
 - '[[BD-INF-IAC-001]]'
 related:
@@ -33,7 +33,8 @@ tags:
 3. 差分レビュー観点
 
 ## 1. モジュール分割
-- 命名規則: `<domain>-<resource>-<env>`。
+- リソース物理名の命名規則は `<domain>-<resource>-<env>` とする。
+- CloudFormation Stack/Construct ID は PascalCase を採用し、docs配備のスタックIDは `DiopsideDeliveryStack` を正本とする。
 - IaC管理方式はCDKのみを採用し、Terraform定義を追加しない。
 - 変更は `cdk diff` 出力をレビュー証跡として保存する。
 
@@ -54,6 +55,8 @@ tags:
 - 全モジュール共通: 説明設定可能なリソースで `description/comment` 欠落差分を拒否する。
 
 ## 変更履歴
+- 2026-02-28: docs配備スタックIDを `DiopsideDeliveryStack` へ更新し、新規スタック作成運用へ同期 [[BD-SYS-ADR-038]]
+- 2026-02-28: 物理リソース名とCloudFormation Stack/Construct IDの命名境界を明確化し、`QuartzSiteStack` の扱いを追記 [[BD-SYS-ADR-038]]
 - 2026-02-21: `description/comment` 必須化ルールと差分レビュー観点を追加
 - 2026-02-13: リソース別設定責務（network/iam/observability/cicd）と差分レビュー観点を追加
 - 2026-02-13: CDKオンリー方針と `cdk diff` 証跡ルールを追加

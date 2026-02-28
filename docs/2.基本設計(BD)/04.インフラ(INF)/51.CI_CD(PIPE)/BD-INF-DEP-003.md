@@ -3,11 +3,11 @@ id: BD-INF-DEP-003
 title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.8
+version: 1.0.9
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-23'
+updated: '2026-02-28'
 up:
 - '[[RQ-FR-024]]'
 - '[[BD-SYS-ADR-013]]'
@@ -117,8 +117,8 @@ flowchart TD
   - 設計正本: [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]]
 
 ## 配信実装（infra）
-- `QuartzSiteStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。
-- `QuartzSiteStack` は GitHub OIDC Provider（`token.actions.githubusercontent.com`）と `GithubActionsDeployRole` を同一スタックで構築する。
+- `DiopsideDeliveryStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。
+- `DiopsideDeliveryStack` は GitHub OIDC Provider（`token.actions.githubusercontent.com`）と `GithubActionsDeployRole` を同一スタックで構築する。
 - `GithubActionsDeployRole` のTrust条件は `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` を必須にする。
 - Assume先ロールARNは `GithubActionsDeployRoleArn` Output で公開し、GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
 - `BucketDeployment` で `siteAssetPath` を S3 の `obsidian/` プレフィックスへ配置する。
@@ -145,6 +145,7 @@ flowchart TD
 - DDで具体ジョブ設定と実行条件を確定する入力が揃っていること。
 
 ## 変更履歴
+- 2026-02-28: docs配備のデフォルトスタックIDを `DiopsideDeliveryStack` へ更新し、新規スタック作成運用へ同期 [[BD-SYS-ADR-038]]
 - 2026-02-23: 必須設計項目をBD確定観点へ明確化し、DD引渡し/未指定事項/受入基準を追加 [[BD-SYS-ADR-036]]
 - 2026-02-21: `docs-deploy.yml` を `push(main)` + `environment: prod` + OIDC AssumeRole運用で実装し、初回ローカル配備後にGitHubへ移行する手順を追加 [[BD-SYS-ADR-038]]
 - 2026-02-21: `docs-pdf` のArtifact名を `.zip` とし、Release配布は `.pdf` を維持する運用へ更新 [[BD-SYS-ADR-037]]
