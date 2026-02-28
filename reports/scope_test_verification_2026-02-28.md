@@ -34,27 +34,25 @@ npm run test:e2e:compose:down
 | --- | --- | --- |
 | API単体 | Pass | 2 passed / 2 total |
 | Web単体 | Pass | 53 passed / 53 total |
-| IT結合(E2E) | Fail | 13 failed / 13 total |
+| IT結合(E2E) | Pass | 13 passed / 13 total |
 
-## 失敗原因（IT結合）
-- `docker compose` 上のAPI起動時に Prisma migrate が失敗し、APIコンテナが起動継続できない。
-- 主要エラー:
-  - `P3018`
-  - `ERROR: constraint "chk_videos_source_type" for relation "videos" already exists`
-- 影響: `[[IT-CASE-001]]`〜`[[IT-CASE-013]]` は事前メトリクス取得（`/api/v1/test/support/db/metrics`）で `ECONNREFUSED` となり全件失敗。
+## 改善内容（IT結合）
+- Prisma migration `0003_check_constraints` を idempotent 化し、重複制約追加で失敗しないよう修正。
+- E2E test-support のレート上限を実行件数に見合う値へ調整し、`/api/v1/test/support/db/metrics` の `429` を解消。
+- 上記適用後に `[[IT-CASE-001]]`〜`[[IT-CASE-013]]` を再実行し、全件Passを確認。
 
 ## スコープ別テスト実装・Pass確認
 | スコープ | 主な対応テスト | 実装有無 | 全Pass判定 |
 | --- | --- | --- | --- |
-| [[RQ-SC-001]] | [[IT-CASE-001]]〜[[IT-CASE-013]], Web/API単体 | あり | No |
-| [[RQ-SC-002]] | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-012]] | あり | No |
-| [[RQ-SC-003]] | [[IT-CASE-004]], [[IT-CASE-011]], [[IT-CASE-013]] | あり | No |
-| [[RQ-SC-004]] | [[IT-CASE-010]], [[IT-CASE-011]] | あり | No |
-| [[RQ-SC-005]] | [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], Web単体 | あり | No |
-| [[RQ-SC-006]] | [[IT-CASE-006]], Web単体 | あり | No |
-| [[RQ-SC-007]] | [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-012]] | あり | No |
-| [[RQ-SC-008]] | [[IT-CASE-006]]（詳細導線の前提） | あり | No |
+| [[RQ-SC-001]] | [[IT-CASE-001]]〜[[IT-CASE-013]], Web/API単体 | あり | Yes |
+| [[RQ-SC-002]] | [[IT-CASE-001]], [[IT-CASE-002]], [[IT-CASE-012]] | あり | Yes |
+| [[RQ-SC-003]] | [[IT-CASE-004]], [[IT-CASE-011]], [[IT-CASE-013]] | あり | Yes |
+| [[RQ-SC-004]] | [[IT-CASE-010]], [[IT-CASE-011]] | あり | Yes |
+| [[RQ-SC-005]] | [[IT-CASE-003]], [[IT-CASE-004]], [[IT-CASE-005]], Web単体 | あり | Yes |
+| [[RQ-SC-006]] | [[IT-CASE-006]], Web単体 | あり | Yes |
+| [[RQ-SC-007]] | [[IT-CASE-007]], [[IT-CASE-008]], [[IT-CASE-012]] | あり | Yes |
+| [[RQ-SC-008]] | [[IT-CASE-006]]（詳細導線の前提） | あり | Yes |
 
 ## 判定
-- 全スコープで「テスト実装あり」は確認済み。
-- ただしIT結合が全件Failのため、全スコープで「全Pass」は未達。
+- 全スコープで「テスト実装あり」を確認済み。
+- IT結合（13/13）を含め、全スコープで「全Pass」を達成。

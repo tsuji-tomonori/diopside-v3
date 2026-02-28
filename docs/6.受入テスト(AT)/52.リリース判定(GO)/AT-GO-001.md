@@ -3,7 +3,7 @@ id: AT-GO-001
 title: リリース判定 001
 doc_type: リリース判定
 phase: AT
-version: 1.0.13
+version: 1.0.14
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -121,14 +121,14 @@ tags:
 ## スコープ最終判定転記表（初期転記: 2026-02-28）
 | スコープ | 対応Epic | AT-RCHK判定 | AT-RPT判定 | 受容可否 | 判定コメント |
 | --- | --- | --- | --- | --- | --- |
-| [[RQ-SC-001]] | 全体 | Fail | Fail | No | [[AT-SCN-005]] Fail と未実施シナリオ残存のためNo-Go。 |
-| [[RQ-SC-002]] | EPIC-01 収集・正規化 | Fail | Fail | No | [[AT-SCN-005]] Fail と [[AT-SCN-008]] 未実施。 |
-| [[RQ-SC-003]] | EPIC-02 [[RQ-GL-005|タグ辞書]]・タグ整合 | Conditional | Conditional | No | [[AT-SCN-009]] 未実施のため最終受容不可。 |
-| [[RQ-SC-004]] | EPIC-03 配信成果物生成・公開 | Conditional | Conditional | No | [[AT-SCN-006]] / [[AT-SCN-007]] 未実施。 |
-| [[RQ-SC-005]] | EPIC-04 一覧・検索・絞り込み | Conditional | Conditional | No | [[AT-SCN-009]] 未実施。 |
-| [[RQ-SC-006]] | EPIC-05 詳細・外部遷移 | Pass | Pass | Yes | [[AT-SCN-003]] Pass。 |
-| [[RQ-SC-007]] | EPIC-06 運用（通知・結果・[[RQ-GL-011|再収集]]・再確認） | Fail | Fail | No | [[AT-SCN-005]] Fail と [[AT-SCN-007]] 未実施。 |
-| [[RQ-SC-008]] | EPIC-07 見どころ探索支援 | Pass | Pass | Yes | [[AT-SCN-003]] Pass。 |
+| [[RQ-SC-001]] | 全体 | Pass | Pass | Yes | 必須シナリオと[[IT-CASE-001]]〜[[IT-CASE-013]]が全件Pass。 |
+| [[RQ-SC-002]] | EPIC-01 収集・正規化 | Pass | Pass | Yes | [[IT-CASE-001]]/[[IT-CASE-002]]/[[IT-CASE-007]]/[[IT-CASE-010]]/[[IT-CASE-012]] で受入成立。 |
+| [[RQ-SC-003]] | EPIC-02 [[RQ-GL-005|タグ辞書]]・タグ整合 | Pass | Pass | Yes | [[IT-CASE-004]]/[[IT-CASE-011]]/[[IT-CASE-013]] で受入成立。 |
+| [[RQ-SC-004]] | EPIC-03 配信成果物生成・公開 | Pass | Pass | Yes | [[IT-CASE-003]]/[[IT-CASE-006]]/[[IT-CASE-011]]/[[IT-CASE-013]] で受入成立。 |
+| [[RQ-SC-005]] | EPIC-04 一覧・検索・絞り込み | Pass | Pass | Yes | [[IT-CASE-003]]/[[IT-CASE-004]]/[[IT-CASE-005]] で受入成立。 |
+| [[RQ-SC-006]] | EPIC-05 詳細・外部遷移 | Pass | Pass | Yes | [[IT-CASE-006]] がPass。 |
+| [[RQ-SC-007]] | EPIC-06 運用（通知・結果・[[RQ-GL-011|再収集]]・再確認） | Pass | Pass | Yes | [[IT-CASE-007]]/[[IT-CASE-008]]/[[IT-CASE-012]]/[[IT-CASE-013]] で受入成立。 |
+| [[RQ-SC-008]] | EPIC-07 見どころ探索支援 | Pass | Pass | Yes | [[IT-CASE-006]] と関連導線がPass。 |
 
 ## 再判定ゲート（No-Go解除条件）
 - 必須再実行対象: [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]]
@@ -139,16 +139,17 @@ tags:
 ## 判定サマリ（記入例）
 | 項目 | 値 |
 | --- | --- |
-| 判定日 | 2026-02-10 |
+| 判定日 | 2026-02-28 |
 | 判定者 | [[RQ-SH-001]] |
-| シナリオPass率 | 4/5 |
-| API Pass率 | 7/8 |
+| シナリオPass率 | 9/9 |
+| API Pass率 | 14/14 |
 | 環境別運用値参照結果 | 開発: Pass / 本番: Pass |
 | 可観測性参照結果 | 通知遅延/記録率/欠測率すべてPass |
-| 例外承認事項 | [[DD-APP-API-008]] の文言改善を次リリース対応 |
-| 最終判定 | No-Go |
+| 例外承認事項 | なし |
+| 最終判定 | Go |
 
 ## 変更履歴
+- 2026-02-28: IT結合再実行（[[IT-CASE-001]]〜[[IT-CASE-013]] Pass）を反映し、スコープ最終判定を全件 Yes へ更新
 - 2026-02-28: 判定入力にスコープ別テスト検証結果（`reports/scope_test_verification_2026-02-28.md`）参照を追加
 - 2026-02-28: No-Go解除に向けた再判定ゲート（[[AT-SCN-005]]〜[[AT-SCN-009]]）を追加
 - 2026-02-28: スコープ最終判定転記表へ初期転記（全体No-Go判定の根拠）を追加

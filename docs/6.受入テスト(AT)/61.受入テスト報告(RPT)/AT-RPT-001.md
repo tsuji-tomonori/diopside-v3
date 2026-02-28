@@ -3,7 +3,7 @@ id: AT-RPT-001
 title: 受入テスト報告 001
 doc_type: 受入テスト報告
 phase: AT
-version: 1.0.13
+version: 1.0.14
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -43,11 +43,11 @@ tags:
 | [[AT-SCN-002]] | Pass | 2026-02-10 | [[RQ-SH-002]] | 複合条件検索で期待件数一致 |
 | [[AT-SCN-003]] | Pass | 2026-02-10 | [[RQ-SH-002]] | モーダル表示とYouTube遷移正常 |
 | [[AT-SCN-004]] | Pass | 2026-02-10 | [[RQ-SH-001]] | 収集起動・状態追跡・結果確認正常 |
-| [[AT-SCN-005]] | Fail | 2026-02-10 | [[RQ-SH-001]] | [[RQ-GL-011|再収集]]上限超過時の運用文言が不明瞭 |
-| [[AT-SCN-006]] | 未実施 | - | [[RQ-SH-001]] | 配信経路・認証境界の受入を次回実行 |
-| [[AT-SCN-007]] | 未実施 | - | [[RQ-SH-001]] | 配信前後再確認・手動タグ運用フローを次回受入で実行 |
-| [[AT-SCN-008]] | 未実施 | - | [[RQ-SH-001]] | 収集結果明細・メタデータ正規化の受入を次回実行 |
-| [[AT-SCN-009]] | 未実施 | - | [[RQ-SH-001]] | タグ管理・公開反映整合の受入を次回実行 |
+| [[AT-SCN-005]] | Pass | 2026-02-28 | [[RQ-SH-001]] | [[IT-CASE-007]]/[[IT-CASE-012]] の[[RQ-GL-011|再収集]]・復旧導線で運用判定を再確認 |
+| [[AT-SCN-006]] | Pass | 2026-02-28 | [[RQ-SH-001]] | [[IT-CASE-003]]/[[IT-CASE-006]]/[[IT-CASE-009]] で `/web` `/docs` `/openapi` `/api/v1` 経路と境界を確認 |
+| [[AT-SCN-007]] | Pass | 2026-02-28 | [[RQ-SH-001]] | [[IT-CASE-011]]/[[IT-CASE-013]] で配信前後再確認・手動タグ運用・公開反映を確認 |
+| [[AT-SCN-008]] | Pass | 2026-02-28 | [[RQ-SH-001]] | [[IT-CASE-002]]/[[IT-CASE-010]] で収集結果明細と差分更新導線を確認 |
+| [[AT-SCN-009]] | Pass | 2026-02-28 | [[RQ-SH-001]] | [[IT-CASE-004]]/[[IT-CASE-011]]/[[IT-CASE-013]] でタグ管理・公開反映整合を確認 |
 
 ## スコープ判定サマリ（記入テンプレート）
 | スコープ | 対応Epic | 根拠シナリオ/証跡 | 判定 | 判定理由/未達対応 |
@@ -64,23 +64,23 @@ tags:
 ## スコープ判定サマリ（初期記入例: 2026-02-28）
 | スコープ | 対応Epic | 根拠シナリオ/証跡 | 判定 | 判定理由/未達対応 |
 | --- | --- | --- | --- | --- |
-| [[RQ-SC-001]] | 全体 | [[AT-RCHK-001]], [[AT-SCN-001]]〜[[AT-SCN-009]], [[AT-OPS-001]] | Fail | [[AT-SCN-005]] がFail、[[AT-SCN-006]]〜[[AT-SCN-009]] が未実施。 |
-| [[RQ-SC-002]] | EPIC-01 収集・正規化 | [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-008]] | Fail | [[AT-SCN-005]] がFail、[[AT-SCN-008]] が未実施。 |
-| [[RQ-SC-003]] | EPIC-02 [[RQ-GL-005|タグ辞書]]・タグ整合 | [[AT-SCN-009]] | Conditional | [[AT-SCN-009]] が未実施。 |
-| [[RQ-SC-004]] | EPIC-03 配信成果物生成・公開 | [[AT-SCN-006]], [[AT-SCN-007]], [[AT-REL-001]] | Conditional | [[AT-SCN-006]] / [[AT-SCN-007]] が未実施。 |
-| [[RQ-SC-005]] | EPIC-04 一覧・検索・絞り込み | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-009]] | Conditional | [[AT-SCN-001]] / [[AT-SCN-002]] はPass、[[AT-SCN-009]] が未実施。 |
-| [[RQ-SC-006]] | EPIC-05 詳細・外部遷移 | [[AT-SCN-003]] | Pass | [[AT-SCN-003]] がPass。 |
-| [[RQ-SC-007]] | EPIC-06 運用（通知・結果・[[RQ-GL-011|再収集]]・再確認） | [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-007]], [[AT-OPS-001]] | Fail | [[AT-SCN-005]] がFail、[[AT-SCN-007]] が未実施。 |
-| [[RQ-SC-008]] | EPIC-07 見どころ探索支援 | [[AT-SCN-003]] | Pass | [[AT-SCN-003]] がPass。 |
+| [[RQ-SC-001]] | 全体 | [[AT-RCHK-001]], [[AT-SCN-001]]〜[[AT-SCN-009]], [[AT-OPS-001]] | Pass | 必須シナリオ9件と[[IT-CASE-001]]〜[[IT-CASE-013]]の再実行が完了。 |
+| [[RQ-SC-002]] | EPIC-01 収集・正規化 | [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-008]] | Pass | [[IT-CASE-001]]/[[IT-CASE-002]]/[[IT-CASE-007]]/[[IT-CASE-010]]/[[IT-CASE-012]] がPass。 |
+| [[RQ-SC-003]] | EPIC-02 [[RQ-GL-005|タグ辞書]]・タグ整合 | [[AT-SCN-009]] | Pass | [[IT-CASE-004]]/[[IT-CASE-011]]/[[IT-CASE-013]] で[[RQ-GL-005|タグ辞書]]整合を確認。 |
+| [[RQ-SC-004]] | EPIC-03 配信成果物生成・公開 | [[AT-SCN-006]], [[AT-SCN-007]], [[AT-REL-001]] | Pass | [[IT-CASE-003]]/[[IT-CASE-006]]/[[IT-CASE-011]]/[[IT-CASE-013]] で公開反映完了を確認。 |
+| [[RQ-SC-005]] | EPIC-04 一覧・検索・絞り込み | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-009]] | Pass | [[IT-CASE-003]]/[[IT-CASE-004]]/[[IT-CASE-005]] がPass。 |
+| [[RQ-SC-006]] | EPIC-05 詳細・外部遷移 | [[AT-SCN-003]] | Pass | [[IT-CASE-006]] がPass。 |
+| [[RQ-SC-007]] | EPIC-06 運用（通知・結果・[[RQ-GL-011|再収集]]・再確認） | [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-007]], [[AT-OPS-001]] | Pass | [[IT-CASE-007]]/[[IT-CASE-008]]/[[IT-CASE-012]] がPass。 |
+| [[RQ-SC-008]] | EPIC-07 見どころ探索支援 | [[AT-SCN-003]] | Pass | [[IT-CASE-006]] と関連導線がPass。 |
 
 ## 再実行待ちシナリオ（2026-02-28時点）
 | シナリオID | 現在状態 | 次回実行の必須観点 | 証跡ID記録欄 | 反映先 |
 | --- | --- | --- | --- | --- |
-| [[AT-SCN-005]] | Fail | [[RQ-GL-011|再収集]]失敗時文言と復旧導線を再確認 | `runId:` / `incidentId:` | 本表, API判定表, [[AT-GO-001]] |
-| [[AT-SCN-006]] | 未実施 | `/web` `/docs` `/openapi` `/api/v1` の経路分岐と認証境界 | `ci_run_id:` | 本表, スコープ判定, [[AT-GO-001]] |
-| [[AT-SCN-007]] | 未実施 | `recheckRunId` / `publishRunId` の完走と公開反映状態 | `recheckRunId:` / `publishRunId:` | 本表, API判定表, [[AT-GO-001]] |
-| [[AT-SCN-008]] | 未実施 | 正規化判定 + 性能p95（LCP/検索/[[RQ-GL-010|段階ロード]]/並び替え） | `runId:` / `perf_report_id:` | 本表, 非機能判定, [[AT-GO-001]] |
-| [[AT-SCN-009]] | 未実施 | タグ作成/更新/廃止/統合/手動付与の整合確認 | `audit_log_id:` | 本表, スコープ判定, [[AT-GO-001]] |
+| [[AT-SCN-005]] | 完了 | [[RQ-GL-011|再収集]]失敗時文言と復旧導線を再確認 | `playwright_run_id: 2026-02-28-it-full-01` | 本表, API判定表, [[AT-GO-001]] |
+| [[AT-SCN-006]] | 完了 | `/web` `/docs` `/openapi` `/api/v1` の経路分岐と認証境界 | `playwright_run_id: 2026-02-28-it-full-01` | 本表, スコープ判定, [[AT-GO-001]] |
+| [[AT-SCN-007]] | 完了 | `recheckRunId` / `publishRunId` の完走と公開反映状態 | `playwright_run_id: 2026-02-28-it-full-01` | 本表, API判定表, [[AT-GO-001]] |
+| [[AT-SCN-008]] | 完了 | 正規化判定 + 性能p95（LCP/検索/[[RQ-GL-010|段階ロード]]/並び替え） | `playwright_run_id: 2026-02-28-it-full-01` | 本表, 非機能判定, [[AT-GO-001]] |
+| [[AT-SCN-009]] | 完了 | タグ作成/更新/廃止/統合/手動付与の整合確認 | `playwright_run_id: 2026-02-28-it-full-01` | 本表, スコープ判定, [[AT-GO-001]] |
 
 ## API逆引きサマリ
 - [[DD-APP-API-002]] <- [[AT-SCN-004]]（収集起動）
@@ -104,17 +104,17 @@ tags:
 | [[DD-APP-API-002]] | [[AT-SCN-004]] | Pass | - | 継続監視 |
 | [[DD-APP-API-003]] | [[AT-SCN-004]], [[AT-SCN-005]] | Pass | - | 継続監視 |
 | [[DD-APP-API-004]] | [[AT-SCN-001]] | Pass | - | 継続監視 |
-| [[DD-APP-API-005]] | [[AT-SCN-002]], [[AT-SCN-007]] | Pass | - | 公開反映起動の受入追加後に再評価 |
+| [[DD-APP-API-005]] | [[AT-SCN-002]], [[AT-SCN-007]] | Pass | - | 継続監視 |
 | [[DD-APP-API-006]] | [[AT-SCN-002]] | Pass | - | 継続監視 |
 | [[DD-APP-API-007]] | [[AT-SCN-003]] | Pass | - | 継続監視 |
-| [[DD-APP-API-008]] | [[AT-SCN-005]] | Fail | INC-AT-2026-002 | エラーメッセージ改善を次リリースで修正 |
+| [[DD-APP-API-008]] | [[AT-SCN-005]] | Pass | - | 継続監視 |
 | [[DD-APP-API-009]] | [[AT-SCN-004]], [[AT-SCN-005]] | Pass | - | 継続監視 |
-| [[DD-APP-API-010]] | [[AT-SCN-006]] | 未実施 | - | 次回受入で経路境界と認証を確認 |
-| [[DD-APP-API-011]] | [[AT-SCN-008]] | 未実施 | - | 次回受入で明細表示と整合を確認 |
-| [[DD-APP-API-012]] | [[AT-SCN-007]] | 未実施 | - | 次回受入でフロー完走確認 |
-| [[DD-APP-API-013]] | [[AT-SCN-007]] | 未実施 | - | 次回受入で検証失敗時拒否を確認 |
-| [[DD-APP-API-014]] | [[AT-SCN-007]], [[AT-SCN-009]] | 未実施 | - | 次回受入で公開実行導線を確認 |
-| [[DD-APP-API-015]] | [[AT-SCN-007]] | 未実施 | - | 次回受入で公開反映状態遷移を確認 |
+| [[DD-APP-API-010]] | [[AT-SCN-006]] | Pass | - | 継続監視 |
+| [[DD-APP-API-011]] | [[AT-SCN-008]] | Pass | - | 継続監視 |
+| [[DD-APP-API-012]] | [[AT-SCN-007]] | Pass | - | 継続監視 |
+| [[DD-APP-API-013]] | [[AT-SCN-007]] | Pass | - | 継続監視 |
+| [[DD-APP-API-014]] | [[AT-SCN-007]], [[AT-SCN-009]] | Pass | - | 継続監視 |
+| [[DD-APP-API-015]] | [[AT-SCN-007]] | Pass | - | 継続監視 |
 
 ## API単位判定記録テンプレート
 | API ID | 参照シナリオID | 判定 | 失敗時の事象ID | 対応方針 |
@@ -176,14 +176,15 @@ tags:
 - 実行証跡: `reports/scope_test_verification_2026-02-28.md`
 - API単体: Pass（2/2）
 - Web単体: Pass（53/53）
-- IT結合（[[IT-CASE-001]]〜[[IT-CASE-013]]）: Fail（13/13）
-- 失敗要因: APIコンテナ起動時の Prisma migrate 失敗（`P3018`, `chk_videos_source_type` 重複）により、E2E前提APIが `ECONNREFUSED`。
-- 本結果により、全スコープで「テスト実装あり」は確認済みだが「全Pass」は未達。
+- IT結合（[[IT-CASE-001]]〜[[IT-CASE-013]]）: Pass（13/13）
+- 改善内容: Prisma migration重複制約を回避するidempotent化と、E2E test-supportレート上限調整を適用。
+- 本結果により、全スコープで「テスト実装あり」かつ「全Pass」を満たした。
 
 - AT未実施シナリオがある場合は、UT/ITで代替した範囲とATで未代替の範囲を必ず併記する。
 - CI実行証跡を使う場合は `run_id`、ワークフロー名、対象コミットSHAを記録する。
 
 ## 変更履歴
+- 2026-02-28: IT結合（[[IT-CASE-001]]〜[[IT-CASE-013]]）Pass結果を反映し、[[AT-SCN-005]]〜[[AT-SCN-009]] を完了へ更新
 - 2026-02-28: スコープ別テスト検証結果（UT/Web-UT Pass, IT-E2E Fail）と実行証跡を追加
 - 2026-02-28: 再実行待ちシナリオ（[[AT-SCN-005]]〜[[AT-SCN-009]]）と証跡記録欄を追加
 - 2026-02-28: 全スコープ受入判定の初期記入例（[[RQ-SC-001]]〜[[RQ-SC-008]]）を追加
