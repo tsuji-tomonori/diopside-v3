@@ -39,8 +39,20 @@ async function pollRun(request: APIRequestContext, runId: string) {
   return status;
 }
 
+async function resetState(request: APIRequestContext) {
+  for (let i = 0; i < 8; i++) {
+    try {
+      const res = await apiPost(request, '/api/v1/test/e2e/reset');
+      if (res.ok()) return;
+    } catch {
+      // retry until API boot completes
+    }
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  }
+}
+
 test.beforeEach(async ({ request }) => {
-  await apiPost(request, '/api/v1/test/e2e/reset');
+  await resetState(request);
 });
 
 test('IT-CASE-001 収集実行起動API 結合テスト', async ({ request }) => {
@@ -61,6 +73,14 @@ test('IT-CASE-001 収集実行起動API 結合テスト', async ({ request }) =>
   const body2 = (await res2.json()) as { run_id: string };
   expect(body2.run_id).toBe(body1.run_id);
 
+  const conflict = await apiPost(
+    request,
+    '/api/v1/ops/ingestion/runs',
+    payload,
+    { 'idempotency-key': 'it-case-001-conflict' }
+  );
+  expect(conflict.status()).toBe(409);
+
   const invalidTarget = await apiPost(
     request,
     '/api/v1/ops/ingestion/runs',
@@ -71,14 +91,6 @@ test('IT-CASE-001 収集実行起動API 結合テスト', async ({ request }) =>
 
   const missingIdempotency = await apiPost(request, '/api/v1/ops/ingestion/runs', payload);
   expect(missingIdempotency.status()).toBe(400);
-
-  const conflict = await apiPost(
-    request,
-    '/api/v1/ops/ingestion/runs',
-    payload,
-    { 'idempotency-key': 'it-case-001-conflict' }
-  );
-  expect(conflict.status()).toBe(409);
 });
 
 test('IT-CASE-002 収集実行状態API 結合テスト', async ({ request }) => {
@@ -124,11 +136,12 @@ test('IT-CASE-002 収集実行状態API 結合テスト', async ({ request }) =>
 });
 
 test('IT-CASE-003 アーカイブ一覧配信契約 結合テスト', async ({ page, request }) => {
-  await page.goto('/');
+  await Promise.all([
+    page.waitForResponse((r) => r.url().includes('/bootstrap.json') && r.ok()),
+    page.waitForResponse((r) => r.url().includes('/archive_index.p0.json') && r.ok()),
+    page.goto('/'),
+  ]);
   await expect(page.getByRole('heading', { name: 'アーカイブタグ検索' })).toBeVisible();
-
-  await page.waitForResponse((r) => r.url().includes('/bootstrap.json') && r.ok());
-  await page.waitForResponse((r) => r.url().includes('/archive_index.p0.json') && r.ok());
 
   const bootstrapRes = await request.get('/bootstrap.json');
   const bootstrap = (await bootstrapRes.json()) as { latest: unknown[] };
@@ -146,7 +159,7 @@ test('IT-CASE-004 タグ辞書配信契約 結合テスト', async ({ page }) =>
   const category = page.locator('details.tagCategory > summary').filter({ hasText: /^大分類から選ぶ/ });
   await category.click();
   await page.locator('.tagRow', { hasText: '雑談' }).first().click();
-  await page.getByRole('button', { name: '閉じる' }).first().click();
+  await page.getByRole('button', { name: '適用' }).click();
   await expect(page.locator('#topTags').locator('.chip', { hasText: '雑談' })).toBeVisible();
 });
 

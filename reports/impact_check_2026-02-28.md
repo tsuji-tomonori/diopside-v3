@@ -203,3 +203,35 @@
 - 文書影響:
   - 配備責務マップ（BD）と領域分割配備手順（DD）が実装実態に整合。
   - BE領域のUTカバレッジソース表記を `api unit execution report` へ更新。
+
+## 追加実施（api/web本番デプロイ自動化）
+- 対象: `Taskfile.yaml`、`.github/workflows/docs-deploy.yml`、`infra/lib/quartz-site-stack.ts`、`api/src/lambda.ts`、`docs/**`（RDR/ADR/BD/DD/AT-RUN/AT-REL）。
+- 変更内容:
+  - `docs-deploy.yml` の main push トリガーへ `web/**` と `api/**` を追加し、timeoutを60分へ拡張。
+  - `Taskfile.yaml` に `web:install/build` と `api:install/build` を追加し、`infra:deploy(:ci)` で docs/web/api を同一チェーン配備化。
+  - CDK contextに `webAssetPath` / `apiAssetPath` を追加し、配備時に `siteAssetPath` と合わせて固定化。
+  - `QuartzSiteStack` のAPIを inline Lambda から `api` 成果物（`dist/lambda.handler`）へ移行。
+  - `DeployWebPlaceholder` を廃止し、`web/dist` を `/web/*` へ配備する `DeployWebAssets` を追加。
+  - `api/src/lambda.ts` を追加し、HonoアプリをLambdaハンドラーとして公開。
+  - 関連設計書（`RQ-RDR-050`, `BD-SYS-ADR-039`, `BD-DEV-PIPE-001`, `DD-INF-DEP-001`, `AT-REL-001`, `AT-RUN-001`）へ運用手順を反映。
+
+## 追加影響確認（api/web本番デプロイ自動化）
+- デプロイ運用:
+  - docsのみでなく web/api 変更時も main push で本番配備が自動実行される。
+  - `task docs:deploy:ci` 1入口で docs/web/api の build/test/deploy が完了し、失敗単位の切り分けが可能。
+- 配信経路:
+  - `/web/*` は placeholder ではなく `web/dist` 成果物を配信。
+  - `/api/v1/*` と `/openapi/*` は `api` 実装成果物をLambda経由で配信。
+
+## 追加実施（静的解析除外条件の設計反映）
+- 対象: `UT-STAT-003`、`UT-STAT-001`。
+- 変更内容:
+  - `UT-STAT-003` に `exclude_targets` を追加し、`docs/4.単体テスト(UT)/21.単体テストケース(CASE)/**/*-PW.md` を `auto_link_glossary --check` 対象外として明記。
+  - 除外理由として、`task docs:ut:pairwise:generate` の生成物を用語自動補正対象へ含めると `task docs:ut:pairwise:check` と循環差分が発生する点を追記。
+  - `task docs:ut:quality:generate` を実行し、`UT-STAT-001` 集約表へ除外条件を反映。
+
+## 追加影響確認（除外妥当性）
+- 判定: 妥当。
+  - 除外対象は手書き設計文書ではなく自動生成成果物（`*-PW.md`）に限定されている。
+  - 生成元（`UT-PW-*`）と主要設計文書（RQ/BD/DD/UT-STAT）は引き続き静的解析対象であり、設計品質ゲートの抜け漏れは生じない。
+  - `task docs:ut:quality:check` と `task docs:ut:pairwise:check` で更新漏れなしを確認。

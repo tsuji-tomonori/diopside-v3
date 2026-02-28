@@ -9,7 +9,11 @@ export default defineConfig({
     timeout: 10_000,
   },
   retries: process.env.CI ? 2 : 0,
-  reporter: [['html', { open: 'never' }], ['list']],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ['allure-playwright', { resultsDir: process.env.ALLURE_RESULTS_DIR || 'allure-results' }],
+  ],
   use: {
     baseURL: process.env.PW_BASE_URL || 'http://127.0.0.1:5173',
     trace: 'on-first-retry',
