@@ -21,6 +21,8 @@ metadata:
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - API処理フロー、入力検証規則、外部依存の呼び出し順、エラー/例外の返却条件、冪等性・再試行方針。
 - DD-APIは HTTP I/F の再定義文書ではなく、OpenAPI正本を前提にしたフロー/制約/オラクルの設計入力として記述する。
+- operation 単位のHTTP契約文書は `BD-APP-OAS-*` 自動生成物を利用し、`DD-APP-API-*` 本文で手書きのI/F正本を作らない。
+- `DD-APP-API-*` は処理フロー・制約・オラクルの記述に集中し、OpenAPI YAML の転載やI/F表の重複記載を行わない。
 - HonoのValidationTargets（`param/query/header/cookie/json/form`）単位の検証設計と適用順。
 - `@hono/zod-openapi` 利用時の `OpenAPIHono`、`createRoute()`、`app.openapi()` の実装規約。
 - `request.params/query/body` の定義位置、`safeParseAsync` 前提、`c.req.valid(...)` 利用規約。
@@ -63,6 +65,7 @@ metadata:
 - 検証済みデータの参照が `c.req.valid(...)` に統一され、ハンドラ内で未検証入力を使わないことを確認する。
 - `@hono/zod-openapi` の `OpenAPIHono` / `createRoute()` / `app.openapi()` を用いた定義になっていることを確認する。
 - エンドポイント/入出力キー/ステータスコードの最終正本が OpenAPI であることを明記し、DD本文の手書き契約が正本化していないことを確認する。
+- `task api:docs:generate` / `task api:docs:check` により `BD-APP-OAS-*` が更新される運用を確認する。
 - `summary`/`operationId`/`tags` と `responses`（成功/失敗）がルート単位で定義されていることを確認する。
 - バリデーション失敗が `HTTPException(400, { cause })` を経由して `app.onError` に集約されることを確認する。
 - Zod v4 のエラー整形関数（`z.flattenError()`/`z.treeifyError()`）を利用し、`format`/`flatten` 旧運用へ依存しないことを確認する。

@@ -7,7 +7,7 @@ type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..");
-const docsDir = resolve(repoRoot, "docs/3.詳細設計(DD)/02.アプリ(APP)/21.API詳細(API)");
+const docsDir = resolve(repoRoot, "docs/2.基本設計(BD)/03.アプリ(APP)/32.OpenAPI IF(IF)");
 const reportsDir = resolve(repoRoot, "reports");
 const reportPath = resolve(reportsDir, "api_openapi_contract_check.md");
 
@@ -36,31 +36,27 @@ for (const [path, pathItem] of Object.entries(openapi.paths ?? {})) {
   }
 }
 
-const endpointPattern = /`(GET|POST|PATCH|PUT|DELETE)\s+(\/api\/v1\/[^`\s]+)`/g;
 const docsEndpoints = new Map<string, { endpoint: string; refs: string[] }>();
 
-for (const file of (await readdir(docsDir)).filter((f) => /^DD-APP-API-\d{3}\.md$/.test(f)).sort()) {
+for (const file of (await readdir(docsDir)).filter((f) => /^BD-APP-OAS-\d{3}\.md$/.test(f)).sort()) {
   const filePath = resolve(docsDir, file);
   const content = await readFile(filePath, "utf8");
-  const lines = content.split(/\r?\n/);
+  const methodMatch = content.match(/^openapi_method:\s*([A-Z]+)$/m);
+  const pathMatch = content.match(/^openapi_path:\s*(\/api\/v1\/[^\n]+)$/m);
+  if (!methodMatch || !pathMatch) {
+    continue;
+  }
 
-  for (let i = 0; i < lines.length; i += 1) {
-    const line = lines[i];
-    if (!line.includes("/api/v1/")) continue;
-
-    for (const match of line.matchAll(endpointPattern)) {
-      const method = match[1] as HttpMethod;
-      const path = match[2];
-      const endpoint = `${method} ${path}`;
-      const ref = `${file}:${i + 1}`;
-      const key = toKey(method, path);
-      const current = docsEndpoints.get(key);
-      if (current) {
-        current.refs.push(ref);
-      } else {
-        docsEndpoints.set(key, { endpoint, refs: [ref] });
-      }
-    }
+  const method = methodMatch[1] as HttpMethod;
+  const path = pathMatch[1].trim();
+  const endpoint = `${method} ${path}`;
+  const ref = `${file}:frontmatter`;
+  const key = toKey(method, path);
+  const current = docsEndpoints.get(key);
+  if (current) {
+    current.refs.push(ref);
+  } else {
+    docsEndpoints.set(key, { endpoint, refs: [ref] });
   }
 }
 
@@ -85,7 +81,7 @@ const reportLines = [
   `- generated_at: ${now}`,
   `- openapi_endpoint_count: ${codeEndpoints.size}`,
   `- docs_endpoint_count: ${docsEndpoints.size}`,
-  "- compared_scope: /api/v1/* in OpenAPI and DD-APP-API-*.md",
+  "- compared_scope: /api/v1/* in OpenAPI and BD-APP-OAS-*.md",
   "",
   "## Only In OpenAPI",
   ...onlyInOpenApiLines,

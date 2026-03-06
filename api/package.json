@@ -11,6 +11,8 @@
     "test": "tsx --test src/**/*.test.ts",
     "openapi:generate": "tsx scripts/generate-openapi.ts",
     "openapi:check": "tsx scripts/check-openapi-vs-dd.ts",
+    "docs:generate": "tsx scripts/generate-openapi-docs.ts",
+    "docs:check": "tsx scripts/generate-openapi-docs.ts --check",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy"
   },

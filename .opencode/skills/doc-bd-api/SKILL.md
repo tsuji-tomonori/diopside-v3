@@ -33,6 +33,9 @@ metadata:
 - RPC型共有時の運用（`AppType` export、メソッドチェーン定義、`hc<AppType>` 利用）。
 - バージョニング/廃止（SemVer、`deprecated: true`、移行手順、Sunset）と契約運用（OpenAPI正本、CI破壊的変更検知）。
 - HTTP API契約の正本は Hono実装から生成する OpenAPI とし、BD本文への手書きスキーマ転記を正本化しない運用。
+- OpenAPI正本から operation 単位Markdown（`BD-APP-OAS-*`）を自動生成し、メソッド/パス/パラメータ/戻り値を表形式で配布する運用。
+- 自動生成される表の説明列は、日本語で省略せずに補完する。
+- 処理フロー・制約・オラクルは `DD-APP-API-*` に分離し、BD本文へ raw YAML やフロー図を持ち込まない。
 - `## 変更履歴` への当日追記。
 
 ## 何を書かないべきか
@@ -66,6 +69,7 @@ metadata:
 - バリデーション失敗が `HTTPException(400, { cause })` と `app.onError` 集約で返却される方針を確認する。
 - RPC採用時に `AppType` export とメソッドチェーン定義が記載されていることを確認する。
 - OpenAPIを契約正本として、Lint/破壊的変更検知/契約テストの運用が記述されていることを確認する。
+- `task api:docs:generate` / `task api:docs:check` と `BD-APP-OAS-*` 自動生成運用が記述されていることを確認する。
 - DD/IT文書がHTTP契約の二重正本になっておらず、フロー/制約/オラクルの入力文書として参照されていることを確認する。
 - OpenAPI JSON配布（`/openapi/v1/openapi.json`）と仕様UI配布（`/openapi/`）が記述されていることを確認する。
 - `## 変更履歴` 各行に `[[BD-*-ADR-xxx]]` が含まれていることを確認する。

@@ -3,11 +3,11 @@ id: BD-APP-API-005
 title: HTTP API契約共通方針
 doc_type: API設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-13'
+updated: '2026-03-06'
 up:
 - '[[RQ-INT-001-01]]'
 - '[[RQ-SEC-001-01]]'
@@ -90,6 +90,9 @@ tags:
 - 破壊的変更が検出された場合は、版追加または互換層追加が完了するまでリリースを停止する。
 - OpenAPI JSON は `/openapi/v1/openapi.json` で配布し、API版 `/api/v1/*` と同一版で管理する。
 - 人向け仕様UIは `/openapi/` に配布し、参照先を `/openapi/v1/openapi.json` へ固定する。
+- API単位の Markdown 文書は OpenAPI 正本から `BD-APP-OAS-*` として自動生成し、メソッド/パス/パラメータ/戻り値を表形式で配布する。
+- 処理フロー・制約・オラクルは `DD-APP-API-*` に記載し、IF文書へ重複記載しない。
+- `task api:docs:generate` / `task api:docs:check` を OpenAPI運用タスクへ含める。
 
 ## Hono + Zod 実装規約
 - 本プロジェクトのAPI契約定義は `@hono/zod-openapi` に統一し、`OpenAPIHono` + `createRoute()` + `app.openapi()` を標準とする。
@@ -131,6 +134,7 @@ tags:
 - 型推論の安定化のため、RPC対象ルートはメソッドチェーンで定義する。
 
 ## 変更履歴
+- 2026-03-06: OpenAPI 正本から `BD-APP-OAS-*` を表形式で自動生成する運用を追加 [[BD-SYS-ADR-023]]
 - 2026-02-13: CORS許可ポリシー（Origin/Method/Header/Credentials）とAPIレート制限を追加 [[BD-SYS-ADR-027]]
 - 2026-02-11: `@hono/zod-openapi` 統一方針（`OpenAPIHono`/`createRoute`、Schema-first、`operationId`/`tags`、OpenAPI公開経路）を追加 [[BD-SYS-ADR-025]]
 - 2026-02-11: Hono + Zod 実装規約（入力検証、`HTTPException`/`onError` 集約、RPC型共有、Zod v4運用）を追加 [[BD-SYS-ADR-025]]

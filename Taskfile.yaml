@@ -404,10 +404,22 @@ tasks:
       - npm run openapi:generate
 
   api:openapi:check:
-    desc: Validate DD API docs against generated OpenAPI
+    desc: Validate BD API IF docs against generated OpenAPI
     dir: '{{.API_DIR}}'
     cmds:
       - npm run openapi:check
+
+  api:docs:generate:
+    desc: Generate BD API IF markdown docs from OpenAPI
+    dir: '{{.API_DIR}}'
+    cmds:
+      - npm run docs:generate
+
+  api:docs:check:
+    desc: Check generated BD API IF markdown docs are up to date
+    dir: '{{.API_DIR}}'
+    cmds:
+      - npm run docs:check
 
   docs:verify:
     desc: Verify deployed docs top page (optional DOCS_SITE_URL)
@@ -424,8 +436,10 @@ tasks:
   docs:deploy:
     desc: Run docs guard + Quartz build + CDK deploy
     cmds:
-      - task docs:guard
       - task api:openapi:generate
+      - task api:docs:generate
+      - task docs:guard
+      - task api:docs:check
       - task api:openapi:check
       - task infra:deploy
       - task docs:verify
@@ -433,8 +447,10 @@ tasks:
   docs:deploy:ci:
     desc: Run docs deploy with serial CI steps
     cmds:
-      - task docs:guard
       - task api:openapi:generate
+      - task api:docs:generate
+      - task docs:guard
+      - task api:docs:check
       - task api:openapi:check
       - task infra:deploy:ci
       - task docs:verify

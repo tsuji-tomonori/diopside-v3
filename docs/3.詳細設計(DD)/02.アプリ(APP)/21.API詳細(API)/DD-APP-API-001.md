@@ -3,11 +3,11 @@ id: DD-APP-API-001
 title: API詳細総論
 doc_type: API詳細
 phase: DD
-version: 1.0.13
+version: 1.0.14
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-28'
+updated: '2026-03-06'
 up:
 - '[[BD-SYS-ARCH-001]]'
 - '[[BD-APP-API-001]]'
@@ -21,6 +21,7 @@ related:
 - '[[BD-APP-API-003]]'
 - '[[BD-APP-API-005]]'
 - '[[BD-SYS-ADR-034]]'
+- '[[BD-APP-OAS-000]]'
 - '[[DD-APP-ERR-001]]'
 - '[[UT-PLAN-001]]'
 tags:
@@ -113,7 +114,13 @@ tags:
 
 ## DD文書の責務
 - HTTP APIの契約正本は Hono実装から生成する OpenAPI（`/openapi/v1/openapi.json`）とし、本書はフロー/制約/オラクルの設計入力を扱う。
+- operation 単位の契約参照は `[[BD-APP-OAS-000]]` / `BD-APP-OAS-*` を利用し、本書および `DD-APP-API-*` は処理フロー・制約・オラクル・運用判断を記述する。
 - 配信契約（`bootstrap.json` / `tag_master.json` / `archive_index.p{page}.json`）の機械可読な契約正本は JSON Schema を維持する。
+
+## OpenAPI自動生成契約文書
+- HTTP APIの operation 単位 Markdown は `[[BD-APP-OAS-000]]` から参照する。
+- `BD-APP-OAS-*` は OpenAPI 正本から自動生成し、メソッド/パス/パラメータ/戻り値のみを表形式で記載する。
+- 既存 `DD-APP-API-*` は API群または業務フロー単位の説明責務を維持する。
 
 ## 共通[[BD-APP-API-003|エラーモデル]]
 - HTTP APIエラーは Problem Details（`application/problem+json`）を標準とする。
@@ -158,6 +165,7 @@ sequenceDiagram
 - 運用APIで収集開始から結果確認まで完結できる。
 
 ## 変更履歴
+- 2026-03-06: operation 単位の自動生成契約文書（[[BD-APP-OAS-000]] / `BD-APP-OAS-*`）を追加し、`DD-APP-API-*` の責務をフロー/制約/オラクルへ明確化 [[BD-SYS-ADR-023]]
 - 2026-02-28: 運用API一覧に `POST /api/v1/admin/publish/runs` を追加し、公開run起動契約を実装と一致化
 - 2026-02-28: 公開API（`/api/v1/public/*`, `/api/v1/search`, `/api/v1/videos/{videoId}`）をMVP対象へ反映し、DD文書の責務を「フロー/制約/オラクル」へ明確化
 - 2026-02-19: Ops契約の外部入出力キーを `snake_case` へ統一し、契約表記ルールを追加 [[BD-SYS-ADR-034]]

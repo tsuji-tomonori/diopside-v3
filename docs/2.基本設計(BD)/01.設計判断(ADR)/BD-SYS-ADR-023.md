@@ -3,11 +3,11 @@ id: BD-SYS-ADR-023
 title: HTTP API契約をRFC準拠で統一する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-03-06'
 up:
 - '[[RQ-INT-001-01]]'
 - '[[RQ-SEC-001-01]]'
@@ -30,6 +30,8 @@ tags:
 - エラー応答は Problem Details（`application/problem+json`）を標準とし、拡張項目で業務コードと再試行可否を表現する。
 - 一覧取得はページング必須とし、大規模データではカーソル方式（opaque cursor）を採用する。
 - OpenAPIを契約正本とし、Lint・破壊的変更検知・コントラクトテストをCIの必須ゲートにする。
+- OpenAPI正本から operation 単位の API契約Markdown（`BD-APP-OAS-*`）を自動生成し、メソッド/パス/パラメータ/戻り値を表形式で配布する。
+- 処理フロー・制約・オラクルは `DD-APP-API-*` に分離し、手書きのHTTP契約文書を正本として扱わない。
 - 廃止は仕様明記（`deprecated: true`）と移行期間確保を必須とし、可能な範囲で `Deprecation`/`Sunset` ヘッダを返す。
 
 ## 理由
@@ -43,6 +45,7 @@ tags:
 - [[BD-APP-API-003|エラーモデル]]: [[BD-APP-API-003]] を Problem Details 基準へ更新する。
 - バージョン境界: [[BD-APP-API-004]] へ SemVer/廃止運用/CI契約検証を反映する。
 - 詳細設計: [[DD-APP-ERR-001]] / [[DD-APP-API-001]] で実装レベルの応答マッピングとテスト観点を更新する。
+- 自動生成文書: `task api:docs:generate` / `task api:docs:check` を追加し、`BD-APP-OAS-*` を OpenAPI 正本から再生成する。
 
 ## 却下した選択肢
 - サービスごとに独自エラー形式を継続する案: [[RQ-SH-002|利用者]]実装と運用監視の複雑性が高いため不採用。
@@ -50,4 +53,5 @@ tags:
 - OpenAPIを参考資料扱いにする案: 契約差分の検知が遅れ、互換性事故リスクが高いため不採用。
 
 ## 変更履歴
+- 2026-03-06: OpenAPI正本から operation 単位Markdown（`BD-APP-OAS-*`）を表形式で自動生成し、処理フローを `DD-APP-API-*` へ分離する運用を追加 [[BD-SYS-ADR-023]]
 - 2026-02-11: 新規作成（HTTP API契約統一方針の決定） [[BD-SYS-ADR-023]]

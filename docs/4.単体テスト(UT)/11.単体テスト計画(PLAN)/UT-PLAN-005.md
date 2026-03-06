@@ -3,11 +3,11 @@ id: UT-PLAN-005
 title: 単体テスト計画 005（バックエンド）
 doc_type: 単体テスト計画
 phase: UT
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-28'
+updated: '2026-03-06'
 up:
 - '[[UT-PLAN-001]]'
 - '[[BD-DEV-TEST-001]]'
@@ -27,6 +27,7 @@ related:
 - '[[UT-CASE-BE-012]]'
 - '[[UT-CASE-BE-013]]'
 - '[[UT-PW-001]]'
+- '[[BD-APP-OAS-000]]'
 - '[[IT-PLAN-001]]'
 tags:
 - diopside
@@ -42,6 +43,7 @@ tags:
 - 正常系・異常系・境界値を網羅する。
 - 契約（入力/出力/エラー）を固定し、互換性破壊を即時検知する。
 - 運用API（[[RQ-GL-011|再収集]]/診断）の状態遷移と拒否条件を検証する。
+- 入出力契約は OpenAPI 正本と `BD-APP-OAS-*` を参照し、分岐/状態遷移は `DD-APP-API-*` を参照する。
 
 ## API単位ケース一覧
 - [[UT-CASE-BE-001]]: [[DD-APP-API-002]]（[[RQ-GL-002|収集実行]]起動API）
@@ -62,6 +64,7 @@ tags:
 - API単位で対象ケースを選択実行し、変更範囲外ケースへの影響を切り分ける。
 - 主要変更時は全13ケースを再実行し、IT計画への引き渡し品質を確認する。
 - `UT-PW-BE-*` を更新した場合は `task docs:ut:pairwise:generate` を実行し、ペアワイズ抽出ケースを再生成する。
+- OpenAPI変更時は `task api:docs:generate` / `task api:docs:check` を実行し、`BD-APP-OAS-*` を最新化したうえでUTケースとの整合を確認する。
 
 ## 完了条件
 - 上記13ケースが安定実行できる。
@@ -69,6 +72,7 @@ tags:
 - 主要APIについて `UT-PW-BE-*` の因子定義と生成ケースが同期している。
 
 ## 変更履歴
+- 2026-03-06: I/F基準を OpenAPI / `BD-APP-OAS-*`、フロー基準を `DD-APP-API-*` に分離し、生成タスクを追加
 - 2026-02-28: バックエンド向けペアワイズ因子定義（UT-PW）と生成運用を追加
 - 2026-02-13: API単位ケースを [[DD-APP-API-011]]〜[[DD-APP-API-015]] / [[UT-CASE-BE-009]]〜[[UT-CASE-BE-013]] へ拡張し、実行方針と完了条件を13ケース基準へ更新
 - 2026-02-11: 新規作成（単体テスト方針の領域分割: BE）

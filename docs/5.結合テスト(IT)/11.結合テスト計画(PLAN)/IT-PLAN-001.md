@@ -3,16 +3,17 @@ id: IT-PLAN-001
 title: 結合テスト計画 001
 doc_type: 結合テスト計画
 phase: IT
-version: 1.0.7
+version: 1.0.8
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-28'
+updated: '2026-03-06'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[UT-PLAN-001]]'
 related:
 - '[[AT-PLAN-001]]'
+- '[[BD-APP-OAS-000]]'
 tags:
 - diopside
 - IT
@@ -30,6 +31,7 @@ tags:
 
 ## 結合テスト設計（境界・契約・連携順序）
 - 契約境界は HTTP API を Hono実装から生成した OpenAPI（`/openapi/v1/openapi.json`）正本、静的JSON契約を JSON Schema 正本として扱い、DD-APP-API-* はフロー/制約/オラクルの設計入力として扱う。
+- operation 単位の契約参照は `BD-APP-OAS-*` を利用し、ITケースの I/F 判定は OpenAPI / `BD-APP-OAS-*`、シナリオ/オラクル判定は `DD-APP-API-*` を使い分ける。
 - ITでは正本OpenAPI（リポジトリ生成物）と実装OpenAPI（起動時公開）を比較し、仕様差分をATへ持ち込まない。
 - 連携順序は `bootstrap -> tag_master -> archive` の依存順を固定し、前段Fail時は後段ケースを停止する。
 - 障害系は [[DD-APP-API-008]] / [[DD-APP-API-009]] を起点に、再実行・診断・復旧可否までを1セットで判定する。
@@ -80,6 +82,7 @@ tags:
 - 障害系ケースで復旧導線が確認できる。
 
 ## 変更履歴
+- 2026-03-06: operation 単位契約参照として `BD-APP-OAS-*` を追加し、I/F判定とフロー判定の参照先を分離
 - 2026-02-28: 契約正本を OpenAPI/JSON Schema へ統一し、DD-APP-API-* はフロー/制約/オラクルを扱う入力文書へ整理
 - 2026-02-28: 結合テスト仕様をUC基準へ再編し、IT-PW（UC001-009）とケース対応表を追加
 - 2026-02-20: テスト章再編に合わせ、結合テスト設計（契約境界・連携順序・障害系判定）の方針を追記
