@@ -335,6 +335,7 @@ export class QuartzSiteStack extends cdk.Stack {
                 "cloudfront:UpdateDistribution",
                 "iam:CreateRole",
                 "iam:DeleteRole",
+                "iam:GetOpenIDConnectProvider",
                 "iam:GetRole",
                 "iam:PassRole",
                 "iam:PutRolePolicy",

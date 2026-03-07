@@ -208,4 +208,22 @@ describe("QuartzSiteStack", () => {
     });
     expect(outputs.GithubOidcProviderArn?.Value).toBe(providerArn);
   });
+
+  test("grants GitHub Actions deploy role read access to the OIDC provider", () => {
+    const template = buildTemplate();
+
+    template.hasResourceProperties("AWS::IAM::Role", {
+      Policies: Match.arrayWith([
+        Match.objectLike({
+          PolicyDocument: {
+            Statement: Match.arrayWith([
+              Match.objectLike({
+                Action: Match.arrayWith(["iam:GetOpenIDConnectProvider"]),
+              }),
+            ]),
+          },
+        }),
+      ]),
+    });
+  });
 });

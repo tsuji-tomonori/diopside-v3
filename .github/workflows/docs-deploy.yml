@@ -75,11 +75,27 @@ jobs:
           ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
           GITHUB_OIDC_PROVIDER_ARN="arn:aws:iam::${ACCOUNT_ID}:oidc-provider/token.actions.githubusercontent.com"
 
-          if aws iam get-open-id-connect-provider \
-            --open-id-connect-provider-arn "${GITHUB_OIDC_PROVIDER_ARN}" \
-            >/dev/null 2>&1; then
+          set +e
+          PROVIDER_CHECK_OUTPUT="$(
+            aws iam get-open-id-connect-provider \
+              --open-id-connect-provider-arn "${GITHUB_OIDC_PROVIDER_ARN}" \
+              2>&1
+          )"
+          PROVIDER_CHECK_STATUS=$?
+          set -e
+
+          if [ "${PROVIDER_CHECK_STATUS}" -eq 0 ]; then
+            echo "Reusing existing GitHub OIDC provider: ${GITHUB_OIDC_PROVIDER_ARN}"
+            task docs:deploy:ci \
+              CDK_ARGS="--context githubOidcProviderArn=${GITHUB_OIDC_PROVIDER_ARN}"
+          elif printf '%s' "${PROVIDER_CHECK_OUTPUT}" | grep -q 'NoSuchEntity'; then
+            echo "GitHub OIDC provider not found. Letting CDK create it."
+            task docs:deploy:ci
+          elif printf '%s' "${PROVIDER_CHECK_OUTPUT}" | grep -q 'AccessDenied'; then
+            echo "Read access to GitHub OIDC provider is denied. Assuming existing provider ARN and importing it."
             task docs:deploy:ci \
               CDK_ARGS="--context githubOidcProviderArn=${GITHUB_OIDC_PROVIDER_ARN}"
           else
-            task docs:deploy:ci
+            printf '%s\n' "${PROVIDER_CHECK_OUTPUT}"
+            exit "${PROVIDER_CHECK_STATUS}"
           fi
