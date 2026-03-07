@@ -134,6 +134,7 @@ tasks:
     desc: Validate all docs and update reports/doc_check.md
     cmds:
       - python3 .opencode/skills/obsidian-doc-check/scripts/validate_vault.py --docs-root docs --report reports/doc_check.md
+      - task docs:infra:check
 
   docs:check:changed:
     desc: Validate changed docs and update reports/doc_check.md
@@ -176,6 +177,17 @@ tasks:
         print("+", " ".join(shlex.quote(x) for x in cmd))
         subprocess.run(cmd, check=True)
         PY
+      - task docs:infra:check:changed
+
+  docs:infra:check:
+    desc: Compare BD-INF resource inventory against prod cdk synth output
+    cmds:
+      - python3 scripts/docs_infra/check_bd_resource_inventory.py
+
+  docs:infra:check:changed:
+    desc: Compare BD-INF resource inventory against prod cdk synth output when relevant files changed
+    cmds:
+      - python3 scripts/docs_infra/check_bd_resource_inventory.py --changed-only
 
   docs:trace:
     desc: Generate static RTM views for Quartz
@@ -253,6 +265,7 @@ tasks:
         PY
       - npm --prefix infra run build
       - npm --prefix infra run test
+      - task docs:infra:check:changed
       - npm --prefix web run typecheck
       - |
         python3 - <<'PY'

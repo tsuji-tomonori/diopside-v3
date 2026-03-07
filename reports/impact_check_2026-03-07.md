@@ -38,3 +38,19 @@
   - `task api:docs:check` / `task api:openapi:check` で、OpenAPI `responses` と `BD-APP-OAS-*` の異常系整合を継続検証できる。
 - docs運用:
   - `doc-bd-api` / `doc-dd-api` / `doc-it-plan` / `docops-orchestrator` / `obsidian-doc-check` / `skill-maintainer` が同一ルールで更新され、以後のAPI契約追加時にも 200 系のみの個票に戻りにくくなる。
+
+## 追加実施（BD-INFリソース一覧と `cdk synth` の自動照合）
+- 対象: `scripts/docs_infra/check_bd_resource_inventory.py`, `Taskfile.yaml`, `README.md`, `.github/workflows/ut-static-analysis.yml`, `docs/2.基本設計(BD)/01.設計判断(ADR)/BD-SYS-ADR-044.md`, `docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md`, `docs/2.基本設計(BD)/04.インフラ(INF)/52.IaCと構成管理(IAC_CM)/BD-INF-IAC-001.md`。
+- 変更内容:
+  - `BD-INF-DEP-005` の管理対象AWSリソース一覧を現行 prod IaC に合わせて見直し、同一文書内へ selector 付き比較定義を追加。
+  - `check_bd_resource_inventory.py` を追加し、fixture asset path を使って prod 条件の `cdk synth` を実行し、主リソースの過不足と未記載リソースを `reports/infra_resource_check.md` へ出力するよう実装。
+  - `docs:infra:check` / `docs:infra:check:changed` を追加し、`docs:check` / `docs:guard` / `docs:ut:stat:check` から自動実行するよう統合。
+  - ADR `BD-SYS-ADR-044` と `BD-INF-IAC-001` を更新し、synth フェーズの必須出力へ「管理対象リソース照合レポート」を追加。
+
+## 追加影響確認（BD-INFリソース一覧と `cdk synth` の自動照合）
+- docs運用:
+  - `task docs:guard` は関連INF文書または `infra/**` の変更を含む場合に、`BD-INF-DEP-005` と prod `cdk synth` の過不足を自動検知できる。
+  - `task docs:check` は Vault整合に加えて `reports/infra_resource_check.md` を生成し、主リソース未記載や設計個数の乖離を fail とする。
+- CI影響:
+  - `UT Static Analysis` は `scripts/docs_infra/**` の変更でも起動し、docs側比較ロジック単体の変更漏れを見逃さない。
+  - 比較は `infra/test/fixtures/site` を使うため、Quartz build や AWS 認証に依存せず再現可能。

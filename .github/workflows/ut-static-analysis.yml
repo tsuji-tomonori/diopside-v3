@@ -5,6 +5,7 @@ on:
     paths:
       - "docs/**/*.md"
       - "scripts/pairwise/**"
+      - "scripts/docs_infra/**"
       - "scripts/ut_quality/**"
       - ".opencode/skills/obsidian-doc-check/scripts/**"
       - ".opencode/skills/obsidian-doc-new/scripts/**"
@@ -18,6 +19,7 @@ on:
     paths:
       - "docs/**/*.md"
       - "scripts/pairwise/**"
+      - "scripts/docs_infra/**"
       - "scripts/ut_quality/**"
       - ".opencode/skills/obsidian-doc-check/scripts/**"
       - ".opencode/skills/obsidian-doc-new/scripts/**"

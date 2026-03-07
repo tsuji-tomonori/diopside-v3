@@ -3,16 +3,17 @@ id: BD-INF-IAC-001
 title: インフラ変更フロー
 doc_type: インフラアーキテクチャ
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-23'
+updated: '2026-03-07'
 up:
 - '[[BD-INF-PLAT-001]]'
 related:
 - '[[BD-INF-CM-001]]'
 - '[[BD-INF-DEP-005]]'
+- '[[BD-SYS-ADR-044]]'
 - '[[DD-INF-IAC-002]]'
 - '[[DD-INF-IAC-001]]'
 - '[[IT-INFIT-ROLL-001]]'
@@ -31,6 +32,7 @@ tags:
 ## 方針
 - インフラ変更はCDK IaCのみで実施し、手動変更を禁止する。
 - `cdk synth -> cdk diff -> review -> approve -> cdk deploy -> verify` を必須手順とする。
+- synth結果は [[BD-INF-DEP-005]] の管理対象AWSリソース一覧と自動照合し、過不足がある場合は review へ進めない。
 
 ## 必須設計項目（BDで必ず決める）
 - 変更フロー（synth/diff/review/approve/deploy/verify）の必須出力。
@@ -42,11 +44,12 @@ tags:
 - フェーズ別の実行条件と禁止事項。
 - 破壊的変更判定ルール（置換/削除/認証境界変更）。
 - verifyで必須とする検証セット（到達性、監視、切戻し判断）。
+- synth時に比較する主リソースの範囲と、補助リソース/CDK内部生成リソースの除外基準。
 
 ## フェーズ責務
 | フェーズ | 正本文書 | 必須出力 | 不可事項 |
 |---|---|---|---|
-| synth | [[DD-INF-IAC-002]], [[DD-INF-IAC-003]] | 生成テンプレート、context値、生成ハッシュ | 本番反映 |
+| synth | [[DD-INF-IAC-002]], [[DD-INF-IAC-003]], [[BD-INF-DEP-005]] | 生成テンプレート、context値、生成ハッシュ、管理対象リソース照合レポート | 本番反映 |
 | diff | [[DD-INF-IAC-002]], [[DD-INF-IAC-001]] | 差分サマリ、影響リソース一覧、破壊的変更有無 | 差分未確認で次フェーズ進行 |
 | review | [[BD-INF-CM-001]] | レビュー記録、承認者、却下理由 | 口頭承認のみ |
 | approve | [[BD-INF-IAC-001]] | 承認チケットID、実行ウィンドウ、ロールバックID | 承認者と実行者の同一化 |
@@ -69,6 +72,7 @@ tags:
 - DDでコマンド・実行手順・判定自動化を設計する入力が揃っていること。
 
 ## 変更履歴
+- 2026-03-07: synthフェーズにBD管理対象リソース一覧との自動照合を追加し、review進行条件へ過不足なしを明記 [[BD-SYS-ADR-044]]
 - 2026-02-23: 目的/必須設計項目/DD引渡し/未指定事項/受入基準を追加し、IaC章を統一テンプレート化 [[BD-SYS-ADR-036]]
 - 2026-02-20: INF章再編に合わせてIaC章の正本位置を更新 [[BD-SYS-ADR-036]]
 - 2026-02-13: CDK標準フロー（synth/diff/deploy）へ変更管理フェーズを再定義 [[BD-SYS-ADR-028]]
