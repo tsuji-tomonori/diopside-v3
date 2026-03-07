@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-28
-updated: '2026-02-28'
+updated: '2026-03-07'
 up:
   - '[[UT-PLAN-004]]'
   - '[[DD-APP-UI-003]]'
@@ -26,7 +26,7 @@ tags:
 - 生成方式: 2-wise（pairwise）、被覆率 100.00%
 
 ## テストケース一覧
-| case_id | 起動操作 | 詳細取得結果 | フォーカス状態 | 外部遷移可否 | 波形アセット | [[RQ-GL-017|ワードクラウド]]アセット |
+| case_id | 起動操作 | 詳細取得結果 | フォーカス状態 | 外部遷移可否 | 波形アセット | ワードクラウドアセット |
 | --- | --- | --- | --- | --- | --- | --- |
 | UT-PW-FE-UI-U03-C001 | list_click | ok | inside_modal | enabled | exists | exists |
 | UT-PW-FE-UI-U03-C002 | list_click | not_found | escaped | disabled | missing | missing |
@@ -42,4 +42,5 @@ tags:
 - 期待結果（Expected）は仕様差分や境界値補完ケースを別途追記して補強する。
 
 ## 変更履歴
+- 2026-03-07: 自動生成
 - 2026-02-28: 自動生成

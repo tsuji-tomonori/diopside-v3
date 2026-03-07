@@ -25,7 +25,7 @@ repos:
         language: system
         pass_filenames: true
         files: ^docs/.*\.md$
-        exclude: (^docs/.*/README\.md$|^docs/.*/TEMPLATE\.md$)
+        exclude: (^docs/.*/README\.md$|^docs/.*/TEMPLATE\.md$|^docs/4\.単体テスト\(UT\)/21\.単体テストケース\(CASE\)/.*/UT-CASE-.*-PW\.md$)
 
       - id: obsidian-validate-vault
         name: Validate Obsidian docs link rules

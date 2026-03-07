@@ -38,6 +38,60 @@ def stringify(value: Any) -> str:
     return str(value)
 
 
+def split_frontmatter(text: str) -> dict[str, Any]:
+    if not text.startswith("---\n"):
+        raise ValueError("frontmatter opening not found")
+    end = text.find("\n---\n", 4)
+    if end == -1:
+        raise ValueError("frontmatter closing not found")
+    fm_text = text[4:end]
+    data = yaml.safe_load(fm_text)
+    if not isinstance(data, dict):
+        raise ValueError("frontmatter is not mapping")
+    return data
+
+
+def extract_history_lines(text: str) -> list[str]:
+    marker = "\n## 変更履歴\n"
+    start = text.find(marker)
+    if start == -1:
+        return []
+    lines = text[start + len(marker) :].splitlines()
+    history: list[str] = []
+    for line in lines:
+        if not line.startswith("- "):
+            break
+        history.append(line)
+    return history
+
+
+def load_existing_output(path: Path) -> tuple[str | None, str | None, list[str], str]:
+    if not path.exists():
+        return None, None, [], ""
+
+    text = path.read_text(encoding="utf-8")
+    try:
+        fm = split_frontmatter(text)
+    except ValueError:
+        return None, None, [], text
+
+    created = fm.get("created")
+    updated = fm.get("updated")
+    return (
+        stringify(created) if created is not None else None,
+        stringify(updated) if updated is not None else None,
+        extract_history_lines(text),
+        text,
+    )
+
+
+def merge_history(history_lines: list[str], today: str) -> list[str]:
+    entry = f"- {today}: 自動生成"
+    if history_lines and history_lines[0] == entry:
+        return history_lines
+    return [entry, *[line for line in history_lines if line != entry]]
+
+
 def is_excluded(assignment: dict[str, str], excludes: list[dict[str, str]]) -> bool:
     for ex in excludes:
         ok = True
@@ -137,10 +191,12 @@ def render_output(
     names: list[str],
     rows: list[list[str]],
     coverage_rate: float,
+    created: str,
+    updated: str,
+    history_lines: list[str],
 ) -> str:
     meta = model["meta"]
     out_stem = Path(meta["output"]).stem
-    today = dt.date.today().isoformat()
     target = meta.get("target", "BE")
     up_links = [normalize_link(x) for x in meta.get("up", [])]
     related_links = [normalize_link(x) for x in meta.get("related", [])]
@@ -154,8 +210,8 @@ def render_output(
         "version: 1.0.0",
         "status: 下書き",
         "owner: RQ-SH-001",
-        f"created: {today}",
-        f"updated: '{today}'",
+        f"created: {created}",
+        f"updated: '{updated}'",
         "up:",
     ]
 
@@ -198,7 +254,7 @@ def render_output(
             "- 期待結果（Expected）は仕様差分や境界値補完ケースを別途追記して補強する。",
             "",
             "## 変更履歴",
-            f"- {today}: 自動生成",
+            *history_lines,
             "",
         ]
     )
@@ -215,6 +271,7 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="check mode (no write)")
     parser.add_argument("--strict", action="store_true", help="fail if coverage < 100%")
     args = parser.parse_args()
+    today = dt.date.today().isoformat()
 
     models = collect_models(PAIRWISE_ROOT)
     if not models:
@@ -238,12 +295,32 @@ def main() -> int:
 
         output_path = Path(model["meta"]["output"])
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        rendered = render_output(model_path, model, names, rows, coverage_rate)
+        existing_created, existing_updated, existing_history, before = load_existing_output(output_path)
+        created = existing_created or today
+        stable_updated = existing_updated or today
+        stable_history = existing_history or [f"- {created}: 自動生成"]
+        rendered = render_output(
+            model_path,
+            model,
+            names,
+            rows,
+            coverage_rate,
+            created,
+            stable_updated,
+            stable_history,
+        )
 
-        if output_path.exists():
-            before = output_path.read_text(encoding="utf-8")
-        else:
-            before = ""
+        if before != rendered:
+            rendered = render_output(
+                model_path,
+                model,
+                names,
+                rows,
+                coverage_rate,
+                created,
+                today,
+                merge_history(existing_history, today) if before else [f"- {today}: 自動生成"],
+            )
 
         if before != rendered:
             changed.append(output_path)

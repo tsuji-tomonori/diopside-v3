@@ -72,6 +72,8 @@ tasks:
                     continue
                 if path.endswith("/README.md") or path.endswith("/TEMPLATE.md"):
                     continue
+                if "/21.単体テストケース(CASE)/" in path and path.endswith("-PW.md"):
+                    continue
                 if not os.path.isfile(path):
                     continue
                 files.append(path)

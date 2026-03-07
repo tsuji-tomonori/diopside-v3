@@ -7,7 +7,7 @@ version: 1.0.0
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-28
-updated: '2026-02-28'
+updated: '2026-03-07'
 up:
   - '[[UT-PLAN-005]]'
   - '[[DD-APP-API-007]]'
@@ -26,7 +26,7 @@ tags:
 - 生成方式: 2-wise（pairwise）、被覆率 100.00%
 
 ## テストケース一覧
-| case_id | 動画ID状態 | 波形含有 | [[RQ-GL-017|ワードクラウド]]含有 | 外部URL状態 | ストア状態 | 認可状態 |
+| case_id | 動画ID状態 | 波形含有 | ワードクラウド含有 | 外部URL状態 | ストア状態 | 認可状態 |
 | --- | --- | --- | --- | --- | --- | --- |
 | UT-PW-BE-DD-APP-API-007-C001 | exists | true | true | valid | ok | guest |
 | UT-PW-BE-DD-APP-API-007-C002 | exists | false | false | missing | unavailable | admin |
@@ -43,4 +43,5 @@ tags:
 - 期待結果（Expected）は仕様差分や境界値補完ケースを別途追記して補強する。
 
 ## 変更履歴
+- 2026-03-07: 自動生成
 - 2026-02-28: 自動生成
