@@ -9,13 +9,19 @@ const fixtureSitePath = path.join(__dirname, "fixtures/site");
 type BuildTemplateOptions = {
   stage?: "dev" | "prod";
   region?: string;
+  githubOidcProviderArn?: string;
 };
 
-function buildTemplate({ stage = "dev", region }: BuildTemplateOptions = {}): Template {
+function buildTemplate({
+  stage = "dev",
+  region,
+  githubOidcProviderArn,
+}: BuildTemplateOptions = {}): Template {
   const app = new App({
     context: {
       siteAssetPath: fixtureSitePath,
       deploymentStage: stage,
+      ...(githubOidcProviderArn ? { githubOidcProviderArn } : {}),
     },
   });
 
@@ -180,5 +186,26 @@ describe("QuartzSiteStack", () => {
     template.resourceCountIs("AWS::CloudWatch::Alarm", 1);
     expect(outputs.MonthlyCostWarnAlarmName).toBeUndefined();
     expect(outputs.MonthlyCostCriticalAlarmName).toBeUndefined();
+  });
+
+  test("reuses an existing GitHub OIDC provider when ARN is provided", () => {
+    const providerArn =
+      "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com";
+    const template = buildTemplate({ githubOidcProviderArn: providerArn });
+    const outputs = template.toJSON().Outputs as Record<string, { Value?: unknown }>;
+
+    template.resourceCountIs("Custom::AWSCDKOpenIdConnectProvider", 0);
+    template.hasResourceProperties("AWS::IAM::Role", {
+      AssumeRolePolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Principal: {
+              Federated: providerArn,
+            },
+          }),
+        ]),
+      },
+    });
+    expect(outputs.GithubOidcProviderArn?.Value).toBe(providerArn);
   });
 });

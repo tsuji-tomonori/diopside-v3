@@ -71,4 +71,15 @@ jobs:
           python3 -m pip install "PyYAML>=6,<7"
 
       - name: Deploy docs
-        run: task docs:deploy:ci
+        run: |
+          ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+          GITHUB_OIDC_PROVIDER_ARN="arn:aws:iam::${ACCOUNT_ID}:oidc-provider/token.actions.githubusercontent.com"
+
+          if aws iam get-open-id-connect-provider \
+            --open-id-connect-provider-arn "${GITHUB_OIDC_PROVIDER_ARN}" \
+            >/dev/null 2>&1; then
+            task docs:deploy:ci \
+              CDK_ARGS="--context githubOidcProviderArn=${GITHUB_OIDC_PROVIDER_ARN}"
+          else
+            task docs:deploy:ci
+          fi

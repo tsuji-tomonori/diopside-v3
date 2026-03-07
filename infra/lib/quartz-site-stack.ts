@@ -71,6 +71,12 @@ export class QuartzSiteStack extends cdk.Stack {
       (this.node.tryGetContext("githubRepo") as string | undefined) ?? "diopside-v3";
     const githubEnvironment =
       (this.node.tryGetContext("githubEnvironment") as string | undefined) ?? "prod";
+    const githubOidcProviderArnContext = this.node.tryGetContext("githubOidcProviderArn");
+    const githubOidcProviderArn =
+      typeof githubOidcProviderArnContext === "string" &&
+      githubOidcProviderArnContext.trim().length > 0
+        ? githubOidcProviderArnContext.trim()
+        : undefined;
     const githubSub = `repo:${githubOwner}/${githubRepo}:environment:${githubEnvironment}`;
     const adminIngressCidr =
       (this.node.tryGetContext("adminIngressCidr") as string | undefined) ?? "10.0.0.0/8";
@@ -286,10 +292,16 @@ export class QuartzSiteStack extends cdk.Stack {
       ],
     });
 
-    const githubOidcProvider = new iam.OpenIdConnectProvider(this, "GithubOidcProvider", {
-      url: "https://token.actions.githubusercontent.com",
-      clientIds: ["sts.amazonaws.com"],
-    });
+    const githubOidcProvider = githubOidcProviderArn
+      ? iam.OpenIdConnectProvider.fromOpenIdConnectProviderArn(
+          this,
+          "GithubOidcProvider",
+          githubOidcProviderArn,
+        )
+      : new iam.OpenIdConnectProvider(this, "GithubOidcProvider", {
+          url: "https://token.actions.githubusercontent.com",
+          clientIds: ["sts.amazonaws.com"],
+        });
 
     const githubActionsDeployRole = new iam.Role(this, "GithubActionsDeployRole", {
       description: "Assumed by GitHub Actions (OIDC) to run docs deploy via CDK",
