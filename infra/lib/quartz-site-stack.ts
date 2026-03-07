@@ -830,34 +830,46 @@ exports.handler = async (event) => {
         cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
     });
 
-    const estimatedChargesMetric = new cloudwatch.Metric({
-      namespace: "AWS/Billing",
-      metricName: "EstimatedCharges",
-      dimensionsMap: {
-        Currency: "USD",
-      },
-      statistic: "Maximum",
-      period: cdk.Duration.hours(6),
-      region: "us-east-1",
-    });
+    const billingMetricRegion = "us-east-1";
+    const deploymentRegion = props?.env?.region ?? process.env.CDK_DEFAULT_REGION;
+    // EstimatedCharges is published in us-east-1 only, so regional stacks must skip
+    // direct alarm creation outside that region to keep synth/deploy valid.
+    const supportsEstimatedChargeAlarms =
+      !deploymentRegion || deploymentRegion === billingMetricRegion;
 
-    const monthlyCostWarnAlarm = new cloudwatch.Alarm(this, "MonthlyCostWarnAlarm", {
-      alarmDescription: "Estimated monthly AWS spend crossed warning threshold",
-      metric: estimatedChargesMetric,
-      threshold: 18,
-      evaluationPeriods: 1,
-      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
-      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-    });
+    let monthlyCostWarnAlarm: cloudwatch.Alarm | undefined;
+    let monthlyCostCriticalAlarm: cloudwatch.Alarm | undefined;
 
-    const monthlyCostCriticalAlarm = new cloudwatch.Alarm(this, "MonthlyCostCriticalAlarm", {
-      alarmDescription: "Estimated monthly AWS spend crossed critical threshold",
-      metric: estimatedChargesMetric,
-      threshold: 20,
-      evaluationPeriods: 1,
-      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
-      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-    });
+    if (supportsEstimatedChargeAlarms) {
+      const estimatedChargesMetric = new cloudwatch.Metric({
+        namespace: "AWS/Billing",
+        metricName: "EstimatedCharges",
+        dimensionsMap: {
+          Currency: "USD",
+        },
+        statistic: "Maximum",
+        period: cdk.Duration.hours(6),
+        region: billingMetricRegion,
+      });
+
+      monthlyCostWarnAlarm = new cloudwatch.Alarm(this, "MonthlyCostWarnAlarm", {
+        alarmDescription: "Estimated monthly AWS spend crossed warning threshold",
+        metric: estimatedChargesMetric,
+        threshold: 18,
+        evaluationPeriods: 1,
+        treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+        comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      });
+
+      monthlyCostCriticalAlarm = new cloudwatch.Alarm(this, "MonthlyCostCriticalAlarm", {
+        alarmDescription: "Estimated monthly AWS spend crossed critical threshold",
+        metric: estimatedChargesMetric,
+        threshold: 20,
+        evaluationPeriods: 1,
+        treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+        comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      });
+    }
 
 
     new cdk.CfnOutput(this, "CloudFrontDomainName", {
@@ -904,14 +916,16 @@ exports.handler = async (event) => {
       value: cloudFront5xxAlarm.alarmName,
       description: "CloudFront 5xx critical alarm name",
     });
-    new cdk.CfnOutput(this, "MonthlyCostWarnAlarmName", {
-      value: monthlyCostWarnAlarm.alarmName,
-      description: "Monthly estimated charge warning alarm name",
-    });
-    new cdk.CfnOutput(this, "MonthlyCostCriticalAlarmName", {
-      value: monthlyCostCriticalAlarm.alarmName,
-      description: "Monthly estimated charge critical alarm name",
-    });
+    if (monthlyCostWarnAlarm && monthlyCostCriticalAlarm) {
+      new cdk.CfnOutput(this, "MonthlyCostWarnAlarmName", {
+        value: monthlyCostWarnAlarm.alarmName,
+        description: "Monthly estimated charge warning alarm name",
+      });
+      new cdk.CfnOutput(this, "MonthlyCostCriticalAlarmName", {
+        value: monthlyCostCriticalAlarm.alarmName,
+        description: "Monthly estimated charge critical alarm name",
+      });
+    }
     new cdk.CfnOutput(this, "InfraReadonlyRoleArn", {
       value: opsReadonlyRole.roleArn,
       description: "Readonly operations role ARN",

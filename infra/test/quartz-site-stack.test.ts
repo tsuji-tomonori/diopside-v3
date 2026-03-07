@@ -6,7 +6,12 @@ import { QuartzSiteStack } from "../lib/quartz-site-stack";
 
 const fixtureSitePath = path.join(__dirname, "fixtures/site");
 
-function buildTemplate(stage: "dev" | "prod" = "dev"): Template {
+type BuildTemplateOptions = {
+  stage?: "dev" | "prod";
+  region?: string;
+};
+
+function buildTemplate({ stage = "dev", region }: BuildTemplateOptions = {}): Template {
   const app = new App({
     context: {
       siteAssetPath: fixtureSitePath,
@@ -15,7 +20,16 @@ function buildTemplate(stage: "dev" | "prod" = "dev"): Template {
   });
 
   Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
-  const stack = new QuartzSiteStack(app, "QuartzSiteStackTest");
+  const stack = new QuartzSiteStack(app, "QuartzSiteStackTest", {
+    ...(region
+      ? {
+          env: {
+            account: "123456789012",
+            region,
+          },
+        }
+      : {}),
+  });
   return Template.fromStack(stack);
 }
 
@@ -33,7 +47,7 @@ describe("QuartzSiteStack", () => {
   });
 
   test("uses documented dev network CIDR plan", () => {
-    const template = buildTemplate("dev");
+    const template = buildTemplate({ stage: "dev" });
 
     template.hasResourceProperties("AWS::EC2::VPC", {
       CidrBlock: "10.20.0.0/16",
@@ -50,7 +64,7 @@ describe("QuartzSiteStack", () => {
   });
 
   test("uses documented prod network CIDR plan", () => {
-    const template = buildTemplate("prod");
+    const template = buildTemplate({ stage: "prod" });
 
     template.hasResourceProperties("AWS::EC2::VPC", {
       CidrBlock: "10.22.0.0/16",
@@ -85,7 +99,7 @@ describe("QuartzSiteStack", () => {
   });
 
   test("enables required-tags config rule inputs in prod", () => {
-    const template = buildTemplate("prod");
+    const template = buildTemplate({ stage: "prod" });
 
     template.hasResourceProperties("AWS::Config::ConfigRule", {
       Source: {
@@ -104,8 +118,8 @@ describe("QuartzSiteStack", () => {
   });
 
   test("enables API access logs in prod only", () => {
-    const prodTemplate = buildTemplate("prod");
-    const devTemplate = buildTemplate("dev");
+    const prodTemplate = buildTemplate({ stage: "prod" });
+    const devTemplate = buildTemplate({ stage: "dev" });
 
     prodTemplate.hasResourceProperties("AWS::ApiGatewayV2::Stage", {
       AccessLogSettings: Match.objectLike({
@@ -126,7 +140,7 @@ describe("QuartzSiteStack", () => {
   });
 
   test("creates additional prod logging buckets", () => {
-    const template = buildTemplate("prod");
+    const template = buildTemplate({ stage: "prod" });
 
     template.resourceCountIs("AWS::S3::Bucket", 3);
   });
@@ -148,5 +162,23 @@ describe("QuartzSiteStack", () => {
     expect(outputs.HttpApiEndpoint).toBeDefined();
     expect(outputs.OpsUserPoolId).toBeDefined();
     expect(outputs.VpcId).toBeDefined();
+  });
+
+  test("creates estimated charges alarms in us-east-1", () => {
+    const template = buildTemplate({ region: "us-east-1" });
+    const outputs = template.toJSON().Outputs as Record<string, unknown>;
+
+    template.resourceCountIs("AWS::CloudWatch::Alarm", 3);
+    expect(outputs.MonthlyCostWarnAlarmName).toBeDefined();
+    expect(outputs.MonthlyCostCriticalAlarmName).toBeDefined();
+  });
+
+  test("skips estimated charges alarms outside us-east-1", () => {
+    const template = buildTemplate({ region: "ap-northeast-1" });
+    const outputs = template.toJSON().Outputs as Record<string, unknown>;
+
+    template.resourceCountIs("AWS::CloudWatch::Alarm", 1);
+    expect(outputs.MonthlyCostWarnAlarmName).toBeUndefined();
+    expect(outputs.MonthlyCostCriticalAlarmName).toBeUndefined();
   });
 });
