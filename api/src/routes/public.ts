@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { store } from "../repositories/store.js";
+import { authenticatedOperationErrorResponses, badRequestProblemResponse, notFoundProblemResponse } from "../schemas/common.js";
 
 const bootstrapRoute = createRoute({
   method: "get",
@@ -28,6 +29,7 @@ const bootstrapRoute = createRoute({
         },
       },
     },
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -51,6 +53,7 @@ const tagMasterRoute = createRoute({
         },
       },
     },
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -80,6 +83,8 @@ const archiveIndexRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -110,6 +115,8 @@ const searchRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -136,6 +143,8 @@ const detailRoute = createRoute({
         },
       },
     },
+    404: notFoundProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 

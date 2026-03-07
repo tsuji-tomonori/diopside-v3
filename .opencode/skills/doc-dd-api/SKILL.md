@@ -34,6 +34,7 @@ metadata:
 - RPC利用時の `AppType` export とメソッドチェーン定義条件。
 - Problem Details（`application/problem+json`）の実装マッピング（`type/title/status/detail/instance` + 拡張）
 - HTTPステータス実装規則（`201` + `Location`、`429` + `Retry-After`、`4xx/5xx` 切り分け）
+- route単位で、認証/認可/入力検証/対象不存在/競合/内部障害に対応する異常レスポンスを OpenAPI `responses` へ定義する。
 - 一覧APIのページング実装（cursor生成/検証、opaque維持、上限値）
 - 可観測性実装（`X-Request-Id`、`traceparent`、ログ相関）
 - `## 変更履歴` への当日追記。
@@ -67,6 +68,7 @@ metadata:
 - エンドポイント/入出力キー/ステータスコードの最終正本が OpenAPI であることを明記し、DD本文の手書き契約が正本化していないことを確認する。
 - `task api:docs:generate` / `task api:docs:check` により `BD-APP-OAS-*` が更新される運用を確認する。
 - `summary`/`operationId`/`tags` と `responses`（成功/失敗）がルート単位で定義されていることを確認する。
+- `responses` に `401/403/400/404/409/429/500` のうち適用される異常系が含まれ、`BD-APP-OAS-*` に再生成されることを確認する。
 - バリデーション失敗が `HTTPException(400, { cause })` を経由して `app.onError` に集約されることを確認する。
 - Zod v4 のエラー整形関数（`z.flattenError()`/`z.treeifyError()`）を利用し、`format`/`flatten` 旧運用へ依存しないことを確認する。
 - 変更後に `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を実行し、用語（`RQ-GL-*`）をObsidianリンクへ自動変換する。

@@ -1,7 +1,16 @@
 import { createRoute, z, OpenAPIHono } from "@hono/zod-openapi";
 import { ProblemError } from "../lib/problem.js";
 import { store } from "../repositories/store.js";
-import { problemSchema, runKindSchema, runStatusSchema, targetTypeSchema, triggerModeSchema } from "../schemas/common.js";
+import {
+  authenticatedOperationErrorResponses,
+  badRequestProblemResponse,
+  conflictProblemResponse,
+  notFoundProblemResponse,
+  runKindSchema,
+  runStatusSchema,
+  targetTypeSchema,
+  triggerModeSchema,
+} from "../schemas/common.js";
 
 const postIngestionRunsRoute = createRoute({
   method: "post",
@@ -46,8 +55,9 @@ const postIngestionRunsRoute = createRoute({
         },
       },
     },
-    400: { description: "Bad request", content: { "application/problem+json": { schema: problemSchema } } },
-    409: { description: "Conflict", content: { "application/problem+json": { schema: problemSchema } } },
+    400: badRequestProblemResponse,
+    409: conflictProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -77,7 +87,8 @@ const getIngestionRunRoute = createRoute({
         },
       },
     },
-    404: { description: "Not found", content: { "application/problem+json": { schema: problemSchema } } },
+    404: notFoundProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -114,6 +125,9 @@ const getIngestionItemsRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    404: notFoundProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -139,6 +153,10 @@ const retryRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    404: notFoundProblemResponse,
+    409: conflictProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -165,6 +183,7 @@ const latestRoute = createRoute({
         },
       },
     },
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -190,6 +209,7 @@ const healthRoute = createRoute({
         },
       },
     },
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -227,6 +247,9 @@ const postRechecksRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    404: notFoundProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 
@@ -254,6 +277,8 @@ const getRecheckRoute = createRoute({
         },
       },
     },
+    404: notFoundProblemResponse,
+    ...authenticatedOperationErrorResponses,
   },
 });
 

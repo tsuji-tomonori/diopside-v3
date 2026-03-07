@@ -3,11 +3,11 @@ id: BD-APP-API-003
 title: エラーモデル
 doc_type: API設計
 phase: BD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-11'
+updated: '2026-03-07'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -36,6 +36,13 @@ tags:
 - 拡張項目: `code`, `category`, `retryable`, `trace_id`, `occurred_at`, `errors[]`, `hint`, `related_run_id`, `related_publish_run_id`。
 - `trace_id` はログ/監視で相関できる形式（UUID）を採用する。
 
+## operation明記ルール
+- OpenAPI 正本と `BD-APP-OAS-*` は、正常系に加えて適用される異常系ステータスを operation ごとに列挙する。
+- `/api/v1/*` は `401` と `500` を基底異常系とし、認証前提の契約で省略しない。
+- `/api/v1/admin/*` は `403` を追加し、認可不足を個別 operation の異常系として明記する。
+- `400` は入力検証/ヘッダ欠落/クエリ不正、`404` は対象不存在、`409` は重複実行や状態競合、`429` はレート制限に対応付ける。
+- `errors[]` や `retryable` などの拡張項目は、上記ステータスで返す Problem Details と組み合わせて使い分ける。
+
 ## エラー分類
 | 分類 | 主対象 | 説明 | 代表コード |
 |---|---|---|---|
@@ -54,9 +61,11 @@ tags:
 
 ## 参照系契約の応答方針
 - 静的配信はHTTPステータス（200/404/5xx）を優先し、UIはフォールバック表示へ遷移する。
+- API参照系は検索/詳細/契約取得ごとに、`400/401/404/500` のうち適用される異常系を `BD-APP-OAS-*` へ明記する。
 - 参照系エラーで管理系の内部情報（DB接続情報、内部パス、秘密値）を返さない。
 
 ## 変更履歴
+- 2026-03-07: `BD-APP-OAS-*` における異常系明記ルールと、`401/403/400/404/409/429/500` の適用基準を追加 [[BD-SYS-ADR-023]]
 - 2026-02-11: Hono + Zod 連携時のバリデーションエラー整形方針を追記 [[BD-SYS-ADR-025]]
 - 2026-02-11: Problem Details（`application/problem+json`）基準へ更新し、429/Retry-After と拡張項目方針を追加 [[BD-SYS-ADR-023]]
 - 2026-02-11: 更新系/参照系を分離した共通エラーモデルを追加 [[BD-SYS-ADR-021]]

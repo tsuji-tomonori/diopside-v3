@@ -35,3 +35,27 @@ export const problemSchema = z
       .optional(),
   })
   .openapi("ProblemDetails");
+
+const problemResponse = (description: string) => ({
+  description,
+  content: { "application/problem+json": { schema: problemSchema } },
+});
+
+export const badRequestProblemResponse = problemResponse("Bad request");
+export const unauthorizedProblemResponse = problemResponse("Unauthorized");
+export const forbiddenProblemResponse = problemResponse("Forbidden");
+export const notFoundProblemResponse = problemResponse("Not found");
+export const conflictProblemResponse = problemResponse("Conflict");
+export const tooManyRequestsProblemResponse = problemResponse("Too many requests");
+export const internalServerErrorProblemResponse = problemResponse("Internal server error");
+
+export const authenticatedOperationErrorResponses = {
+  401: unauthorizedProblemResponse,
+  500: internalServerErrorProblemResponse,
+} as const;
+
+export const adminOperationErrorResponses = {
+  401: unauthorizedProblemResponse,
+  403: forbiddenProblemResponse,
+  500: internalServerErrorProblemResponse,
+} as const;

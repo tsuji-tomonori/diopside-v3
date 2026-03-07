@@ -32,6 +32,7 @@ metadata:
 - RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれている
 - BD文書の `## 変更履歴` 各行に、関連ADRリンク（`[[BD-*-ADR-xxx]]`）が含まれている
 - API系文書（BD-APP-API/DD-APP-API/IT-PLAN）で、HTTP API契約正本が OpenAPI（Hono生成）として一貫している
+- API系文書と `BD-APP-OAS-*` で、operation ごとの異常系レスポンス（`401/403/400/404/409/429/500` など）が OpenAPI `responses` と整合している
 
 ## 実行
 - 必要に応じて `python3 .opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py <対象Markdownパス>` を先に実行する。

@@ -38,7 +38,7 @@ metadata:
 18. RQ文書の `## 変更履歴` 各行に、関連RDRリンク（`[[RQ-RDR-xxx]]`）が含まれていることを確認する。
 19. BD文書の `## 変更履歴` 各行に、関連ADRリンク（`[[BD-*-ADR-xxx]]`）が含まれていることを確認する。
 20. RQ-UC/RQ-FRを更新する場合は、アクター目的主体（`[[RQ-SH-*|...]]が〜する/できる`）で記述し、`本システムは` / `システムは` を主語にした要求記述へ戻さない。
-21. API契約変更（`docs/**API**` または `api/src/routes/**`）を含む場合は `task api:openapi:generate`、`task api:docs:generate`、`task api:docs:check`、`task api:openapi:check` を実行し、正本OpenAPIとAPI契約文書の同期を検証する。
+21. API契約変更（`docs/**API**` または `api/src/routes/**`）を含む場合は `task api:openapi:generate`、`task api:docs:generate`、`task api:docs:check`、`task api:openapi:check` を実行し、正本OpenAPIとAPI契約文書の同期、および `BD-APP-OAS-*` の異常系レスポンス（`401/403/400/404/409/429/500` など）追記漏れがないことを検証する。
 
 ## 出力契約
 - 変更済み docs

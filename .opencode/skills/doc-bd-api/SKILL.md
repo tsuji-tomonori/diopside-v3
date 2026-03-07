@@ -20,6 +20,7 @@ metadata:
 - 文書IDに対応する1トピックの内容。
 - Frontmatter必須キー（id/title/doc_type/phase/version/status/owner/created/updated/up/related/tags）。
 - APIの利用目的、対象利用者、エンドポイント単位の要求/応答、エラー契約、互換性方針。
+- operation単位で、適用する異常レスポンス（`401/403/400/404/409/429/500` など）を OpenAPI `responses` と `BD-APP-OAS-*` に省略なく定義する。
 - HTTPセマンティクス（GET/POST/PUT/PATCH/DELETE の意味、冪等性、安全性）とステータスコード方針。
 - 一覧取得のページング方式（`limit` + `cursor` 推奨、cursorはopaque）と検索パラメータ統一方針。
 - エラー形式の標準（`application/problem+json`、`type/title/status/detail/instance`）と拡張項目方針。
@@ -33,7 +34,7 @@ metadata:
 - RPC型共有時の運用（`AppType` export、メソッドチェーン定義、`hc<AppType>` 利用）。
 - バージョニング/廃止（SemVer、`deprecated: true`、移行手順、Sunset）と契約運用（OpenAPI正本、CI破壊的変更検知）。
 - HTTP API契約の正本は Hono実装から生成する OpenAPI とし、BD本文への手書きスキーマ転記を正本化しない運用。
-- OpenAPI正本から operation 単位Markdown（`BD-APP-OAS-*`）を自動生成し、メソッド/パス/パラメータ/戻り値を表形式で配布する運用。
+- OpenAPI正本から operation 単位Markdown（`BD-APP-OAS-*`）を自動生成し、メソッド/パス/パラメータ/正常・異常レスポンスを表形式で配布する運用。
 - 自動生成される表の説明列は、日本語で省略せずに補完する。
 - 処理フロー・制約・オラクルは `DD-APP-API-*` に分離し、BD本文へ raw YAML やフロー図を持ち込まない。
 - `## 変更履歴` への当日追記。
@@ -60,6 +61,7 @@ metadata:
 - `up/related` のリンク先が存在することを確認する。
 - `GET` にボディを持たせない設計になっていることを確認する。
 - PUT/DELETE の冪等性、POST作成時の `201` + `Location`、レート制限時の `429` + `Retry-After` が定義されていることを確認する。
+- `/api/v1/*` の認証失敗 `401`、`/api/v1/admin/*` の認可失敗 `403`、入力不正 `400`、対象不存在 `404`、競合 `409`、内部障害 `500` が適用箇所で省略されていないことを確認する。
 - Problem Details必須メンバー（`type/title/status/detail/instance`）を欠落なく定義していることを確認する。
 - `param/query/header/cookie/json/form` の必要箇所が定義され、`json/form` の `Content-Type` 条件と `header` 小文字運用が明記されていることを確認する。
 - 検証済み入力が `c.req.valid(...)` 経由に統一され、未検証入力の利用を許容していないことを確認する。

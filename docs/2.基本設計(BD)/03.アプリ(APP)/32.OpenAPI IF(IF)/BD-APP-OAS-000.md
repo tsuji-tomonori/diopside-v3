@@ -3,11 +3,11 @@ id: BD-APP-OAS-000
 title: OpenAPI IF一覧
 doc_type: API設計
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-03-06
-updated: '2026-03-06'
+updated: '2026-03-07'
 up:
 - '[[BD-APP-API-004]]'
 - '[[BD-APP-API-001]]'
@@ -55,4 +55,4 @@ tags:
 | [[BD-APP-OAS-023]] | 動画詳細API契約 | `GET` | `/api/v1/videos/{videoId}` | [[DD-APP-API-007]] |
 
 ## 変更履歴
-- 2026-03-06: OpenAPI 正本から表形式のI/F一覧を自動生成 [[BD-SYS-ADR-023]]
+- 2026-03-07: OpenAPI 正本から表形式のI/F一覧を自動生成 [[BD-SYS-ADR-023]]

@@ -1,6 +1,13 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { store } from "../repositories/store.js";
-import { problemSchema, publishStatusSchema, runStatusSchema } from "../schemas/common.js";
+import {
+  adminOperationErrorResponses,
+  badRequestProblemResponse,
+  conflictProblemResponse,
+  notFoundProblemResponse,
+  publishStatusSchema,
+  runStatusSchema,
+} from "../schemas/common.js";
 import { ProblemError } from "../lib/problem.js";
 
 const postTagRoute = createRoute({
@@ -27,7 +34,9 @@ const postTagRoute = createRoute({
       description: "Created",
       content: { "application/json": { schema: z.object({ tag_id: z.string(), updated_at: z.string().datetime() }) } },
     },
-    409: { description: "Conflict", content: { "application/problem+json": { schema: problemSchema } } },
+    400: badRequestProblemResponse,
+    409: conflictProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -64,6 +73,9 @@ const patchTagRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    404: notFoundProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -87,6 +99,9 @@ const patchVideoTagsRoute = createRoute({
       description: "Updated",
       content: { "application/json": { schema: z.object({ video_id: z.string(), tag_ids: z.array(z.string()), updated_at: z.string() }) } },
     },
+    400: badRequestProblemResponse,
+    404: notFoundProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -118,6 +133,9 @@ const postPromptRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    404: notFoundProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -162,6 +180,8 @@ const postImportRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -194,6 +214,8 @@ const postDocsPublishRoute = createRoute({
         },
       },
     },
+    400: badRequestProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -219,6 +241,8 @@ const getDocsPublishRoute = createRoute({
         },
       },
     },
+    404: notFoundProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -241,6 +265,8 @@ const postTagMasterPublishRoute = createRoute({
       description: "Accepted",
       content: { "application/json": { schema: z.object({ publish_run_id: z.string().uuid(), status: runStatusSchema }) } },
     },
+    400: badRequestProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -263,6 +289,8 @@ const postPublishRunsRoute = createRoute({
       description: "Accepted",
       content: { "application/json": { schema: z.object({ publish_run_id: z.string().uuid(), status: runStatusSchema }) } },
     },
+    400: badRequestProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 
@@ -295,6 +323,8 @@ const getPublishRoute = createRoute({
         },
       },
     },
+    404: notFoundProblemResponse,
+    ...adminOperationErrorResponses,
   },
 });
 

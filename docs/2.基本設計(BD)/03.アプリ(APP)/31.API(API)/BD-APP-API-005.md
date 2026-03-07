@@ -3,11 +3,11 @@ id: BD-APP-API-005
 title: HTTP API契約共通方針
 doc_type: API設計
 phase: BD
-version: 1.0.4
+version: 1.0.5
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-03-06'
+updated: '2026-03-07'
 up:
 - '[[RQ-INT-001-01]]'
 - '[[RQ-SEC-001-01]]'
@@ -35,6 +35,7 @@ tags:
 - HTTP APIは RFC 9110 の意味論に従い、メソッドの安全性/冪等性/ステータス運用を契約として固定する。
 - 互換性は「破壊せず追加で進化」を原則とし、廃止は段階的に告知して移行期間を確保する。
 - OpenAPI を契約の正本とし、実装より先に更新してCIで破壊的変更を検知する。
+- operation 単位の契約文書（`BD-APP-OAS-*`）は、正常系だけでなく適用される異常系も `responses` に列挙し、省略した `200/201/202` のみの契約を残さない。
 
 ## URI/命名規約
 - URIは名詞中心で設計し、操作動詞を含むパス（例: `/create-*`）を採用しない。
@@ -59,6 +60,14 @@ tags:
 - フィールド単位の検証失敗は拡張メンバー（例: `errors[]`）で機械可読に返す。
 - `detail` の文字列パースを前提にせず、機械判定に必要な情報は拡張フィールドへ分離する。
 - 内部例外、スタックトレース、秘密情報は応答へ含めない。
+
+## 異常系明記規約
+- `BD-APP-OAS-*` は operation ごとに、適用される異常レスポンスを省略せず列挙する。
+- `/api/v1/*` は少なくとも `401 Unauthorized` と `500 Internal Server Error` の返却可能性を契約へ含める。
+- `/api/v1/admin/*` は `403 Forbidden` を追加し、認可不足を認証失敗と混同しない。
+- 入力検証やヘッダ欠落を扱う operation は `400 Bad Request`、識別子参照で対象不在があり得る operation は `404 Not Found`、重複実行や状態競合を扱う operation は `409 Conflict` を明記する。
+- レート制限を適用する operation は `429 Too Many Requests` と `Retry-After` を明記する。
+- 異常レスポンスの記載は Hono middleware / `ProblemError` / `app.onError` の実装と一致させ、文書側だけで独自ステータスを増やさない。
 
 ## 互換性/バージョニング/廃止規約
 - 互換変更は追加で実施し、既存フィールドの削除・型変更・意味変更を避ける。
@@ -90,7 +99,7 @@ tags:
 - 破壊的変更が検出された場合は、版追加または互換層追加が完了するまでリリースを停止する。
 - OpenAPI JSON は `/openapi/v1/openapi.json` で配布し、API版 `/api/v1/*` と同一版で管理する。
 - 人向け仕様UIは `/openapi/` に配布し、参照先を `/openapi/v1/openapi.json` へ固定する。
-- API単位の Markdown 文書は OpenAPI 正本から `BD-APP-OAS-*` として自動生成し、メソッド/パス/パラメータ/戻り値を表形式で配布する。
+- API単位の Markdown 文書は OpenAPI 正本から `BD-APP-OAS-*` として自動生成し、メソッド/パス/パラメータ/正常・異常レスポンスを表形式で配布する。
 - 処理フロー・制約・オラクルは `DD-APP-API-*` に記載し、IF文書へ重複記載しない。
 - `task api:docs:generate` / `task api:docs:check` を OpenAPI運用タスクへ含める。
 
@@ -134,6 +143,7 @@ tags:
 - 型推論の安定化のため、RPC対象ルートはメソッドチェーンで定義する。
 
 ## 変更履歴
+- 2026-03-07: operation 単位契約文書で異常系レスポンスの明記を必須化し、`401/403/400/404/409/429/500` の適用規約を追加 [[BD-SYS-ADR-023]]
 - 2026-03-06: OpenAPI 正本から `BD-APP-OAS-*` を表形式で自動生成する運用を追加 [[BD-SYS-ADR-023]]
 - 2026-02-13: CORS許可ポリシー（Origin/Method/Header/Credentials）とAPIレート制限を追加 [[BD-SYS-ADR-027]]
 - 2026-02-11: `@hono/zod-openapi` 統一方針（`OpenAPIHono`/`createRoute`、Schema-first、`operationId`/`tags`、OpenAPI公開経路）を追加 [[BD-SYS-ADR-025]]

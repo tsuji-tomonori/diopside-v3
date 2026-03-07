@@ -24,3 +24,17 @@
 - `task docs:ut:pairwise:check`
 - `task docs:guard`
 - `task docs:ut:stat:check`
+
+## 追加実施（BD API契約の異常系明記）
+- 対象: `api/src/routes/{ops,admin,public}.ts`, `api/src/schemas/common.ts`, `docs/2.基本設計(BD)/01.設計判断(ADR)/BD-SYS-ADR-023.md`, `docs/2.基本設計(BD)/03.アプリ(APP)/31.API(API)/BD-APP-API-{003,004,005}.md`, `.opencode/skills/{doc-bd-api,doc-dd-api,doc-it-plan,docops-orchestrator,obsidian-doc-check,skill-maintainer}/SKILL.md`。
+- 変更内容:
+  - OpenAPI正本の各 route に、認証/認可/入力検証/対象不存在/競合/内部障害に対応する Problem Details レスポンスを追加し、`BD-APP-OAS-*` 再生成時に異常系が個票へ反映されるよう更新。
+  - `BD-APP-API-003` / `BD-APP-API-004` / `BD-APP-API-005` と `BD-SYS-ADR-023` を更新し、operation単位契約で異常系レスポンスを省略しない方針と、`401/403/400/404/409/429/500` の適用基準を追記。
+  - 関連スキルを更新し、API契約変更時に異常系レスポンスの明記と検証を同一変更で扱うよう同期。
+
+## 追加影響確認（BD API契約の異常系明記）
+- API契約:
+  - `task api:openapi:generate` / `task api:docs:generate` により、`BD-APP-OAS-*` の戻り値表へ異常系レスポンスが追加される。
+  - `task api:docs:check` / `task api:openapi:check` で、OpenAPI `responses` と `BD-APP-OAS-*` の異常系整合を継続検証できる。
+- docs運用:
+  - `doc-bd-api` / `doc-dd-api` / `doc-it-plan` / `docops-orchestrator` / `obsidian-doc-check` / `skill-maintainer` が同一ルールで更新され、以後のAPI契約追加時にも 200 系のみの個票に戻りにくくなる。

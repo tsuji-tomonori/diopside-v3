@@ -37,7 +37,7 @@ metadata:
 17. BD文書の `## 変更履歴` 各行に、関連ADRリンク（`[[BD-*-ADR-xxx]]`）を必須化する規約を関連スキルへ同期する。
 18. RQ-UC/RQ-FRの本文はアクター目的主体（`[[RQ-SH-*|...]]が〜`）を正本とし、`本システムは` / `システムは` 依存の記述へ回帰しない規約を関連スキルへ同期する。
 19. NFR記載規約を変更した場合は、`doc-rq-av/ps/sec/prc/oby/int/data/cost/dev/ux` の品質チェックへ「〜できる」基調・1項目1判定ルールを同一変更で同期する。
-20. API契約運用規約を変更した場合は、`doc-bd-api` / `doc-dd-api` / `doc-it-plan` / `docops-orchestrator` / `obsidian-doc-check` へ「HTTP API正本=Hono生成OpenAPI」を同一変更で同期する。
+20. API契約運用規約を変更した場合は、`doc-bd-api` / `doc-dd-api` / `doc-it-plan` / `docops-orchestrator` / `obsidian-doc-check` へ「HTTP API正本=Hono生成OpenAPI」と「operation単位で異常系レスポンスを明記する」規約を同一変更で同期する。
 
 ## 完了条件
 - 旧案件語彙が残っていない。
