@@ -3,11 +3,11 @@ id: BD-SYS-ADR-014
 title: 単一CloudFrontのパス分岐と認証境界を固定する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.0
+version: 1.0.1
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-03-07'
 up:
 - '[[RQ-RDR-026]]'
 related:
@@ -27,7 +27,7 @@ tags:
 - `'/*'` はデフォルト配信を持たず、`/web/` への誘導専用とする。
 - rewrite/fallbackの適用範囲を経路ごとに固定する。
   - `/docs/*`: 拡張子補完rewriteを許可
-  - `/web/*`: SPA fallbackを許可
+  - `/web/*`: SPA fallbackを許可し、edge functionで `index.html` へ収束させる
   - `/openapi/*` と `/api/*`: rewrite/fallbackを禁止
 - `/openapi/*` と `/api/*` は Cognito JWT 認証を必須とする。
 
@@ -46,4 +46,5 @@ tags:
 - rewriteを全経路に適用する案: API/OpenAPIの契約を壊すため不採用。
 
 ## 変更履歴
+- 2026-03-07: `/web/*` のSPA fallback実装をedge function前提へ明確化 [[BD-SYS-ADR-014]]
 - 2026-02-11: 新規作成

@@ -1,9 +1,9 @@
 # Infra Resource Inventory Check
 
-- generated_at: 2026-03-07T12:40:12+00:00
+- generated_at: 2026-03-07T14:37:21+00:00
 - inventory_doc: docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md
-- synthesized_template: infra/.build/docs-infra-check/run-15302/cdk.out/DiopsideDeliveryStack.template.json
-- synth_command: npm run synth -- --output .build/docs-infra-check/run-15302/cdk.out --context siteAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/site --context deploymentStage=prod --context tagEnvironment=Production DiopsideDeliveryStack
+- synthesized_template: infra/.build/docs-infra-check/run-17012/cdk.out/DiopsideDeliveryStack.template.json
+- synth_command: npm run synth -- --output .build/docs-infra-check/run-17012/cdk.out --context siteAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/site --context webAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/web --context deploymentStage=prod --context tagEnvironment=Production DiopsideDeliveryStack
 
 ## Synth Notes
 ```text
@@ -65,7 +65,7 @@ If you don’t want to see a notice anymore, use "cdk acknowledge <id>". For exa
 | Amazon VPC | `AWS::EC2::VPCEndpoint` | 1 | 1 | PASS |
 | Amazon VPC | `AWS::EC2::SecurityGroup` | 3 | 3 | PASS |
 | Amazon CloudFront | `AWS::CloudFront::Distribution` | 1 | 1 | PASS |
-| Amazon CloudFront | `AWS::CloudFront::Function` | 2 | 2 | PASS |
+| Amazon CloudFront | `AWS::CloudFront::Function` | 3 | 3 | PASS |
 | Amazon CloudFront | `AWS::CloudFront::OriginAccessControl` | 1 | 1 | PASS |
 | Amazon CloudFront | `AWS::CloudFront::ResponseHeadersPolicy` | 1 | 1 | PASS |
 | Amazon S3 | `AWS::S3::Bucket` | 3 | 3 | PASS |

@@ -3,7 +3,7 @@ id: BD-INF-DEP-005
 title: コンピュートと配備設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.11
+version: 1.0.12
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -76,7 +76,7 @@ tags:
 | AWSサービス | 論理個数（本番） | 構築理由 | 根拠文書 | 導入段階 |
 |---|---:|---|---|---|
 | Amazon VPC | 1 VPC / 3 Subnets / 3 RouteTables / 3 SecurityGroups / 2 NetworkACLs / 1 GatewayEndpoint | 公開/管理/API実行の境界をVPC内で分離し、常設NATなしで閉域制御するため。 | [[BD-INF-NET-001]], [[DD-INF-NET-001]] | Phase 1導入済 |
-| Amazon CloudFront | 1 Distribution / 2 Functions / 1 OAC / 1 ResponseHeadersPolicy | 画面・ドキュメント・OpenAPI・APIを単一配信境界で経路分離し、URL補正と既定遷移をエッジで実施するため。 | [[BD-INF-DEP-004]], [[DD-INF-CF-001]] | Phase 1導入済 |
+| Amazon CloudFront | 1 Distribution / 3 Functions / 1 OAC / 1 ResponseHeadersPolicy | 画面・ドキュメント・OpenAPI・APIを単一配信境界で経路分離し、URL補正・SPA fallback・既定遷移をエッジで実施するため。 | [[BD-INF-DEP-004]], [[DD-INF-CF-001]] | Phase 1導入済 |
 | Amazon S3 | 3 Buckets（静的配信 / CloudFrontアクセスログ / Config証跡） | 静的成果物配信、配信証跡、Config証跡をバケット分離し、保持/暗号化境界を明確化するため。 | [[BD-INF-AUD-001]], [[DD-INF-S3-001]] | Phase 1導入済 |
 | Amazon API Gateway | 1 HTTP API / 3 Routes / 1 Integration / 1 Authorizer / 1 Stage | `/api/v1/*` と `/openapi/*` をCloudFront配下で公開し、JWT認証境界を固定するため。 | [[BD-APP-API-004]], [[DD-INF-LMB-001]] | Phase 1導入済 |
 | AWS Lambda | 1ワークロード（API） | Phase 1ではAPI/Ops/OpenAPI返却を単一関数で提供し、運用・配信補助はPhase 2で分離拡張するため。 | [[BD-INF-DEP-005]], [[DD-INF-LMB-001]] | Phase 2で拡張 |
@@ -135,7 +135,7 @@ items:
       - type: AWS::CloudFront::Distribution
         count: 1
       - type: AWS::CloudFront::Function
-        count: 2
+        count: 3
       - type: AWS::CloudFront::OriginAccessControl
         count: 1
       - type: AWS::CloudFront::ResponseHeadersPolicy
@@ -225,6 +225,7 @@ items:
 - DDで手順や具体コマンドを確定する前提情報が揃っていること。
 
 ## 変更履歴
+- 2026-03-07: `/web/*` のSPA fallback用CloudFront Function追加に合わせて管理対象AWSリソース一覧を同期 [[BD-SYS-ADR-044]]
 - 2026-03-07: 管理対象AWSリソース一覧をprod `cdk synth` と自動照合できる比較定義へ更新し、主リソースの個数を現行IaCへ同期 [[BD-SYS-ADR-044]]
 - 2026-02-28: API正本化に合わせて配備責務マップとロールバック記述の backend 表記を api へ更新 [[BD-SYS-ADR-036]]
 - 2026-02-23: 必須設計項目をBD確定観点へ明確化し、DD引渡し/受入基準を追加 [[BD-SYS-ADR-036]]

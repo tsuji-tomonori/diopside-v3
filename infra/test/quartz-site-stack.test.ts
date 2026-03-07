@@ -5,6 +5,7 @@ import { AwsSolutionsChecks } from "cdk-nag";
 import { QuartzSiteStack } from "../lib/quartz-site-stack";
 
 const fixtureSitePath = path.join(__dirname, "fixtures/site");
+const fixtureWebPath = path.join(__dirname, "fixtures/web");
 
 type BuildTemplateOptions = {
   stage?: "dev" | "prod";
@@ -20,6 +21,7 @@ function buildTemplate({
   const app = new App({
     context: {
       siteAssetPath: fixtureSitePath,
+      webAssetPath: fixtureWebPath,
       deploymentStage: stage,
       ...(githubOidcProviderArn ? { githubOidcProviderArn } : {}),
     },
@@ -99,6 +101,25 @@ describe("QuartzSiteStack", () => {
           Match.objectLike({ PathPattern: "/openapi/*" }),
           Match.objectLike({ PathPattern: "/docs/*" }),
           Match.objectLike({ PathPattern: "/web/*" }),
+        ]),
+      },
+    });
+  });
+
+  test("associates a viewer-request function with /web/* for SPA fallback", () => {
+    const template = buildTemplate();
+
+    template.hasResourceProperties("AWS::CloudFront::Distribution", {
+      DistributionConfig: {
+        CacheBehaviors: Match.arrayWith([
+          Match.objectLike({
+            PathPattern: "/web/*",
+            FunctionAssociations: Match.arrayWith([
+              Match.objectLike({
+                EventType: "viewer-request",
+              }),
+            ]),
+          }),
         ]),
       },
     });

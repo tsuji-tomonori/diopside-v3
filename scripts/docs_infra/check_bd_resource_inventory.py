@@ -22,6 +22,7 @@ REPO_ROOT = SCRIPT_DIR.parent.parent
 DEFAULT_DOC_PATH = REPO_ROOT / "docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md"
 DEFAULT_REPORT_PATH = REPO_ROOT / "reports/infra_resource_check.md"
 DEFAULT_FIXTURE_SITE_PATH = REPO_ROOT / "infra/test/fixtures/site"
+DEFAULT_FIXTURE_WEB_PATH = REPO_ROOT / "infra/test/fixtures/web"
 DEFAULT_SYNTH_OUTPUT_BASE_DIR = REPO_ROOT / "infra/.build/docs-infra-check"
 DEFAULT_INFRA_DIR = REPO_ROOT / "infra"
 DEFAULT_STACK_NAME = "DiopsideDeliveryStack"
@@ -53,6 +54,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--infra-dir", type=Path, default=DEFAULT_INFRA_DIR)
     parser.add_argument("--stack-name", default=DEFAULT_STACK_NAME)
     parser.add_argument("--fixture-site-path", type=Path, default=DEFAULT_FIXTURE_SITE_PATH)
+    parser.add_argument("--fixture-web-path", type=Path, default=DEFAULT_FIXTURE_WEB_PATH)
     parser.add_argument("--synth-output-dir", type=Path)
     parser.add_argument("--template-path", type=Path)
     parser.add_argument("--changed-only", action="store_true")
@@ -168,6 +170,8 @@ def ensure_prerequisites(args: argparse.Namespace) -> None:
         raise FileNotFoundError(f"inventory doc not found: {args.doc_path}")
     if not args.fixture_site_path.is_dir():
         raise FileNotFoundError(f"fixture site path not found: {args.fixture_site_path}")
+    if not args.fixture_web_path.is_dir():
+        raise FileNotFoundError(f"fixture web path not found: {args.fixture_web_path}")
     if not (args.infra_dir / "node_modules").is_dir():
         raise FileNotFoundError(
             "infra/node_modules not found. Run `npm --prefix infra ci` before this check."
@@ -197,6 +201,8 @@ def synth_template(args: argparse.Namespace, config: dict[str, Any]) -> tuple[Pa
         str(relative_output_dir),
         "--context",
         f"siteAssetPath={args.fixture_site_path}",
+        "--context",
+        f"webAssetPath={args.fixture_web_path}",
         "--context",
         f"deploymentStage={deployment_stage}",
         "--context",

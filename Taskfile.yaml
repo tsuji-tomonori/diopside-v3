@@ -7,7 +7,10 @@ vars:
   QUARTZ_CUSTOM_STYLE_SOURCE: '{{.ROOT_DIR}}/config/quartz/custom.scss'
   INFRA_DIR: '{{.ROOT_DIR}}/infra'
   API_DIR: '{{.ROOT_DIR}}/api'
+  WEB_DIR: '{{.ROOT_DIR}}/web'
   SITE_ASSET_PATH: '{{.ROOT_DIR}}/quartz/public'
+  WEB_ASSET_PATH: '{{.ROOT_DIR}}/web/dist'
+  WEB_PUBLIC_BASE: '/web/'
   STACK: 'DiopsideDeliveryStack'
   CDK_ARGS: ''
   DOCS_SITE_URL: ''
@@ -369,6 +372,27 @@ tasks:
         DIOPSIDE_DOCS_COMMIT="${GITHUB_SHA:-$(git -C "{{.ROOT_DIR}}" rev-parse HEAD)}" \
         npx quartz build -d ../docs'
 
+  web:install:
+    desc: Install web dependencies
+    dir: '{{.WEB_DIR}}'
+    cmds:
+      - npm ci
+
+  web:build:
+    desc: Build web assets for `/web/*`
+    deps:
+      - web:install
+    dir: '{{.WEB_DIR}}'
+    cmds:
+      - VITE_PUBLIC_BASE={{.WEB_PUBLIC_BASE}} npm run build
+
+  web:build:ci:
+    desc: Build web assets sequentially for CI
+    dir: '{{.WEB_DIR}}'
+    cmds:
+      - npm ci
+      - VITE_PUBLIC_BASE={{.WEB_PUBLIC_BASE}} npm run build
+
   infra:install:
     desc: Install CDK dependencies
     dir: '{{.INFRA_DIR}}'
@@ -387,28 +411,31 @@ tasks:
     desc: Synthesize CDK template for docs delivery
     deps:
       - quartz:build
+      - web:build
       - infra:build
     dir: '{{.INFRA_DIR}}'
     cmds:
-      - npm run synth -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
+      - npm run synth -- --context siteAssetPath={{.SITE_ASSET_PATH}} --context webAssetPath={{.WEB_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
 
   infra:deploy:
     desc: Deploy docs assets with CDK
     deps:
       - quartz:build
+      - web:build
       - infra:build
     dir: '{{.INFRA_DIR}}'
     cmds:
-      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
+      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} --context webAssetPath={{.WEB_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
 
   infra:deploy:ci:
     desc: Deploy docs assets with CDK (CI serial)
     dir: '{{.INFRA_DIR}}'
     cmds:
       - task quartz:build:ci
+      - task web:build:ci
       - npm ci
       - npm run build
-      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}} --require-approval never
+      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} --context webAssetPath={{.WEB_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}} --require-approval never
 
   api:openapi:generate:
     desc: Generate OpenAPI artifacts from API code
@@ -446,6 +473,7 @@ tasks:
         fi
         curl -fsSL "{{.DOCS_SITE_URL}}/" > /dev/null
         curl -fsSL "{{.DOCS_SITE_URL}}/docs/" > /dev/null
+        curl -fsSL "{{.DOCS_SITE_URL}}/web/" > /dev/null
         echo "Verified: {{.DOCS_SITE_URL}}/"'
 
   docs:deploy:

@@ -54,3 +54,19 @@
 - CI影響:
   - `UT Static Analysis` は `scripts/docs_infra/**` の変更でも起動し、docs側比較ロジック単体の変更漏れを見逃さない。
   - 比較は `infra/test/fixtures/site` を使うため、Quartz build や AWS 認証に依存せず再現可能。
+
+## 追加実施（`/web/*` 配信修正）
+- 対象: `infra/lib/quartz-site-stack.ts`, `infra/functions/web-spa-rewrite.js`, `infra/test/{quartz-site-stack,web-spa-rewrite}.test.ts`, `infra/test/fixtures/web/index.html`, `web/vite.config.ts`, `Taskfile.yaml`, `scripts/docs_infra/check_bd_resource_inventory.py`, `docs/2.基本設計(BD)/01.設計判断(ADR)/BD-SYS-ADR-014.md`, `docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md`, `docs/3.詳細設計(DD)/03.インフラ(INF)/20.配信基盤(CF)/DD-INF-CF-002.md`。
+- 変更内容:
+  - CloudFront の `/web/*` に viewer-request Function を追加し、`/web/` と拡張子なし deep link を `/web/index.html` へ収束させる SPA fallback を実装。
+  - CDK の Web 配備物を placeholder から `web/dist` へ切り替え、`task infra:synth` / `task infra:deploy` / CI 配備で `webAssetPath` を渡すよう更新。
+  - Vite build に `VITE_PUBLIC_BASE=/web/` を注入し、配備後の JS/CSS/静的 JSON が `/web/*` 配下から解決されるよう調整。
+  - `docs_infra` の synth fixture に `web` 側アセットを追加し、CloudFront Function 数と SPA fallback の設計文書を現行 IaC に同期。
+
+## 追加影響確認（`/web/*` 配信修正）
+- 配信影響:
+  - `https://<distribution>/web/` は匿名で `index.html` を返し、`/web/<deep-path>` 直叩きでも SPA 表示を継続できる。
+  - `/web/bootstrap.json` や `/web/assets/*` は拡張子付き静的アセットとして rewrite 対象外のまま配信される。
+- ビルド/運用影響:
+  - `task infra:synth` / `task infra:deploy` は `web/dist` のビルドを前提に動作し、`docs:verify` は `/web/` の到達も検証する。
+  - `task docs:infra:check` は `infra/test/fixtures/web` を用いて、Web ビルド前でも CloudFront 構成差分を再現検証できる。

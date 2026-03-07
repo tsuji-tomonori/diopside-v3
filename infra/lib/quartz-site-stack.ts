@@ -15,6 +15,7 @@ import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
+import * as fs from "fs";
 import * as path from "path";
 
 export class QuartzSiteStack extends cdk.Stack {
@@ -65,6 +66,9 @@ export class QuartzSiteStack extends cdk.Stack {
     const siteAssetPath =
       (this.node.tryGetContext("siteAssetPath") as string | undefined) ??
       path.join(__dirname, "../../quartz/public");
+    const webAssetPath =
+      (this.node.tryGetContext("webAssetPath") as string | undefined) ??
+      path.join(__dirname, "../../web/dist");
     const githubOwner =
       (this.node.tryGetContext("githubOwner") as string | undefined) ?? "tsuji-tomonori";
     const githubRepo =
@@ -83,6 +87,13 @@ export class QuartzSiteStack extends cdk.Stack {
     const apiOriginVerifySecret =
       (this.node.tryGetContext("apiOriginVerifySecret") as string | undefined) ??
       `${cdk.Aws.ACCOUNT_ID}-${cdk.Aws.STACK_NAME}-origin-verify`;
+
+    if (!fs.existsSync(siteAssetPath)) {
+      throw new Error(`siteAssetPath does not exist: ${siteAssetPath}`);
+    }
+    if (!fs.existsSync(webAssetPath)) {
+      throw new Error(`webAssetPath does not exist: ${webAssetPath}`);
+    }
 
     const vpcCidr = deploymentStage === "prod" ? "10.22.0.0/16" : "10.20.0.0/16";
     const publicSubnetCidr = deploymentStage === "prod" ? "10.22.0.0/24" : "10.20.0.0/24";
@@ -650,6 +661,13 @@ exports.handler = async (event) => {
         filePath: path.join(__dirname, "../functions/pretty-url-rewrite.js"),
       }),
     });
+    const webSpaFallbackFn = new cloudfront.Function(this, "WebSpaFallbackFn", {
+      comment: "Rewrite extensionless /web routes to the SPA entrypoint",
+      runtime: cloudfront.FunctionRuntime.JS_2_0,
+      code: cloudfront.FunctionCode.fromFile({
+        filePath: path.join(__dirname, "../functions/web-spa-rewrite.js"),
+      }),
+    });
 
     const redirectFn = new cloudfront.Function(this, "DefaultRouteRedirectFn", {
       comment: "Redirect unmatched root paths to /web/",
@@ -740,6 +758,12 @@ exports.handler = async (event) => {
           origin: siteOrigin,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+          functionAssociations: [
+            {
+              function: webSpaFallbackFn,
+              eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+            },
+          ],
           responseHeadersPolicy,
         },
       },
@@ -753,15 +777,10 @@ exports.handler = async (event) => {
       distribution,
       distributionPaths: ["/docs/*"],
     });
-    new s3deploy.BucketDeployment(this, "DeployWebPlaceholder", {
-      sources: [
-        s3deploy.Source.data(
-          "web/index.html",
-          "<!doctype html><html><body><h1>diopside web</h1><p>placeholder</p></body></html>",
-        ),
-      ],
+    new s3deploy.BucketDeployment(this, "DeployWebAssets", {
+      sources: [s3deploy.Source.asset(webAssetPath)],
       destinationBucket: siteBucket,
-      destinationKeyPrefix: keyPrefix,
+      destinationKeyPrefix: `${keyPrefix}/web`,
       memoryLimit: 512,
       distribution,
       distributionPaths: ["/web/*"],
