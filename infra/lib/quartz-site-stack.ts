@@ -292,12 +292,30 @@ export class QuartzSiteStack extends cdk.Stack {
       ],
     });
 
+    const githubActionsDeployRoleIamActions = [
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:GetOpenIDConnectProvider",
+      "iam:GetRole",
+      "iam:PassRole",
+      "iam:PutRolePolicy",
+      "iam:DeleteRolePolicy",
+      "iam:TagRole",
+      "iam:UntagRole",
+      "iam:UpdateAssumeRolePolicy",
+    ];
+
     const permissionBoundary = new iam.ManagedPolicy(this, "RolePermissionBoundary", {
       description: "Permission boundary for infrastructure roles",
       statements: [
         new iam.PolicyStatement({
-          effect: iam.Effect.DENY,
-          actions: ["iam:*", "kms:ScheduleKeyDeletion", "s3:DeleteBucket"],
+          effect: iam.Effect.ALLOW,
+          notActions: ["iam:*", "kms:ScheduleKeyDeletion", "s3:DeleteBucket"],
+          resources: ["*"],
+        }),
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: githubActionsDeployRoleIamActions,
           resources: ["*"],
         }),
       ],
@@ -344,16 +362,7 @@ export class QuartzSiteStack extends cdk.Stack {
                 "cloudfront:TagResource",
                 "cloudfront:UntagResource",
                 "cloudfront:UpdateDistribution",
-                "iam:CreateRole",
-                "iam:DeleteRole",
-                "iam:GetOpenIDConnectProvider",
-                "iam:GetRole",
-                "iam:PassRole",
-                "iam:PutRolePolicy",
-                "iam:DeleteRolePolicy",
-                "iam:TagRole",
-                "iam:UntagRole",
-                "iam:UpdateAssumeRolePolicy",
+                ...githubActionsDeployRoleIamActions,
                 "lambda:AddPermission",
                 "lambda:CreateFunction",
                 "lambda:DeleteFunction",

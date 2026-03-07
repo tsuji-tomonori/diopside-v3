@@ -247,4 +247,48 @@ describe("QuartzSiteStack", () => {
       ]),
     });
   });
+
+  test("grants GitHub Actions deploy role bootstrap SSM read access", () => {
+    const template = buildTemplate();
+
+    template.hasResourceProperties("AWS::IAM::Role", {
+      Policies: Match.arrayWith([
+        Match.objectLike({
+          PolicyDocument: {
+            Statement: Match.arrayWith([
+              Match.objectLike({
+                Action: Match.arrayWith(["ssm:GetParameter"]),
+              }),
+            ]),
+          },
+        }),
+      ]),
+    });
+  });
+
+  test("allows bootstrap checks and curated IAM actions through the permission boundary", () => {
+    const template = buildTemplate();
+
+    template.hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Description: "Permission boundary for infrastructure roles",
+      PolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Effect: "Allow",
+            NotAction: Match.arrayWith(["iam:*", "kms:ScheduleKeyDeletion", "s3:DeleteBucket"]),
+            Resource: "*",
+          }),
+          Match.objectLike({
+            Effect: "Allow",
+            Action: Match.arrayWith([
+              "iam:GetOpenIDConnectProvider",
+              "iam:GetRole",
+              "iam:PassRole",
+            ]),
+            Resource: "*",
+          }),
+        ]),
+      },
+    });
+  });
 });
