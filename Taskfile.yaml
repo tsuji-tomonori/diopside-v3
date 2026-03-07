@@ -395,7 +395,7 @@ tasks:
       - task quartz:build:ci
       - npm ci
       - npm run build
-      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}}
+      - npm run deploy -- --context siteAssetPath={{.SITE_ASSET_PATH}} {{.STACK}} {{.CDK_ARGS}} --require-approval never
 
   api:openapi:generate:
     desc: Generate OpenAPI artifacts from API code
