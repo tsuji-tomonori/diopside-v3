@@ -1,3 +1,5 @@
+import { isAdminDevBypassEnabled, readViteEnv } from './adminRuntime';
+
 import type {
   DiagnosticsHealth,
   IngestionRunItem,
@@ -6,14 +8,6 @@ import type {
   RecheckRunResult,
   TagImportResult,
 } from './adminTypes';
-
-function readViteEnv(key: string): string | undefined {
-  try {
-    return Function('k', 'try { return import.meta.env?.[k]; } catch { return undefined; }')(key) as string | undefined;
-  } catch {
-    return undefined;
-  }
-}
 
 const BASE_URL = (readViteEnv('VITE_ADMIN_API_BASE_URL')?.trim() || '').replace(/\/$/, '');
 const STATIC_AUTH_TOKEN = readViteEnv('VITE_ADMIN_API_TOKEN')?.trim() || null;
@@ -44,12 +38,15 @@ function newIdempotencyKey(prefix: string): string {
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   const token = authTokenProvider();
-  if (!token) {
+  const allowAnonymousInDev = !token && isAdminDevBypassEnabled();
+  if (!token && !allowAnonymousInDev) {
     throw new Error(`API 401 ${path} (ADMIN_AUTH_REQUIRED)`);
   }
 
   const headers = new Headers(init?.headers ?? {});
-  headers.set('authorization', `Bearer ${token}`);
+  if (token) {
+    headers.set('authorization', `Bearer ${token}`);
+  }
   if (init?.body) {
     headers.set('content-type', 'application/json');
   }

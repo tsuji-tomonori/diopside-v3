@@ -1,3 +1,5 @@
+import { readViteEnv } from './adminRuntime';
+
 type AdminSession = {
   accessToken: string;
   idToken?: string;
@@ -12,14 +14,6 @@ type CallbackResult =
 
 const SESSION_KEY = 'diopside.admin.auth.session';
 const PKCE_KEY = 'diopside.admin.auth.pkce';
-
-function readViteEnv(key: string): string | undefined {
-  try {
-    return Function('k', 'try { return import.meta.env?.[k]; } catch { return undefined; }')(key) as string | undefined;
-  } catch {
-    return undefined;
-  }
-}
 
 function getConfig() {
   const domain = (readViteEnv('VITE_COGNITO_DOMAIN') || '').trim().replace(/\/$/, '');

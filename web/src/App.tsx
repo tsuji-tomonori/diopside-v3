@@ -28,6 +28,7 @@ import {
   startAdminLogin,
 } from './lib/adminAuth';
 import { hasStaticAdminToken, setAdminAuthTokenProvider } from './lib/adminApi';
+import { getAdminDevBypassClaims, isAdminDevBypassEnabled } from './lib/adminRuntime';
 
 type LoadPhase = 'idle' | 'bootstrap' | 'legacy' | 'tag_master' | 'archive' | 'complete';
 
@@ -139,6 +140,14 @@ export function App() {
           return;
         }
 
+        if (isAdminDevBypassEnabled()) {
+          if (!mounted) return;
+          setAdminClaims(getAdminDevBypassClaims());
+          setAdminAuthStatus('authenticated');
+          setAdminAuthMessage('開発モード: API の JWT_DEV_BYPASS=1 を前提に管理UI認証を省略中です。');
+          return;
+        }
+
         if (!mounted) return;
         setAdminAuthStatus('error');
         setAdminAuthMessage('Cognito設定が未完了です。VITE_COGNITO_* を設定してください。');
@@ -177,6 +186,14 @@ export function App() {
   }, [toast]);
 
   const loginAdmin = useCallback(async () => {
+    if (!isAdminAuthConfigured() && !hasStaticAdminToken() && isAdminDevBypassEnabled()) {
+      setAdminClaims(getAdminDevBypassClaims());
+      setAdminAuthStatus('authenticated');
+      setAdminAuthMessage('開発モード: API の JWT_DEV_BYPASS=1 を前提に管理UI認証を省略中です。');
+      toast('開発モードのため、管理UI認証をスキップしました。');
+      return;
+    }
+
     try {
       await startAdminLogin();
     } catch (e) {
