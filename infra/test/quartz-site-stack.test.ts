@@ -234,6 +234,7 @@ describe("QuartzSiteStack", () => {
     const template = buildTemplate();
 
     template.hasResourceProperties("AWS::IAM::Role", {
+      RoleName: "diopside-delivery-dev-github-actions",
       Policies: Match.arrayWith([
         Match.objectLike({
           PolicyDocument: {
@@ -246,6 +247,16 @@ describe("QuartzSiteStack", () => {
         }),
       ]),
     });
+  });
+
+  test("uses deterministic GitHub Actions deploy role name in prod", () => {
+    const template = buildTemplate({ stage: "prod" });
+    const outputs = template.toJSON().Outputs as Record<string, unknown>;
+
+    template.hasResourceProperties("AWS::IAM::Role", {
+      RoleName: "diopside-delivery-prod-github-actions",
+    });
+    expect(outputs.GithubActionsDeployRoleName).toBeDefined();
   });
 
   test("grants GitHub Actions deploy role bootstrap SSM read access", () => {

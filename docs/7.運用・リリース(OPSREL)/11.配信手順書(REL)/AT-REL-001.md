@@ -3,7 +3,7 @@ id: AT-REL-001
 title: 配信手順書 001
 doc_type: 配信手順書
 phase: AT
-version: 1.0.16
+version: 1.0.17
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -34,7 +34,7 @@ tags:
 
 ## 前提条件
 - 初回のみローカルAWS認証情報（`CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）で `task infra:deploy` を実行し、OIDC Provider/Assume先ロールを作成済みである。
-- GitHub Environment `delivery-prod` に `AWS_ROLE_ARN` と `AWS_REGION` を設定済みである。
+- GitHub Environment `delivery-prod` に `AWS_ACCOUNT_ID` と `AWS_REGION` を設定済みである（`AWS_ROLE_ARN` は非既定ロール名を使う場合の互換overrideとして任意）。
 - `docs/` 更新内容がコミット可能状態である。
 - `quartz/` と `infra/` が同一リポジトリ配下に存在する。
 
@@ -51,16 +51,17 @@ tags:
 1. GitHubリポジトリの `Settings -> Environments` で `delivery-prod` を作成する。
 2. `delivery-prod` の `Deployment branches` は `main` のみに制限する。
 3. `delivery-prod` の `Required reviewers` を1名以上設定し、本番配信承認を必須化する。
-4. `delivery-prod` の Variables へ `AWS_REGION=ap-northeast-1` を追加する。
-5. 初回の `task infra:deploy` 完了後、Stack Output `GithubActionsDeployRoleArn` を取得し、`delivery-prod` の Variables へ `AWS_ROLE_ARN=<Output値>` を追加する。
-6. 公開サイトURLが確定している場合は `DOCS_SITE_URL=https://<docs-domain>` を追加する（未設定時はHTTP確認をスキップ）。
-7. `Actions -> Production Delivery` を `workflow_dispatch` で1回実行し、`Validate required variables` と `Verify assumed identity` が成功することを確認する。
+4. `delivery-prod` の Variables へ `AWS_ACCOUNT_ID=<12桁AWSアカウントID>` を追加する。
+5. `delivery-prod` の Variables へ `AWS_REGION=ap-northeast-1` を追加する。
+6. 既定ロール名以外で運用する場合のみ、`delivery-prod` の Variables へ `AWS_ROLE_ARN=<Assume先Role ARN>` を追加する。
+7. 公開サイトURLが確定している場合は `DOCS_SITE_URL=https://<docs-domain>` を追加する（未設定時はHTTP確認をスキップ）。
+8. `Actions -> Production Delivery` を `workflow_dispatch` で1回実行し、`Resolve AWS deploy role ARN` と `Verify assumed identity` が成功することを確認する。
 
 ## 配信手順
 1. 各ブランチで変更を push し、GitHub Actions `CI Docs` / `CI Platform` / `CI API` が起動することを確認する。
 2. Pull Request を作成し、`main` の branch protection により `ci-docs` / `ci-platform` / `ci-api` の完了前はマージできないことを確認する。
-3. 初回導入時のみローカルで `task infra:deploy` を実行し、OIDC Provider/Assume先ロールを作成する。
-4. Stack Output `GithubActionsDeployRoleArn` を GitHub Environment `delivery-prod` の `AWS_ROLE_ARN` へ設定する。
+3. 初回導入時のみローカルで `task infra:deploy` を実行し、OIDC Provider/Assume先ロール `diopside-delivery-prod-github-actions` を作成する。
+4. GitHub Environment `delivery-prod` に `AWS_ACCOUNT_ID` / `AWS_REGION`（必要時のみ `AWS_ROLE_ARN`）が設定済みであることを確認する。
 5. `main` へマージ後、GitHub Actions `Production Delivery` が自動起動することを確認する。
 6. `apply-delivery` job で `Setup Node` が `22` で実行され、`Reset Quartz workspace` が成功することを確認する。
 7. `Configure AWS credentials (OIDC)` と `aws sts get-caller-identity` が成功することを確認する。
@@ -82,9 +83,9 @@ tags:
 6. 失敗時はラベルを外して再試行し、反復失敗時は [[AT-RUN-001]] に従って自動実行を停止する。
 
 ## 設定不備時の確認手順
-1. `Missing variable: AWS_ROLE_ARN` が出る場合は Environment `delivery-prod` の Variables 名/値を再確認する。
+1. `Missing variable: AWS_ACCOUNT_ID or AWS_ROLE_ARN` が出る場合は Environment `delivery-prod` に `AWS_ACCOUNT_ID=<12桁AWSアカウントID>` を設定し、非既定ロール名を使う場合のみ `AWS_ROLE_ARN` override を追加する。
 2. `Missing variable: AWS_REGION` が出る場合は `AWS_REGION=ap-northeast-1` を設定する。
-3. OIDC Assume失敗時は `AWS_ROLE_ARN`、Trust条件（`aud=sts.amazonaws.com`, `sub=repo:tsuji-tomonori/diopside-v3:environment:delivery-prod`）、Jobの `environment: delivery-prod` の一致を確認する。
+3. OIDC Assume失敗時は `AWS_ACCOUNT_ID` から解決されるロール `diopside-delivery-prod-github-actions` または `AWS_ROLE_ARN` override、Trust条件（`aud=sts.amazonaws.com`, `sub=repo:tsuji-tomonori/diopside-v3:environment:delivery-prod`）、Jobの `environment: delivery-prod` の一致を確認する。
 4. `docs:verify` 失敗時は `DOCS_SITE_URL` の値と公開URLの到達性を確認する。
 
 ## 判定基準
@@ -105,7 +106,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-GO-001]] から本書を参照し、証跡は [[AT-RPT-001]] に集約する。
 
 ## 変更履歴
-- 2026-03-08: `main` branch protection、Environment `delivery-prod`、`Production Delivery`、`task delivery:apply(:ci)`、main反映時PDF生成を追加 [[RQ-RDR-050]]
+- 2026-03-08: `main` branch protection、Environment `delivery-prod`、`Production Delivery`、`task delivery:apply(:ci)`、main反映時PDF生成、`AWS_ACCOUNT_ID` + 固定ロール名でのOIDC解決を追加 [[RQ-RDR-050]]
 - 2026-02-23: OpenCode OAuthシークレット管理を [[AT-REL-002]] へ分離し、Environment `opencode` を参照する運用へ更新 [[RQ-RDR-050]]
 - 2026-02-23: `opencode-codex-issue.yml` へ名称同期し、`issues:assigned` 補助入口を運用手順へ追記 [[RQ-RDR-050]]
 - 2026-02-23: Issueラベル起動の運用手順（allowlist判定、OAuth復元、証跡確認）を追加 [[RQ-RDR-050]]

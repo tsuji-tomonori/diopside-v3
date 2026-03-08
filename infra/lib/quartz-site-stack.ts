@@ -75,6 +75,9 @@ export class QuartzSiteStack extends cdk.Stack {
       (this.node.tryGetContext("githubRepo") as string | undefined) ?? "diopside-v3";
     const githubEnvironment =
       (this.node.tryGetContext("githubEnvironment") as string | undefined) ?? "delivery-prod";
+    const githubActionsDeployRoleName =
+      (this.node.tryGetContext("githubActionsDeployRoleName") as string | undefined) ??
+      `diopside-delivery-${deploymentStage}-github-actions`;
     const githubOidcProviderArnContext = this.node.tryGetContext("githubOidcProviderArn");
     const githubOidcProviderArn =
       typeof githubOidcProviderArnContext === "string" &&
@@ -335,6 +338,7 @@ export class QuartzSiteStack extends cdk.Stack {
     const githubActionsDeployRole = new iam.Role(this, "GithubActionsDeployRole", {
       description: "Assumed by GitHub Actions (OIDC) to run docs deploy via CDK",
       maxSessionDuration: cdk.Duration.hours(1),
+      roleName: githubActionsDeployRoleName,
       permissionsBoundary: permissionBoundary,
       assumedBy: new iam.OpenIdConnectPrincipal(githubOidcProvider).withConditions({
         StringEquals: {
@@ -920,6 +924,10 @@ exports.handler = async (event) => {
     new cdk.CfnOutput(this, "GithubActionsDeployRoleArn", {
       value: githubActionsDeployRole.roleArn,
       description: "Assume role ARN for GitHub Actions docs deploy workflow",
+    });
+    new cdk.CfnOutput(this, "GithubActionsDeployRoleName", {
+      value: githubActionsDeployRole.roleName,
+      description: "Assume role name for GitHub Actions docs deploy workflow",
     });
     new cdk.CfnOutput(this, "GithubOidcProviderArn", {
       value: githubOidcProvider.openIdConnectProviderArn,

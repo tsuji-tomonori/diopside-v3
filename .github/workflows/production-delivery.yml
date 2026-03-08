@@ -20,8 +20,10 @@ jobs:
     timeout-minutes: 45
     environment: delivery-prod
     env:
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
       DOCS_SITE_URL: ${{ vars.DOCS_SITE_URL }}
+      GITHUB_ACTIONS_DEPLOY_ROLE_NAME: diopside-delivery-prod-github-actions
 
     steps:
       - name: Checkout
@@ -29,19 +31,44 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate required variables
+      - name: Resolve AWS deploy role ARN
+        id: aws_role
+        env:
+          AWS_ROLE_ARN_OVERRIDE: ${{ vars.AWS_ROLE_ARN }}
         run: |
-          test -n "${{ vars.AWS_ROLE_ARN }}" || { echo "Missing variable: AWS_ROLE_ARN"; exit 1; }
           test -n "${AWS_REGION}" || { echo "Missing variable: AWS_REGION"; exit 1; }
+          if [ -n "${AWS_ROLE_ARN_OVERRIDE}" ]; then
+            role_arn="${AWS_ROLE_ARN_OVERRIDE}"
+            echo "Using AWS_ROLE_ARN override from Environment delivery-prod."
+          elif [ -n "${AWS_ACCOUNT_ID}" ]; then
+            role_arn="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${GITHUB_ACTIONS_DEPLOY_ROLE_NAME}"
+            echo "Using deterministic deploy role ARN for account ${AWS_ACCOUNT_ID}."
+          else
+            echo "Missing variable: AWS_ACCOUNT_ID or AWS_ROLE_ARN"
+            echo "Bootstrap: run 'task infra:deploy' once with admin AWS credentials, then set AWS_ACCOUNT_ID in Environment delivery-prod."
+            exit 1
+          fi
+
+          expected_account_id="$(printf '%s' "${role_arn}" | cut -d: -f5)"
+          echo "role_arn=${role_arn}" >> "$GITHUB_OUTPUT"
+          echo "expected_account_id=${expected_account_id}" >> "$GITHUB_OUTPUT"
+          echo "Resolved deploy role ARN: ${role_arn}"
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ steps.aws_role.outputs.role_arn }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Verify assumed identity
-        run: aws sts get-caller-identity
+        run: |
+          assumed_account_id="$(aws sts get-caller-identity --query Account --output text)"
+          echo "Assumed AWS account: ${assumed_account_id}"
+          test "${assumed_account_id}" = "${{ steps.aws_role.outputs.expected_account_id }}" || {
+            echo "Assumed unexpected AWS account: ${assumed_account_id}"
+            exit 1
+          }
+          aws sts get-caller-identity
 
       - name: Install Task
         uses: go-task/setup-task@v1

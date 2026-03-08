@@ -7,6 +7,7 @@
   - 手動PDF生成は `Docs PDF Preview` の `workflow_dispatch` 専用へ変更し、branch push では不要な PDF build を走らせない構成へ整理した。
   - Task の標準入口を `task delivery:apply` / `task delivery:apply:ci` へ改称し、`task docs:deploy` / `task docs:deploy:ci` は互換 alias として残した。
   - OIDC の GitHub Environment 名を `delivery-prod` へ変更し、CDK 側の `githubEnvironment` 既定値も同期した。
+  - GitHub Actions 配備ロールの物理名を `diopside-delivery-prod-github-actions` へ固定し、workflow は `AWS_ACCOUNT_ID` からAssume先ARNを解決する設計へ変更した。`AWS_ROLE_ARN` は互換overrideへ縮退した。
 
 ## 影響確認
 - ブランチ保護:
@@ -15,8 +16,10 @@
 - Environment / OIDC:
   - GitHub Environment `delivery-prod` を `main` 限定・承認付きの本番配信境界として扱う設計へ更新した。
   - IAM Trust Policy の `sub` は `repo:tsuji-tomonori/diopside-v3:environment:delivery-prod` を正本とした。
+  - Environment 変数は `AWS_ACCOUNT_ID` / `AWS_REGION` を標準とし、Stack Output の手動転記がなくても OIDC Assume できる構成へ見直した。
 - 配信手順:
   - 各ブランチ push で CI を先行実行し、`main` 反映後は `Production Delivery` により本番配備と PDF artifact 生成を自動実行する手順へ更新した。
+  - 初回ローカル `task infra:deploy` 後は `AWS_ACCOUNT_ID` 設定のみで GitHub Actions 側のAssume先ARNが確定し、`AWS_ROLE_ARN` の手動転記が不要になった。
   - PDF artifact は `diopside-docs-{branch}-{shortsha}.zip` 命名で 90 日保持とした。
 
 ## 更新文書

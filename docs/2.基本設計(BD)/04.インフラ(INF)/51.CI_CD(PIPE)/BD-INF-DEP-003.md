@@ -3,7 +3,7 @@ id: BD-INF-DEP-003
 title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.10
+version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
@@ -103,7 +103,7 @@ flowchart TD
   - 起動: `workflow_dispatch` と `push(main)`
   - 実行環境: `environment: delivery-prod` を必須化し、Environment保護ルールで承認境界を管理する。
   - 役割: OIDC認証 -> `task delivery:apply:ci`（配備適用）と `task docs:pdf`（PDF生成）を同一イベントで実行する。
-  - 認証: `aws-actions/configure-aws-credentials@v6` で `AWS_ROLE_ARN` を Assume し、長期キーを使用しない。
+  - 認証: `aws-actions/configure-aws-credentials@v6` で `AWS_ACCOUNT_ID` から組み立てた既定ロールARNを Assume し、長期キーを使用しない。非既定ロール名は `AWS_ROLE_ARN` override で吸収する。
   - 直列化: `concurrency: production-delivery` を固定し、同時配備を禁止する。
 
 ## cdk-nag品質ゲート
@@ -129,7 +129,7 @@ flowchart TD
 - `DiopsideDeliveryStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。
 - `DiopsideDeliveryStack` は GitHub OIDC Provider（`token.actions.githubusercontent.com`）と `GithubActionsDeployRole` を同一スタックで構築する。
 - `GithubActionsDeployRole` のTrust条件は `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:delivery-prod` を必須にする。
-- Assume先ロールARNは `GithubActionsDeployRoleArn` Output で公開し、GitHub Environment `delivery-prod` の `AWS_ROLE_ARN` へ設定する。
+- `GithubActionsDeployRole` の物理名は `diopside-delivery-prod-github-actions` に固定し、GitHub Environment `delivery-prod` の `AWS_ACCOUNT_ID` からworkflow内でAssume先ARNを解決する。非既定ロール名は `AWS_ROLE_ARN` override で扱う。
 - `BucketDeployment` で `siteAssetPath` を S3 の `obsidian/` プレフィックスへ配置する。
 - CloudFront Distribution は S3 Origin + OAC 構成で、S3 バケットは公開禁止（`BLOCK_ALL`）とする。
 - デプロイ時に `distributionPaths: ["/*"]` を指定し、CloudFront のキャッシュを無効化する。
@@ -142,7 +142,7 @@ flowchart TD
 ## 失敗時の確認観点
 - Quartz build 失敗時: `docs/` の Markdown 記法とリンク不整合を確認し、再度 `task quartz:build` を実行する。
 - CDK deploy 失敗時: AWS 認証情報（`CDK_DEFAULT_ACCOUNT`/`CDK_DEFAULT_REGION`）と `siteAssetPath` の解決パスを確認する。
-- OIDC Assume失敗時: `AWS_ROLE_ARN` の値、Trust Policyの `aud/sub`、GitHub Environment名（`delivery-prod`）の一致を確認する。
+- OIDC Assume失敗時: `AWS_ACCOUNT_ID` から解決されるロール `diopside-delivery-prod-github-actions` または `AWS_ROLE_ARN` override、Trust Policyの `aud/sub`、GitHub Environment名（`delivery-prod`）の一致を確認する。
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 未指定事項
@@ -154,7 +154,7 @@ flowchart TD
 - DDで具体ジョブ設定と実行条件を確定する入力が揃っていること。
 
 ## 変更履歴
-- 2026-03-08: 各ブランチ push のCI、`Production Delivery`、Environment `delivery-prod`、main反映時PDF生成を設計へ反映 [[BD-SYS-ADR-039]]
+- 2026-03-08: 各ブランチ push のCI、`Production Delivery`、Environment `delivery-prod`、main反映時PDF生成、`AWS_ACCOUNT_ID` + 固定ロール名でのOIDC解決を設計へ反映 [[BD-SYS-ADR-039]]
 - 2026-02-28: docs配備のデフォルトスタックIDを `DiopsideDeliveryStack` へ更新し、新規スタック作成運用へ同期 [[BD-SYS-ADR-038]]
 - 2026-02-23: 必須設計項目をBD確定観点へ明確化し、DD引渡し/未指定事項/受入基準を追加 [[BD-SYS-ADR-036]]
 - 2026-02-21: `docs-deploy.yml` を `push(main)` + `environment: prod` + OIDC AssumeRole運用で実装し、初回ローカル配備後にGitHubへ移行する手順を追加 [[BD-SYS-ADR-038]]

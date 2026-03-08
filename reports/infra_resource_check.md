@@ -1,9 +1,9 @@
 # Infra Resource Inventory Check
 
-- generated_at: 2026-03-08T03:14:17+00:00
+- generated_at: 2026-03-08T05:08:09+00:00
 - inventory_doc: docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md
-- synthesized_template: infra/.build/docs-infra-check/run-17751/cdk.out/DiopsideDeliveryStack.template.json
-- synth_command: npm run synth -- --output .build/docs-infra-check/run-17751/cdk.out --context siteAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/site --context webAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/web --context deploymentStage=prod --context tagEnvironment=Production DiopsideDeliveryStack
+- synthesized_template: infra/.build/docs-infra-check/run-20674/cdk.out/DiopsideDeliveryStack.template.json
+- synth_command: npm run synth -- --output .build/docs-infra-check/run-20674/cdk.out --context siteAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/site --context webAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/web --context deploymentStage=prod --context tagEnvironment=Production DiopsideDeliveryStack
 
 ## Synth Notes
 ```text

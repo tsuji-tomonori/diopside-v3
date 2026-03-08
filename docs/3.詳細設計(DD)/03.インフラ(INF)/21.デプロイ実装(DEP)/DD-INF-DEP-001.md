@@ -3,7 +3,7 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.17
+version: 1.0.18
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
@@ -93,7 +93,7 @@ tags:
   - Workflow名は `Production Delivery` とする。
   - `workflow_dispatch` と `push(main)` で起動し、`environment: delivery-prod` と `concurrency: production-delivery` で直列化する。
   - `permissions` は `id-token: write` / `contents: read` を最小構成で付与する。
-  - `aws-actions/configure-aws-credentials@v6` を使用し、`AWS_ROLE_ARN` + `AWS_REGION` で OIDC Assume を実行する。
+  - `aws-actions/configure-aws-credentials@v6` を使用し、固定ロール名 `diopside-delivery-prod-github-actions` を `AWS_ACCOUNT_ID` から解決して OIDC Assume を実行する。非既定ロール名は `AWS_ROLE_ARN` override で互換運用する。
   - Assume直後に `aws sts get-caller-identity` を実行し、誤アカウント配備を検知する。
   - `apply-delivery` job は `task delivery:apply:ci`（`docs:guard` -> `infra:deploy:ci` -> `docs:verify`）を実行する。
   - `build-docs-pdf` job は `task docs:pdf` を実行し、Artifact `diopside-docs-{branch}-{shortsha}.zip` を90日保持する。
@@ -118,15 +118,17 @@ tags:
 | Control | `concurrency.group` | `production-delivery` | Yes | workflow定義 | 同時配備を禁止するため。 |
 | Permission | `permissions.id-token` | `write` | Yes | workflow定義 | OIDCでトークン発行するため。 |
 | Permission | `permissions.contents` | `read` | Yes | workflow定義 | リポジトリ読取を許可するため。 |
-| Env var | `AWS_ROLE_ARN` | ARN文字列（例: `arn:aws:iam::<account-id>:role/GithubActionsDeployRole`） | Yes | GitHub Environment `delivery-prod` variables | Assume先ロールを指定するため。 |
+| Env var | `AWS_ACCOUNT_ID` | 12桁AWSアカウントID | Yes | GitHub Environment `delivery-prod` variables | 既定のAssume先ロールARNを組み立てるため。 |
 | Env var | `AWS_REGION` | `ap-northeast-1`（運用標準） | Yes | GitHub Environment `delivery-prod` variables | AWS API実行リージョンを固定するため。 |
+| Env var | `AWS_ROLE_ARN` | ARN文字列（例: `arn:aws:iam::<account-id>:role/custom-role`） | No | GitHub Environment `delivery-prod` variables | 非既定ロール名を使う場合の互換overrideとするため。 |
 | Env var | `DOCS_SITE_URL` | `https://<docs-domain>` | No | GitHub Environment `delivery-prod` variables | `task docs:verify` のHTTP確認先を指定するため。 |
 | Step | `actions/checkout` | `@v4` (`fetch-depth: 0`) | Yes | workflow定義 | 差分判定に必要な履歴を取得するため。 |
 | Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task delivery:apply:ci` 実行のため。 |
 | Step | `actions/setup-python` | `@v5` (`python-version: 3.11`) | Yes | workflow定義 | docs検証スクリプトの実行環境を固定するため。 |
 | Step | `actions/setup-node` | `@v4` (`node-version: 22`) | Yes | workflow定義 | Quartzのengine要件を満たした実行環境を固定するため。 |
 | Step | `Reset Quartz workspace` | `rm -rf quartz` | Yes | workflow定義 | 途中失敗で残った不整合作業ツリーを除去するため。 |
-| Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ vars.AWS_ROLE_ARN }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
+| Step | `Resolve AWS deploy role ARN` | `AWS_ROLE_ARN` override または `arn:aws:iam::<AWS_ACCOUNT_ID>:role/diopside-delivery-prod-github-actions` を出力 | Yes | workflow定義 | workflow内でAssume先ARNを決定し、手動転記を不要化するため。 |
+| Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ steps.aws_role.outputs.role_arn }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
 | Verify | `aws sts get-caller-identity` | 0終了コード | Yes | workflow定義 | 誤アカウント配備を検知するため。 |
 | Deploy | 実行コマンド | `task delivery:apply:ci` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
 | Artifact | PDF Artifact | `diopside-docs-{branch}-{shortsha}.zip`（90日保持） | Yes | workflow定義 | main反映ごとのPDF証跡を保持するため。 |
@@ -167,11 +169,11 @@ tags:
 - Provider URL: `https://token.actions.githubusercontent.com`
 - Audience: `sts.amazonaws.com`
 - Subject: `repo:tsuji-tomonori/diopside-v3:environment:delivery-prod`
-- Assume先ロール: `GithubActionsDeployRole`（Stack Output `GithubActionsDeployRoleArn` から取得し、`AWS_ROLE_ARN` へ設定）
+- Assume先ロール: 論理ID `GithubActionsDeployRole` / 物理名 `diopside-delivery-prod-github-actions`。workflowは `AWS_ACCOUNT_ID` からARNを解決し、必要時のみ `AWS_ROLE_ARN` override を使う。
 
 ## 初回導入手順
 - 初回はローカルの[[RQ-SH-001|管理者]]権限で `task infra:deploy` を実行し、`GithubOidcProvider` と `GithubActionsDeployRole` を作成する。
-- 初回配備後、`GithubActionsDeployRoleArn` Output を GitHub Environment `delivery-prod` の `AWS_ROLE_ARN` へ設定する。
+- 初回配備後、GitHub Environment `delivery-prod` に `AWS_ACCOUNT_ID` と `AWS_REGION` を設定する。非既定ロール名で配備した場合のみ `AWS_ROLE_ARN` override を設定する。
 - 2回目以降の配備は GitHub Actions から OIDC で実行する。
 
 ## テスト方針（CDK）
@@ -208,24 +210,24 @@ tags:
   - `docs/` 配下Markdown
   - `siteAssetPath` context（明示または既定値）
   - AWS認証情報（初回ローカル: `CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）
-  - GitHub Environment変数（`delivery-prod` の `AWS_ROLE_ARN`, `AWS_REGION`, 任意で `DOCS_SITE_URL`）
+  - GitHub Environment変数（`delivery-prod` の `AWS_ACCOUNT_ID`, `AWS_REGION`, 任意で `AWS_ROLE_ARN`, `DOCS_SITE_URL`）
 - 出力:
   - `quartz/public` の静的サイト成果物
   - `diopside-docs-{branch}-{shortsha}.pdf`（Release配布用PDF）
   - `diopside-docs-{branch}-{shortsha}.zip`（Actions Artifact名）
   - S3配置済みアセット（`obsidian/`）
   - CloudFront invalidation結果
-  - `GithubActionsDeployRoleArn` / `GithubOidcProviderArn`（初回構築時のStack Output）
+  - `GithubActionsDeployRoleArn` / `GithubActionsDeployRoleName` / `GithubOidcProviderArn`（初回構築時のStack Output）
 
 ## 障害ハンドリング
 - Quartz build失敗: Markdown構文・リンク不整合を修正し、`task quartz:build` で再試行する。
 - CDK deploy失敗: AWS認証情報と `siteAssetPath` 解決結果を確認し、`task infra:deploy` を再実行する。
-- OIDC Assume失敗: `AWS_ROLE_ARN`、Trust Policy の `aud/sub`、`environment: delivery-prod` の一致を確認する。
+- OIDC Assume失敗: `AWS_ACCOUNT_ID` から導出されるロール `diopside-delivery-prod-github-actions` または `AWS_ROLE_ARN` override、Trust Policy の `aud/sub`、`environment: delivery-prod` の一致を確認する。
 - 反映遅延: invalidation完了状態を確認し、必要時に再デプロイする。
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
-- 2026-03-08: `Production Delivery` と `delivery-prod`、`task delivery:apply(:ci)`、mainブランチ保護設定を追加 [[BD-SYS-ADR-039]]
+- 2026-03-08: `Production Delivery` と `delivery-prod`、`task delivery:apply(:ci)`、mainブランチ保護設定、`AWS_ACCOUNT_ID` + 固定ロール名でのOIDC解決を追加 [[BD-SYS-ADR-039]]
 - 2026-02-23: OpenCode OAuthトークンをEnvironment `opencode` のSecretで管理する運用へ更新し、`environment` パラメータを追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: `opencode-codex-issue.yml` に合わせ、`issues:assigned` 補助入口、変数化ガード、`plan/build` 二段階、IssueコメントPATCH更新、workflow改変ブロックを追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: `opencode-issue.yml` の実行仕様（`issues:labeled`、allowlist、OAuth復元、最小権限、`share=false`）を追加 [[BD-SYS-ADR-039]]
