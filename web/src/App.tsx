@@ -29,6 +29,7 @@ import {
 } from './lib/adminAuth';
 import { hasStaticAdminToken, setAdminAuthTokenProvider } from './lib/adminApi';
 import { getAdminDevBypassClaims, isAdminDevBypassEnabled } from './lib/adminRuntime';
+import { getAppBasePath, isAdminRoutePath } from './lib/routes';
 
 type LoadPhase = 'idle' | 'bootstrap' | 'legacy' | 'tag_master' | 'archive' | 'complete';
 
@@ -71,7 +72,7 @@ function buildTagGroupMapFromMaster(tagMaster: TagMasterJson): TagGroupMap {
 const DEFAULT_LIMIT = 220;
 
 export function App() {
-  const [viewMode, setViewMode] = useState<'public' | 'admin'>('public');
+  const [pathname, setPathname] = useState<string>(() => window.location.pathname);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadPhase, setLoadPhase] = useState<LoadPhase>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -122,8 +123,20 @@ export function App() {
     scopes: [],
     groups: [],
   });
+  const isAdminRoute = isAdminRoutePath(pathname);
 
   useEffect(() => {
+    function onPopState() {
+      setPathname(window.location.pathname);
+    }
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  useEffect(() => {
+    if (!isAdminRoute) return;
+
     let mounted = true;
 
     async function initializeAdminAuth() {
@@ -183,7 +196,7 @@ export function App() {
     return () => {
       mounted = false;
     };
-  }, [toast]);
+  }, [isAdminRoute, toast]);
 
   const loginAdmin = useCallback(async () => {
     if (!isAdminAuthConfigured() && !hasStaticAdminToken() && isAdminDevBypassEnabled()) {
@@ -315,7 +328,7 @@ export function App() {
       setLoadPhase('idle');
 
       try {
-        const base = import.meta.env.BASE_URL || '/';
+        const base = getAppBasePath(window.location.pathname);
 
         // Check if new format is available
         const hasBootstrap = await tryLoadBootstrap(base);
@@ -455,7 +468,7 @@ export function App() {
             </div>
           </div>
 
-          {viewMode === 'public' ? (
+          {!isAdminRoute ? (
             <SearchBar query={q} onChangeQuery={setQ} pillText={pillText} tagCounts={tagCounts} items={items} onPickTag={pickTag} />
           ) : (
             <div className="search adminModeInfo" role="status" aria-live="polite">
@@ -464,26 +477,17 @@ export function App() {
           )}
 
           <div className="actions">
-            <button className={`btn ${viewMode === 'public' ? 'active' : ''}`} type="button" onClick={() => setViewMode('public')}>
-              公開UI
-            </button>
-            <button className={`btn ${viewMode === 'admin' ? 'active' : ''}`} type="button" onClick={() => setViewMode('admin')}>
-              管理UI
-            </button>
-
-            {viewMode === 'admin' && (
+            {isAdminRoute ? (
               adminAuthStatus === 'authenticated' ? (
                 <button className="btn" type="button" onClick={logoutAdminUser}>
                   ログアウト
                 </button>
               ) : (
-                <button className="btn primary" type="button" onClick={loginAdmin}>
+                <button className="btn primary" type="button" onClick={loginAdmin} disabled={adminAuthStatus === 'checking'}>
                   Cognitoでログイン
                 </button>
               )
-            )}
-
-            {viewMode === 'public' && (
+            ) : (
               <>
                 <button className="btn" type="button" onClick={() => setDrawerOpen(true)} aria-expanded={drawerOpen} aria-controls="filters-drawer">
                   Filters
@@ -511,7 +515,7 @@ export function App() {
           </div>
         )}
 
-        {!loading && !error && viewMode === 'public' && (
+        {!loading && !error && !isAdminRoute && (
           <>
             <SelectedTags tags={selectedTagList} onToggle={toggleTag} />
 
@@ -526,9 +530,9 @@ export function App() {
           </>
         )}
 
-        {!loading && !error && viewMode === 'admin' && adminAuthStatus === 'authenticated' && <AdminPanel toast={toast} />}
+        {!loading && !error && isAdminRoute && adminAuthStatus === 'authenticated' && <AdminPanel toast={toast} />}
 
-        {!loading && !error && viewMode === 'admin' && adminAuthStatus !== 'authenticated' && (
+        {!loading && !error && isAdminRoute && adminAuthStatus !== 'authenticated' && (
           <section className="adminPanel" aria-label="管理UI認証">
             <h2>管理UI 認証</h2>
             <p>{adminAuthStatus === 'checking' ? '認証状態を確認中です...' : adminAuthMessage}</p>
@@ -540,7 +544,7 @@ export function App() {
           </section>
         )}
 
-        {!loading && !error && viewMode === 'admin' && adminAuthStatus === 'authenticated' && (
+        {!loading && !error && isAdminRoute && adminAuthStatus === 'authenticated' && (
           <div className="small" role="status" aria-live="polite">
             管理者: {adminClaims.sub ?? 'unknown'} / scope: {adminClaims.scopes.join(' ') || '-'} / groups:{' '}
             {adminClaims.groups.join(',') || '-'}
@@ -559,7 +563,7 @@ export function App() {
       </button>
 
       <FiltersDrawer
-        open={drawerOpen && viewMode === 'public'}
+        open={drawerOpen && !isAdminRoute}
         onClose={() => setDrawerOpen(false)}
         totalCount={items.length}
         filteredCount={filteredItems.length}

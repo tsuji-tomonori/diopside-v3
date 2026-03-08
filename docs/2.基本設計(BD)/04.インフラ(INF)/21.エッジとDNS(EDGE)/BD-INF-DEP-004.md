@@ -3,17 +3,18 @@ id: BD-INF-DEP-004
 title: エッジ・DNS・証明書設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-23'
+updated: '2026-03-08'
 up:
 - '[[RQ-FR-025]]'
 - '[[BD-SYS-ADR-014]]'
 related:
 - '[[BD-INF-DEP-003]]'
 - '[[BD-SYS-ADR-021]]'
+- '[[BD-SYS-ADR-045]]'
 - '[[DD-INF-DEP-002]]'
 - '[[AT-REL-001]]'
 - '[[AT-RUN-001]]'
@@ -42,7 +43,7 @@ tags:
 - 証明書運用条件（発行/更新責務、失効時対応、検証方式）。
 
 ## パス予約
-- `/web/*`: 画面配信（SPA）
+- `/web/*`: 画面配信（SPA）。`/web/admin` は管理画面入口の予約URL
 - `/docs/*`: 文書配信（Quartz）
 - `/openapi/*`: OpenAPI UI/仕様配信
 - `/api/v1/*`: 業務API
@@ -54,7 +55,7 @@ tags:
 | 1 | `/api/*` | API Origin | 必須 | 禁止 |
 | 2 | `/openapi/*` | Static Origin | 必須 | 禁止 |
 | 3 | `/docs/*` | Static Origin | 任意 | rewrite許可 |
-| 4 | `/web/*` | Static Origin | アプリ制御 | SPA fallback許可 |
+| 4 | `/web/*` | Static Origin | アプリ制御 | SPA fallback許可（`/web/admin` 直アクセスを含む） |
 | 5 | `/*` | Redirect Handler | なし | `/web/` 誘導のみ |
 
 ## キャッシュ方針
@@ -68,6 +69,7 @@ tags:
 ## デプロイ方針
 - 静的成果物はプレフィックス分離で配置する（例: `web/`, `docs/`, `openapi/`）。
 - [[RQ-SH-002|利用者]]向け静的JSON（`bootstrap`, `tag_master`, `archive_index`）は `/web/*` 配下の配信領域で提供し、DB正本は公開しない。
+- 公開UIには `/web/admin` への導線を置かず、管理画面は予約URL直指定でのみ到達させる。
 - ドキュメントとテスト結果は `/docs/*` 経路で公開し、業務API経路へ混在させない。
 - invalidationは経路別に実行する（`/web/*`, `/docs/*`, `/openapi/*`）。
 - `/*` 全体invalidationは緊急時のみ許可する。
@@ -86,9 +88,11 @@ tags:
 
 ## 受入基準
 - 予約パスごとの責務と認証境界が競合なく定義されていること。
+- `/web/admin` の直アクセスと、公開UI無導線の条件が同一設計で説明できること。
 - DDでCloudFront behavior/証明書設定を確定する入力が欠落していないこと。
 
 ## 変更履歴
+- 2026-03-08: `/web/admin` を管理画面入口の予約URLとして明記し、公開UIに管理導線を置かない条件を追加 [[BD-SYS-ADR-045]]
 - 2026-02-23: 必須設計項目の明確化とDD引渡し/受入基準を追加 [[BD-SYS-ADR-036]]
 - 2026-02-20: 章再編に合わせてエッジ/DNS/証明書の必須設計項目を追加 [[BD-SYS-ADR-036]]
 - 2026-02-11: 3層再設計の段階実行計画（Phase A-D）を追加 [[BD-SYS-ADR-021]]

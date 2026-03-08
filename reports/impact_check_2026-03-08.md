@@ -43,3 +43,40 @@
 
 ## 補足
 - `git diff --check` は既存差分 `api/openapi/openapi.v1.generated.yaml` の末尾空行で fail した。今回の変更対象外のため未修正。
+
+---
+
+## 実施内容（管理画面入口のURL直指定化）
+- 対象:
+  - 要求/設計: `RQ-FR-025`, `RQ-RDR-055`, `BD-SYS-ADR-045`, `BD-APP-UI-001`, `BD-INF-DEP-004`, `DD-APP-UI-001`, `AT-SCN-006`, `RQ-RTM-001`, `RQ-RTM-002`
+  - Web実装: `web/src/App.tsx`, `web/src/lib/routes.ts`, `web/src/__tests__/App.test.tsx`, `web/src/lib/__tests__/routes.test.ts`
+- 変更内容:
+  - 管理画面入口を `/web/admin` の予約URL直指定へ固定し、公開UIから管理画面への遷移ボタン/リンクを置かない要求へ更新した。
+  - 要求決定 `RQ-RDR-055` と設計決定 `BD-SYS-ADR-045` を追加し、UI境界と配信経路設計へ同一方針を反映した。
+  - `task docs:trace` により `RQ-RTM-001` / `RQ-RTM-002` を再生成し、`RQ-FR-025` と新規 RDR/ADR の追跡を同期した。
+  - Web実装は `viewMode` 切替を廃止し、`pathname` 判定で `/web/admin` のみ管理UIを描画する構成へ変更した。
+  - ベースパス解決を `pathname` 由来へ寄せ、`/web/*` 配下の公開資産読込を維持したままテスト可能にした。
+
+## 影響確認
+- 公開導線:
+  - `/web/` では公開UIのみ表示し、管理画面導線が露出しない。
+  - `/web/admin` 直アクセス時のみ管理認証/管理画面を表示する。
+- ドキュメント整合:
+  - `RQ-FR-025 -> RQ-RDR-055 -> BD-SYS-ADR-045 -> BD/DD/AT本文` の追跡経路を追加した。
+  - `RQ-RTM-001` / `RQ-RTM-002` に新規 RDR/ADR と更新文書の関連が反映された。
+- 実装境界:
+  - 公開UI操作群と管理UI操作群を同一画面ボタンで切り替えない構成へ変更した。
+  - 既存の管理API認証処理は admin route 上でのみ初期化する構成へ絞った。
+
+## 検証
+- `task docs:trace`
+  - `RQ-RTM-001` / `RQ-RTM-002` を再生成し、`RQ-FR-025` に `RQ-RDR-055` / `BD-SYS-ADR-045` が反映された。
+- `task docs:guard`
+  - `reports/doc_check.md`: `issues: 0`, `broken_links: 0`
+- `npm --prefix web run test -- --runInBand src/__tests__/App.test.tsx src/lib/__tests__/routes.test.ts`
+  - `2 passed, 2 total`
+- `npm --prefix web run typecheck`
+  - `tsc -p tsconfig.json --noEmit` 成功
+
+## 補足
+- 既存の未整理差分 `api/openapi/openapi.v1.generated.yaml` と `reports/api_openapi_contract_check.md` は今回の変更対象外として未変更扱いにした。
