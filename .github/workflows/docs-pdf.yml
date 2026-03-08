@@ -1,16 +1,13 @@
-name: Docs PDF
+name: Docs PDF Preview
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "docs/**/*.md"
-      - "scripts/docs_pdf/**"
-      - "Taskfile.yaml"
-      - ".github/workflows/docs-pdf.yml"
+
+permissions:
+  contents: read
 
 jobs:
-  build-docs-pdf:
+  build-docs-pdf-preview:
     runs-on: ubuntu-latest
 
     steps:

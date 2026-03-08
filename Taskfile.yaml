@@ -270,6 +270,7 @@ tasks:
       - npm --prefix infra run test
       - task docs:infra:check:changed
       - npm --prefix web run typecheck
+      - npm --prefix web run test
       - |
         python3 - <<'PY'
         import subprocess
@@ -476,8 +477,8 @@ tasks:
         curl -fsSL "{{.DOCS_SITE_URL}}/web/" > /dev/null
         echo "Verified: {{.DOCS_SITE_URL}}/"'
 
-  docs:deploy:
-    desc: Run docs guard + Quartz build + CDK deploy
+  delivery:apply:
+    desc: Run delivery apply workflow locally
     cmds:
       - task api:openapi:generate
       - task api:docs:generate
@@ -487,8 +488,8 @@ tasks:
       - task infra:deploy
       - task docs:verify
 
-  docs:deploy:ci:
-    desc: Run docs deploy with serial CI steps
+  delivery:apply:ci:
+    desc: Run delivery apply workflow in CI
     cmds:
       - task api:openapi:generate
       - task api:docs:generate
@@ -497,3 +498,13 @@ tasks:
       - task api:openapi:check
       - task infra:deploy:ci
       - task docs:verify
+
+  docs:deploy:
+    desc: Backward-compatible alias of delivery:apply
+    cmds:
+      - task delivery:apply
+
+  docs:deploy:ci:
+    desc: Backward-compatible alias of delivery:apply:ci
+    cmds:
+      - task delivery:apply:ci

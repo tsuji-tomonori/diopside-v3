@@ -1,0 +1,176 @@
+name: Production Delivery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: production-delivery
+  cancel-in-progress: false
+
+jobs:
+  apply-delivery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: delivery-prod
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      DOCS_SITE_URL: ${{ vars.DOCS_SITE_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate required variables
+        run: |
+          test -n "${{ vars.AWS_ROLE_ARN }}" || { echo "Missing variable: AWS_ROLE_ARN"; exit 1; }
+          test -n "${AWS_REGION}" || { echo "Missing variable: AWS_REGION"; exit 1; }
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify assumed identity
+        run: aws sts get-caller-identity
+
+      - name: Install Task
+        uses: go-task/setup-task@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Reset Quartz workspace
+        run: rm -rf quartz
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "PyYAML>=6,<7"
+
+      - name: Apply production delivery
+        run: |
+          ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+          GITHUB_OIDC_PROVIDER_ARN="arn:aws:iam::${ACCOUNT_ID}:oidc-provider/token.actions.githubusercontent.com"
+
+          set +e
+          PROVIDER_CHECK_OUTPUT="$(
+            aws iam get-open-id-connect-provider \
+              --open-id-connect-provider-arn "${GITHUB_OIDC_PROVIDER_ARN}" \
+              2>&1
+          )"
+          PROVIDER_CHECK_STATUS=$?
+          set -e
+
+          if [ "${PROVIDER_CHECK_STATUS}" -eq 0 ]; then
+            echo "Reusing existing GitHub OIDC provider: ${GITHUB_OIDC_PROVIDER_ARN}"
+            task delivery:apply:ci \
+              CDK_ARGS="--context githubEnvironment=delivery-prod --context githubOidcProviderArn=${GITHUB_OIDC_PROVIDER_ARN}"
+          elif printf '%s' "${PROVIDER_CHECK_OUTPUT}" | grep -q 'NoSuchEntity'; then
+            echo "GitHub OIDC provider not found. Letting CDK create it."
+            task delivery:apply:ci \
+              CDK_ARGS="--context githubEnvironment=delivery-prod"
+          elif printf '%s' "${PROVIDER_CHECK_OUTPUT}" | grep -q 'AccessDenied'; then
+            echo "Read access to GitHub OIDC provider is denied. Assuming existing provider ARN and importing it."
+            task delivery:apply:ci \
+              CDK_ARGS="--context githubEnvironment=delivery-prod --context githubOidcProviderArn=${GITHUB_OIDC_PROVIDER_ARN}"
+          else
+            printf '%s\n' "${PROVIDER_CHECK_OUTPUT}"
+            exit "${PROVIDER_CHECK_STATUS}"
+          fi
+
+  build-docs-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Task
+        uses: go-task/setup-task@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Cache npm + Puppeteer (Chromium)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/puppeteer
+          key: ${{ runner.os }}-production-delivery-pdf-${{ hashFiles('scripts/docs_pdf/**', 'docs/**/*.md', 'Taskfile.yaml') }}
+
+      - name: Install system dependencies (Pandoc + XeLaTeX + fonts)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-noto-cjk \
+            fonts-noto-cjk-extra
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "PyYAML>=6,<7"
+
+      - name: Install obsidian-export
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/zoni/obsidian-export/releases/download/v25.3.0/obsidian-export-installer.sh | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          obsidian-export --version
+
+      - name: Install Mermaid CLI
+        run: |
+          npm install -g @mermaid-js/mermaid-cli@11.12.0
+
+      - name: Build PDF
+        run: |
+          task docs:pdf
+
+      - name: Prepare artifact PDF filename
+        id: pdf_meta
+        run: |
+          branch="${{ github.ref_name }}"
+          safe_branch="$(printf '%s' "$branch" | tr '/[:space:]' '-' | tr -cd 'A-Za-z0-9._-')"
+          short_sha="$(git rev-parse --short HEAD)"
+          pdf_name="diopside-docs-${safe_branch}-${short_sha}.pdf"
+          artifact_name="diopside-docs-${safe_branch}-${short_sha}.zip"
+          cp reports/diopside-docs.pdf "reports/${pdf_name}"
+          echo "pdf_name=${pdf_name}" >> "$GITHUB_OUTPUT"
+          echo "artifact_name=${artifact_name}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.pdf_meta.outputs.artifact_name }}
+          path: reports/${{ steps.pdf_meta.outputs.pdf_name }}
+          retention-days: 90

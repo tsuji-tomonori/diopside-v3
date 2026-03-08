@@ -3,11 +3,11 @@ id: BD-INF-DEP-005
 title: コンピュートと配備設計
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.12
+version: 1.0.13
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-03-07'
+updated: '2026-03-08'
 up:
   - '[[RQ-FR-025]]'
   - '[[RQ-DEV-001-01]]'
@@ -54,7 +54,7 @@ tags:
 | FE | SPA静的成果物 | `/web/*` | front build/test -> deploy |
 | Infra | CloudFront/S3/IAM/Config | 全経路 | `cdk diff` -> `cdk deploy` |
 | DB | スキーマ変更、マイグレーション | 非公開経路 | migrate -> verify -> rollback |
-| Doc | Quartz静的成果物、OpenAPI公開成果物 | `/docs/*`, `/openapi/*` | `task quartz:build` -> `task docs:deploy` |
+| Doc | Quartz静的成果物、OpenAPI公開成果物 | `/docs/*`, `/openapi/*` | `task quartz:build` -> `task delivery:apply` |
 | TestAsset | UT/IT/ATの固定データ・検証成果物 | 非公開経路 | test asset republish |
 
 ## 配備モード境界
@@ -65,7 +65,7 @@ tags:
 | 緊急配備 | 重大障害復旧、回避策即時反映 | 影響単位 + 必要最小限Infra | 非関連単位の同時変更 | 障害導線の復旧確認 + 監査記録 |
 
 ## 実行方針
-- 標準入口は `task docs:deploy` を維持し、内部で領域別タスクへ分岐する。
+- 標準入口は `task delivery:apply` を維持し、内部で領域別タスクへ分岐する。
 - インフラ反映は `cdk diff` で差分確認後に `cdk deploy` する順序を必須化する。
 - CloudFront behavior順序は `/api/*` -> `/openapi/*` -> `/docs/*` -> `/web/*` -> `/*` を固定する。
 - invalidationは経路別（`/docs/*` `/web/*` `/openapi/*`）で実施し、`/*` は緊急時のみ許可する。
@@ -225,6 +225,7 @@ items:
 - DDで手順や具体コマンドを確定する前提情報が揃っていること。
 
 ## 変更履歴
+- 2026-03-08: Doc領域の標準入口を `task delivery:apply` へ更新 [[BD-SYS-ADR-013]]
 - 2026-03-07: `/web/*` のSPA fallback用CloudFront Function追加に合わせて管理対象AWSリソース一覧を同期 [[BD-SYS-ADR-044]]
 - 2026-03-07: 管理対象AWSリソース一覧をprod `cdk synth` と自動照合できる比較定義へ更新し、主リソースの個数を現行IaCへ同期 [[BD-SYS-ADR-044]]
 - 2026-02-28: API正本化に合わせて配備責務マップとロールバック記述の backend 表記を api へ更新 [[BD-SYS-ADR-036]]

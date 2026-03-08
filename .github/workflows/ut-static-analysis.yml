@@ -1,35 +1,14 @@
-name: UT Static Analysis
+name: CI Platform
 
 on:
   pull_request:
-    paths:
-      - "docs/**/*.md"
-      - "scripts/pairwise/**"
-      - "scripts/docs_infra/**"
-      - "scripts/ut_quality/**"
-      - ".opencode/skills/obsidian-doc-check/scripts/**"
-      - ".opencode/skills/obsidian-doc-new/scripts/**"
-      - "infra/**"
-      - "web/**"
-      - "Taskfile.yaml"
-      - ".github/workflows/ut-static-analysis.yml"
   push:
-    branches:
-      - main
-    paths:
-      - "docs/**/*.md"
-      - "scripts/pairwise/**"
-      - "scripts/docs_infra/**"
-      - "scripts/ut_quality/**"
-      - ".opencode/skills/obsidian-doc-check/scripts/**"
-      - ".opencode/skills/obsidian-doc-new/scripts/**"
-      - "infra/**"
-      - "web/**"
-      - "Taskfile.yaml"
-      - ".github/workflows/ut-static-analysis.yml"
+
+permissions:
+  contents: read
 
 jobs:
-  ut-static-analysis:
+  ci-platform:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

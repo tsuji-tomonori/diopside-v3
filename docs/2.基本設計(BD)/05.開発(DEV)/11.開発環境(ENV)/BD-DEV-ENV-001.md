@@ -3,11 +3,11 @@ id: BD-DEV-ENV-001
 title: 開発環境
 doc_type: 環境設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-03-08'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-PC-005]]'
@@ -37,7 +37,7 @@ tags:
 - データ方針: 本番相当構造のサンプルデータを使用し、本番データの直接編集を禁止する。
 
 ## 必須依存
-- IaC/配信: AWS CDK、S3、CloudFront、`task docs:deploy` 実行チェーン。
+- IaC/配信: AWS CDK、S3、CloudFront、`task delivery:apply` 実行チェーン。
 - ドキュメント: Obsidian Markdown、Quartz build（`quartz/public` 出力）。
 - 品質ゲート: `lint` / `test` / `build` / `cdk synth` を開発段階で再現可能とする。
 
@@ -49,6 +49,7 @@ tags:
 - インフラ詳細は [[BD-INF-ENV-001]] と [[DD-INF-IAC-002]] を正本とし、本書は環境要件の入口として扱う。
 
 ## 変更履歴
+- 2026-03-08: 開発環境の配信入口を `task delivery:apply` へ更新 [[BD-SYS-ADR-013]]
 - 2026-02-13: インフラ文書体系への参照（[[BD-INF-ENV-001]], [[DD-INF-IAC-002]]）を追加 [[BD-SYS-ADR-028]]
 - 2026-02-11: 開発環境の定義（依存/制約/一時検証方針）を具体化 [[BD-SYS-ADR-018]]
 - 2026-02-10: 新規作成

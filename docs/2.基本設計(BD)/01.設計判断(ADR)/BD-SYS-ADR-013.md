@@ -3,11 +3,11 @@ id: BD-SYS-ADR-013
 title: ドキュメント公開はQuartz成果物をCDK経由で配信する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-11'
+updated: '2026-03-08'
 up:
 - '[[RQ-RDR-025]]'
 related:
@@ -28,7 +28,7 @@ tags:
 - S3バケットは公開禁止（`BLOCK_ALL`）とし、CloudFront OAC経由のみで配信する。
 - デプロイ時はCloudFront invalidation（`/*`）を実行し、反映遅延を抑制する。
 - URLルーティングはCloudFront Functionで拡張子なしURLを `.html` へ補完し、`/` は公開トップへ固定リライトする。
-- 実行入口はTaskへ集約し、公開運用は `task docs:deploy` を標準とする。
+- 実行入口はTaskへ集約し、公開運用は `task delivery:apply` を標準とする。
 - CI/CDは品質ゲート（リンク整合）と配備ジョブを分離し、配備は手動実行またはmain反映時のみ実施する。
 
 ## 理由
@@ -48,5 +48,6 @@ tags:
 - S3公開バケット運用: アクセス制御の一元化ができず、運用リスクが増えるため不採用。
 
 ## 変更履歴
+- 2026-03-08: 公開運用の標準入口を `task delivery:apply` へ更新し、名称を `Production Delivery` 系へ同期 [[BD-SYS-ADR-013]]
 - 2026-02-11: Task入口統一とCI/CD分離方針、段階導入（Phase 1/2）を追記
 - 2026-02-11: 新規作成

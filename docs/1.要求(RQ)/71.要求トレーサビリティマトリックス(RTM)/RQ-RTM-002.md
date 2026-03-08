@@ -3,11 +3,11 @@ id: RQ-RTM-002
 title: 要求トレーサビリティ（設計別）
 doc_type: 要求トレーサビリティマトリックス
 phase: RQ
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-28'
+updated: '2026-03-08'
 up:
 - '[[RQ-RTM-001]]'
 related:
@@ -348,7 +348,7 @@ tags:
 | [[RQ-DEV-001-08]] | CDKの構成は「Construct中心 + Stack配線」に従い、Construct/Stack内部で `process.env` を直接参照しない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-09]] | statefulリソースを含む変更では、論理IDの変更有無をレビューで確認し、意図しない置換が発生しない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-10]] | スキル更新を含む変更では、`reports/impact_check_YYYY-MM-DD.md` と `reports/doc_check.md` が同一変更で更新され、`broken_links: 0` を満たせる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-001-11]] | ドキュメント公開は `task docs:deploy` を標準入口として実行でき、Quartz成果物（`quartz/public`）と配信アセット（`siteAssetPath`）の不整合を起こさず運用できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-001-11]] | ドキュメント公開は `task delivery:apply` を標準入口として実行でき、Quartz成果物（`quartz/public`）と配信アセット（`siteAssetPath`）の不整合を起こさず運用できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-12]] | 公開反映時はCloudFront invalidationが実行され、配信確認手順（[[AT-REL-001]]）で更新差分を確認できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-REL-001]] | PASS |
 | [[RQ-DEV-001-13]] | 単一CloudFront運用では `'/web/*'`, `'/docs/*'`, `'/openapi/*'`, `'/api/v1/*'` の経路分岐を維持でき、`'/docs/*'` 以外へrewriteを適用しない状態を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-001-14]] | 本番反映手順は15分以内で完了し、失敗時は10分以内に直前版へロールバックできる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -379,16 +379,16 @@ tags:
 | [[RQ-DEV-004-05]] | ADR未作成の該当変更がリリース候補に含まれる場合、レビューチェックリストで検知できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-004-06]] | 緊急障害対応で事前ADR作成が困難な場合は、復旧後7日以内に事後ADRを作成できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-004-07]] | 軽微な設定変更（閾値調整、タグ値変更等）はADR対象外とし、変更履歴への記録で代替できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-005-01]] | Pull RequestごとにGitHub Actionsで品質ゲートを自動実行し、必須チェック合格前のマージを防止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-005-01]] | Pull Requestおよび各ブランチへのpushごとにGitHub Actionsで品質ゲートを自動実行し、必須チェック合格前のマージを防止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-GO-001]], [[AT-PLAN-001]], [[AT-REL-001]], [[AT-REL-002]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-02]] | PR更新ごとに `lint` / `test` / `build` を必須ステータスチェックとして実行できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-03]] | `docs` / `web` / `api` / `infra` のデプロイ単位ごとに失敗ジョブを判別できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-04]] | 必須チェック未達時に保護ブランチへマージできない状態を維持できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-05]] | 必須チェックで使用するjob名は一意に管理され、判定衝突を起こさない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-06]] | CIが基盤障害で失敗した場合は再実行で復旧確認を行い、復旧確認前にマージしない運用ができる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-005-07]] | チェック定義変更時は、変更理由と影響範囲を同一PRへ記録できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-006-01]] | GitHub Actionsでデプロイ環境ごとの排他制御と承認ゲートを維持し、失敗時のロールバック入口を固定化できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-REL-001]] | PASS |
+| [[RQ-DEV-006-01]] | GitHub Actionsで `main` 反映時に本番配信とPDF生成を自動実行しつつ、デリバリ環境ごとの排他制御と承認ゲートを維持し、失敗時のロールバック入口を固定化できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-REL-001]] | PASS |
 | [[RQ-DEV-006-02]] | デプロイは環境単位の `concurrency` 制御で同時実行を防止できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
-| [[RQ-DEV-006-03]] | 本番環境はEnvironment保護ルールで承認を必須化できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
+| [[RQ-DEV-006-03]] | 本番デリバリ環境はEnvironment保護ルールで承認を必須化できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-006-04]] | `workflow_dispatch` で明示的にデプロイを起動できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-006-05]] | 直前版へのロールバック手順をGitHub Actionsの手動入口として実行できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
 | [[RQ-DEV-006-06]] | デプロイ失敗時は `Quartz build失敗` / `CDK deploy失敗` / `反映遅延` の3系統で切り分け、復旧手順へ遷移できる | [[AT-SCN-001]], [[AT-SCN-002]], [[AT-SCN-003]], [[AT-SCN-004]], [[AT-SCN-005]], [[AT-SCN-006]], [[AT-SCN-007]], [[AT-SCN-008]], [[AT-SCN-009]] | [[AT-PLAN-001]], [[AT-RUN-001]] | PASS |
@@ -880,6 +880,7 @@ tags:
 <!-- END AUTO-GENERATED: TEST_LAYER_TRACE -->
 
 ## 変更履歴
+- 2026-03-08: `task delivery:apply`、各ブランチ push のCI、`delivery-prod` への要求文言更新を追跡表へ反映 [[RQ-RDR-050]]
 - 2026-02-28: AT章のOPSINF廃止に合わせ、設計別トレーサビリティのAT参照を [[AT-OPS-001]] / [[AT-RUN-001]] へ集約 [[RQ-RDR-049]]
 - 2026-02-28: 非機能要求の文言誤り（`設定されているできる`）修正に合わせて設計別トレーサビリティの記述を正規化 [[RQ-RDR-049]]
 - 2026-02-23: Issueラベル起動運用の要求追加に合わせて設計別トレーサビリティを再生成 [[RQ-RDR-050]]

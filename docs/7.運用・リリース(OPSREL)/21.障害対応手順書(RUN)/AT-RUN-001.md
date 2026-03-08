@@ -3,11 +3,11 @@ id: AT-RUN-001
 title: 障害対応手順書 001
 doc_type: 障害対応手順書
 phase: AT
-version: 1.0.5
+version: 1.0.6
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-20'
+updated: '2026-03-08'
 up:
 - '[[BD-DEV-TEST-001]]'
 - '[[IT-PLAN-001]]'
@@ -39,7 +39,7 @@ tags:
 2. Quartz build失敗時は修正後に `task quartz:build` を再実行する。
 3. CDK deploy失敗時は認証情報とcontextを修正後に `task infra:deploy` を再実行する。
 4. cdk-nag失敗時は原則コード修正で解消し、除外が必要な場合は [[DD-INF-DEP-001]] へ除外理由を追記して再実行する。
-5. 反映遅延時はinvalidation完了を待機し、必要時に `task docs:deploy` を再実行する。
+5. 反映遅延時はinvalidation完了を待機し、必要時に `task delivery:apply` を再実行する。
 6. 経路競合時はbehavior順序を修正し、`'/web'`, `'/docs'`, `'/openapi'`, `'/api/v1'` の到達試験を再実行する。
 7. 認証障害時は認証設定を修正し、未認証拒否と認証後アクセスを再確認する。
 8. 復旧完了後、公開URLで更新差分を確認して運用記録へ残す。
@@ -53,6 +53,7 @@ tags:
 - 受入判定では [[AT-PLAN-001]] / [[AT-OPS-001]] / [[AT-GO-001]] から本書を参照する。
 
 ## 変更履歴
+- 2026-03-08: 障害復旧時の標準再実行入口を `task delivery:apply` へ更新
 - 2026-02-20: テスト章再編に合わせて「7.運用・リリース(OPSREL)」へ移設し、AT判定からの参照位置づけを明記
 - 2026-02-11: cdk-nag失敗時の切り分けと文書同期（[[DD-INF-DEP-001]]）手順を追加
 - 2026-02-11: 単一CloudFrontパス分岐に伴う経路競合/認証障害の切り分け手順を追加

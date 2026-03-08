@@ -3,11 +3,11 @@ id: DD-INF-SEC-002
 title: IAM詳細設計
 doc_type: インフラ詳細
 phase: DD
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-13
-updated: '2026-02-28'
+updated: '2026-03-08'
 up:
 - '[[BD-INF-SEC-001]]'
 - '[[RQ-SEC-001-01]]'
@@ -32,7 +32,7 @@ tags:
 | ロール | 主体 | 主権限 | 制約 |
 |---|---|---|---|
 | `infra-deploy-role` | CI/CD | IaC `cdk synth/diff/deploy`、CloudFront invalidation | 初回はローカル実行、以降はGitHub OIDCで引受 |
-| `GithubActionsDeployRole` | GitHub Actions (`environment: prod`) | `task docs:deploy` 実行に必要な AWS 操作、CDK [[RQ-GL-007|bootstrap]] role 引受 | Trust条件 `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` |
+| `GithubActionsDeployRole` | GitHub Actions (`environment: delivery-prod`) | `task delivery:apply` 実行に必要な AWS 操作、CDK [[RQ-GL-007|bootstrap]] role 引受 | Trust条件 `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:delivery-prod` |
 | `infra-readonly-role` | 運用監視 | CloudWatch/Config/CloudTrail参照 | 書き込み権限禁止 |
 | `breakglass-admin-role` | 障害一次対応 | 期間限定の管理操作 | 60分で自動失効、二重承認必須 |
 
@@ -44,8 +44,8 @@ tags:
 
 ## OIDC信頼条件
 - OIDC Provider は `https://token.actions.githubusercontent.com` を使用し、Audience は `sts.amazonaws.com` のみに固定する。
-- `sub` 条件は `repo:tsuji-tomonori/diopside-v3:environment:prod` を固定し、別repo/別環境からの引受を拒否する。
-- GitHub Environment `prod` は `main` ブランチのみ許可し、無承認の任意ブランチ配備を禁止する。
+- `sub` 条件は `repo:tsuji-tomonori/diopside-v3:environment:delivery-prod` を固定し、別repo/別環境からの引受を拒否する。
+- GitHub Environment `delivery-prod` は `main` ブランチのみ許可し、無承認の任意ブランチ配備を禁止する。
 
 ## Secrets/KMS運用
 - 機密値は Secrets Manager 管理とし、参照は `GetSecretValue` のみに限定する。
@@ -63,6 +63,7 @@ tags:
 - Issueラベル起動の自動実行は `issue_number`, `label`, `actor`, `run_id`, `pull_request` を監査証跡へ残す。
 
 ## 変更履歴
+- 2026-03-08: GitHub Actions配備主体を `Production Delivery` / Environment `delivery-prod` に更新し、OIDC `sub` を同期 [[BD-SYS-ADR-038]]
 - 2026-02-28: GitHub Actions配備ロールの識別子を実装と同じ `GithubActionsDeployRole` に統一し、Logical ID正本ルールを追記 [[BD-SYS-ADR-038]]
 - 2026-02-28: OPSINF廃止に合わせ、受入参照を [[AT-OPS-001]] へ更新
 - 2026-02-23: OpenCode OAuthトークンの保管先をGitHub Environment `opencode` Secretへ更新

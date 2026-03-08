@@ -1,9 +1,9 @@
 # Infra Resource Inventory Check
 
-- generated_at: 2026-03-07T14:37:21+00:00
+- generated_at: 2026-03-08T03:14:17+00:00
 - inventory_doc: docs/2.基本設計(BD)/04.インフラ(INF)/31.コンピュートと配備(CMP_DEP)/BD-INF-DEP-005.md
-- synthesized_template: infra/.build/docs-infra-check/run-17012/cdk.out/DiopsideDeliveryStack.template.json
-- synth_command: npm run synth -- --output .build/docs-infra-check/run-17012/cdk.out --context siteAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/site --context webAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/web --context deploymentStage=prod --context tagEnvironment=Production DiopsideDeliveryStack
+- synthesized_template: infra/.build/docs-infra-check/run-17751/cdk.out/DiopsideDeliveryStack.template.json
+- synth_command: npm run synth -- --output .build/docs-infra-check/run-17751/cdk.out --context siteAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/site --context webAssetPath=/home/t-tsuji/project/diopside-v3/infra/test/fixtures/web --context deploymentStage=prod --context tagEnvironment=Production DiopsideDeliveryStack
 
 ## Synth Notes
 ```text
@@ -20,36 +20,6 @@
 [Warning at /DiopsideDeliveryStack/PrivateNaclDenyEgress] AwsSolutions-VPC3: A Network ACL or Network ACL entry has been implemented. Network ACLs should be used sparingly for the following reasons: they can be complex to manage, they are stateless, every IP address must be explicitly opened in each (inbound/outbound) direction, and they affect a complete subnet. Use security groups when possible as they are stateful and easier to manage.
 
 75 feature flags are not configured. Run 'cdk flags --unstable=flags' to learn more.
-
-NOTICES         (What's this? https://github.com/aws/aws-cdk/wiki/CLI-Notices)
-
-37013	(cli) cdk watch triggers deployment unexpectedly or not at all
-
-	Overview: Do not use 'cdk watch' with this version of the cdk cli.
-	          Upgrade to ^2.1106.0.
-
-	Affected versions: cli: >=2.1103.0 <2.1106.0
-
-	More information at: https://github.com/aws/aws-cdk/issues/37013
-
-
-34892	CDK CLI collects telemetry data on command usage starting at version 2.1100.0 (unless opted out)
-
-	Overview: We do not collect customer content and we anonymize the
-	          telemetry we do collect. See the attached issue for more
-	          information on what data is collected, why, and how to
-	          opt-out. Telemetry will NOT be collected for any CDK CLI
-	          version prior to version 2.1100.0 - regardless of
-	          opt-in/out. You can also view the telemetry we collect by
-	          logging it to a local file, by adding
-	          `--telemetry-file=my/local/file` to any `cdk` command.
-
-	Affected versions: cli: >=2.1100.0 <2.1106.1
-
-	More information at: https://github.com/aws/aws-cdk/issues/34892
-
-
-If you don’t want to see a notice anymore, use "cdk acknowledge <id>". For example, "cdk acknowledge 37013".
 ```
 - inventory_service_count: 11
 - compared_selector_count: 28

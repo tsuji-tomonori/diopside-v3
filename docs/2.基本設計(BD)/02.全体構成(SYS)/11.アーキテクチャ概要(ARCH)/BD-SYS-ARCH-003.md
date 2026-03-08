@@ -3,11 +3,11 @@ id: BD-SYS-ARCH-003
 title: クラウド配置構成
 doc_type: アーキテクチャ概要
 phase: BD
-version: 1.0.6
+version: 1.0.7
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-15'
+updated: '2026-03-08'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -60,7 +60,7 @@ tags:
   - 公開経路は `/web/*` と `/docs/*`。
   - 管理/契約経路は `/api/v1/*` と `/openapi/*`。
 - 運用境界:
-  - 配備入口は `task docs:deploy` を正本とし、経路単位でinvalidationする。
+  - 配備入口は `task delivery:apply` を正本とし、経路単位でinvalidationする。
   - 切戻しは「前回公開版への復帰」を第一選択とし、全体切戻しは緊急時のみ許可する。
 - 監視境界:
   - `/web` `/docs` `/openapi` `/api/v1` の経路別4xx/5xx率を分離して監視する。
@@ -89,6 +89,7 @@ flowchart TD
 ```
 
 ## 変更履歴
+- 2026-03-08: 配備入口の標準名を `task delivery:apply` へ更新 [[BD-SYS-ADR-013]]
 - 2026-02-15: [[BD-SYS-ARCH-002|論理構成]]正本（[[BD-SYS-ARCH-002]]）との対応を追記し、4区分とバックエンド内処理形態分離を配置視点で明確化 [[BD-SYS-ADR-033]]
 - 2026-02-14: `BD-SYS-ARCH-006` を本書へ統合し、配信/運用/監視境界と障害時動作を一本化 [[BD-SYS-ADR-014]]
 - 2026-02-11: 収集/公開ジョブの実行境界を単一Backend API（Hono）内へ統一 [[BD-SYS-ADR-021]]

@@ -3,11 +3,11 @@ id: BD-DEV-ENV-002
 title: 本番環境
 doc_type: 環境設計
 phase: BD
-version: 1.0.3
+version: 1.0.4
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-13'
+updated: '2026-03-08'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-PC-005]]'
@@ -40,7 +40,7 @@ tags:
 
 ## 必須依存
 - 配信: S3 + CloudFront（OAC前提）、経路別キャッシュ/無効化運用。
-- デプロイ: `task docs:deploy` と CDK による再現可能な配備。
+- デプロイ: `task delivery:apply` と CDK による再現可能な配備。
 - 監視/判定: 可用性・性能・セキュリティの指標を運用文書で判定可能に維持する。
 
 ## 運用上の制約
@@ -52,6 +52,7 @@ tags:
 - ネットワーク境界と環境昇格ルールの正本は [[BD-INF-ENV-001]] / [[BD-INF-NET-001]] とする。
 
 ## 変更履歴
+- 2026-03-08: 本番環境の配信入口を `task delivery:apply` へ更新 [[BD-SYS-ADR-013]]
 - 2026-02-13: INF文書参照（環境分割/ネットワーク境界）を追加 [[BD-SYS-ADR-028]]
 - 2026-02-11: 本番環境の定義（経路/依存/品質制約/検証方針）を具体化 [[BD-SYS-ADR-018]]
 - 2026-02-10: 新規作成

@@ -74,7 +74,7 @@ export class QuartzSiteStack extends cdk.Stack {
     const githubRepo =
       (this.node.tryGetContext("githubRepo") as string | undefined) ?? "diopside-v3";
     const githubEnvironment =
-      (this.node.tryGetContext("githubEnvironment") as string | undefined) ?? "prod";
+      (this.node.tryGetContext("githubEnvironment") as string | undefined) ?? "delivery-prod";
     const githubOidcProviderArnContext = this.node.tryGetContext("githubOidcProviderArn");
     const githubOidcProviderArn =
       typeof githubOidcProviderArnContext === "string" &&

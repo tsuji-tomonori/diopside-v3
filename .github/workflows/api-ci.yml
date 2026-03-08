@@ -1,19 +1,14 @@
-name: api-ci
+name: CI API
 
 on:
   pull_request:
-    paths:
-      - "api/**"
-      - ".github/workflows/api-ci.yml"
   push:
-    branches:
-      - main
-    paths:
-      - "api/**"
-      - ".github/workflows/api-ci.yml"
+
+permissions:
+  contents: read
 
 jobs:
-  api-checks:
+  ci-api:
     runs-on: ubuntu-latest
     defaults:
       run:

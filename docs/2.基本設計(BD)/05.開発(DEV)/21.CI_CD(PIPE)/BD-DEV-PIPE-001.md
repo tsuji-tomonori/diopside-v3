@@ -3,11 +3,11 @@ id: BD-DEV-PIPE-001
 title: ビルド方針（デプロイ単位分離）
 doc_type: ビルド設計
 phase: BD
-version: 1.0.10
+version: 1.0.11
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-23'
+updated: '2026-03-08'
 up:
 - '[[RQ-SC-001]]'
 - '[[RQ-FR-001]]'
@@ -94,9 +94,9 @@ tags:
 - 自動検査だけで代替せず、リリース前にキーボード操作とスクリーンリーダーの手動確認を補助ゲートとして運用する。
 
 ### GitHub Actions実装補足
-- PR品質ゲートはGitHub Actions `ci` ワークフローで実行し、必須ステータスチェック名は `ci-docs` / `ci-web` / `ci-api` / `ci-infra` を正本とする。
+- 品質ゲートは Pull Request と各ブランチ push の両方で実行し、必須ステータスチェック名は `ci-docs` / `ci-platform` / `ci-api` を正本とする。
 - 必須ステータスチェック名とjob名は1対1で管理し、別ワークフローで同名jobを作成しない。
-- 単位別ジョブの実行条件は `paths` を基準に制御し、共有設定変更時は影響単位を拡張実行する。
+- `main` ブランチ保護は「PR必須」「必須チェック `ci-docs` / `ci-platform` / `ci-api`」「会話解決必須」「force-push禁止」「削除禁止」を最小構成とする。
 - Issue起点の自動修正は `issues:labeled` を専用トリガーとし、`opencode/run` などの許可ラベル以外では実行しない。
 - 補助トリガーとして `issues:assigned` を許可し、指定assignee一致時のみ同一ジョブを起動する。
 - 実行条件は `label一致` + `github.actor allowlist` の二重条件を必須化し、公開Issue本文は未信頼入力として扱う。
@@ -107,7 +107,7 @@ tags:
 - 進捗はIssueコメントを単一コメントIDへPATCH更新して可視化し、ログ出力はtailに制限する。
 - 自動修正ジョブは `.github/workflows/` 差分検出時にFail停止し、AI出力によるworkflow改変を受け入れない。
 - デプロイ系ワークフローは環境単位 `concurrency` を必須設定とし、同一環境への並列反映を禁止する。
-- 本番デプロイはGitHub Environment `prod` の承認ゲートを必須とし、`workflow_dispatch` 実行時も同じ保護ルールを適用する。
+- 本番配信は `Production Delivery` とし、GitHub Environment `delivery-prod` の承認ゲートを必須とし、`workflow_dispatch` 実行時も同じ保護ルールを適用する。
 - Artifacts命名は `<単位>-<branch>-<shortsha>` で統一し、a11y結果を含む判定証跡は90日以上保持する。
 
 ## 受入基準
@@ -137,6 +137,7 @@ tags:
 - a11y検査結果が90日以上保持され、`AT-RPT-001` と `AT-GO-001` から参照可能である。
 
 ## 変更履歴
+- 2026-03-08: 各ブランチ push のCI、必須チェック名 `ci-docs` / `ci-platform` / `ci-api`、`Production Delivery` と `delivery-prod` を実装補足へ反映 [[BD-SYS-ADR-039]]
 - 2026-02-23: `issues:assigned` 補助トリガー、変数化ガード、`plan/build` 二段階、IssueコメントPATCH更新、workflow改変ブロックを追加 [[BD-SYS-ADR-039]]
 - 2026-02-23: Issueラベル起動の実装補足（許可ラベル、allowlist、OAuth一時復元、`share=false`）を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: GitHub Actions採用に伴う実装補足（必須チェック名、paths、concurrency、Environment承認、Artifacts命名）を追加 [[BD-SYS-ADR-039]]

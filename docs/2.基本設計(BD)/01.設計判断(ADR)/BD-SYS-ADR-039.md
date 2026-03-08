@@ -3,11 +3,11 @@ id: BD-SYS-ADR-039
 title: CI/CDはGitHub Actionsを実装基盤に統一しPRとデプロイを分離運用する
 doc_type: アーキテクチャ決定記録
 phase: BD
-version: 1.0.2
+version: 1.0.3
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-21
-updated: '2026-02-23'
+updated: '2026-03-08'
 up:
 - '[[RQ-DEV-005-01]]'
 - '[[RQ-DEV-006-01]]'
@@ -25,12 +25,13 @@ tags:
 ---
 
 ## 決定事項
-- CI実行は `ci` ワークフローに統一し、PRごとに必須ステータスチェックを実行する。
-- CD実行は `docs-deploy` などのデプロイ専用ワークフローへ分離し、`workflow_dispatch` と main反映で起動できる構成を採用する。
+- CI実行は Pull Request と各ブランチ push の両方で行い、必須ステータスチェック `ci-docs` / `ci-platform` / `ci-api` を安定して報告する。
+- CD実行は `Production Delivery` などの配信専用ワークフローへ分離し、`workflow_dispatch` と `main` 反映で起動できる構成を採用する。
+- `main` ブランチ保護は「PR必須」「必須チェック」「会話解決」「force-push禁止」「削除禁止」を正本ルールとする。
 - Issue起点の自動修正は `issues:labeled` を専用入口とし、許可ラベル + 実行者allowlistの二重条件を満たす場合のみ実行する。
 - 自動修正の入口は `issues:labeled` を基本とし、必要時は `issues:assigned` を補助入口として同一ガード条件で運用する。
 - デプロイジョブは環境単位 `concurrency` を必須化し、同一環境への並列反映を禁止する。
-- 本番反映はGitHub Environment保護ルールと承認ゲートを必須化する。
+- 本番反映は GitHub Environment `delivery-prod` の保護ルールと承認ゲートを必須化する。
 - 認証はOIDC AssumeRoleを採用し、長期アクセスキーをSecretsへ保持しない。
 - セキュリティ統制として、Actions参照SHA固定・`GITHUB_TOKEN` 最小権限・利用元制限を実装条件に含める。
 - OpenCode/Codex利用時はAPIキー常設ではなくOAuthトークンの一時復元を採用し、`share=false` を既定にする。
@@ -43,8 +44,8 @@ tags:
 - docs先行公開フェーズから単一CloudFront分岐運用へ拡張しても、単位別ジョブ分離を維持できる。
 
 ## 影響
-- `BD-DEV-PIPE-001` にGitHub Actions実装補足（job命名、paths、排他、証跡保持）を追加する。
-- `AT-REL-001` に `docs-deploy` 実行時の確認観点を参照可能な状態で維持する。
+- `BD-DEV-PIPE-001` にGitHub Actions実装補足（必須チェック名、branch protection、排他、証跡保持）を追加する。
+- `AT-REL-001` に `Production Delivery` 実行時の確認観点を参照可能な状態で維持する。
 - `AT-GO-001` に非機能ゲート判定でGitHub Actions証跡参照を追加する。
 - `DD-INF-DEP-001` にIssueラベル起動ワークフローのパラメータ（trigger/if/permissions/secret復元）を追加する。
 
@@ -54,6 +55,7 @@ tags:
 - 長期アクセスキーをGitHub Secretsで運用する案: ローテーションと漏えい時影響の観点で不採用。
 
 ## 変更履歴
+- 2026-03-08: 各ブランチ push のCI、`Production Delivery`、`main` ブランチ保護ルール、Environment `delivery-prod` を決定事項へ追加 [[BD-SYS-ADR-039]]
 - 2026-02-23: `issues:assigned` 補助入口、`plan->build` 二段階、IssueコメントPATCH更新、workflow改変ブロック方針を追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: Issueラベル起動の実行条件とOAuthトークン一時復元方針を追加 [[BD-SYS-ADR-039]]
 - 2026-02-21: 新規作成（GitHub Actions統一運用と権限境界分離を決定） [[BD-SYS-ADR-039]]

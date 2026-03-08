@@ -3,11 +3,11 @@ id: DD-INF-DEP-001
 title: デプロイ詳細
 doc_type: デプロイ詳細
 phase: DD
-version: 1.0.16
+version: 1.0.17
 status: 下書き
 owner: RQ-SH-001
 created: 2026-01-31
-updated: '2026-02-23'
+updated: '2026-03-08'
 up:
 - '[[BD-INF-DEP-003]]'
 - '[[BD-SYS-ADR-013]]'
@@ -33,7 +33,7 @@ tags:
 
 ## 詳細仕様
 - CloudFront/S3の設定値（Behavior/OAC/prefix/暗号化）は [[DD-INF-CF-001]] / [[DD-INF-S3-001]] を正本とし、本書は配備フローを正本とする。
-- 公開実行は `task docs:deploy` を起点に `docs -> infra -> quartz/infra build -> cdk deploy` の順で実行する。
+- 公開実行は `task delivery:apply` を起点に `docs -> infra -> quartz/infra build -> cdk deploy` の順で実行する。
 - Quartz成果物は `npx quartz build -d ../docs` の出力 `quartz/public` を正本とする。
 - CDK実行時は `--context siteAssetPath=<repo>/quartz/public` を必須指定し、明示値が未指定の場合は `../../quartz/public` を既定値として解決する。
 - 配信配置先は S3 `obsidian/` プレフィックス固定とし、CloudFront Distribution（OAC）経由で配信する。
@@ -43,12 +43,18 @@ tags:
 - statefulリソースを含む場合はStackを分離し、論理ID変更の有無をレビュー記録へ残す。
 
 ## Task定義（設計）
-- `docs:deploy`
+- `delivery:apply`
   - 役割: 公開一括実行（標準入口）
   - 手順: `docs:guard` -> `quartz:build` -> `infra:build` -> `infra:deploy` -> `docs:verify`
-- `docs:deploy:ci`
+- `delivery:apply:ci`
   - 役割: CI向け公開一括実行（直列実行）
   - 手順: `docs:guard` -> `infra:deploy:ci` -> `docs:verify`
+- `docs:deploy`
+  - 役割: 互換維持用alias
+  - 実行: `task delivery:apply`
+- `docs:deploy:ci`
+  - 役割: 互換維持用alias
+  - 実行: `task delivery:apply:ci`
 - `quartz:build`
   - 役割: 文書ビルド
   - 実行: `npx quartz build -d ../docs`
@@ -67,22 +73,30 @@ tags:
 
 ## Workflow定義（設計）
 - `docs-link-check.yml`
-  - docs変更時に `auto_link_glossary --check` と `validate_vault --targets` を実行する。
+  - Workflow名は `CI Docs`、job名は `ci-docs` とする。
+  - Pull Request / 各ブランチ push で起動し、docs差分の `auto_link_glossary --check` と `validate_vault --targets` を実行する。
+- `ut-static-analysis.yml`
+  - Workflow名は `CI Platform`、job名は `ci-platform` とする。
+  - Pull Request / 各ブランチ push で起動し、docs静的解析、infra build/test、web typecheck/test を実行する。
+- `api-ci.yml`
+  - Workflow名は `CI API`、job名は `ci-api` とする。
+  - Pull Request / 各ブランチ push で起動し、API の typecheck/build/test を実行する。
 - `docs-pdf.yml`
-  - docs markdown / `scripts/docs_pdf/**` / `Taskfile.yaml` / workflow変更時に起動する。
+  - `workflow_dispatch` のみで起動する手動PDF確認用workflowとする。
   - `task docs:pdf` 実行後、`diopside-docs-{branch}-{shortsha}.pdf` を生成し、Artifact名 `diopside-docs-{branch}-{shortsha}.zip` としてアップロードする。
   - `branch` は `github.ref_name` を使用し、`/` と空白を `-` へ置換して `A-Za-z0-9._-` のみ許可する。
 - `release-docs-pdf.yml`
   - Release `published` で起動し、`task docs:pdf` 後にRelease AssetへPDFを添付する。
   - 配布名は `diopside-docs-{branch}-{shortsha}.pdf` とし、`branch` は `github.event.release.target_commitish` を同一規則で正規化する。
   - `gh release upload ... --clobber` で同名Assetを上書きする。
-- `docs-deploy.yml`
-  - `workflow_dispatch` と `push(main)` で起動し、変更パスは `docs/**`, `infra/**`, `config/quartz/**`, `Taskfile.yaml`, workflow自身に限定する。
-  - `environment: prod` で実行し、`concurrency: docs-deploy-prod` で直列化する。
+- `production-delivery.yml`
+  - Workflow名は `Production Delivery` とする。
+  - `workflow_dispatch` と `push(main)` で起動し、`environment: delivery-prod` と `concurrency: production-delivery` で直列化する。
   - `permissions` は `id-token: write` / `contents: read` を最小構成で付与する。
   - `aws-actions/configure-aws-credentials@v6` を使用し、`AWS_ROLE_ARN` + `AWS_REGION` で OIDC Assume を実行する。
   - Assume直後に `aws sts get-caller-identity` を実行し、誤アカウント配備を検知する。
-  - 実行順: `task docs:deploy:ci`（`docs:guard` -> `infra:deploy:ci` -> `docs:verify`）
+  - `apply-delivery` job は `task delivery:apply:ci`（`docs:guard` -> `infra:deploy:ci` -> `docs:verify`）を実行する。
+  - `build-docs-pdf` job は `task docs:pdf` を実行し、Artifact `diopside-docs-{branch}-{shortsha}.zip` を90日保持する。
 - `opencode-codex-issue.yml`
   - `issues:labeled` / `issues:assigned` で起動し、許可ラベルまたはassignee一致に加えて実行者allowlistを二重判定する。
   - `concurrency: opencode-issue-${issue_number}` を設定し、同一Issueの多重実行を防止する。
@@ -93,29 +107,41 @@ tags:
   - 実行フェーズは `plan` -> `build` の二段階を固定し、Issueコメントを同一comment_idへPATCH更新して進捗を追跡する。
   - 生成差分に `.github/workflows/` が含まれる場合はFail停止し、workflow改変を禁止する。
 
-## GitHub Actions パラメータ・設定値（`docs-deploy.yml`）
+## GitHub Actions パラメータ・設定値（`production-delivery.yml`）
 | 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
 |---|---|---|---|---|---|
 | Trigger | `on.workflow_dispatch` | 有効 | Yes | workflow定義 | 手動配備を許可するため。 |
 | Trigger | `on.push.branches` | `main` | Yes | workflow定義 | 本番配備ブランチを固定するため。 |
-| Trigger | `on.push.paths` | `docs/**`, `infra/**`, `config/quartz/**`, `Taskfile.yaml`, `.github/workflows/docs-deploy.yml` | Yes | workflow定義 | 不要な起動を防ぐため。 |
 | Job | `runs-on` | `ubuntu-latest` | Yes | workflow定義 | 実行環境を統一するため。 |
 | Job | `timeout-minutes` | `45` | Yes | workflow定義 | ハング時の長時間実行を防ぐため。 |
-| Job | `environment` | `prod` | Yes | workflow定義 | Environment保護ルールを適用するため。 |
-| Control | `concurrency.group` | `docs-deploy-prod` | Yes | workflow定義 | 同時配備を禁止するため。 |
+| Job | `environment` | `delivery-prod` | Yes | workflow定義 | Environment保護ルールを適用するため。 |
+| Control | `concurrency.group` | `production-delivery` | Yes | workflow定義 | 同時配備を禁止するため。 |
 | Permission | `permissions.id-token` | `write` | Yes | workflow定義 | OIDCでトークン発行するため。 |
 | Permission | `permissions.contents` | `read` | Yes | workflow定義 | リポジトリ読取を許可するため。 |
-| Env var | `AWS_ROLE_ARN` | ARN文字列（例: `arn:aws:iam::<account-id>:role/GithubActionsDeployRole`） | Yes | GitHub Environment `prod` variables | Assume先ロールを指定するため。 |
-| Env var | `AWS_REGION` | `ap-northeast-1`（運用標準） | Yes | GitHub Environment `prod` variables | AWS API実行リージョンを固定するため。 |
-| Env var | `DOCS_SITE_URL` | `https://<docs-domain>` | No | GitHub Environment `prod` variables | `task docs:verify` のHTTP確認先を指定するため。 |
+| Env var | `AWS_ROLE_ARN` | ARN文字列（例: `arn:aws:iam::<account-id>:role/GithubActionsDeployRole`） | Yes | GitHub Environment `delivery-prod` variables | Assume先ロールを指定するため。 |
+| Env var | `AWS_REGION` | `ap-northeast-1`（運用標準） | Yes | GitHub Environment `delivery-prod` variables | AWS API実行リージョンを固定するため。 |
+| Env var | `DOCS_SITE_URL` | `https://<docs-domain>` | No | GitHub Environment `delivery-prod` variables | `task docs:verify` のHTTP確認先を指定するため。 |
 | Step | `actions/checkout` | `@v4` (`fetch-depth: 0`) | Yes | workflow定義 | 差分判定に必要な履歴を取得するため。 |
-| Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task docs:deploy:ci` 実行のため。 |
+| Step | `go-task/setup-task` | `@v1` | Yes | workflow定義 | `task delivery:apply:ci` 実行のため。 |
 | Step | `actions/setup-python` | `@v5` (`python-version: 3.11`) | Yes | workflow定義 | docs検証スクリプトの実行環境を固定するため。 |
 | Step | `actions/setup-node` | `@v4` (`node-version: 22`) | Yes | workflow定義 | Quartzのengine要件を満たした実行環境を固定するため。 |
 | Step | `Reset Quartz workspace` | `rm -rf quartz` | Yes | workflow定義 | 途中失敗で残った不整合作業ツリーを除去するため。 |
 | Step | `aws-actions/configure-aws-credentials` | `@v6` (`role-to-assume: ${{ vars.AWS_ROLE_ARN }}`, `aws-region: ${{ env.AWS_REGION }}`) | Yes | workflow定義 | 長期アクセスキーを使わず配備するため。 |
 | Verify | `aws sts get-caller-identity` | 0終了コード | Yes | workflow定義 | 誤アカウント配備を検知するため。 |
-| Deploy | 実行コマンド | `task docs:deploy:ci` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
+| Deploy | 実行コマンド | `task delivery:apply:ci` | Yes | workflow定義 | docs検証から配備までを一括実行するため。 |
+| Artifact | PDF Artifact | `diopside-docs-{branch}-{shortsha}.zip`（90日保持） | Yes | workflow定義 | main反映ごとのPDF証跡を保持するため。 |
+
+## GitHub Branch Protection パラメータ・設定値（`main`）
+| 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
+|---|---|---|---|---|---|
+| Rule | `Require a pull request before merging` | `true` | Yes | GitHub Branch protection | 直接pushでの本番反映を防止するため。 |
+| Rule | `Required approvals` | `1` | Yes | GitHub Branch protection | main反映前にレビューを必須化するため。 |
+| Rule | `Dismiss stale pull request approvals` | `true` | Yes | GitHub Branch protection | 追加push後の再承認を必須化するため。 |
+| Rule | `Require status checks to pass before merging` | `true (strict)` | Yes | GitHub Branch protection | 最新main基準でCI成功を強制するため。 |
+| Rule | `Required checks` | `ci-docs`, `ci-platform`, `ci-api` | Yes | GitHub Branch protection | 品質ゲート未達のマージを防止するため。 |
+| Rule | `Require conversation resolution before merging` | `true` | Yes | GitHub Branch protection | 未解決レビュー論点の持ち越しを防止するため。 |
+| Rule | `Allow force pushes` | `false` | Yes | GitHub Branch protection | 履歴改変を防止するため。 |
+| Rule | `Allow deletions` | `false` | Yes | GitHub Branch protection | mainブランチ消失を防止するため。 |
 
 ## GitHub Actions パラメータ・設定値（`opencode-codex-issue.yml`）
 | 区分 | パラメータ | 設定値/形式 | 必須 | 設定元 | 目的 |
@@ -140,12 +166,12 @@ tags:
 ## OIDC信頼条件（固定値）
 - Provider URL: `https://token.actions.githubusercontent.com`
 - Audience: `sts.amazonaws.com`
-- Subject: `repo:tsuji-tomonori/diopside-v3:environment:prod`
+- Subject: `repo:tsuji-tomonori/diopside-v3:environment:delivery-prod`
 - Assume先ロール: `GithubActionsDeployRole`（Stack Output `GithubActionsDeployRoleArn` から取得し、`AWS_ROLE_ARN` へ設定）
 
 ## 初回導入手順
 - 初回はローカルの[[RQ-SH-001|管理者]]権限で `task infra:deploy` を実行し、`GithubOidcProvider` と `GithubActionsDeployRole` を作成する。
-- 初回配備後、`GithubActionsDeployRoleArn` Output を GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
+- 初回配備後、`GithubActionsDeployRoleArn` Output を GitHub Environment `delivery-prod` の `AWS_ROLE_ARN` へ設定する。
 - 2回目以降の配備は GitHub Actions から OIDC で実行する。
 
 ## テスト方針（CDK）
@@ -182,7 +208,7 @@ tags:
   - `docs/` 配下Markdown
   - `siteAssetPath` context（明示または既定値）
   - AWS認証情報（初回ローカル: `CDK_DEFAULT_ACCOUNT` / `CDK_DEFAULT_REGION`）
-  - GitHub Environment変数（`AWS_ROLE_ARN`, `AWS_REGION`, 任意で `DOCS_SITE_URL`）
+  - GitHub Environment変数（`delivery-prod` の `AWS_ROLE_ARN`, `AWS_REGION`, 任意で `DOCS_SITE_URL`）
 - 出力:
   - `quartz/public` の静的サイト成果物
   - `diopside-docs-{branch}-{shortsha}.pdf`（Release配布用PDF）
@@ -194,11 +220,12 @@ tags:
 ## 障害ハンドリング
 - Quartz build失敗: Markdown構文・リンク不整合を修正し、`task quartz:build` で再試行する。
 - CDK deploy失敗: AWS認証情報と `siteAssetPath` 解決結果を確認し、`task infra:deploy` を再実行する。
-- OIDC Assume失敗: `AWS_ROLE_ARN`、Trust Policy の `aud/sub`、`environment: prod` の一致を確認する。
+- OIDC Assume失敗: `AWS_ROLE_ARN`、Trust Policy の `aud/sub`、`environment: delivery-prod` の一致を確認する。
 - 反映遅延: invalidation完了状態を確認し、必要時に再デプロイする。
 - cdk-nag失敗: 新規指摘は原則修正し、除外する場合は本設計とコードに理由を同時追記して再実行する。
 
 ## 変更履歴
+- 2026-03-08: `Production Delivery` と `delivery-prod`、`task delivery:apply(:ci)`、mainブランチ保護設定を追加 [[BD-SYS-ADR-039]]
 - 2026-02-23: OpenCode OAuthトークンをEnvironment `opencode` のSecretで管理する運用へ更新し、`environment` パラメータを追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: `opencode-codex-issue.yml` に合わせ、`issues:assigned` 補助入口、変数化ガード、`plan/build` 二段階、IssueコメントPATCH更新、workflow改変ブロックを追記 [[BD-SYS-ADR-039]]
 - 2026-02-23: `opencode-issue.yml` の実行仕様（`issues:labeled`、allowlist、OAuth復元、最小権限、`share=false`）を追加 [[BD-SYS-ADR-039]]

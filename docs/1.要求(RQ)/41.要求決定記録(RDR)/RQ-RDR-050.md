@@ -3,11 +3,11 @@ id: RQ-RDR-050
 title: CI/CD実装基盤をGitHub Actionsに統一し要件を原子分割で追加する決定
 doc_type: 要求決定記録
 phase: RQ
-version: 1.0.1
+version: 1.0.2
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-21
-updated: '2026-02-23'
+updated: '2026-03-08'
 up:
 - '[[RQ-SC-001]]'
 related:
@@ -35,6 +35,9 @@ tags:
 
 ## 決定事項
 - CI/CDの実装基盤はGitHub Actionsを正本とし、PR品質ゲートとデプロイ運用を同一基盤で運用する。
+- 品質ゲートは Pull Request に加えて各ブランチへの push でも実行し、マージ前の失敗検知を前倒しする。
+- `main` 反映時は本番配信ワークフロー `Production Delivery` を起動し、配備適用と PDF 生成を同一イベントで実行する。
+- 本番配信の GitHub Environment 名は `delivery-prod` とし、`main` ブランチ限定の保護ルールと承認境界を適用する。
 - 既存要件の意味変更は行わず、GitHub Actions運用に関する要求は新規要件を追加して原子性を維持する。
 - 追加要件はDevOps非機能（[[RQ-DEV-005-01]]/[[RQ-DEV-006-01]]/[[RQ-DEV-007-01]]）、セキュリティ非機能（[[RQ-SEC-005-01]]）、運用ユースケース（[[RQ-UC-010]]〜[[RQ-UC-013]]）へ分割する。
 - 設計反映は `BD-DEV-PIPE-001` と `BD-SYS-ADR-039` で実装方針を固定し、運用判定は `AT-REL-001` と `AT-GO-001` から参照する。
@@ -52,5 +55,6 @@ tags:
 - 運用文書: `AT-REL-001` と `AT-GO-001` に参照関係を補足し、Go/No-Go判定へ証跡連携を追加する。
 
 ## 変更履歴
+- 2026-03-08: 各ブランチ push のCI実行、`Production Delivery` の main 反映起動、Environment `delivery-prod` を決定事項へ追加 [[RQ-RDR-050]]
 - 2026-02-23: Issueラベル起動とOAuthトークン運用（allowlist二重条件、APIキー非常設）を決定事項へ追加 [[RQ-RDR-050]]
 - 2026-02-21: 新規作成 [[RQ-RDR-050]]

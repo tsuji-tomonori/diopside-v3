@@ -1,21 +1,14 @@
-name: Docs Link Check
+name: CI Docs
 
 on:
   pull_request:
-    paths:
-      - "docs/**/*.md"
-      - ".opencode/skills/obsidian-doc-check/scripts/validate_vault.py"
-      - ".opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py"
-      - ".github/workflows/docs-link-check.yml"
   push:
-    paths:
-      - "docs/**/*.md"
-      - ".opencode/skills/obsidian-doc-check/scripts/validate_vault.py"
-      - ".opencode/skills/obsidian-doc-new/scripts/auto_link_glossary.py"
-      - ".github/workflows/docs-link-check.yml"
+
+permissions:
+  contents: read
 
 jobs:
-  docs-link-check:
+  ci-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

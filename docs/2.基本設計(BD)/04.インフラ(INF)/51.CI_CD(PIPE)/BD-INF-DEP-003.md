@@ -3,11 +3,11 @@ id: BD-INF-DEP-003
 title: CI/CD基本設計（Quartz + CDK）
 doc_type: デプロイ設計
 phase: BD
-version: 1.0.9
+version: 1.0.10
 status: 下書き
 owner: RQ-SH-001
 created: 2026-02-11
-updated: '2026-02-28'
+updated: '2026-03-08'
 up:
 - '[[RQ-FR-024]]'
 - '[[BD-SYS-ADR-013]]'
@@ -39,7 +39,7 @@ tags:
 - 失敗時判定基準（ロールバック条件、監査記録必須項目）。
 
 ## 前提
-- 将来運用では `quartz/` と `infra/` を同一リポジトリ配下に配置し、`task docs:deploy` を公開標準コマンドとして提供する。
+- 将来運用では `quartz/` と `infra/` を同一リポジトリ配下に配置し、`task delivery:apply` を公開標準コマンドとして提供する。
 - 公開対象は Obsidian文書をQuartzでビルドした静的成果物（`quartz/public`）とする。
 
 ## CornellNoteWeb準拠ポイント
@@ -50,7 +50,7 @@ tags:
 ## 公開フロー（全体）
 ```mermaid
 flowchart TD
-  A[docs/.md 更新] --> B[task docs:deploy]
+  A[docs/.md 更新] --> B[task delivery:apply]
   B --> C[task infra:deploy]
   C --> D[task quartz:build]
   D --> E[npx quartz build -d ../docs]
@@ -65,8 +65,8 @@ flowchart TD
 ```
 
 ## 実行チェーン
-- 標準コマンドは `task docs:deploy` を使用する。
-- `docs:deploy` は `infra:deploy` を呼び出す。
+- 標準コマンドは `task delivery:apply` を使用する。
+- `delivery:apply` は `infra:deploy` を呼び出す。
 - `infra:deploy` は依存として `quartz:build` と `infra:build` を実行する。
 - `quartz:build` は `npx quartz build -d ../docs` により `quartz/public` を生成する。
 - `infra:deploy` は `npm run deploy -- --context siteAssetPath=<repo>/quartz/public` を実行し、配信元アセットを明示する。
@@ -78,24 +78,33 @@ flowchart TD
 - statefulリソースを含む変更では、論理ID変更有無をレビュー観点へ追加する。
 
 ## CI/CD設計
-- `docs-link-check`:
-  - 対象: docs markdown変更
-  - 役割: 用語リンク補正チェックと整合検証（`auto_link_glossary --check`、`validate_vault --targets`）
+- `CI Docs`:
+  - 起動: Pull Request / 各ブランチ push
+  - 役割: docs差分の用語リンク補正チェックと整合検証（`auto_link_glossary --check`、`validate_vault --targets`）
+  - 必須チェック名: `ci-docs`
+- `CI Platform`:
+  - 起動: Pull Request / 各ブランチ push
+  - 役割: docs静的解析、infra build/test、web typecheck/test を一括実行する。
+  - 必須チェック名: `ci-platform`
+- `CI API`:
+  - 起動: Pull Request / 各ブランチ push
+  - 役割: API の typecheck/build/test を一括実行する。
+  - 必須チェック名: `ci-api`
 - `docs-pdf`:
-  - 起動: docs markdown / `scripts/docs_pdf/**` / `Taskfile.yaml` / workflow変更時
-  - 役割: `task docs:pdf` で単一PDFを生成し、Actions Artifactとして配布する。
+  - 起動: `workflow_dispatch`
+  - 役割: `task docs:pdf` で単一PDFを生成し、手動確認用Artifactとして配布する。
   - Artifact名: `diopside-docs-{branch}-{shortsha}.zip`（中身は `diopside-docs-{branch}-{shortsha}.pdf`）
 - `release-docs-pdf`:
   - 起動: GitHub Release `published`
   - 役割: `task docs:pdf` の成果物をRelease Assetsへ添付し、Release画面から直接ダウンロード可能にする。
   - 配布名: `diopside-docs-{branch}-{shortsha}.pdf`（branchは `github.event.release.target_commitish` を同一規則で正規化）
   - 上書き方針: 同名Assetは `--clobber` で置換する。
-- `docs-deploy`:
-  - 起動: `workflow_dispatch` と `push(main)`（`docs/**`, `infra/**`, `config/quartz/**`, `Taskfile.yaml`, workflow変更）
-  - 実行環境: `environment: prod` を必須化し、Environment保護ルールで承認境界を管理する。
-  - 役割: OIDC認証 -> `task docs:deploy`（`docs:guard` + `infra:deploy` + `docs:verify`）
+- `production-delivery`:
+  - 起動: `workflow_dispatch` と `push(main)`
+  - 実行環境: `environment: delivery-prod` を必須化し、Environment保護ルールで承認境界を管理する。
+  - 役割: OIDC認証 -> `task delivery:apply:ci`（配備適用）と `task docs:pdf`（PDF生成）を同一イベントで実行する。
   - 認証: `aws-actions/configure-aws-credentials@v6` で `AWS_ROLE_ARN` を Assume し、長期キーを使用しない。
-  - 直列化: `concurrency: docs-deploy-prod` を固定し、同時配備を禁止する。
+  - 直列化: `concurrency: production-delivery` を固定し、同時配備を禁止する。
 
 ## cdk-nag品質ゲート
 - `infra` のCDK合成時に `AwsSolutionsChecks` を適用し、未承認の警告/エラーを残したまま配備しない。
@@ -111,7 +120,7 @@ flowchart TD
 ## 段階導入方針
 - Phase 1（先行）
   - 対象: `/docs/*` の公開のみ
-  - 目的: `task docs:deploy` による再現可能な公開フローを先に安定化
+  - 目的: `task delivery:apply` による再現可能な公開フローを先に安定化
 - Phase 2（拡張）
   - 対象: 単一CloudFrontで `/web/*`, `/docs/*`, `/openapi/*`, `/api/v1/*` を分岐
   - 設計正本: [[BD-INF-DEP-004]] / [[DD-INF-DEP-002]]
@@ -119,8 +128,8 @@ flowchart TD
 ## 配信実装（infra）
 - `DiopsideDeliveryStack` は `siteAssetPath` context（未指定時は `../../quartz/public`）を参照する。
 - `DiopsideDeliveryStack` は GitHub OIDC Provider（`token.actions.githubusercontent.com`）と `GithubActionsDeployRole` を同一スタックで構築する。
-- `GithubActionsDeployRole` のTrust条件は `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:prod` を必須にする。
-- Assume先ロールARNは `GithubActionsDeployRoleArn` Output で公開し、GitHub Environment `prod` の `AWS_ROLE_ARN` へ設定する。
+- `GithubActionsDeployRole` のTrust条件は `aud=sts.amazonaws.com` かつ `sub=repo:tsuji-tomonori/diopside-v3:environment:delivery-prod` を必須にする。
+- Assume先ロールARNは `GithubActionsDeployRoleArn` Output で公開し、GitHub Environment `delivery-prod` の `AWS_ROLE_ARN` へ設定する。
 - `BucketDeployment` で `siteAssetPath` を S3 の `obsidian/` プレフィックスへ配置する。
 - CloudFront Distribution は S3 Origin + OAC 構成で、S3 バケットは公開禁止（`BLOCK_ALL`）とする。
 - デプロイ時に `distributionPaths: ["/*"]` を指定し、CloudFront のキャッシュを無効化する。
@@ -133,7 +142,7 @@ flowchart TD
 ## 失敗時の確認観点
 - Quartz build 失敗時: `docs/` の Markdown 記法とリンク不整合を確認し、再度 `task quartz:build` を実行する。
 - CDK deploy 失敗時: AWS 認証情報（`CDK_DEFAULT_ACCOUNT`/`CDK_DEFAULT_REGION`）と `siteAssetPath` の解決パスを確認する。
-- OIDC Assume失敗時: `AWS_ROLE_ARN` の値、Trust Policyの `aud/sub`、GitHub Environment名（`prod`）の一致を確認する。
+- OIDC Assume失敗時: `AWS_ROLE_ARN` の値、Trust Policyの `aud/sub`、GitHub Environment名（`delivery-prod`）の一致を確認する。
 - 反映遅延時: CloudFront invalidation の完了状態を確認し、必要時に再デプロイする。
 
 ## 未指定事項
@@ -145,6 +154,7 @@ flowchart TD
 - DDで具体ジョブ設定と実行条件を確定する入力が揃っていること。
 
 ## 変更履歴
+- 2026-03-08: 各ブランチ push のCI、`Production Delivery`、Environment `delivery-prod`、main反映時PDF生成を設計へ反映 [[BD-SYS-ADR-039]]
 - 2026-02-28: docs配備のデフォルトスタックIDを `DiopsideDeliveryStack` へ更新し、新規スタック作成運用へ同期 [[BD-SYS-ADR-038]]
 - 2026-02-23: 必須設計項目をBD確定観点へ明確化し、DD引渡し/未指定事項/受入基準を追加 [[BD-SYS-ADR-036]]
 - 2026-02-21: `docs-deploy.yml` を `push(main)` + `environment: prod` + OIDC AssumeRole運用で実装し、初回ローカル配備後にGitHubへ移行する手順を追加 [[BD-SYS-ADR-038]]
